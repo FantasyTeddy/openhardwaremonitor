@@ -133,9 +133,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="OxyPlot.WindowsForms" Version="2013.1.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\External\Aga.Controls\Aga.Controls.csproj" />
-    <ProjectReference Include="..\External\OxyPlot\OxyPlot.WindowsForms\OxyPlot.WindowsForms.csproj" />
-    <ProjectReference Include="..\External\OxyPlot\OxyPlot\OxyPlot.csproj" />
     <ProjectReference Include="..\OpenHardwareMonitorLib\OpenHardwareMonitorLib.csproj" />
   </ItemGroup>
 

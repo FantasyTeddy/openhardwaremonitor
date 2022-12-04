@@ -15,9 +15,7 @@ using System.Linq;
 using System.Windows.Forms;
 using OpenHardwareMonitor.Hardware;
 using OxyPlot;
-using OxyPlot.Axes;
 using OxyPlot.WindowsForms;
-using OxyPlot.Series;
 using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.GUI {
@@ -56,12 +54,12 @@ namespace OpenHardwareMonitor.GUI {
     }
 
     public void SetCurrentSettings() {
-      settings.SetValue("plotPanel.MinTimeSpan", (float)timeAxis.ViewMinimum);
-      settings.SetValue("plotPanel.MaxTimeSpan", (float)timeAxis.ViewMaximum);
+      settings.SetValue("plotPanel.MinTimeSpan", (float)timeAxis.ActualMinimum);
+      settings.SetValue("plotPanel.MaxTimeSpan", (float)timeAxis.ActualMaximum);
 
       foreach (var axis in axes.Values) {
-        settings.SetValue("plotPanel.Min" + axis.Key, (float)axis.ViewMinimum);
-        settings.SetValue("plotPanel.Max" + axis.Key, (float)axis.ViewMaximum);
+        settings.SetValue("plotPanel.Min" + axis.Key, (float)axis.ActualMinimum);
+        settings.SetValue("plotPanel.Max" + axis.Key, (float)axis.ActualMaximum);
       }
     }
 
