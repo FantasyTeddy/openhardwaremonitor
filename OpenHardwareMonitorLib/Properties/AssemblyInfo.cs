@@ -8,7 +8,10 @@
  
 */
 
-using System.Reflection;
+using System;
+using System.Runtime.InteropServices;
 
-[assembly: AssemblyVersion("0.9.6.0")]
-[assembly: AssemblyInformationalVersion("0.9.6")]
+[assembly: ComVisible(false)]
+[assembly: CLSCompliant(true)]
+
+[assembly: DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
