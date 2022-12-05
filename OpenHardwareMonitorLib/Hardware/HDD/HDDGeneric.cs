@@ -10,9 +10,7 @@
 	
 */
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware.HDD {

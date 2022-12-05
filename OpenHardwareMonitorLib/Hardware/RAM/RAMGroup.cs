@@ -8,8 +8,6 @@
 	
 */
 
-using System;
-
 namespace OpenHardwareMonitor.Hardware.RAM {
   internal class RAMGroup : IGroup {
 

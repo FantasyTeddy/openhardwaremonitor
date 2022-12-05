@@ -10,10 +10,7 @@
 
 */
 
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 
 namespace OpenHardwareMonitor.Hardware.HDD {
   internal class HarddriveGroup : IGroup {

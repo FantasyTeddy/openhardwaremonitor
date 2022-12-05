@@ -8,9 +8,6 @@
 	
 */
 
-using System;
-using System.Collections.Generic;
-
 namespace OpenHardwareMonitor.Collections {
 
   public struct Pair<F, S> {
