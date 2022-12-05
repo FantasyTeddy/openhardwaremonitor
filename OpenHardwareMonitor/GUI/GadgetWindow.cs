@@ -407,18 +407,18 @@ namespace OpenHardwareMonitor.GUI {
 
         [StructLayout(LayoutKind.Sequential)]
         public struct BitmapInfo {
-            public Int32 Size;
-            public Int32 Width;
-            public Int32 Height;
-            public Int16 Planes;
-            public Int16 BitCount;
-            public Int32 Compression;
-            public Int32 SizeImage;
-            public Int32 XPelsPerMeter;
-            public Int32 YPelsPerMeter;
-            public Int32 ClrUsed;
-            public Int32 ClrImportant;
-            public Int32 Colors;
+            public int Size;
+            public int Width;
+            public int Height;
+            public short Planes;
+            public short BitCount;
+            public int Compression;
+            public int SizeImage;
+            public int XPelsPerMeter;
+            public int YPelsPerMeter;
+            public int ClrUsed;
+            public int ClrImportant;
+            public int Colors;
         }
 
         public static readonly IntPtr HWND_BOTTOM = (IntPtr)1;
@@ -479,7 +479,7 @@ namespace OpenHardwareMonitor.GUI {
                 return (ushort)((ulong)l & 0xFFFF);
             }
 
-            public static UInt16 HIWORD(IntPtr l) {
+            public static ushort HIWORD(IntPtr l) {
                 return (ushort)(((ulong)l >> 16) & 0xFFFF);
             }
 

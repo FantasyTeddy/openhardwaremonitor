@@ -84,7 +84,7 @@ namespace OpenHardwareMonitor.Utilities {
                 return false;
 
             try {
-                String line;
+                string line;
                 using (StreamReader reader = new StreamReader(fileName))
                     line = reader.ReadLine();
 

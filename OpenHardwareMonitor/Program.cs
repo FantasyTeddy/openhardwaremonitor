@@ -37,7 +37,7 @@ namespace OpenHardwareMonitor {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             using (GUI.MainForm form = new GUI.MainForm()) {
-                form.FormClosed += delegate (Object sender, FormClosedEventArgs e) {
+                form.FormClosed += delegate (object sender, FormClosedEventArgs e) {
                     Application.Exit();
                 };
                 Application.Run();

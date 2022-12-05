@@ -133,7 +133,7 @@ namespace OpenHardwareMonitor.GUI {
             get { return ValueToString(sensor.Max); }
         }
 
-        public override bool Equals(System.Object obj) {
+        public override bool Equals(object obj) {
             if (obj == null)
                 return false;
 

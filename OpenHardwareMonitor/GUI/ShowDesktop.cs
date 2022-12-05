@@ -81,7 +81,7 @@ namespace OpenHardwareMonitor.GUI {
             return IntPtr.Zero;
         }
 
-        private void OnTimer(Object state) {
+        private void OnTimer(object state) {
             bool showDesktopDetected;
 
             IntPtr workerWindow = GetDesktopWorkerWindow();

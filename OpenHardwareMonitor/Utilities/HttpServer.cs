@@ -49,7 +49,7 @@ namespace OpenHardwareMonitor.Utilities {
             }
         }
 
-        public Boolean StartHTTPListener() {
+        public bool StartHTTPListener() {
             if (PlatformNotSupported)
                 return false;
 
@@ -73,7 +73,7 @@ namespace OpenHardwareMonitor.Utilities {
             return true;
         }
 
-        public Boolean StopHTTPListener() {
+        public bool StopHTTPListener() {
             if (PlatformNotSupported)
                 return false;
 
