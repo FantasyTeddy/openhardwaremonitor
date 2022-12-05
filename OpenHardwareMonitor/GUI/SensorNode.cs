@@ -66,12 +66,12 @@ namespace OpenHardwareMonitor.GUI {
               "hidden").ToString(), sensor.IsDefaultHidden);
             base.IsVisible = !hidden;
 
-            this.Plot = settings.GetValue(new Identifier(sensor.Identifier,
+            Plot = settings.GetValue(new Identifier(sensor.Identifier,
               "plot").ToString(), false);
 
             string id = new Identifier(sensor.Identifier, "penColor").ToString();
             if (settings.Contains(id))
-                this.PenColor = settings.GetValue(id, Color.Black);
+                PenColor = settings.GetValue(id, Color.Black);
         }
 
         public override string Text {

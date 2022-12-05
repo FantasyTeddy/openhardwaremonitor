@@ -19,8 +19,8 @@ namespace OpenHardwareMonitor.Hardware {
           new GroupAffinity(ushort.MaxValue, 0);
 
         public GroupAffinity(ushort group, ulong mask) {
-            this.Group = group;
-            this.Mask = mask;
+            Group = group;
+            Mask = mask;
         }
 
         public static GroupAffinity Single(ushort group, int index) {

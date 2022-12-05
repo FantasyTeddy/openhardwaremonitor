@@ -98,7 +98,7 @@ namespace OpenHardwareMonitor.GUI {
             // set the DockStyle here, to avoid conflicts with the MainMenu
             this.splitContainer.Dock = DockStyle.Fill;
 
-            this.Font = SystemFonts.MessageBoxFont;
+            Font = SystemFonts.MessageBoxFont;
             treeView.Font = SystemFonts.MessageBoxFont;
 
             plotPanel = new PlotPanel(settings, unitManager);
@@ -358,7 +358,7 @@ namespace OpenHardwareMonitor.GUI {
             plotForm.FormBorderStyle = FormBorderStyle.SizableToolWindow;
             plotForm.ShowInTaskbar = false;
             plotForm.StartPosition = FormStartPosition.Manual;
-            this.AddOwnedForm(plotForm);
+            AddOwnedForm(plotForm);
             plotForm.Bounds = new Rectangle {
                 X = settings.GetValue("plotForm.Location.X", -100000),
                 Y = settings.GetValue("plotForm.Location.Y", 100),
@@ -373,7 +373,7 @@ namespace OpenHardwareMonitor.GUI {
 
             showPlot.Changed += delegate (object sender, EventArgs e) {
                 if (plotLocation.Value == 0) {
-                    if (showPlot.Value && this.Visible)
+                    if (showPlot.Value && Visible)
                         plotForm.Show();
                     else
                         plotForm.Hide();
@@ -388,7 +388,7 @@ namespace OpenHardwareMonitor.GUI {
                         splitContainer.Panel2.Controls.Clear();
                         splitContainer.Panel2Collapsed = true;
                         plotForm.Controls.Add(plotPanel);
-                        if (showPlot.Value && this.Visible)
+                        if (showPlot.Value && Visible)
                             plotForm.Show();
                         break;
                     case 1:
@@ -442,8 +442,8 @@ namespace OpenHardwareMonitor.GUI {
                 }
             };
 
-            this.VisibleChanged += delegate (object sender, EventArgs e) {
-                if (this.Visible && showPlot.Value && plotLocation.Value == 0)
+            VisibleChanged += delegate (object sender, EventArgs e) {
+                if (Visible && showPlot.Value && plotLocation.Value == 0)
                     plotForm.Show();
                 else
                     plotForm.Hide();
@@ -648,7 +648,7 @@ namespace OpenHardwareMonitor.GUI {
                               (newBounds.Height / 2);
             }
 
-            this.Bounds = newBounds;
+            Bounds = newBounds;
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {

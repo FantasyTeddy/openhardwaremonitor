@@ -40,7 +40,7 @@ namespace OpenHardwareMonitor.GUI {
               BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
               null, new Type[] { typeof(int) }, null);
 
-            this.CreateHandle(CreateParams);
+            CreateHandle(CreateParams);
 
             // move window to the bottom
             MoveToBottom(Handle);

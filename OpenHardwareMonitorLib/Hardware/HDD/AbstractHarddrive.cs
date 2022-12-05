@@ -269,7 +269,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         public override string GetReport() {
             StringBuilder r = new StringBuilder();
 
-            r.AppendLine(this.GetType().Name);
+            r.AppendLine(GetType().Name);
             r.AppendLine();
             r.AppendLine("Drive name: " + name);
             r.AppendLine("Firmware version: " + firmwareRevision);

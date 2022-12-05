@@ -114,7 +114,7 @@ namespace OpenHardwareMonitor.GUI {
                 } catch { }
             }
 
-            this.Location = new Point(
+            Location = new Point(
               settings.GetValue("sensorGadget.Location.X", 100),
               settings.GetValue("sensorGadget.Location.Y", 100));
             LocationChanged += delegate (object sender, EventArgs e) {
@@ -176,7 +176,7 @@ namespace OpenHardwareMonitor.GUI {
                 };
                 opacityMenu.MenuItems.Add(item);
             }
-            this.ContextMenu = contextMenu;
+            ContextMenu = contextMenu;
 
             hardwareNames = new UserOption("sensorGadget.Hardwarenames", true,
               hardwareNamesItem, settings);
@@ -187,12 +187,12 @@ namespace OpenHardwareMonitor.GUI {
             alwaysOnTop = new UserOption("sensorGadget.AlwaysOnTop", false,
               alwaysOnTopItem, settings);
             alwaysOnTop.Changed += delegate (object sender, EventArgs e) {
-                this.AlwaysOnTop = alwaysOnTop.Value;
+                AlwaysOnTop = alwaysOnTop.Value;
             };
             lockPositionAndSize = new UserOption("sensorGadget.LockPositionAndSize",
               false, lockItem, settings);
             lockPositionAndSize.Changed += delegate (object sender, EventArgs e) {
-                this.LockPositionAndSize = lockPositionAndSize.Value;
+                LockPositionAndSize = lockPositionAndSize.Value;
             };
 
             HitTest += delegate (object sender, HitTestEventArgs e) {
@@ -398,7 +398,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void Resize() {
-            Resize(this.Size.Width);
+            Resize(Size.Width);
         }
 
         private void Resize(int width) {
@@ -414,7 +414,7 @@ namespace OpenHardwareMonitor.GUI {
             if (sensors.Count == 0)
                 y += 4 * sensorLineHeight + hardwareLineHeight;
             y += bottomMargin;
-            this.Size = new Size(width, y);
+            Size = new Size(width, y);
         }
 
         private void DrawImageWidthBorder(Graphics g, int width, int height,

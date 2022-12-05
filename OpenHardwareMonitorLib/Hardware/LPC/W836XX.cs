@@ -273,7 +273,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         public string GetReport() {
             StringBuilder r = new StringBuilder();
 
-            r.AppendLine("LPC " + this.GetType().Name);
+            r.AppendLine("LPC " + GetType().Name);
             r.AppendLine();
             r.Append("Chip ID: 0x"); r.AppendLine(chip.ToString("X"));
             r.Append("Chip revision: 0x");

@@ -138,8 +138,8 @@ namespace OpenHardwareMonitor.GUI {
             }
 
             protected override void ClearItems() {
-                while (this.Count != 0)
-                    this.RemoveAt(this.Count - 1);
+                while (Count != 0)
+                    RemoveAt(Count - 1);
             }
 
             protected override void InsertItem(int index, Node item) {

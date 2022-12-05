@@ -52,10 +52,10 @@ namespace OpenHardwareMonitor.GUI {
 
         protected override void OnMouseDown(MouseEventArgs e) {
             if (Orientation == Orientation.Vertical) {
-                delta = this.SplitterDistance - e.X;
+                delta = SplitterDistance - e.X;
                 Cursor.Current = Cursors.VSplit;
             } else {
-                delta = this.SplitterDistance - e.Y;
+                delta = SplitterDistance - e.Y;
                 Cursor.Current = Cursors.HSplit;
             }
             base.IsSplitterFixed = true;

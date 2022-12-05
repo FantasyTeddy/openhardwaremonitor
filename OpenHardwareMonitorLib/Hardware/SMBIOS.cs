@@ -404,12 +404,12 @@ namespace OpenHardwareMonitor.Hardware {
             public ProcessorInformation(byte type, ushort handle, byte[] data,
               string[] strings)
               : base(type, handle, data, strings) {
-                this.ManufacturerName = GetString(0x07).Trim();
-                this.Version = GetString(0x10).Trim();
-                this.CoreCount = GetByte(0x23);
-                this.CoreEnabled = GetByte(0x24);
-                this.ThreadCount = GetByte(0x25);
-                this.ExternalClock = GetWord(0x12);
+                ManufacturerName = GetString(0x07).Trim();
+                Version = GetString(0x10).Trim();
+                CoreCount = GetByte(0x23);
+                CoreEnabled = GetByte(0x24);
+                ThreadCount = GetByte(0x25);
+                ExternalClock = GetWord(0x12);
             }
 
             public string ManufacturerName { get; private set; }

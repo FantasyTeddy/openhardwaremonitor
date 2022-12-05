@@ -48,9 +48,9 @@ namespace OpenHardwareMonitor.GUI {
 
             UpdateAxesPosition();
 
-            this.SuspendLayout();
-            this.Controls.Add(plot);
-            this.ResumeLayout(true);
+            SuspendLayout();
+            Controls.Add(plot);
+            ResumeLayout(true);
         }
 
         public void SetCurrentSettings() {

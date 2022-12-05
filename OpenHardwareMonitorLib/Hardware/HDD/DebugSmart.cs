@@ -402,8 +402,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         private class Drive {
 
             public Drive(string name, string firmware, int idBase, string value) {
-                this.Name = name;
-                this.FirmwareVersion = firmware;
+                Name = name;
+                FirmwareVersion = firmware;
 
                 string[] lines = value.Split(new[] { '\r', '\n' },
                   StringSplitOptions.RemoveEmptyEntries);

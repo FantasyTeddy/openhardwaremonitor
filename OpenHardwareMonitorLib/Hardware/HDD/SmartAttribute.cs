@@ -56,14 +56,14 @@ namespace OpenHardwareMonitor.Hardware.HDD {
           RawValueConversion rawValueConversion, SensorType? sensorType,
           int sensorChannel, string sensorName, bool defaultHiddenSensor = false,
           ParameterDescription[] parameterDescriptions = null) {
-            this.Identifier = identifier;
-            this.Name = name;
+            Identifier = identifier;
+            Name = name;
             this.rawValueConversion = rawValueConversion;
-            this.SensorType = sensorType;
-            this.SensorChannel = sensorChannel;
-            this.SensorName = sensorName;
-            this.DefaultHiddenSensor = defaultHiddenSensor;
-            this.ParameterDescriptions = parameterDescriptions;
+            SensorType = sensorType;
+            SensorChannel = sensorChannel;
+            SensorName = sensorName;
+            DefaultHiddenSensor = defaultHiddenSensor;
+            ParameterDescriptions = parameterDescriptions;
         }
 
         /// <summary>

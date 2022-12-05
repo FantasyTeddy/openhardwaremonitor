@@ -27,7 +27,7 @@ namespace OpenHardwareMonitor.GUI {
             this.settings = settings;
             this.unitManager = unitManager;
             this.hardware = hardware;
-            this.Image = HardwareTypeImage.Instance.GetImage(hardware.HardwareType);
+            Image = HardwareTypeImage.Instance.GetImage(hardware.HardwareType);
 
             foreach (SensorType sensorType in Enum.GetValues(typeof(SensorType)))
                 typeNodes.Add(new TypeNode(sensorType, hardware, settings));
