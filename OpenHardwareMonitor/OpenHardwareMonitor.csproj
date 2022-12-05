@@ -134,10 +134,10 @@
 
   <ItemGroup>
     <PackageReference Include="OxyPlot.WindowsForms" Version="2013.1.2.1" />
+    <PackageReference Include="TreeViewAdv" Version="1.7.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\External\Aga.Controls\Aga.Controls.csproj" />
     <ProjectReference Include="..\OpenHardwareMonitorLib\OpenHardwareMonitorLib.csproj" />
   </ItemGroup>
 
