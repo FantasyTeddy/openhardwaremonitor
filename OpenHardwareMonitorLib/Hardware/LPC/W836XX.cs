@@ -169,7 +169,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             if (bit < 0 || bit > 63)
                 throw new ArgumentException("Bit out of range.");
 
-            ulong mask = (((ulong)1) << bit);
+            ulong mask = ((ulong)1) << bit;
             return value > 0 ? target | mask : target & ~mask;
         }
 
@@ -308,7 +308,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     r.Append("  ");
                     for (int j = 0; j <= 0xF; j++) {
                         r.Append(" ");
-                        r.Append(ReadByte((byte)(k), (byte)((i << 4) | j)).ToString(
+                        r.Append(ReadByte((byte)k, (byte)((i << 4) | j)).ToString(
                           "X2", CultureInfo.InvariantCulture));
                     }
                     r.AppendLine();

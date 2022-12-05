@@ -225,7 +225,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             ulong countEnd = ((ulong)msbEnd << 32) | lsbEnd;
 
             double coreFrequency = 1e-6 *
-              (((double)(countEnd - countBegin)) * Stopwatch.Frequency) /
+              ((double)(countEnd - countBegin) * Stopwatch.Frequency) /
               (timeEnd - timeBegin);
 
             double busFrequency = coreFrequency / coreMultiplier;
@@ -243,7 +243,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             r.Append(base.GetReport());
 
             r.Append("Miscellaneous Control Address: 0x");
-            r.AppendLine((miscellaneousControlAddress).ToString("X",
+            r.AppendLine(miscellaneousControlAddress.ToString("X",
               CultureInfo.InvariantCulture));
             r.Append("Time Stamp Counter Multiplier: ");
             r.AppendLine(timeStampCounterMultiplier.ToString(
@@ -302,7 +302,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                           CLOCK_POWER_TIMING_CONTROL_0_REGISTER, out value);
                         uint frequencyId = value & 0x1F;
                         return (frequencyId + 0x10) /
-                          (divisorIdMSD + (divisorIdLSD * 0.25) + 1);
+                          (divisorIdMSD + divisorIdLSD * 0.25 + 1);
                     }
                 default:
                     return 1;

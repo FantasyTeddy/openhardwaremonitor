@@ -641,11 +641,11 @@ namespace OpenHardwareMonitor.GUI {
             if (intersection.Width < 20 || intersection.Height < 20 ||
               !settings.Contains("mainForm.Location.X")
             ) {
-                newBounds.X = (Screen.PrimaryScreen.WorkingArea.Width / 2) -
-                              (newBounds.Width / 2);
+                newBounds.X = Screen.PrimaryScreen.WorkingArea.Width / 2 -
+                              newBounds.Width / 2;
 
-                newBounds.Y = (Screen.PrimaryScreen.WorkingArea.Height / 2) -
-                              (newBounds.Height / 2);
+                newBounds.Y = Screen.PrimaryScreen.WorkingArea.Height / 2 -
+                              newBounds.Height / 2;
             }
 
             Bounds = newBounds;

@@ -89,7 +89,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             r.Append(base.GetReport());
 
             r.Append("Miscellaneous Control Address: 0x");
-            r.AppendLine((miscellaneousControlAddress).ToString("X",
+            r.AppendLine(miscellaneousControlAddress.ToString("X",
               CultureInfo.InvariantCulture));
             r.AppendLine();
 
@@ -135,7 +135,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                         // CurrFID can be found in eax bits 0-5, MaxFID in 16-21
                         // 8-13 hold StartFID, we don't use that here.
                         double curMP = 0.5 * ((eax & 0x3F) + 8);
-                        double maxMP = 0.5 * ((eax >> 16 & 0x3F) + 8);
+                        double maxMP = 0.5 * (((eax >> 16) & 0x3F) + 8);
                         coreClocks[i].Value =
                           (float)(curMP * TimeStampCounterFrequency / maxMP);
                         newBusClock = (float)(TimeStampCounterFrequency / maxMP);

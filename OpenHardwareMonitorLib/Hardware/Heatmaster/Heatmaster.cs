@@ -136,7 +136,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                     ActivateSensor(fans[i]);
                     controls[i] =
                       new Sensor(name, device, SensorType.Control, this, settings);
-                    controls[i].Value = (100 / 255.0f) * ReadInteger(device, 'P');
+                    controls[i].Value = 100 / 255.0f * ReadInteger(device, 'P');
                     ActivateSensor(controls[i]);
                 }
 
@@ -203,7 +203,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                             case 32:
                                 if (ints.Length == 3 && ints[0] <= fans.Length) {
                                     fans[ints[0] - 1].Value = ints[1];
-                                    controls[ints[0] - 1].Value = (100 / 255.0f) * ints[2];
+                                    controls[ints[0] - 1].Value = 100 / 255.0f * ints[2];
                                 }
                                 break;
                             case 48:

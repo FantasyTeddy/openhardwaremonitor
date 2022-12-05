@@ -46,7 +46,7 @@ namespace OpenHardwareMonitor.Hardware.RAM {
                 return;
 
             loadSensor.Value = 100.0f -
-              (100.0f * status.AvailablePhysicalMemory) /
+              100.0f * status.AvailablePhysicalMemory /
               status.TotalPhysicalMemory;
 
             usedMemory.Value = (float)(status.TotalPhysicalMemory

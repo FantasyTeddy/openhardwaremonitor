@@ -168,9 +168,9 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             countEnd = Opcode.Rdtsc();
             long afterEnd = Stopwatch.GetTimestamp();
 
-            double delta = (timeEnd - timeBegin);
+            double delta = timeEnd - timeBegin;
             frequency = 1e-6 *
-              (((double)(countEnd - countBegin)) * Stopwatch.Frequency) / delta;
+              ((double)(countEnd - countBegin) * Stopwatch.Frequency) / delta;
 
             double beginError = (afterBegin - timeBegin) / delta;
             double endError = (afterEnd - timeEnd) / delta;
@@ -183,11 +183,11 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             uint eax, edx;
             if (Ring0.RdmsrTx(msr, out eax, out edx, affinity)) {
                 r.Append(" ");
-                r.Append((msr).ToString("X8", CultureInfo.InvariantCulture));
+                r.Append(msr.ToString("X8", CultureInfo.InvariantCulture));
                 r.Append("  ");
-                r.Append((edx).ToString("X8", CultureInfo.InvariantCulture));
+                r.Append(edx.ToString("X8", CultureInfo.InvariantCulture));
                 r.Append("  ");
-                r.Append((eax).ToString("X8", CultureInfo.InvariantCulture));
+                r.Append(eax.ToString("X8", CultureInfo.InvariantCulture));
                 r.AppendLine();
             }
         }
@@ -272,8 +272,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 // restore the previous thread affinity mask
                 ThreadAffinity.Set(previousAffinity);
 
-                double delta = ((double)(time - lastTime)) / Stopwatch.Frequency;
-                double error = ((double)(time - firstTime)) / Stopwatch.Frequency;
+                double delta = (double)(time - lastTime) / Stopwatch.Frequency;
+                double error = (double)(time - firstTime) / Stopwatch.Frequency;
 
                 // only use data if they are measured accuarte enough (max 0.1ms delay)
                 if (error < 0.0001) {

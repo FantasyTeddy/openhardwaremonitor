@@ -59,7 +59,7 @@ namespace OpenHardwareMonitor.Hardware {
             if (id == null)
                 return false;
 
-            return (identifier == id.identifier);
+            return identifier == id.identifier;
         }
 
         public override int GetHashCode() {
@@ -89,14 +89,14 @@ namespace OpenHardwareMonitor.Hardware {
             if (id1 == null)
                 return id2 != null;
             else
-                return (id1.CompareTo(id2) < 0);
+                return id1.CompareTo(id2) < 0;
         }
 
         public static bool operator >(Identifier id1, Identifier id2) {
             if (id1 == null)
                 return false;
             else
-                return (id1.CompareTo(id2) > 0);
+                return id1.CompareTo(id2) > 0;
         }
 
     }

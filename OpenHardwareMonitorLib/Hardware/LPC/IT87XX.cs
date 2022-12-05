@@ -118,7 +118,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 if (index < 3) {
                     var value = ReadByte(FAN_MAIN_CTRL_REG, out _);
 
-                    if ((value & (1 << index)) > 0 != initialFanOutputModeEnabled[index]) {
+                    if (((value & (1 << index)) > 0) != initialFanOutputModeEnabled[index]) {
                         WriteByte(FAN_MAIN_CTRL_REG, (byte)(value ^ (1 << index)));
                     }
                 }

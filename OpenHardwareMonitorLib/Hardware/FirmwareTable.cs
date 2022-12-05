@@ -17,7 +17,7 @@ namespace OpenHardwareMonitor.Hardware {
     internal static class FirmwareTable {
 
         public static byte[] GetTable(Provider provider, string table) {
-            int id = table[3] << 24 | table[2] << 16 | table[1] << 8 | table[0];
+            int id = (table[3] << 24) | (table[2] << 16) | (table[1] << 8) | table[0];
             return GetTable(provider, id);
         }
 
@@ -67,9 +67,9 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public enum Provider : int {
-            ACPI = (byte)'A' << 24 | (byte)'C' << 16 | (byte)'P' << 8 | (byte)'I',
-            FIRM = (byte)'F' << 24 | (byte)'I' << 16 | (byte)'R' << 8 | (byte)'M',
-            RSMB = (byte)'R' << 24 | (byte)'S' << 16 | (byte)'M' << 8 | (byte)'B'
+            ACPI = ((byte)'A' << 24) | ((byte)'C' << 16) | ((byte)'P' << 8) | (byte)'I',
+            FIRM = ((byte)'F' << 24) | ((byte)'I' << 16) | ((byte)'R' << 8) | (byte)'M',
+            RSMB = ((byte)'R' << 24) | ((byte)'S' << 16) | ((byte)'M' << 8) | (byte)'B'
         }
 
         private static class NativeMethods {

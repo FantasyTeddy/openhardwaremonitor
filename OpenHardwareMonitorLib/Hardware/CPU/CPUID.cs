@@ -204,7 +204,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
               ((cpuidData[1, 0] & 0x0F00) >> 8);
             this.model = ((cpuidData[1, 0] & 0x0F0000) >> 12) +
               ((cpuidData[1, 0] & 0xF0) >> 4);
-            this.stepping = (cpuidData[1, 0] & 0x0F);
+            this.stepping = cpuidData[1, 0] & 0x0F;
 
             this.apicId = (cpuidData[1, 1] >> 24) & 0xFF;
 
@@ -241,12 +241,12 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                     break;
             }
 
-            processorId = (apicId >> (int)(coreMaskWith + threadMaskWith));
-            coreId = ((apicId >> (int)(threadMaskWith))
-              - (processorId << (int)(coreMaskWith)));
+            processorId = apicId >> (int)(coreMaskWith + threadMaskWith);
+            coreId = (apicId >> (int)threadMaskWith)
+              - (processorId << (int)coreMaskWith);
             threadId = apicId
               - (processorId << (int)(coreMaskWith + threadMaskWith))
-              - (coreId << (int)(threadMaskWith));
+              - (coreId << (int)threadMaskWith);
         }
 
         public string Name {

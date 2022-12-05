@@ -98,7 +98,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                             if (serialPort.BytesToRead > 0) {
                                 bool flag = false;
                                 while (serialPort.BytesToRead > 0 && !flag) {
-                                    flag |= (serialPort.ReadByte() == 0xAA);
+                                    flag |= serialPort.ReadByte() == 0xAA;
                                 }
                                 if (flag) {
                                     serialPort.WriteLine("[0:0]RH");
@@ -115,7 +115,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                                             }
                                             k++;
                                         }
-                                        isValid = (revision == 770);
+                                        isValid = revision == 770;
                                         if (!isValid) {
                                             report.Append("Status: Wrong Hardware Revision " +
                                               revision.ToString(CultureInfo.InvariantCulture));

@@ -68,7 +68,7 @@ namespace OpenHardwareMonitor.GUI {
                           (task.Definition.Actions.Count > 0) &&
                           (task.Definition.Actions[1].Type ==
                             TASK_ACTION_TYPE.TASK_ACTION_EXEC) &&
-                          (task.Definition.Actions[1] as IExecAction != null) &&
+                          ((task.Definition.Actions[1] as IExecAction) != null) &&
                           ((task.Definition.Actions[1] as IExecAction).Path ==
                             Application.ExecutablePath);
 

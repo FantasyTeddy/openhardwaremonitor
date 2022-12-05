@@ -279,7 +279,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
               out result, Marshal.SizeOf(typeof(DriveSmartReadDataResult)),
               out bytesReturned, IntPtr.Zero);
 
-            return (isValid) ? result.Attributes : new DriveAttributeValue[0];
+            return isValid ? result.Attributes : new DriveAttributeValue[0];
         }
 
         public DriveThresholdValue[] ReadSmartThresholds(IntPtr handle,
@@ -299,7 +299,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
               out result, Marshal.SizeOf(typeof(DriveSmartReadThresholdsResult)),
               out bytesReturned, IntPtr.Zero);
 
-            return (isValid) ? result.Thresholds : new DriveThresholdValue[0];
+            return isValid ? result.Thresholds : new DriveThresholdValue[0];
         }
 
         private string GetString(byte[] bytes) {

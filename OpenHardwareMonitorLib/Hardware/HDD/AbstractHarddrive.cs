@@ -255,7 +255,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                         } catch (IOException) { } catch (UnauthorizedAccessException) { }
                     }
                     if (totalSize > 0) {
-                        usageSensor.Value = 100.0f - (100.0f * totalFreeSpace) / totalSize;
+                        usageSensor.Value = 100.0f - 100.0f * totalFreeSpace / totalSize;
                     } else {
                         usageSensor.Value = null;
                     }
@@ -283,13 +283,13 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                 if (values.Length > 0) {
                     r.AppendFormat(CultureInfo.InvariantCulture,
                       " {0}{1}{2}{3}{4}{5}{6}{7}",
-                      ("ID").PadRight(3),
-                      ("Description").PadRight(35),
-                      ("Raw Value").PadRight(13),
-                      ("Worst").PadRight(6),
-                      ("Value").PadRight(6),
-                      ("Thres").PadRight(6),
-                      ("Physical").PadRight(8),
+                      "ID".PadRight(3),
+                      "Description".PadRight(35),
+                      "Raw Value".PadRight(13),
+                      "Worst".PadRight(6),
+                      "Value".PadRight(6),
+                      "Thres".PadRight(6),
+                      "Physical".PadRight(8),
                       Environment.NewLine);
 
                     foreach (DriveAttributeValue value in values) {

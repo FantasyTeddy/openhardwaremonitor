@@ -191,7 +191,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
                 for (int i = 0; i < sensorhubFlows.Length; i++)
                     if (data[231 + i] > 0 && data[234] > 0) {
-                        float pulsesPerSecond = (data[231 + i] * 4.0f) / data[234];
+                        float pulsesPerSecond = data[231 + i] * 4.0f / data[234];
                         float pulsesPerLiter = sensorhubFlows[i].Parameters[0].Value;
                         sensorhubFlows[i].Value = pulsesPerSecond * 3600 / pulsesPerLiter;
                         ActivateSensor(sensorhubFlows[i]);
@@ -255,7 +255,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                 r.Append((i << 4).ToString("X3", CultureInfo.InvariantCulture));
                 r.Append("  ");
                 for (int j = 0; j <= 0xF; j++) {
-                    int index = ((i << 4) | j);
+                    int index = (i << 4) | j;
                     if (index < primaryData.Length) {
                         r.Append(" ");
                         r.Append(primaryData[index].ToString("X2", CultureInfo.InvariantCulture));
@@ -275,7 +275,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                     r.Append((i << 4).ToString("X3", CultureInfo.InvariantCulture));
                     r.Append("  ");
                     for (int j = 0; j <= 0xF; j++) {
-                        int index = ((i << 4) | j);
+                        int index = (i << 4) | j;
                         if (index < alternativeData.Length) {
                             r.Append(" ");
                             r.Append(alternativeData[index].ToString("X2", CultureInfo.InvariantCulture));

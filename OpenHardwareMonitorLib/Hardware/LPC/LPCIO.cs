@@ -290,7 +290,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     port.WinbondNuvotonFintekExit();
 
                     ReportUnknownChip(port, "Winbond / Nuvoton / Fintek",
-                      ((id << 8) | revision));
+                      (id << 8) | revision);
                 }
             } else {
 

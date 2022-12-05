@@ -488,8 +488,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             for (int i = temperatureRegister.Length - 1; i >= 0; i--) {
                 int value = ((sbyte)ReadByte(temperatureRegister[i])) << 1;
                 if (temperatureHalfBit[i] > 0) {
-                    value |= ((ReadByte(temperatureHalfRegister[i]) >>
-                      temperatureHalfBit[i]) & 0x1);
+                    value |= (ReadByte(temperatureHalfRegister[i]) >>
+                      temperatureHalfBit[i]) & 0x1;
                 }
 
                 byte source = ReadByte(temperatureSourceRegister[i]);

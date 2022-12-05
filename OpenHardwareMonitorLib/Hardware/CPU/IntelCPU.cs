@@ -425,7 +425,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 if (Ring0.RdmsrTx(IA32_THERM_STATUS_MSR, out eax, out edx,
                     cpuid[i][0].Affinity) && (eax & 0x80000000) != 0) {
                     // get the dist from tjMax from bits 22:16
-                    float deltaT = ((eax & 0x007F0000) >> 16);
+                    float deltaT = (eax & 0x007F0000) >> 16;
                     float tjMax = coreTemperatures[i].Parameters[0].Value;
                     float tSlope = coreTemperatures[i].Parameters[1].Value;
                     coreTemperatures[i].Value = tjMax - tSlope * deltaT;
@@ -440,7 +440,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 if (Ring0.RdmsrTx(IA32_PACKAGE_THERM_STATUS, out eax, out edx,
                     cpuid[0][0].Affinity) && (eax & 0x80000000) != 0) {
                     // get the dist from tjMax from bits 22:16
-                    float deltaT = ((eax & 0x007F0000) >> 16);
+                    float deltaT = (eax & 0x007F0000) >> 16;
                     float tjMax = packageTemperature.Parameters[0].Value;
                     float tSlope = packageTemperature.Parameters[1].Value;
                     packageTemperature.Value = tjMax - tSlope * deltaT;

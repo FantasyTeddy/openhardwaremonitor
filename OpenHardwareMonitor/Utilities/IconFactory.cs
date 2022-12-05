@@ -65,7 +65,7 @@ namespace OpenHardwareMonitor.Utilities {
 
             public ICONIMAGE(int width, int height, byte[] colors) {
                 this.Header = new BITMAPINFOHEADER(width, height << 1,
-                  (8 * colors.Length) / (width * height));
+                  8 * colors.Length / (width * height));
                 this.Colors = colors;
                 MaskSize = (width * height) >> 3;
             }

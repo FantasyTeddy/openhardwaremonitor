@@ -141,7 +141,7 @@ namespace OpenHardwareMonitor.GUI {
             if (s == null)
                 return false;
 
-            return (sensor == s.sensor);
+            return sensor == s.sensor;
         }
 
         public override int GetHashCode() {

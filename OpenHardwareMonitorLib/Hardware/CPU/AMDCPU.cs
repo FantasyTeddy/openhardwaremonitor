@@ -32,7 +32,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
               address, DEVICE_VENDOR_ID_REGISTER, out deviceVendor))
                 return Ring0.InvalidPciAddress;
 
-            if (deviceVendor != (deviceId << 16 | AMD_VENDOR_ID))
+            if (deviceVendor != ((deviceId << 16) | AMD_VENDOR_ID))
                 return Ring0.InvalidPciAddress;
 
             return address;
