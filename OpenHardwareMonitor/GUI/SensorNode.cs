@@ -8,9 +8,9 @@
 	
 */
 
-using OpenHardwareMonitor.Hardware;
 using System;
 using System.Drawing;
+using OpenHardwareMonitor.Hardware;
 
 namespace OpenHardwareMonitor.GUI {
   public class SensorNode : Node {

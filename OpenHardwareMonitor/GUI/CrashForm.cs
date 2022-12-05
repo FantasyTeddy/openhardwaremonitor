@@ -8,12 +8,12 @@
 	
 */
 
-using OpenHardwareMonitor.Utilities;
 using System;
 using System.IO;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
+using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
   public partial class CrashForm : Form {

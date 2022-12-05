@@ -9,10 +9,10 @@
 */
 
 using System;
-using System.Windows.Forms;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace OpenHardwareMonitor.GUI {
   public partial class PortForm : Form {

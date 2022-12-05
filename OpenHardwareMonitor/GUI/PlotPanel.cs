@@ -13,10 +13,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using OpenHardwareMonitor.Collections;
 using OpenHardwareMonitor.Hardware;
 using OxyPlot;
 using OxyPlot.WindowsForms;
-using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.GUI {
   public class PlotPanel : UserControl {

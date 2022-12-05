@@ -13,8 +13,8 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
-using System.Threading;
 using System.Text;
+using System.Threading;
 
 namespace OpenHardwareMonitor.Hardware {
   internal static class Ring0 {

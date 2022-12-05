@@ -8,8 +8,8 @@
 	
 */
 
-using System.Drawing;
 using System.Collections.Generic;
+using System.Drawing;
 using OpenHardwareMonitor.Hardware;
 
 namespace OpenHardwareMonitor.GUI {

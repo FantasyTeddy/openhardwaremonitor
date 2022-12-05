@@ -9,8 +9,8 @@
 */
 
 using System;
-using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace OpenHardwareMonitor.Hardware {
   internal static class Opcode {

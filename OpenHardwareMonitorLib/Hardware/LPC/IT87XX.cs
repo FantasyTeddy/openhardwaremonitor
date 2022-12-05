@@ -8,9 +8,9 @@
 	
 */
 
+using System;
 using System.Globalization;
 using System.Text;
-using System;
 
 namespace OpenHardwareMonitor.Hardware.LPC {
   internal class IT87XX : ISuperIO {

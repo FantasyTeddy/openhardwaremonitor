@@ -12,8 +12,8 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Collections;
+using OpenHardwareMonitor.Hardware;
 
 namespace OpenHardwareMonitor.GUI {
   public partial class ParameterForm : Form {
