@@ -1,12 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
     <RootNamespace>OpenHardwareMonitor</RootNamespace>
     <Title>Open Hardware Monitor Library</Title>
-    <Version>0.9.6.0</Version>
     <Product>Open Hardware Monitor Library</Product>
-    <Copyright>Copyright © 2009-2020 Michael Möller</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
