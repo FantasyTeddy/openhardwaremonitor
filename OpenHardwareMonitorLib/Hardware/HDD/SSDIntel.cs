@@ -15,12 +15,12 @@ using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware.HDD {
 
-  [NamePrefix("INTEL SSD"),
+    [NamePrefix("INTEL SSD"),
 RequireSmart(0xE1), RequireSmart(0xE8), RequireSmart(0xE9)]
-  internal class SSDIntel : AbstractHarddrive {
+    internal class SSDIntel : AbstractHarddrive {
 
-    private static readonly IEnumerable<SmartAttribute> smartAttributes =
-      new List<SmartAttribute> {
+        private static readonly IEnumerable<SmartAttribute> smartAttributes =
+          new List<SmartAttribute> {
 
       new SmartAttribute(0x01, SmartNames.ReadErrorRate),
       new SmartAttribute(0x03, SmartNames.SpinUpTime),
@@ -59,10 +59,10 @@ RequireSmart(0xE1), RequireSmart(0xE8), RequireSmart(0xE9)]
         (byte[] r, byte v, IReadOnlyArray<IParameter> p)
           => { return RawToInt(r, v, p) / 0x20; },
         SensorType.Data, 1, SmartNames.HostReads),
-    };
+        };
 
-    public SSDIntel(ISmart smart, string name, string firmwareRevision,
-      int index, ISettings settings)
-      : base(smart, name, firmwareRevision, index, smartAttributes, settings) { }
-  }
+        public SSDIntel(ISmart smart, string name, string firmwareRevision,
+          int index, ISettings settings)
+          : base(smart, name, firmwareRevision, index, smartAttributes, settings) { }
+    }
 }

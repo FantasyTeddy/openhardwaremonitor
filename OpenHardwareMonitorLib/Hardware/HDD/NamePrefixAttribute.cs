@@ -12,14 +12,14 @@ using System;
 
 namespace OpenHardwareMonitor.Hardware.HDD {
 
-  [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-  internal class NamePrefixAttribute : Attribute {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    internal class NamePrefixAttribute : Attribute {
 
-    public NamePrefixAttribute(string namePrefix) {
-      Prefix = namePrefix;
+        public NamePrefixAttribute(string namePrefix) {
+            Prefix = namePrefix;
+        }
+
+        public string Prefix { get; private set; }
+
     }
-
-    public string Prefix { get; private set; }
-
-  }
 }

@@ -15,11 +15,11 @@ using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware.HDD {
 
-  [NamePrefix("")]
-  internal class GenericHarddisk : AbstractHarddrive {
+    [NamePrefix("")]
+    internal class GenericHarddisk : AbstractHarddrive {
 
-    private static readonly List<SmartAttribute> smartAttributes =
-      new List<SmartAttribute> {
+        private static readonly List<SmartAttribute> smartAttributes =
+          new List<SmartAttribute> {
       new SmartAttribute(0x01, SmartNames.ReadErrorRate),
       new SmartAttribute(0x02, SmartNames.ThroughputPerformance),
       new SmartAttribute(0x03, SmartNames.SpinUpTime),
@@ -101,10 +101,10 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         new[] { new ParameterDescription("Offset [°C]",
                   "Temperature offset of the thermal sensor.\n" +
                   "Temperature = Value + Offset.", 0) })
-    };
+        };
 
-    public GenericHarddisk(ISmart smart, string name, string firmwareRevision,
-      int index, ISettings settings)
-      : base(smart, name, firmwareRevision, index, smartAttributes, settings) { }
-  }
+        public GenericHarddisk(ISmart smart, string name, string firmwareRevision,
+          int index, ISettings settings)
+          : base(smart, name, firmwareRevision, index, smartAttributes, settings) { }
+    }
 }

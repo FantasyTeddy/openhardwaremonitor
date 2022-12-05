@@ -15,9 +15,9 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
 #if DEBUG
 
-  internal class DebugSmart : ISmart {
+    internal class DebugSmart : ISmart {
 
-    private Drive[] drives = {
+        private Drive[] drives = {
       new Drive("KINGSTON SNV425S264GB", null, 16,
         @" 01 000000000000 100 100      
            02 000000000000 100 100      
@@ -357,107 +357,107 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             F9 FD0400000000 100 100 0 
             FC 090000000000 100 100 0")};
 
-    public IntPtr OpenDrive(int driveNumber) {
-      if (driveNumber < drives.Length)
-        return (IntPtr)driveNumber;
-      else
-        return InvalidHandle;
-    }
-
-    public bool EnableSmart(IntPtr handle, int driveNumber) {
-      if (handle != (IntPtr)driveNumber)
-        throw new ArgumentOutOfRangeException();
-
-      return true;
-    }
-
-    public DriveAttributeValue[] ReadSmartData(IntPtr handle, int driveNumber) {
-      if (handle != (IntPtr)driveNumber)
-        throw new ArgumentOutOfRangeException();
-
-      return drives[driveNumber].DriveAttributeValues;
-    }
-
-    public DriveThresholdValue[] ReadSmartThresholds(IntPtr handle,
-      int driveNumber) {
-      if (handle != (IntPtr)driveNumber)
-        throw new ArgumentOutOfRangeException();
-
-      return drives[driveNumber].DriveThresholdValues;
-    }
-
-    public bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber,
-      out string name, out string firmwareRevision) {
-      if (handle != (IntPtr)driveNumber)
-        throw new ArgumentOutOfRangeException();
-
-      name = drives[driveNumber].Name;
-      firmwareRevision = drives[driveNumber].FirmwareVersion;
-      return true;
-    }
-
-    public void CloseHandle(IntPtr handle) { }
-
-
-    private class Drive {
-
-      public Drive(string name, string firmware, int idBase, string value) {
-        this.Name = name;
-        this.FirmwareVersion = firmware;
-
-        string[] lines = value.Split(new[] { '\r', '\n' },
-          StringSplitOptions.RemoveEmptyEntries);
-
-        DriveAttributeValues = new DriveAttributeValue[lines.Length];
-        List<DriveThresholdValue> thresholds = new List<DriveThresholdValue>();
-
-        for (int i = 0; i < lines.Length; i++) {
-
-          string[] array = lines[i].Split(new[] { ' ' },
-            StringSplitOptions.RemoveEmptyEntries);
-
-          if (array.Length != 4 && array.Length != 5)
-            throw new Exception();
-
-          DriveAttributeValue v = new DriveAttributeValue();
-          v.Identifier = Convert.ToByte(array[0], idBase);
-
-          v.RawValue = new byte[6];
-          for (int j = 0; j < 6; j++) {
-            v.RawValue[j] = Convert.ToByte(array[1].Substring(2 * j, 2), 16);
-          }
-
-          v.WorstValue = Convert.ToByte(array[2], 10);
-          v.AttrValue = Convert.ToByte(array[3], 10);
-
-          DriveAttributeValues[i] = v;
-
-          if (array.Length == 5) {
-            DriveThresholdValue t = new DriveThresholdValue();
-            t.Identifier = v.Identifier;
-            t.Threshold = Convert.ToByte(array[4], 10);
-            thresholds.Add(t);
-          }
+        public IntPtr OpenDrive(int driveNumber) {
+            if (driveNumber < drives.Length)
+                return (IntPtr)driveNumber;
+            else
+                return InvalidHandle;
         }
 
-        DriveThresholdValues = thresholds.ToArray();
-      }
+        public bool EnableSmart(IntPtr handle, int driveNumber) {
+            if (handle != (IntPtr)driveNumber)
+                throw new ArgumentOutOfRangeException();
 
-      public DriveAttributeValue[] DriveAttributeValues { get; private set; }
+            return true;
+        }
 
-      public DriveThresholdValue[] DriveThresholdValues { get; private set; }
+        public DriveAttributeValue[] ReadSmartData(IntPtr handle, int driveNumber) {
+            if (handle != (IntPtr)driveNumber)
+                throw new ArgumentOutOfRangeException();
 
-      public string Name { get; private set; }
+            return drives[driveNumber].DriveAttributeValues;
+        }
 
-      public string FirmwareVersion { get; private set; }
+        public DriveThresholdValue[] ReadSmartThresholds(IntPtr handle,
+          int driveNumber) {
+            if (handle != (IntPtr)driveNumber)
+                throw new ArgumentOutOfRangeException();
+
+            return drives[driveNumber].DriveThresholdValues;
+        }
+
+        public bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber,
+          out string name, out string firmwareRevision) {
+            if (handle != (IntPtr)driveNumber)
+                throw new ArgumentOutOfRangeException();
+
+            name = drives[driveNumber].Name;
+            firmwareRevision = drives[driveNumber].FirmwareVersion;
+            return true;
+        }
+
+        public void CloseHandle(IntPtr handle) { }
+
+
+        private class Drive {
+
+            public Drive(string name, string firmware, int idBase, string value) {
+                this.Name = name;
+                this.FirmwareVersion = firmware;
+
+                string[] lines = value.Split(new[] { '\r', '\n' },
+                  StringSplitOptions.RemoveEmptyEntries);
+
+                DriveAttributeValues = new DriveAttributeValue[lines.Length];
+                List<DriveThresholdValue> thresholds = new List<DriveThresholdValue>();
+
+                for (int i = 0; i < lines.Length; i++) {
+
+                    string[] array = lines[i].Split(new[] { ' ' },
+                      StringSplitOptions.RemoveEmptyEntries);
+
+                    if (array.Length != 4 && array.Length != 5)
+                        throw new Exception();
+
+                    DriveAttributeValue v = new DriveAttributeValue();
+                    v.Identifier = Convert.ToByte(array[0], idBase);
+
+                    v.RawValue = new byte[6];
+                    for (int j = 0; j < 6; j++) {
+                        v.RawValue[j] = Convert.ToByte(array[1].Substring(2 * j, 2), 16);
+                    }
+
+                    v.WorstValue = Convert.ToByte(array[2], 10);
+                    v.AttrValue = Convert.ToByte(array[3], 10);
+
+                    DriveAttributeValues[i] = v;
+
+                    if (array.Length == 5) {
+                        DriveThresholdValue t = new DriveThresholdValue();
+                        t.Identifier = v.Identifier;
+                        t.Threshold = Convert.ToByte(array[4], 10);
+                        thresholds.Add(t);
+                    }
+                }
+
+                DriveThresholdValues = thresholds.ToArray();
+            }
+
+            public DriveAttributeValue[] DriveAttributeValues { get; private set; }
+
+            public DriveThresholdValue[] DriveThresholdValues { get; private set; }
+
+            public string Name { get; private set; }
+
+            public string FirmwareVersion { get; private set; }
+        }
+
+        public IntPtr InvalidHandle { get { return (IntPtr)(-1); } }
+
+        public string[] GetLogicalDrives(int driveIndex) {
+            return new string[0];
+        }
     }
-
-    public IntPtr InvalidHandle { get { return (IntPtr)(-1); } }
-
-    public string[] GetLogicalDrives(int driveIndex) {
-      return new string[0];
-    }
-  }
 
 #endif
 

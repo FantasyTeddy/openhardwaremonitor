@@ -10,13 +10,13 @@
 
 namespace OpenHardwareMonitor.Hardware {
 
-  internal interface IGroup {
+    internal interface IGroup {
 
-    IHardware[] Hardware { get; }
+        IHardware[] Hardware { get; }
 
-    string GetReport();
+        string GetReport();
 
-    void Close();
-  }
+        void Close();
+    }
 
 }

@@ -9,16 +9,16 @@
 */
 
 namespace OpenHardwareMonitor.Hardware.HDD {
-  using System.Collections.Generic;
-  using OpenHardwareMonitor.Collections;
+    using System.Collections.Generic;
+    using OpenHardwareMonitor.Collections;
 
-  [NamePrefix(""), RequireSmart(0xB1), RequireSmart(0xB3), RequireSmart(0xB5),
+    [NamePrefix(""), RequireSmart(0xB1), RequireSmart(0xB3), RequireSmart(0xB5),
 RequireSmart(0xB6), RequireSmart(0xB7), RequireSmart(0xBB),
 RequireSmart(0xC3), RequireSmart(0xC7)]
-  internal class SSDSamsung : AbstractHarddrive {
+    internal class SSDSamsung : AbstractHarddrive {
 
-    private static readonly IEnumerable<SmartAttribute> smartAttributes =
-      new List<SmartAttribute> {
+        private static readonly IEnumerable<SmartAttribute> smartAttributes =
+          new List<SmartAttribute> {
       new SmartAttribute(0x05, SmartNames.ReallocatedSectorsCount),
       new SmartAttribute(0x09, SmartNames.PowerOnHours, RawToInt),
       new SmartAttribute(0x0C, SmartNames.PowerCycleCount, RawToInt),
@@ -56,10 +56,10 @@ RequireSmart(0xC3), RequireSmart(0xC7)]
             ((long)r[2] << 16) | ((long)r[1] << 8) | r[0]) *
             (512.0f / 1024 / 1024 / 1024);
         }, SensorType.Data, 0, "Total Bytes Written")
-    };
+        };
 
-    public SSDSamsung(ISmart smart, string name, string firmwareRevision,
-      int index, ISettings settings)
-      : base(smart, name, firmwareRevision, index, smartAttributes, settings) { }
-  }
+        public SSDSamsung(ISmart smart, string name, string firmwareRevision,
+          int index, ISettings settings)
+          : base(smart, name, firmwareRevision, index, smartAttributes, settings) { }
+    }
 }

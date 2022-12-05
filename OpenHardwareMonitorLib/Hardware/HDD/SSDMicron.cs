@@ -13,13 +13,13 @@ using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware.HDD {
 
-  [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xAC),
+    [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xAC),
 RequireSmart(0xAD), RequireSmart(0xAE), RequireSmart(0xC4),
 RequireSmart(0xCA), RequireSmart(0xCE)]
-  internal class SSDMicron : AbstractHarddrive {
+    internal class SSDMicron : AbstractHarddrive {
 
-    private static readonly IEnumerable<SmartAttribute> smartAttributes =
-      new List<SmartAttribute> {
+        private static readonly IEnumerable<SmartAttribute> smartAttributes =
+          new List<SmartAttribute> {
 
       new SmartAttribute(0x01, SmartNames.ReadErrorRate, RawToInt),
       new SmartAttribute(0x05, SmartNames.ReallocatedNANDBlockCount, RawToInt),
@@ -60,49 +60,49 @@ RequireSmart(0xCA), RequireSmart(0xCE)]
         }, SensorType.Data, 0, "Total Bytes Written"),
       new SmartAttribute(0xF7, SmartNames.HostProgramNANDPagesCount, RawToInt),
       new SmartAttribute(0xF8, SmartNames.FTLProgramNANDPagesCount, RawToInt)
-    };
+        };
 
-    private Sensor temperature;
-    private Sensor writeAmplification;
+        private Sensor temperature;
+        private Sensor writeAmplification;
 
-    public SSDMicron(ISmart smart, string name, string firmwareRevision,
-      int index, ISettings settings)
-      : base(smart, name, firmwareRevision, index, smartAttributes, settings) {
-      this.temperature = new Sensor("Temperature", 0, false,
-        SensorType.Temperature, this,
-        new[] { new ParameterDescription("Offset [°C]",
+        public SSDMicron(ISmart smart, string name, string firmwareRevision,
+          int index, ISettings settings)
+          : base(smart, name, firmwareRevision, index, smartAttributes, settings) {
+            this.temperature = new Sensor("Temperature", 0, false,
+              SensorType.Temperature, this,
+              new[] { new ParameterDescription("Offset [°C]",
           "Temperature offset of the thermal sensor.\n" +
           "Temperature = Value + Offset.", 0) }, settings);
-      this.writeAmplification = new Sensor("Write Amplification", 0,
-        SensorType.Factor, this, settings);
-    }
-
-    public override void UpdateAdditionalSensors(DriveAttributeValue[] values) {
-      float? hostProgramPagesCount = null;
-      float? ftlProgramPagesCount = null;
-      foreach (DriveAttributeValue value in values) {
-        if (value.Identifier == 0xF7)
-          hostProgramPagesCount = RawToInt(value.RawValue, value.AttrValue, null);
-
-        if (value.Identifier == 0xF8)
-          ftlProgramPagesCount = RawToInt(value.RawValue, value.AttrValue, null);
-
-        if (value.Identifier == 0xC2) {
-          temperature.Value =
-            value.RawValue[0] + temperature.Parameters[0].Value;
-          if (value.RawValue[0] != 0)
-            ActivateSensor(temperature);
+            this.writeAmplification = new Sensor("Write Amplification", 0,
+              SensorType.Factor, this, settings);
         }
-      }
-      if (hostProgramPagesCount.HasValue && ftlProgramPagesCount.HasValue) {
-        if (hostProgramPagesCount.Value > 0)
-          writeAmplification.Value =
-            (hostProgramPagesCount.Value + ftlProgramPagesCount) /
-            hostProgramPagesCount.Value;
-        else
-          writeAmplification.Value = 0;
-        ActivateSensor(writeAmplification);
-      }
+
+        public override void UpdateAdditionalSensors(DriveAttributeValue[] values) {
+            float? hostProgramPagesCount = null;
+            float? ftlProgramPagesCount = null;
+            foreach (DriveAttributeValue value in values) {
+                if (value.Identifier == 0xF7)
+                    hostProgramPagesCount = RawToInt(value.RawValue, value.AttrValue, null);
+
+                if (value.Identifier == 0xF8)
+                    ftlProgramPagesCount = RawToInt(value.RawValue, value.AttrValue, null);
+
+                if (value.Identifier == 0xC2) {
+                    temperature.Value =
+                      value.RawValue[0] + temperature.Parameters[0].Value;
+                    if (value.RawValue[0] != 0)
+                        ActivateSensor(temperature);
+                }
+            }
+            if (hostProgramPagesCount.HasValue && ftlProgramPagesCount.HasValue) {
+                if (hostProgramPagesCount.Value > 0)
+                    writeAmplification.Value =
+                      (hostProgramPagesCount.Value + ftlProgramPagesCount) /
+                      hostProgramPagesCount.Value;
+                else
+                    writeAmplification.Value = 0;
+                ActivateSensor(writeAmplification);
+            }
+        }
     }
-  }
 }

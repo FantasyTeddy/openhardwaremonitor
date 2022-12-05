@@ -14,11 +14,11 @@ using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware.HDD {
 
-  [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xB1)]
-  internal class SSDSandforce : AbstractHarddrive {
+    [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xB1)]
+    internal class SSDSandforce : AbstractHarddrive {
 
-    private static readonly IEnumerable<SmartAttribute> smartAttributes =
-      new List<SmartAttribute> {
+        private static readonly IEnumerable<SmartAttribute> smartAttributes =
+          new List<SmartAttribute> {
       new SmartAttribute(0x01, SmartNames.RawReadErrorRate),
       new SmartAttribute(0x05, SmartNames.RetiredBlockCount, RawToInt),
       new SmartAttribute(0x09, SmartNames.PowerOnHours, RawToInt),
@@ -49,35 +49,35 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         SensorType.Data, 1, SmartNames.HostWrites),
       new SmartAttribute(0xF2, SmartNames.HostReads, RawToInt,
         SensorType.Data, 2, SmartNames.HostReads)
-    };
+        };
 
-    private Sensor writeAmplification;
+        private Sensor writeAmplification;
 
-    public SSDSandforce(ISmart smart, string name, string firmwareRevision,
-      int index, ISettings settings)
-      : base(smart, name, firmwareRevision, index, smartAttributes, settings) {
-      this.writeAmplification = new Sensor("Write Amplification", 1,
-        SensorType.Factor, this, settings);
+        public SSDSandforce(ISmart smart, string name, string firmwareRevision,
+          int index, ISettings settings)
+          : base(smart, name, firmwareRevision, index, smartAttributes, settings) {
+            this.writeAmplification = new Sensor("Write Amplification", 1,
+              SensorType.Factor, this, settings);
+        }
+
+        public override void UpdateAdditionalSensors(DriveAttributeValue[] values) {
+            float? controllerWritesToNAND = null;
+            float? hostWritesToController = null;
+            foreach (DriveAttributeValue value in values) {
+                if (value.Identifier == 0xE9)
+                    controllerWritesToNAND = RawToInt(value.RawValue, value.AttrValue, null);
+
+                if (value.Identifier == 0xEA)
+                    hostWritesToController = RawToInt(value.RawValue, value.AttrValue, null);
+            }
+            if (controllerWritesToNAND.HasValue && hostWritesToController.HasValue) {
+                if (hostWritesToController.Value > 0)
+                    writeAmplification.Value =
+                      controllerWritesToNAND.Value / hostWritesToController.Value;
+                else
+                    writeAmplification.Value = 0;
+                ActivateSensor(writeAmplification);
+            }
+        }
     }
-
-    public override void UpdateAdditionalSensors(DriveAttributeValue[] values) {
-      float? controllerWritesToNAND = null;
-      float? hostWritesToController = null;
-      foreach (DriveAttributeValue value in values) {
-        if (value.Identifier == 0xE9)
-          controllerWritesToNAND = RawToInt(value.RawValue, value.AttrValue, null);
-
-        if (value.Identifier == 0xEA)
-          hostWritesToController = RawToInt(value.RawValue, value.AttrValue, null);
-      }
-      if (controllerWritesToNAND.HasValue && hostWritesToController.HasValue) {
-        if (hostWritesToController.Value > 0)
-          writeAmplification.Value =
-            controllerWritesToNAND.Value / hostWritesToController.Value;
-        else
-          writeAmplification.Value = 0;
-        ActivateSensor(writeAmplification);
-      }
-    }
-  }
 }

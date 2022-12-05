@@ -10,26 +10,26 @@
 
 namespace OpenHardwareMonitor.Hardware {
 
-  public enum ControlMode {
-    Undefined,
-    Software,
-    Default
-  }
+    public enum ControlMode {
+        Undefined,
+        Software,
+        Default
+    }
 
-  public interface IControl {
+    public interface IControl {
 
-    Identifier Identifier { get; }
+        Identifier Identifier { get; }
 
-    ControlMode ControlMode { get; }
+        ControlMode ControlMode { get; }
 
-    float SoftwareValue { get; }
+        float SoftwareValue { get; }
 
-    void SetDefault();
+        void SetDefault();
 
-    float MinSoftwareValue { get; }
-    float MaxSoftwareValue { get; }
+        float MinSoftwareValue { get; }
+        float MaxSoftwareValue { get; }
 
-    void SetSoftware(float value);
+        void SetSoftware(float value);
 
-  }
+    }
 }
