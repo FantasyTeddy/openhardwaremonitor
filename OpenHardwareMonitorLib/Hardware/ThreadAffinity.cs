@@ -46,7 +46,7 @@ namespace OpenHardwareMonitor.Hardware {
         return true;
       } catch {
         return false;
-      }      
+      }
     }
 
     /// <summary>
@@ -87,9 +87,8 @@ namespace OpenHardwareMonitor.Hardware {
         var currentThread = NativeMethods.GetCurrentThread();
 
         try {
-          if (NativeMethods.SetThreadGroupAffinity(currentThread, 
-            ref groupAffinity, out var previousGroupAffinity)) 
-          {
+          if (NativeMethods.SetThreadGroupAffinity(currentThread,
+            ref groupAffinity, out var previousGroupAffinity)) {
             return new GroupAffinity(previousGroupAffinity.Group,
               (ulong)previousGroupAffinity.Mask);
           } else {
@@ -103,11 +102,11 @@ namespace OpenHardwareMonitor.Hardware {
             currentThread, uIntPtrMask);
 
           return new GroupAffinity(0, previous);
-        }        
+        }
       }
     }
 
-    private static class NativeMethods {      
+    private static class NativeMethods {
       private const string KERNEL = "kernel32.dll";
 
       [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi)]
@@ -125,7 +124,7 @@ namespace OpenHardwareMonitor.Hardware {
         public UIntPtr Mask;
         [MarshalAs(UnmanagedType.U2)]
         public ushort Group;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3, 
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3,
           ArraySubType = UnmanagedType.U2)]
         public ushort[] Reserved;
       }
@@ -137,15 +136,15 @@ namespace OpenHardwareMonitor.Hardware {
           out GROUP_AFFINITY previousGroupAffinity);
 
       private const string LIBC = "libc";
-      
+
       [DllImport(LIBC)]
       public static extern int sched_getaffinity(int pid, IntPtr maskSize,
         ref ulong mask);
-      
+
       [DllImport(LIBC)]
       public static extern int sched_setaffinity(int pid, IntPtr maskSize,
-        ref ulong mask);  
-    }  
+        ref ulong mask);
+    }
   }
 }
 

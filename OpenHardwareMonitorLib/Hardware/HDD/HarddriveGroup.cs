@@ -17,11 +17,11 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
     private const int MAX_DRIVES = 32;
 
-    private readonly List<AbstractHarddrive> hardware = 
+    private readonly List<AbstractHarddrive> hardware =
       new List<AbstractHarddrive>();
 
     public HarddriveGroup(ISettings settings) {
-      if (OperatingSystem.IsUnix) 
+      if (OperatingSystem.IsUnix)
         return;
 
       ISmart smart = new WindowsSmart();
@@ -46,7 +46,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     }
 
     public void Close() {
-      foreach (AbstractHarddrive hdd in hardware) 
+      foreach (AbstractHarddrive hdd in hardware)
         hdd.Close();
     }
   }

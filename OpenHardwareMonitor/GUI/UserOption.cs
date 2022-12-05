@@ -35,7 +35,7 @@ namespace OpenHardwareMonitor.GUI {
 
     private void menuItem_Click(object sender, EventArgs e) {
       this.Value = !this.Value;
-    }    
+    }
 
     public bool Value {
       get { return value; }

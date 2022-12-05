@@ -24,7 +24,7 @@ namespace OpenHardwareMonitor.GUI {
     public ReportForm() {
       InitializeComponent();
       try {
-        titleLabel.Font = new Font(SystemFonts.DefaultFont, FontStyle.Bold);      
+        titleLabel.Font = new Font(SystemFonts.DefaultFont, FontStyle.Bold);
         reportTextBox.Font = new Font(FontFamily.GenericMonospace,
           SystemFonts.DefaultFont.Size);
       } catch { }
@@ -32,10 +32,10 @@ namespace OpenHardwareMonitor.GUI {
 
     public string Report {
       get { return report; }
-      set { 
+      set {
         report = value;
         reportTextBox.Text = report;
-      }      
+      }
     }
 
     private void sendButton_Click(object sender, EventArgs e) {
@@ -74,5 +74,5 @@ namespace OpenHardwareMonitor.GUI {
           MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
-  }  
+  }
 }

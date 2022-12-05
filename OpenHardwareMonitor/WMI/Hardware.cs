@@ -16,7 +16,7 @@ namespace OpenHardwareMonitor.WMI {
   [InstrumentationClass(InstrumentationType.Instance)]
   public class Hardware : IWmiObject {
     #region WMI Exposed
-    
+
     public string HardwareType { get; private set; }
     public string Identifier { get; private set; }
     public string Name { get; private set; }

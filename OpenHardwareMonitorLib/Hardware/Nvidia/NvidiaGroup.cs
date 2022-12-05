@@ -15,7 +15,7 @@ using System.Text;
 namespace OpenHardwareMonitor.Hardware.Nvidia {
 
   internal class NvidiaGroup : IGroup {
-   
+
     private readonly List<Hardware> hardware = new List<Hardware>();
     private readonly StringBuilder report = new StringBuilder();
 
@@ -32,14 +32,14 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         report.AppendLine(version);
       }
 
-      NvPhysicalGpuHandle[] handles = 
+      NvPhysicalGpuHandle[] handles =
         new NvPhysicalGpuHandle[NVAPI.MAX_PHYSICAL_GPUS];
       int count;
       if (NVAPI.NvAPI_EnumPhysicalGPUs == null) {
         report.AppendLine(" Error: NvAPI_EnumPhysicalGPUs not available");
         report.AppendLine();
         return;
-      } else {        
+      } else {
         NvStatus status = NVAPI.NvAPI_EnumPhysicalGPUs(handles, out count);
         if (status != NvStatus.OK) {
           report.AppendLine(" Status: " + status);
@@ -60,8 +60,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         new Dictionary<NvPhysicalGpuHandle, NvDisplayHandle>();
 
       if (NVAPI.NvAPI_EnumNvidiaDisplayHandle != null &&
-        NVAPI.NvAPI_GetPhysicalGPUsFromDisplay != null) 
-      {
+        NVAPI.NvAPI_GetPhysicalGPUsFromDisplay != null) {
         NvStatus status = NvStatus.OK;
         int i = 0;
         while (status == NvStatus.OK) {

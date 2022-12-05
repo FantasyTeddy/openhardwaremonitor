@@ -31,7 +31,7 @@ namespace OpenHardwareMonitor.Hardware {
     private static string ReadSysFS(string path) {
       try {
         if (File.Exists(path)) {
-          using (StreamReader reader = new StreamReader(path)) 
+          using (StreamReader reader = new StreamReader(path))
             return reader.ReadLine();
         } else {
           return null;
@@ -40,22 +40,22 @@ namespace OpenHardwareMonitor.Hardware {
         return null;
       }
     }
-    
+
     public SMBIOS() {
       if (OperatingSystem.IsUnix) {
         this.raw = null;
         this.table = null;
-        
+
         string boardVendor = ReadSysFS("/sys/class/dmi/id/board_vendor");
-        string boardName = ReadSysFS("/sys/class/dmi/id/board_name");        
-        string boardVersion = ReadSysFS("/sys/class/dmi/id/board_version");        
+        string boardName = ReadSysFS("/sys/class/dmi/id/board_name");
+        string boardVersion = ReadSysFS("/sys/class/dmi/id/board_version");
         this.baseBoardInformation = new BaseBoardInformation(
           boardVendor, boardName, boardVersion, null);
 
         string systemVendor = ReadSysFS("/sys/class/dmi/id/sys_vendor");
         string productName = ReadSysFS("/sys/class/dmi/id/product_name");
-        string productVersion = ReadSysFS("/sys/class/dmi/id/product_version");    
-        this.systemInformation = new SystemInformation(systemVendor, 
+        string productVersion = ReadSysFS("/sys/class/dmi/id/product_version");
+        this.systemInformation = new SystemInformation(systemVendor,
           productName, productVersion, null, null);
 
         string biosVendor = ReadSysFS("/sys/class/dmi/id/bios_vendor");
@@ -63,7 +63,7 @@ namespace OpenHardwareMonitor.Hardware {
         this.biosInformation = new BIOSInformation(biosVendor, biosVersion);
 
         this.memoryDevices = new MemoryDevice[0];
-      } else {              
+      } else {
         List<Structure> structureList = new List<Structure>();
         List<MemoryDevice> memoryDeviceList = new List<MemoryDevice>();
 
@@ -72,42 +72,42 @@ namespace OpenHardwareMonitor.Hardware {
         byte minorVersion = 0;
         try {
           ManagementObjectCollection collection;
-          using (ManagementObjectSearcher searcher = 
-            new ManagementObjectSearcher("root\\WMI", 
+          using (ManagementObjectSearcher searcher =
+            new ManagementObjectSearcher("root\\WMI",
               "SELECT * FROM MSSMBios_RawSMBiosTables")) {
             collection = searcher.Get();
           }
-         
+
           foreach (ManagementObject mo in collection) {
             raw = (byte[])mo["SMBiosData"];
             majorVersion = (byte)mo["SmbiosMajorVersion"];
-            minorVersion = (byte)mo["SmbiosMinorVersion"];            
+            minorVersion = (byte)mo["SmbiosMinorVersion"];
             break;
           }
-        } catch { }      
+        } catch { }
 
         if (majorVersion > 0 || minorVersion > 0)
           version = new Version(majorVersion, minorVersion);
-  
+
         if (raw != null && raw.Length > 0) {
           int offset = 0;
           byte type = raw[offset];
           while (offset + 4 < raw.Length && type != 127) {
-  
+
             type = raw[offset];
             int length = raw[offset + 1];
             ushort handle = (ushort)((raw[offset + 2] << 8) | raw[offset + 3]);
-  
+
             if (offset + length > raw.Length)
               break;
             byte[] data = new byte[length];
             Array.Copy(raw, offset, data, 0, length);
             offset += length;
-  
+
             List<string> stringsList = new List<string>();
             if (offset < raw.Length && raw[offset] == 0)
               offset++;
-  
+
             while (offset < raw.Length && raw[offset] != 0) {
               StringBuilder sb = new StringBuilder();
               while (offset < raw.Length && raw[offset] != 0) {
@@ -126,17 +126,21 @@ namespace OpenHardwareMonitor.Hardware {
                 this.systemInformation = new SystemInformation(
                   type, handle, data, stringsList.ToArray());
                 structureList.Add(this.systemInformation); break;
-              case 0x02: this.baseBoardInformation = new BaseBoardInformation(
+              case 0x02:
+                this.baseBoardInformation = new BaseBoardInformation(
                   type, handle, data, stringsList.ToArray());
                 structureList.Add(this.baseBoardInformation); break;
-              case 0x04: this.processorInformation = new ProcessorInformation(
+              case 0x04:
+                this.processorInformation = new ProcessorInformation(
                   type, handle, data, stringsList.ToArray());
                 structureList.Add(this.processorInformation); break;
-              case 0x11: MemoryDevice m = new MemoryDevice(
+              case 0x11:
+                MemoryDevice m = new MemoryDevice(
                   type, handle, data, stringsList.ToArray());
                 memoryDeviceList.Add(m);
                 structureList.Add(m); break;
-              default: structureList.Add(new Structure(
+              default:
+                structureList.Add(new Structure(
                 type, handle, data, stringsList.ToArray())); break;
             }
           }
@@ -198,7 +202,7 @@ namespace OpenHardwareMonitor.Hardware {
         r.AppendLine();
       }
 
-      for (int i = 0; i < MemoryDevices.Length; i++) {        
+      for (int i = 0; i < MemoryDevices.Length; i++) {
         r.Append("Memory Device [" + i + "] Manufacturer: ");
         r.AppendLine(MemoryDevices[i].ManufacturerName);
         r.Append("Memory Device [" + i + "] Part Number: ");
@@ -222,7 +226,7 @@ namespace OpenHardwareMonitor.Hardware {
           r.Append(" ");
           for (int j = 0; j < 0x40; j++) {
             int index = (i << 6) | j;
-            if (index < base64.Length) {              
+            if (index < base64.Length) {
               r.Append(base64[index]);
             }
           }
@@ -284,8 +288,7 @@ namespace OpenHardwareMonitor.Hardware {
           return "";
       }
 
-      public Structure(byte type, ushort handle, byte[] data, string[] strings) 
-      {
+      public Structure(byte type, ushort handle, byte[] data, string[] strings) {
         this.type = type;
         this.handle = handle;
         this.data = data;
@@ -296,23 +299,21 @@ namespace OpenHardwareMonitor.Hardware {
 
       public ushort Handle { get { return handle; } }
     }
-      
+
     public class BIOSInformation : Structure {
 
       private readonly string vendor;
       private readonly string version;
-      
-      public BIOSInformation(string vendor, string version) 
-        : base (0x00, 0, null, null) 
-      {
+
+      public BIOSInformation(string vendor, string version)
+        : base(0x00, 0, null, null) {
         this.vendor = vendor;
         this.version = version;
       }
-      
+
       public BIOSInformation(byte type, ushort handle, byte[] data,
         string[] strings)
-        : base(type, handle, data, strings) 
-      {
+        : base(type, handle, data, strings) {
         this.vendor = GetString(0x04);
         this.version = GetString(0x05);
       }
@@ -330,10 +331,9 @@ namespace OpenHardwareMonitor.Hardware {
       private readonly string serialNumber;
       private readonly string family;
 
-      public SystemInformation(string manufacturerName, string productName, 
-        string version, string serialNumber, string family) 
-        : base (0x01, 0, null, null) 
-      {
+      public SystemInformation(string manufacturerName, string productName,
+        string version, string serialNumber, string family)
+        : base(0x01, 0, null, null) {
         this.manufacturerName = manufacturerName;
         this.productName = productName;
         this.version = version;
@@ -343,8 +343,7 @@ namespace OpenHardwareMonitor.Hardware {
 
       public SystemInformation(byte type, ushort handle, byte[] data,
         string[] strings)
-        : base(type, handle, data, strings) 
-      {
+        : base(type, handle, data, strings) {
         this.manufacturerName = GetString(0x04);
         this.productName = GetString(0x05);
         this.version = GetString(0x06);
@@ -370,17 +369,16 @@ namespace OpenHardwareMonitor.Hardware {
       private readonly string productName;
       private readonly string version;
       private readonly string serialNumber;
-      
-      public BaseBoardInformation(string manufacturerName, string productName, 
-        string version, string serialNumber) 
-        : base(0x02, 0, null, null) 
-      {
+
+      public BaseBoardInformation(string manufacturerName, string productName,
+        string version, string serialNumber)
+        : base(0x02, 0, null, null) {
         this.manufacturerName = manufacturerName;
         this.productName = productName;
         this.version = version;
         this.serialNumber = serialNumber;
       }
-      
+
       public BaseBoardInformation(byte type, ushort handle, byte[] data,
         string[] strings)
         : base(type, handle, data, strings) {
@@ -388,9 +386,9 @@ namespace OpenHardwareMonitor.Hardware {
         this.manufacturerName = GetString(0x04).Trim();
         this.productName = GetString(0x05).Trim();
         this.version = GetString(0x06).Trim();
-        this.serialNumber = GetString(0x07).Trim();               
+        this.serialNumber = GetString(0x07).Trim();
       }
-      
+
       public string ManufacturerName { get { return manufacturerName; } }
 
       public string ProductName { get { return productName; } }
@@ -405,8 +403,7 @@ namespace OpenHardwareMonitor.Hardware {
 
       public ProcessorInformation(byte type, ushort handle, byte[] data,
         string[] strings)
-        : base(type, handle, data, strings) 
-      {
+        : base(type, handle, data, strings) {
         this.ManufacturerName = GetString(0x07).Trim();
         this.Version = GetString(0x10).Trim();
         this.CoreCount = GetByte(0x23);
@@ -424,7 +421,7 @@ namespace OpenHardwareMonitor.Hardware {
       public int CoreEnabled { get; private set; }
 
       public int ThreadCount { get; private set; }
-     
+
       public int ExternalClock { get; private set; }
     }
 
@@ -439,8 +436,7 @@ namespace OpenHardwareMonitor.Hardware {
 
       public MemoryDevice(byte type, ushort handle, byte[] data,
         string[] strings)
-        : base(type, handle, data, strings) 
-      {
+        : base(type, handle, data, strings) {
         this.deviceLocator = GetString(0x10).Trim();
         this.bankLocator = GetString(0x11).Trim();
         this.manufacturerName = GetString(0x17).Trim();

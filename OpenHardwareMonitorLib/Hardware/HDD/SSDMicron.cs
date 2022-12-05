@@ -11,16 +11,16 @@
 using System.Collections.Generic;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware.HDD {  
+namespace OpenHardwareMonitor.Hardware.HDD {
 
-  [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xAC), 
-   RequireSmart(0xAD), RequireSmart(0xAE), RequireSmart(0xC4),
-   RequireSmart(0xCA), RequireSmart(0xCE)]
+  [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xAC),
+RequireSmart(0xAD), RequireSmart(0xAE), RequireSmart(0xC4),
+RequireSmart(0xCA), RequireSmart(0xCE)]
   internal class SSDMicron : AbstractHarddrive {
 
     private static readonly IEnumerable<SmartAttribute> smartAttributes =
       new List<SmartAttribute> {
-      
+
       new SmartAttribute(0x01, SmartNames.ReadErrorRate, RawToInt),
       new SmartAttribute(0x05, SmartNames.ReallocatedNANDBlockCount, RawToInt),
       new SmartAttribute(0x09, SmartNames.PowerOnHours, RawToInt),
@@ -31,22 +31,22 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       new SmartAttribute(0xAD, SmartNames.WearLevelingCount, RawToInt),
       new SmartAttribute(0xAE, SmartNames.UnexpectedPowerLossCount, RawToInt),
       new SmartAttribute(0xB4, SmartNames.UnusedReserveNANDBlocks, RawToInt),
-      new SmartAttribute(0xB5, SmartNames.Non4kAlignedAccess, 
-        (byte[] raw, byte value, IReadOnlyArray<IParameter> p) 
-          => { return 6e4f * ((raw[5] << 8) | raw[4]); }),      
+      new SmartAttribute(0xB5, SmartNames.Non4kAlignedAccess,
+        (byte[] raw, byte value, IReadOnlyArray<IParameter> p)
+          => { return 6e4f * ((raw[5] << 8) | raw[4]); }),
       new SmartAttribute(0xB7, SmartNames.SataDownshiftErrorCount, RawToInt),
       new SmartAttribute(0xB8, SmartNames.ErrorCorrectionCount, RawToInt),
       new SmartAttribute(0xBB, SmartNames.ReportedUncorrectableErrors, RawToInt),
       new SmartAttribute(0xBC, SmartNames.CommandTimeout, RawToInt),
       new SmartAttribute(0xBD, SmartNames.FactoryBadBlockCount, RawToInt),
-      new SmartAttribute(0xC2, SmartNames.Temperature, RawToInt),       
+      new SmartAttribute(0xC2, SmartNames.Temperature, RawToInt),
       new SmartAttribute(0xC4, SmartNames.ReallocationEventCount, RawToInt),
       new SmartAttribute(0xC5, SmartNames.CurrentPendingSectorCount),
       new SmartAttribute(0xC6, SmartNames.OffLineUncorrectableErrorCount, RawToInt),
       new SmartAttribute(0xC7, SmartNames.UltraDmaCrcErrorCount, RawToInt),
-      new SmartAttribute(0xCA, SmartNames.RemainingLife, 
-        (byte[] raw, byte value, IReadOnlyArray<IParameter> p) 
-          => { return 100 - RawToInt(raw, value, p); }, 
+      new SmartAttribute(0xCA, SmartNames.RemainingLife,
+        (byte[] raw, byte value, IReadOnlyArray<IParameter> p)
+          => { return 100 - RawToInt(raw, value, p); },
         SensorType.Level, 0, SmartNames.RemainingLife),
       new SmartAttribute(0xCE, SmartNames.WriteErrorRate,
          (byte[] raw, byte value, IReadOnlyArray<IParameter> p)
@@ -65,10 +65,9 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     private Sensor temperature;
     private Sensor writeAmplification;
 
-    public SSDMicron(ISmart smart, string name, string firmwareRevision, 
+    public SSDMicron(ISmart smart, string name, string firmwareRevision,
       int index, ISettings settings)
-      : base(smart, name, firmwareRevision, index, smartAttributes, settings) 
-    {
+      : base(smart, name, firmwareRevision, index, smartAttributes, settings) {
       this.temperature = new Sensor("Temperature", 0, false,
         SensorType.Temperature, this,
         new[] { new ParameterDescription("Offset [°C]",
@@ -89,7 +88,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
           ftlProgramPagesCount = RawToInt(value.RawValue, value.AttrValue, null);
 
         if (value.Identifier == 0xC2) {
-          temperature.Value = 
+          temperature.Value =
             value.RawValue[0] + temperature.Parameters[0].Value;
           if (value.RawValue[0] != 0)
             ActivateSensor(temperature);
@@ -98,7 +97,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       if (hostProgramPagesCount.HasValue && ftlProgramPagesCount.HasValue) {
         if (hostProgramPagesCount.Value > 0)
           writeAmplification.Value =
-            (hostProgramPagesCount.Value + ftlProgramPagesCount) / 
+            (hostProgramPagesCount.Value + ftlProgramPagesCount) /
             hostProgramPagesCount.Value;
         else
           writeAmplification.Value = 0;

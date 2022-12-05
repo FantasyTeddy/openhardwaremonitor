@@ -30,7 +30,7 @@ namespace OpenHardwareMonitor.Hardware {
     private bool ramEnabled;
     private bool gpuEnabled;
     private bool fanControllerEnabled;
-    private bool hddEnabled;    
+    private bool hddEnabled;
 
     public Computer() {
       this.settings = new Settings();
@@ -163,7 +163,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
         ramEnabled = value;
       }
-    }    
+    }
 
     public bool GPUEnabled {
       get { return gpuEnabled; }
@@ -242,16 +242,15 @@ namespace OpenHardwareMonitor.Hardware {
     }
 
     private static void ReportHardwareSensorTree(
-      IHardware hardware, TextWriter w, string space) 
-    {
+      IHardware hardware, TextWriter w, string space) {
       w.WriteLine("{0}|", space);
       w.WriteLine("{0}+- {1} ({2})",
         space, hardware.Name, hardware.Identifier);
       ISensor[] sensors = hardware.Sensors;
       Array.Sort(sensors, CompareSensor);
       foreach (ISensor sensor in sensors) {
-        w.WriteLine("{0}|  +- {1,-14} : {2,8:G6} {3,8:G6} {4,8:G6} ({5})", 
-          space, sensor.Name, sensor.Value, sensor.Min, sensor.Max, 
+        w.WriteLine("{0}|  +- {1,-14} : {2,8:G6} {3,8:G6} {4,8:G6} ({5})",
+          space, sensor.Name, sensor.Value, sensor.Min, sensor.Max,
           sensor.Identifier);
       }
       foreach (IHardware subHardware in hardware.SubHardware)
@@ -390,7 +389,7 @@ namespace OpenHardwareMonitor.Hardware {
 
     public void Traverse(IVisitor visitor) {
       foreach (IGroup group in groups)
-        foreach (IHardware hardware in group.Hardware) 
+        foreach (IHardware hardware in group.Hardware)
           hardware.Accept(visitor);
     }
 

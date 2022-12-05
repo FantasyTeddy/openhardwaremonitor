@@ -41,7 +41,7 @@ namespace OpenHardwareMonitor.Hardware {
     }
 
     protected virtual void ActivateSensor(ISensor sensor) {
-      if (active.Add(sensor)) 
+      if (active.Add(sensor))
         if (SensorAdded != null)
           SensorAdded(sensor);
     }
@@ -49,7 +49,7 @@ namespace OpenHardwareMonitor.Hardware {
     protected virtual void DeactivateSensor(ISensor sensor) {
       if (active.Remove(sensor))
         if (SensorRemoved != null)
-          SensorRemoved(sensor);     
+          SensorRemoved(sensor);
     }
 
     public string Name {
@@ -61,7 +61,7 @@ namespace OpenHardwareMonitor.Hardware {
           customName = value;
         else
           customName = name;
-        settings.SetValue(new Identifier(Identifier, "name").ToString(), 
+        settings.SetValue(new Identifier(Identifier, "name").ToString(),
           customName);
       }
     }
@@ -72,12 +72,12 @@ namespace OpenHardwareMonitor.Hardware {
       }
     }
 
-    #pragma warning disable 67
+#pragma warning disable 67
     public event SensorEventHandler SensorAdded;
     public event SensorEventHandler SensorRemoved;
-    #pragma warning restore 67
-  
-    
+#pragma warning restore 67
+
+
     public abstract HardwareType HardwareType { get; }
 
     public virtual string GetReport() {

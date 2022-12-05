@@ -45,16 +45,16 @@ namespace OpenHardwareMonitor.Utilities {
 
       public void Write(BinaryWriter bw) {
         bw.Write(Size);
-			  bw.Write(Width);
-			  bw.Write(Height);
-			  bw.Write(Planes);
-			  bw.Write(BitCount);
-			  bw.Write(Compression);
-			  bw.Write(SizeImage);
-			  bw.Write(XPelsPerMeter);
-			  bw.Write(YPelsPerMeter);
-			  bw.Write(ClrUsed);
-			  bw.Write(ClrImportant);
+        bw.Write(Width);
+        bw.Write(Height);
+        bw.Write(Planes);
+        bw.Write(BitCount);
+        bw.Write(Compression);
+        bw.Write(SizeImage);
+        bw.Write(XPelsPerMeter);
+        bw.Write(YPelsPerMeter);
+        bw.Write(ClrUsed);
+        bw.Write(ClrImportant);
       }
     }
 
@@ -64,7 +64,7 @@ namespace OpenHardwareMonitor.Utilities {
       public int MaskSize;
 
       public ICONIMAGE(int width, int height, byte[] colors) {
-        this.Header = new BITMAPINFOHEADER(width, height << 1, 
+        this.Header = new BITMAPINFOHEADER(width, height << 1,
           (8 * colors.Length) / (width * height));
         this.Colors = colors;
         MaskSize = (width * height) >> 3;
@@ -76,7 +76,7 @@ namespace OpenHardwareMonitor.Utilities {
         for (int i = (Header.Height >> 1) - 1; i >= 0; i--)
           bw.Write(Colors, i * stride, stride);
         for (int i = 0; i < 2 * MaskSize; i++)
-          bw.Write((byte)0);        
+          bw.Write((byte)0);
       }
     }
 
@@ -140,30 +140,32 @@ namespace OpenHardwareMonitor.Utilities {
       }
 
       public uint Size {
-        get { return (uint)(6 + Entries.Length * 
-          (Entries.Length > 0 ? Entries[0].Size : 0)); } 
+        get {
+          return (uint)(6 + Entries.Length *
+          (Entries.Length > 0 ? Entries[0].Size : 0));
+        }
       }
     }
 
-    private static BinaryWriter binaryWriter = 
+    private static BinaryWriter binaryWriter =
       new BinaryWriter(new MemoryStream());
-	
-    public static Icon Create(byte[] colors, int width, int height, 
+
+    public static Icon Create(byte[] colors, int width, int height,
       PixelFormat format) {
       if (format != PixelFormat.Format32bppArgb)
         throw new NotImplementedException();
 
       ICONIMAGE image = new ICONIMAGE(width, height, colors);
       ICONDIR dir = new ICONDIR(
-        new ICONDIRENTRY[] { new ICONDIRENTRY(image, 0) } );
+        new ICONDIRENTRY[] { new ICONDIRENTRY(image, 0) });
       dir.Entries[0].ImageOffset = dir.Size;
 
       Icon icon;
       binaryWriter.BaseStream.Position = 0;
-			dir.Write(binaryWriter);
+      dir.Write(binaryWriter);
       image.Write(binaryWriter);
 
-			binaryWriter.BaseStream.Position = 0;
+      binaryWriter.BaseStream.Position = 0;
       icon = new Icon(binaryWriter.BaseStream);
 
       return icon;

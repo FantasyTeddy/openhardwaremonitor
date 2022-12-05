@@ -233,7 +233,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     public ulong Reserved3;
     public ulong Reserved4;
 
-    [MarshalAs(UnmanagedType.ByValArray, 
+    [MarshalAs(UnmanagedType.ByValArray,
       SizeConst = NVAPI.MAX_FAN_COOLERS_STATUS_ITEMS)]
     internal NvFanCoolersStatusItem[] Items;
   }
@@ -324,12 +324,12 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate NvStatus NvAPI_GPU_GetDynamicPstatesInfoExDelegate(
-      NvPhysicalGpuHandle gpuHandle, 
+      NvPhysicalGpuHandle gpuHandle,
       ref NvDynamicPstatesInfoEx dynamicPstatesInfoEx);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate NvStatus NvAPI_GPU_GetDynamicPstatesInfoDelegate(
-      NvPhysicalGpuHandle gpuHandle, 
+      NvPhysicalGpuHandle gpuHandle,
       ref NvDynamicPstatesInfo dynamicPstatesInfo);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -357,7 +357,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate NvStatus NvAPI_GPU_GetPCIIdentifiersDelegate(
-      NvPhysicalGpuHandle gpuHandle, out uint deviceId, out uint subSystemId, 
+      NvPhysicalGpuHandle gpuHandle, out uint deviceId, out uint subSystemId,
       out uint revisionId, out uint extDeviceId);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -461,9 +461,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
 
       try {
         GetDelegate(0x0150E828, out NvAPI_Initialize);
-      } catch (DllNotFoundException) { return; } 
-        catch (EntryPointNotFoundException) { return; } 
-        catch (ArgumentNullException) { return; }
+      } catch (DllNotFoundException) { return; } catch (EntryPointNotFoundException) { return; } catch (ArgumentNullException) { return; }
 
       if (NvAPI_Initialize() == NvStatus.OK) {
         GetDelegate(0xE3640A56, out NvAPI_GPU_GetThermalSettings);

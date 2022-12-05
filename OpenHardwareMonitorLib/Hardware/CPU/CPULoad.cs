@@ -43,7 +43,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
     private readonly bool available;
 
-    private static bool GetTimes(out long[] idle, out long[] total) {      
+    private static bool GetTimes(out long[] idle, out long[] total) {
       SystemProcessorPerformanceInformation[] informations = new
         SystemProcessorPerformanceInformation[64];
 
@@ -71,7 +71,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
     public CPULoad(CPUID[][] cpuid) {
       this.cpuid = cpuid;
-      this.coreLoads = new float[cpuid.Length];         
+      this.coreLoads = new float[cpuid.Length];
       this.totalLoad = 0;
       try {
         GetTimes(out idleTimes, out totalTimes);
@@ -105,7 +105,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
       if (!GetTimes(out newIdleTimes, out newTotalTimes))
         return;
 
-      for (int i = 0; i < Math.Min(newTotalTimes.Length, totalTimes.Length); i++) 
+      for (int i = 0; i < Math.Min(newTotalTimes.Length, totalTimes.Length); i++)
         if (newTotalTimes[i] - this.totalTimes[i] < 100000)
           return;
 
@@ -119,7 +119,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         for (int j = 0; j < cpuid[i].Length; j++) {
           long index = cpuid[i][j].Thread;
           if (index < newIdleTimes.Length && index < totalTimes.Length) {
-            float idle = 
+            float idle =
               (float)(newIdleTimes[index] - this.idleTimes[index]) /
               (float)(newTotalTimes[index] - this.totalTimes[index]);
             value += idle;

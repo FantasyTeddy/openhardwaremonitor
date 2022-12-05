@@ -64,13 +64,13 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
   }
 
   [StructLayout(LayoutKind.Sequential)]
-  internal struct FT_DEVICE_INFO_NODE {    
+  internal struct FT_DEVICE_INFO_NODE {
     public uint Flags;
-    public FT_DEVICE Type; 
-    public uint ID; 
-    public uint LocId; 
+    public FT_DEVICE Type;
+    public uint ID;
+    public uint LocId;
     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
-    public string SerialNumber; 
+    public string SerialNumber;
     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
     public string Description;
     public FT_HANDLE Handle;
@@ -97,45 +97,45 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
     public delegate FT_STATUS FT_PurgeDelegate(FT_HANDLE handle, FT_PURGE mask);
     public delegate FT_STATUS FT_GetStatusDelegate(FT_HANDLE handle,
       out uint amountInRxQueue, out uint amountInTxQueue, out uint eventStatus);
-    public delegate FT_STATUS FT_ReadDelegate(FT_HANDLE handle, 
+    public delegate FT_STATUS FT_ReadDelegate(FT_HANDLE handle,
       [Out] byte[] buffer, uint bytesToRead, out uint bytesReturned);
     public delegate FT_STATUS FT_ReadByteDelegate(FT_HANDLE handle,
       out byte buffer, uint bytesToRead, out uint bytesReturned);
 
-    public static readonly FT_CreateDeviceInfoListDelegate 
+    public static readonly FT_CreateDeviceInfoListDelegate
       FT_CreateDeviceInfoList = CreateDelegate<
       FT_CreateDeviceInfoListDelegate>("FT_CreateDeviceInfoList");
-    public static readonly FT_GetDeviceInfoListDelegate 
+    public static readonly FT_GetDeviceInfoListDelegate
       FT_GetDeviceInfoList = CreateDelegate<
       FT_GetDeviceInfoListDelegate>("FT_GetDeviceInfoList");
-    public static readonly FT_OpenDelegate 
+    public static readonly FT_OpenDelegate
       FT_Open = CreateDelegate<
       FT_OpenDelegate>("FT_Open");
-    public static readonly FT_CloseDelegate 
+    public static readonly FT_CloseDelegate
       FT_Close = CreateDelegate<
       FT_CloseDelegate>("FT_Close");
-    public static readonly FT_SetBaudRateDelegate 
+    public static readonly FT_SetBaudRateDelegate
       FT_SetBaudRate = CreateDelegate<
       FT_SetBaudRateDelegate>("FT_SetBaudRate");
-    public static readonly FT_SetDataCharacteristicsDelegate 
+    public static readonly FT_SetDataCharacteristicsDelegate
       FT_SetDataCharacteristics = CreateDelegate<
       FT_SetDataCharacteristicsDelegate>("FT_SetDataCharacteristics");
-    public static readonly FT_SetFlowControlDelegate 
+    public static readonly FT_SetFlowControlDelegate
       FT_SetFlowControl = CreateDelegate<
       FT_SetFlowControlDelegate>("FT_SetFlowControl");
-    public static readonly FT_SetTimeoutsDelegate 
+    public static readonly FT_SetTimeoutsDelegate
       FT_SetTimeouts = CreateDelegate<
       FT_SetTimeoutsDelegate>("FT_SetTimeouts");
-    public static readonly FT_WriteDelegate 
+    public static readonly FT_WriteDelegate
       FT_Write = CreateDelegate<
       FT_WriteDelegate>("FT_Write");
-    public static readonly FT_PurgeDelegate 
+    public static readonly FT_PurgeDelegate
       FT_Purge = CreateDelegate<
       FT_PurgeDelegate>("FT_Purge");
-    public static readonly FT_GetStatusDelegate 
+    public static readonly FT_GetStatusDelegate
       FT_GetStatus = CreateDelegate<
       FT_GetStatusDelegate>("FT_GetStatus");
-    public static readonly FT_ReadDelegate 
+    public static readonly FT_ReadDelegate
       FT_Read = CreateDelegate<
       FT_ReadDelegate>("FT_Read");
     public static readonly FT_ReadByteDelegate
@@ -146,7 +146,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
     public static FT_STATUS Write(FT_HANDLE handle, byte[] buffer) {
       uint bytesWritten;
-      FT_STATUS status = FT_Write(handle, buffer, (uint)buffer.Length, 
+      FT_STATUS status = FT_Write(handle, buffer, (uint)buffer.Length,
         out bytesWritten);
       if (bytesWritten != buffer.Length)
         return FT_STATUS.FT_FAILED_TO_WRITE_DEVICE;
@@ -177,7 +177,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
     public static void Read(FT_HANDLE handle, byte[] buffer) {
       uint bytesReturned;
-      FT_STATUS status = 
+      FT_STATUS status =
         FT_Read(handle, buffer, (uint)buffer.Length, out bytesReturned);
       if (status != FT_STATUS.FT_OK || bytesReturned != buffer.Length)
         throw new InvalidOperationException();

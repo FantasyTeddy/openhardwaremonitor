@@ -18,15 +18,14 @@ namespace OpenHardwareMonitor.GUI {
     private readonly IHardware hardware;
     private readonly Identifier expandedIdentifier;
 
-    public TypeNode(SensorType sensorType, IHardware hardware, 
-      PersistentSettings settings) : base() 
-    {
+    public TypeNode(SensorType sensorType, IHardware hardware,
+      PersistentSettings settings) : base() {
       this.settings = settings;
       this.sensorType = sensorType;
       this.hardware = hardware;
 
       switch (sensorType) {
-        case SensorType.Voltage: 
+        case SensorType.Voltage:
           this.Image = Utilities.EmbeddedResources.GetImage("voltage.png");
           this.Text = "Voltages";
           break;
@@ -66,7 +65,7 @@ namespace OpenHardwareMonitor.GUI {
           this.Image = Utilities.EmbeddedResources.GetImage("data.png");
           this.Text = "Data";
           break;
-        case SensorType.SmallData :
+        case SensorType.SmallData:
           this.Image = Utilities.EmbeddedResources.GetImage("data.png");
           this.Text = "Data";
           break;
@@ -85,21 +84,21 @@ namespace OpenHardwareMonitor.GUI {
 
       this.expandedIdentifier = new Identifier(new Identifier(hardware.Identifier,
         sensorType.ToString().ToLowerInvariant()), "expanded");
-      base.IsExpanded = 
+      base.IsExpanded =
         settings.GetValue(expandedIdentifier.ToString(), base.IsExpanded);
     }
 
     private void TypeNode_NodeRemoved(Node node) {
       node.IsVisibleChanged -= new NodeEventHandler(node_IsVisibleChanged);
       node_IsVisibleChanged(null);
-    }    
+    }
 
     private void TypeNode_NodeAdded(Node node) {
       node.IsVisibleChanged += new NodeEventHandler(node_IsVisibleChanged);
       node_IsVisibleChanged(null);
     }
 
-    private void node_IsVisibleChanged(Node node) {      
+    private void node_IsVisibleChanged(Node node) {
       foreach (Node n in Nodes)
         if (n.IsVisible) {
           this.IsVisible = true;

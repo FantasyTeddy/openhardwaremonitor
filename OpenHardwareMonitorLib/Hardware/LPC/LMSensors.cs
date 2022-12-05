@@ -44,9 +44,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             case "f71869a":
               lmChips.Add(new LMChip(Chip.F71869A, path)); break;
             case "f71882fg":
-              lmChips.Add(new LMChip(Chip.F71882, path)); break;            
+              lmChips.Add(new LMChip(Chip.F71882, path)); break;
             case "f71889a":
-              lmChips.Add(new LMChip(Chip.F71889AD, path)); break;            
+              lmChips.Add(new LMChip(Chip.F71889AD, path)); break;
             case "f71878ad":
               lmChips.Add(new LMChip(Chip.F71878AD, path)); break;
             case "f71889ed":
@@ -66,7 +66,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
               lmChips.Add(new LMChip(Chip.IT8718F, path)); break;
             case "it8720":
               lmChips.Add(new LMChip(Chip.IT8720F, path)); break;
-            
+
             case "nct6775":
               lmChips.Add(new LMChip(Chip.NCT6771F, path)); break;
             case "nct6776":
@@ -174,7 +174,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         return null;
       }
 
-      public void SetControl(int index, byte? value) { }   
+      public void SetControl(int index, byte? value) { }
 
       private string ReadFirstLine(Stream stream) {
         StringBuilder sb = new StringBuilder();

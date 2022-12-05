@@ -15,7 +15,7 @@ using System.Text;
 namespace OpenHardwareMonitor.Hardware.TBalancer {
   internal class TBalancer : Hardware {
 
-    private readonly int portIndex;    
+    private readonly int portIndex;
     private readonly byte protocolVersion;
     private readonly Sensor[] digitalTemperatures = new Sensor[8];
     private readonly Sensor[] analogTemperatures = new Sensor[4];
@@ -40,14 +40,13 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
     private readonly MethodDelegate alternativeRequest;
 
     public TBalancer(int portIndex, byte protocolVersion, ISettings settings)
-      : base("T-Balancer bigNG",  new Identifier("bigng",
-        portIndex.ToString(CultureInfo.InvariantCulture)), settings) 
-    {
+      : base("T-Balancer bigNG", new Identifier("bigng",
+        portIndex.ToString(CultureInfo.InvariantCulture)), settings) {
 
       this.portIndex = portIndex;
       this.protocolVersion = protocolVersion;
 
-      ParameterDescription[] parameter = new [] {
+      ParameterDescription[] parameter = new[] {
         new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
       };
       int offset = 0;
@@ -74,32 +73,32 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
       for (int i = 0; i < sensorhubFlows.Length; i++)
         sensorhubFlows[i] = new Sensor("Flowmeter " + (i + 1),
-          i, SensorType.Flow, this, new [] {
-            new ParameterDescription("Impulse Rate", 
+          i, SensorType.Flow, this, new[] {
+            new ParameterDescription("Impulse Rate",
               "The impulse rate of the flowmeter in pulses/L", 509)
           }, settings);
 
       for (int i = 0; i < controls.Length; i++) {
-        controls[i] = new Sensor("Fan Channel " + i, i, SensorType.Control, 
+        controls[i] = new Sensor("Fan Channel " + i, i, SensorType.Control,
           this, settings);
       }
 
       for (int i = 0; i < miniNGControls.Length; i++) {
         miniNGControls[i] = new Sensor("miniNG #" + (i / 2 + 1) +
-          " Fan Channel " + (i % 2 + 1), 4 + i, SensorType.Control, this, 
+          " Fan Channel " + (i % 2 + 1), 4 + i, SensorType.Control, this,
           settings);
       }
 
       alternativeRequest = new MethodDelegate(DelayedAlternativeRequest);
 
       Open();
-      Update(); 
+      Update();
     }
 
     protected override void ActivateSensor(ISensor sensor) {
       deactivating.Remove(sensor);
-      base.ActivateSensor(sensor);   
-    } 
+      base.ActivateSensor(sensor);
+    }
 
     protected override void DeactivateSensor(ISensor sensor) {
       if (deactivating.Contains(sensor)) {
@@ -107,7 +106,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         base.DeactivateSensor(sensor);
       } else if (active.Contains(sensor)) {
         deactivating.Add(sensor);
-      }     
+      }
     }
 
     private void ReadminiNG(int number) {
@@ -119,7 +118,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
       for (int i = 0; i < 2; i++) {
         Sensor sensor = miniNGTemperatures[number * 2 + i];
         if (data[offset + 7 + i] > 0) {
-          sensor.Value = 0.5f * data[offset + 7 + i] + 
+          sensor.Value = 0.5f * data[offset + 7 + i] +
             sensor.Parameters[0].Value;
           ActivateSensor(sensor);
         } else {
@@ -129,10 +128,10 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
       for (int i = 0; i < 2; i++) {
         if (miniNGFans[number * 2 + i] == null)
-          miniNGFans[number * 2 + i] = 
+          miniNGFans[number * 2 + i] =
             new Sensor("miniNG #" + (number + 1) + " Fan Channel " + (i + 1),
             4 + number * 2 + i, SensorType.Fan, this, settings);
-        
+
         Sensor sensor = miniNGFans[number * 2 + i];
 
         sensor.Value = 20.0f * data[offset + 43 + 2 * i];
@@ -148,15 +147,15 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
     private void ReadData() {
       FTD2XX.Read(handle, data);
-      
+
       if (data[0] != STARTFLAG) {
-        FTD2XX.FT_Purge(handle, FT_PURGE.FT_PURGE_RX);   
+        FTD2XX.FT_Purge(handle, FT_PURGE.FT_PURGE_RX);
         return;
       }
 
       if (data[1] == 255 || data[1] == 88) { // bigNG
 
-        if (data[274] != protocolVersion) 
+        if (data[274] != protocolVersion)
           return;
 
         if (primaryData.Length == 0)
@@ -165,7 +164,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
         for (int i = 0; i < digitalTemperatures.Length; i++)
           if (data[238 + i] > 0) {
-            digitalTemperatures[i].Value = 0.5f * data[238 + i] + 
+            digitalTemperatures[i].Value = 0.5f * data[238 + i] +
               digitalTemperatures[i].Parameters[0].Value;
             ActivateSensor(digitalTemperatures[i]);
           } else {
@@ -199,13 +198,13 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
           } else {
             DeactivateSensor(sensorhubFlows[i]);
           }
-        
+
         for (int i = 0; i < fans.Length; i++) {
           float maxRPM = 11.5f * ((data[149 + 2 * i] << 8) | data[148 + 2 * i]);
 
           if (fans[i] == null)
             fans[i] = new Sensor("Fan Channel " + i, i, SensorType.Fan,
-              this, new [] { new ParameterDescription("MaxRPM", 
+              this, new[] { new ParameterDescription("MaxRPM",
                   "Maximum revolutions per minute (RPM) of the fan.", maxRPM)
               }, settings);
 
@@ -214,7 +213,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
             value = 0.02f * data[137 + i];
           else // analog mode
             value = 0.01f * data[141 + i];
-          
+
           fans[i].Value = fans[i].Parameters[0].Value * value;
           ActivateSensor(fans[i]);
 
@@ -227,11 +226,11 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
           alternativeData = new byte[data.Length];
         data.CopyTo(alternativeData, 0);
 
-        ReadminiNG(0);        
-              
+        ReadminiNG(0);
+
         if (data[66] == 253)  // miniNG #2
           ReadminiNG(1);
-      } 
+      }
     }
 
     public override HardwareType HardwareType {
@@ -243,7 +242,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
       r.AppendLine("T-Balancer bigNG");
       r.AppendLine();
-      r.Append("Port Index: "); 
+      r.Append("Port Index: ");
       r.AppendLine(portIndex.ToString(CultureInfo.InvariantCulture));
       r.AppendLine();
 
@@ -252,15 +251,15 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
       r.AppendLine("       00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
       r.AppendLine();
       for (int i = 0; i <= 0x11; i++) {
-        r.Append(" "); 
-        r.Append((i << 4).ToString("X3", CultureInfo.InvariantCulture)); 
+        r.Append(" ");
+        r.Append((i << 4).ToString("X3", CultureInfo.InvariantCulture));
         r.Append("  ");
         for (int j = 0; j <= 0xF; j++) {
           int index = ((i << 4) | j);
           if (index < primaryData.Length) {
             r.Append(" ");
             r.Append(primaryData[index].ToString("X2", CultureInfo.InvariantCulture));
-          }          
+          }
         }
         r.AppendLine();
       }
@@ -272,8 +271,8 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         r.AppendLine("       00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
         r.AppendLine();
         for (int i = 0; i <= 0x11; i++) {
-          r.Append(" "); 
-          r.Append((i << 4).ToString("X3", CultureInfo.InvariantCulture)); 
+          r.Append(" ");
+          r.Append((i << 4).ToString("X3", CultureInfo.InvariantCulture));
           r.Append("  ");
           for (int j = 0; j <= 0xF; j++) {
             int index = ((i << 4) | j);
@@ -291,12 +290,12 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
     }
 
     private void DelayedAlternativeRequest() {
-      System.Threading.Thread.Sleep(500);      
+      System.Threading.Thread.Sleep(500);
       FTD2XX.Write(handle, new byte[] { 0x37 });
     }
 
     public void Open() {
-      FTD2XX.FT_Open(portIndex, out handle); 
+      FTD2XX.FT_Open(portIndex, out handle);
       FTD2XX.FT_SetBaudRate(handle, 19200);
       FTD2XX.FT_SetDataCharacteristics(handle, 8, 1, 0);
       FTD2XX.FT_SetFlowControl(handle, FT_FLOW_CONTROL.FT_FLOW_RTS_CTS, 0x11,

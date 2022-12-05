@@ -50,7 +50,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
     Toshiba,
     XFX,
     ZOTAC,
-    Unknown    
+    Unknown
   }
 
 }

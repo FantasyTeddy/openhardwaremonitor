@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
       Manufacturer manufacturer = smbios.Board == null ? Manufacturer.Unknown :
         Identification.GetManufacturer(smbios.Board.ManufacturerName);
 
-      Model model = smbios.Board == null ? Model.Unknown : 
+      Model model = smbios.Board == null ? Model.Unknown :
         Identification.GetModel(smbios.Board.ProductName);
 
       if (smbios.Board != null) {
@@ -54,10 +54,10 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         this.lmSensors = new LMSensors();
         superIO = lmSensors.SuperIO;
       } else {
-        this.lpcio = new LPCIO();       
+        this.lpcio = new LPCIO();
         superIO = lpcio.SuperIO;
       }
-      
+
       superIOHardware = new Hardware[superIO.Length];
       for (int i = 0; i < superIO.Length; i++)
         superIOHardware[i] = new SuperIOHardware(this, superIO[i],
@@ -91,16 +91,16 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
     }
 
     public string GetReport() {
-      StringBuilder r = new StringBuilder(); 
+      StringBuilder r = new StringBuilder();
 
       r.AppendLine("Mainboard");
-      r.AppendLine();           
+      r.AppendLine();
       r.Append(smbios.GetReport());
 
       if (lpcio != null)
         r.Append(lpcio.GetReport());
 
-      byte[] table = 
+      byte[] table =
         FirmwareTable.GetTable(FirmwareTable.Provider.ACPI, "TAMG");
       if (table != null) {
         GigabyteTAMG tamg = new GigabyteTAMG(table);
@@ -127,10 +127,10 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
       get { return new ISensor[0]; }
     }
 
-    #pragma warning disable 67
+#pragma warning disable 67
     public event SensorEventHandler SensorAdded;
     public event SensorEventHandler SensorRemoved;
-    #pragma warning restore 67
+#pragma warning restore 67
 
     public void Accept(IVisitor visitor) {
       if (visitor == null)
@@ -140,7 +140,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
     public void Traverse(IVisitor visitor) {
       foreach (IHardware hardware in superIOHardware)
-        hardware.Accept(visitor);     
+        hardware.Accept(visitor);
     }
   }
 }

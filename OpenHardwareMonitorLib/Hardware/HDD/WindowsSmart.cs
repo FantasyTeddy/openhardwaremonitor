@@ -19,26 +19,26 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
   internal class WindowsSmart : ISmart {
     [Flags]
-    protected enum AccessMode : uint {     
-      Read = 0x80000000,    
-      Write = 0x40000000,     
-      Execute = 0x20000000,     
+    protected enum AccessMode : uint {
+      Read = 0x80000000,
+      Write = 0x40000000,
+      Execute = 0x20000000,
       All = 0x10000000
     }
 
     [Flags]
     protected enum ShareMode : uint {
-      None = 0,     
-      Read = 1,     
-      Write = 2,    
+      None = 0,
+      Read = 1,
+      Write = 2,
       Delete = 4
     }
 
     protected enum CreationMode : uint {
       New = 1,
-      CreateAlways = 2,    
-      OpenExisting = 3,    
-      OpenAlways = 4,    
+      CreateAlways = 2,
+      OpenExisting = 3,
+      OpenAlways = 4,
       TruncateExisting = 5
     }
 
@@ -142,47 +142,47 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     protected struct CommandBlockRegisters {
-      public RegisterFeature Features;         
-      public byte SectorCount;      
-      public byte LBALow;       
-      public byte LBAMid;           
-      public byte LBAHigh;        
+      public RegisterFeature Features;
+      public byte SectorCount;
+      public byte LBALow;
+      public byte LBAMid;
+      public byte LBAHigh;
       public byte Device;
-      public RegisterCommand Command;           
-      public byte Reserved;                  
+      public RegisterCommand Command;
+      public byte Reserved;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     protected struct DriveCommandParameter {
-      public uint BufferSize;           
-      public CommandBlockRegisters Registers;           
-      public byte DriveNumber;   
+      public uint BufferSize;
+      public CommandBlockRegisters Registers;
+      public byte DriveNumber;
       [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-      public byte[] Reserved;                                
+      public byte[] Reserved;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     protected struct DriverStatus {
-      public byte DriverError;   
-      public byte IDEError;             
+      public byte DriverError;
+      public byte IDEError;
       [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-      public byte[] Reserved;               
+      public byte[] Reserved;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     protected struct DriveCommandResult {
       public uint BufferSize;
       public DriverStatus DriverStatus;
-    } 
+    }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     protected struct DriveSmartReadDataResult {
-      public uint BufferSize;           
+      public uint BufferSize;
       public DriverStatus DriverStatus;
       public byte Version;
       public byte Reserved;
       [MarshalAs(UnmanagedType.ByValArray, SizeConst = MAX_DRIVE_ATTRIBUTES)]
-      public DriveAttributeValue[] Attributes;                                                                                       
+      public DriveAttributeValue[] Attributes;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -257,9 +257,9 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       parameter.Registers.LBAHigh = SMART_LBA_HI;
       parameter.Registers.Command = RegisterCommand.SmartCmd;
 
-      return NativeMethods.DeviceIoControl(handle, DriveCommand.SendDriveCommand, 
+      return NativeMethods.DeviceIoControl(handle, DriveCommand.SendDriveCommand,
         ref parameter, Marshal.SizeOf(typeof(DriveCommandParameter)), out result,
-        Marshal.SizeOf(typeof(DriveCommandResult)), out bytesReturned, 
+        Marshal.SizeOf(typeof(DriveCommandResult)), out bytesReturned,
         IntPtr.Zero);
     }
 
@@ -274,17 +274,16 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       parameter.Registers.LBAHigh = SMART_LBA_HI;
       parameter.Registers.Command = RegisterCommand.SmartCmd;
 
-      bool isValid = NativeMethods.DeviceIoControl(handle, 
-        DriveCommand.ReceiveDriveData, ref parameter, Marshal.SizeOf(parameter), 
-        out result, Marshal.SizeOf(typeof(DriveSmartReadDataResult)), 
+      bool isValid = NativeMethods.DeviceIoControl(handle,
+        DriveCommand.ReceiveDriveData, ref parameter, Marshal.SizeOf(parameter),
+        out result, Marshal.SizeOf(typeof(DriveSmartReadDataResult)),
         out bytesReturned, IntPtr.Zero);
 
       return (isValid) ? result.Attributes : new DriveAttributeValue[0];
     }
 
     public DriveThresholdValue[] ReadSmartThresholds(IntPtr handle,
-      int driveNumber) 
-    {
+      int driveNumber) {
       DriveCommandParameter parameter = new DriveCommandParameter();
       DriveSmartReadThresholdsResult result;
       uint bytesReturned = 0;
@@ -297,13 +296,13 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
       bool isValid = NativeMethods.DeviceIoControl(handle,
         DriveCommand.ReceiveDriveData, ref parameter, Marshal.SizeOf(parameter),
-        out result, Marshal.SizeOf(typeof(DriveSmartReadThresholdsResult)), 
-        out bytesReturned, IntPtr.Zero); 
+        out result, Marshal.SizeOf(typeof(DriveSmartReadThresholdsResult)),
+        out bytesReturned, IntPtr.Zero);
 
       return (isValid) ? result.Thresholds : new DriveThresholdValue[0];
     }
 
-    private string GetString(byte[] bytes) {   
+    private string GetString(byte[] bytes) {
       char[] chars = new char[bytes.Length];
       for (int i = 0; i < bytes.Length; i += 2) {
         chars[i] = (char)bytes[i + 1];
@@ -312,9 +311,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       return new string(chars).Trim(new char[] { ' ', '\0' });
     }
 
-    public bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber, 
-      out string name, out string firmwareRevision) 
-    {
+    public bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber,
+      out string name, out string firmwareRevision) {
       DriveCommandParameter parameter = new DriveCommandParameter();
       DriveIdentifyResult result;
       uint bytesReturned;
@@ -322,9 +320,9 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       parameter.DriveNumber = (byte)driveNumber;
       parameter.Registers.Command = RegisterCommand.IdCmd;
 
-      bool valid = NativeMethods.DeviceIoControl(handle, 
-        DriveCommand.ReceiveDriveData, ref parameter, Marshal.SizeOf(parameter), 
-        out result, Marshal.SizeOf(typeof(DriveIdentifyResult)), 
+      bool valid = NativeMethods.DeviceIoControl(handle,
+        DriveCommand.ReceiveDriveData, ref parameter, Marshal.SizeOf(parameter),
+        out result, Marshal.SizeOf(typeof(DriveIdentifyResult)),
         out bytesReturned, IntPtr.Zero);
 
       if (!valid) {
@@ -350,11 +348,11 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             "SELECT * FROM Win32_DiskPartition " +
             "WHERE DiskIndex = " + driveIndex))
         using (ManagementObjectCollection dpc = s.Get())
-        foreach (ManagementObject dp in dpc) 
-          using (ManagementObjectCollection ldc = 
-            dp.GetRelated("Win32_LogicalDisk"))
-          foreach (ManagementBaseObject ld in ldc) 
-            list.Add(((string)ld["Name"]).TrimEnd(':')); 
+          foreach (ManagementObject dp in dpc)
+            using (ManagementObjectCollection ldc =
+              dp.GetRelated("Win32_LogicalDisk"))
+              foreach (ManagementBaseObject ld in ldc)
+                list.Add(((string)ld["Name"]).TrimEnd(':'));
       } catch { }
       return list.ToArray();
     }
@@ -383,7 +381,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       [return: MarshalAsAttribute(UnmanagedType.Bool)]
       public static extern bool DeviceIoControl(IntPtr handle,
         DriveCommand command, ref DriveCommandParameter parameter,
-        int parameterSize, out DriveSmartReadThresholdsResult result, 
+        int parameterSize, out DriveSmartReadThresholdsResult result,
         int resultSize, out uint bytesReturned, IntPtr overlapped);
 
       [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi)]
@@ -399,6 +397,6 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         DriveCommand command, ref DriveCommandParameter parameter,
         int parameterSize, out DriveIdentifyResult result, int resultSize,
         out uint bytesReturned, IntPtr overlapped);
-    }    
+    }
   }
 }

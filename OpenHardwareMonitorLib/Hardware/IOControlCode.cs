@@ -19,10 +19,9 @@ namespace OpenHardwareMonitor.Hardware {
     public IOControlCode(uint deviceType, uint function, Access access) :
       this(deviceType, function, Method.Buffered, access) { }
 
-    public IOControlCode(uint deviceType, uint function, Method method, 
-      Access access) 
-    {
-      code = (deviceType << 16) | 
+    public IOControlCode(uint deviceType, uint function, Method method,
+      Access access) {
+      code = (deviceType << 16) |
         ((uint)access << 14) | (function << 2) | (uint)method;
     }
 
@@ -38,5 +37,5 @@ namespace OpenHardwareMonitor.Hardware {
       Read = 1,
       Write = 2
     }
-  }    
+  }
 }

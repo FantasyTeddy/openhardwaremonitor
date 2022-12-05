@@ -80,17 +80,17 @@ namespace OpenHardwareMonitor.GUI {
       }
     }
 
-    #pragma warning disable 67
+#pragma warning disable 67
     public event EventHandler<TreeModelEventArgs> NodesChanged;
     public event EventHandler<TreePathEventArgs> StructureChanged;
     public event EventHandler<TreeModelEventArgs> NodesInserted;
     public event EventHandler<TreeModelEventArgs> NodesRemoved;
-    #pragma warning restore 67
+#pragma warning restore 67
 
     public void OnNodeChanged(Node parent, int index, Node node) {
       if (NodesChanged != null && parent != null) {
         TreePath path = GetPath(parent);
-        if (path != null) 
+        if (path != null)
           NodesChanged(this, new TreeModelEventArgs(
             path, new int[] { index }, new object[] { node }));
       }
@@ -113,7 +113,7 @@ namespace OpenHardwareMonitor.GUI {
 
     public void OnNodeRemoved(Node parent, int index, Node node) {
       if (NodesRemoved != null) {
-        TreeModelEventArgs args = new TreeModelEventArgs(GetPath(parent), 
+        TreeModelEventArgs args = new TreeModelEventArgs(GetPath(parent),
           new int[] { index }, new object[] { node });
         NodesRemoved(this, args);
       }

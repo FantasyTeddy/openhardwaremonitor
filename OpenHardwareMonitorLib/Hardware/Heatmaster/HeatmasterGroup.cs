@@ -65,18 +65,18 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
     }
 
     public HeatmasterGroup(ISettings settings) {
-      
+
       // No implementation for Heatmaster on Unix systems      
       if (OperatingSystem.IsUnix)
         return;
 
-      string[] portNames = GetRegistryPortNames();      
+      string[] portNames = GetRegistryPortNames();
       for (int i = 0; i < portNames.Length; i++) {
         bool isValid = false;
-        try {        
+        try {
           using (SerialPort serialPort =
             new SerialPort(portNames[i], 38400, Parity.None, 8, StopBits.One)) {
-            serialPort.NewLine = ((char)0x0D).ToString();            
+            serialPort.NewLine = ((char)0x0D).ToString();
             report.Append("Port Name: "); report.AppendLine(portNames[i]);
 
             try {
@@ -109,7 +109,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                       string line = ReadLine(serialPort, 100);
                       if (line.StartsWith("-[0:0]RH:",
                         StringComparison.Ordinal)) {
-                        revision = int.Parse(line.Substring(9), 
+                        revision = int.Parse(line.Substring(9),
                           CultureInfo.InvariantCulture);
                         break;
                       }
@@ -132,7 +132,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
               serialPort.DiscardInBuffer();
             } else {
               report.AppendLine("Status: Port not Open");
-            }            
+            }
           }
         } catch (Exception e) {
           report.AppendLine(e.ToString());

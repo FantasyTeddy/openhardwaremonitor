@@ -23,7 +23,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     private const int UPDATE_DIVIDER = 30; // update only every 30s
 
     // array of all harddrive types, matching type is searched in this order
-    private static Type[] hddTypes = {       
+    private static Type[] hddTypes = {
       typeof(SSDPlextor),
       typeof(SSDIntel),
       typeof(SSDSandforce),
@@ -46,12 +46,11 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     private DriveInfo[] driveInfos;
     private Sensor usageSensor;
 
-    protected AbstractHarddrive(ISmart smart, string name, 
-      string firmwareRevision, int index, 
-      IEnumerable<SmartAttribute> smartAttributes, ISettings settings) 
+    protected AbstractHarddrive(ISmart smart, string name,
+      string firmwareRevision, int index,
+      IEnumerable<SmartAttribute> smartAttributes, ISettings settings)
       : base(name, new Identifier("hdd",
-        index.ToString(CultureInfo.InvariantCulture)), settings)
-    {
+        index.ToString(CultureInfo.InvariantCulture)), settings) {
       this.firmwareRevision = firmwareRevision;
       this.smart = smart;
       handle = smart.OpenDrive(index);
@@ -81,9 +80,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       CreateSensors();
     }
 
-    public static AbstractHarddrive CreateInstance(ISmart smart, 
-      int driveIndex, ISettings settings) 
-    {
+    public static AbstractHarddrive CreateInstance(ISmart smart,
+      int driveIndex, ISettings settings) {
       IntPtr deviceHandle = smart.OpenDrive(driveIndex);
 
       string name = null;
@@ -117,8 +115,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
               hasNonZeroSizeDrive = true;
               break;
             }
-          } catch (ArgumentException) { 
-          } catch (IOException) { 
+          } catch (ArgumentException) {
+          } catch (IOException) {
           } catch (UnauthorizedAccessException) {
           }
         }
@@ -160,11 +158,11 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
         // if an attribute is missing, then try the next type
         if (!allRequiredAttributesFound)
-          continue;        
+          continue;
 
         // check if there is a matching name prefix for this type
         foreach (NamePrefixAttribute prefix in namePrefixes) {
-          if (name.StartsWith(prefix.Prefix, StringComparison.InvariantCulture)) 
+          if (name.StartsWith(prefix.Prefix, StringComparison.InvariantCulture))
             return Activator.CreateInstance(type, smart, name, firmwareRevision,
               driveIndex, settings) as AbstractHarddrive;
         }
@@ -214,7 +212,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       }
 
       if (driveInfos.Length > 0) {
-        usageSensor = 
+        usageSensor =
           new Sensor("Used Space", 0, SensorType.Load, this, settings);
         ActivateSensor(usageSensor);
       }
@@ -224,15 +222,14 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       get { return HardwareType.HDD; }
     }
 
-    public virtual void UpdateAdditionalSensors(DriveAttributeValue[] values) {}
+    public virtual void UpdateAdditionalSensors(DriveAttributeValue[] values) { }
 
     public override void Update() {
       if (count == 0) {
         if (handle != smart.InvalidHandle) {
           DriveAttributeValue[] values = smart.ReadSmartData(handle, index);
 
-          foreach (KeyValuePair<SmartAttribute, Sensor> keyValuePair in sensors) 
-          {
+          foreach (KeyValuePair<SmartAttribute, Sensor> keyValuePair in sensors) {
             SmartAttribute attribute = keyValuePair.Key;
             foreach (DriveAttributeValue value in values) {
               if (value.Identifier == attribute.Identifier) {
@@ -265,8 +262,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
       }
 
-      count++; 
-      count %= UPDATE_DIVIDER; 
+      count++;
+      count %= UPDATE_DIVIDER;
     }
 
     public override string GetReport() {
@@ -352,8 +349,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     }
 
     protected static float RawToInt(byte[] raw, byte value,
-      IReadOnlyArray<IParameter> parameters) 
-    {
+      IReadOnlyArray<IParameter> parameters) {
       return (raw[3] << 24) | (raw[2] << 16) | (raw[1] << 8) | raw[0];
     }
 

@@ -18,7 +18,7 @@ namespace OpenHardwareMonitor.Hardware {
 
     private const char Separator = '/';
 
-    private static void CheckIdentifiers(IEnumerable<string> identifiers) {      
+    private static void CheckIdentifiers(IEnumerable<string> identifiers) {
       foreach (string s in identifiers)
         if (s.Contains(" ") || s.Contains(Separator.ToString()))
           throw new ArgumentException("Invalid identifier");
@@ -69,8 +69,8 @@ namespace OpenHardwareMonitor.Hardware {
     public int CompareTo(Identifier other) {
       if (other == null)
         return 1;
-      else 
-        return string.Compare(this.identifier, other.identifier, 
+      else
+        return string.Compare(this.identifier, other.identifier,
           StringComparison.Ordinal);
     }
 
@@ -88,16 +88,16 @@ namespace OpenHardwareMonitor.Hardware {
     public static bool operator <(Identifier id1, Identifier id2) {
       if (id1 == null)
         return id2 != null;
-      else 
+      else
         return (id1.CompareTo(id2) < 0);
     }
 
     public static bool operator >(Identifier id1, Identifier id2) {
       if (id1 == null)
         return false;
-      else 
+      else
         return (id1.CompareTo(id2) > 0);
-    }  
+    }
 
   }
 }

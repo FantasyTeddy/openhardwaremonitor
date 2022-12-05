@@ -48,11 +48,10 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     private IntPtr context;
     private readonly int overdriveVersion;
 
-    public ATIGPU(string name, int adapterIndex, int busNumber, 
-      int deviceNumber, IntPtr context, ISettings settings) 
-      : base(name, new Identifier("atigpu", 
-        adapterIndex.ToString(CultureInfo.InvariantCulture)), settings)
-    {
+    public ATIGPU(string name, int adapterIndex, int busNumber,
+      int deviceNumber, IntPtr context, ISettings settings)
+      : base(name, new Identifier("atigpu",
+        adapterIndex.ToString(CultureInfo.InvariantCulture)), settings) {
       this.adapterIndex = adapterIndex;
       this.busNumber = busNumber;
       this.deviceNumber = deviceNumber;
@@ -60,18 +59,17 @@ namespace OpenHardwareMonitor.Hardware.ATI {
       this.context = context;
 
       if (ADL.ADL_Overdrive_Caps(adapterIndex, out _, out _,
-        out overdriveVersion) != ADLStatus.OK)
-      {
+        out overdriveVersion) != ADLStatus.OK) {
         overdriveVersion = -1;
       }
 
-      this.temperatureCore = 
+      this.temperatureCore =
         new Sensor("GPU Core", 0, SensorType.Temperature, this, settings);
-      this.temperatureMemory = 
+      this.temperatureMemory =
         new Sensor("GPU Memory", 1, SensorType.Temperature, this, settings);
-      this.temperatureVrmCore = 
+      this.temperatureVrmCore =
         new Sensor("GPU VRM Core", 2, SensorType.Temperature, this, settings);
-      this.temperatureVrmMemory = 
+      this.temperatureVrmMemory =
         new Sensor("GPU VRM Memory", 3, SensorType.Temperature, this, settings);
       this.temperatureVrmMemory0 =
         new Sensor("GPU VRM Memory #1", 4, SensorType.Temperature, this, settings);
@@ -81,9 +79,9 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         new Sensor("GPU VRM SOC", 6, SensorType.Temperature, this, settings);
       this.temperatureLiquid =
         new Sensor("GPU Liquid", 7, SensorType.Temperature, this, settings);
-      this.temperaturePlx = 
+      this.temperaturePlx =
         new Sensor("GPU PLX", 8, SensorType.Temperature, this, settings);
-      this.temperatureHotSpot = 
+      this.temperatureHotSpot =
         new Sensor("GPU Hot Spot", 9, SensorType.Temperature, this, settings);
 
       this.powerTotal = new Sensor("GPU Total", 0, SensorType.Power, this, settings);
@@ -109,24 +107,23 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
       ADLFanSpeedInfo afsi = new ADLFanSpeedInfo();
       if (ADL.ADL_Overdrive5_FanSpeedInfo_Get(adapterIndex, 0, ref afsi)
-        != ADLStatus.OK) 
-      {
+        != ADLStatus.OK) {
         afsi.MaxPercent = 100;
         afsi.MinPercent = 0;
       }
 
-      this.fanControl = new Control(controlSensor, settings, afsi.MinPercent, 
+      this.fanControl = new Control(controlSensor, settings, afsi.MinPercent,
         afsi.MaxPercent);
       this.fanControl.ControlModeChanged += ControlModeChanged;
-      this.fanControl.SoftwareControlValueChanged += 
+      this.fanControl.SoftwareControlValueChanged +=
         SoftwareControlValueChanged;
       ControlModeChanged(fanControl);
       this.controlSensor.Control = fanControl;
-      Update();                   
+      Update();
     }
 
     private void SoftwareControlValueChanged(IControl control) {
-      if (control.ControlMode == ControlMode.Software) {        
+      if (control.ControlMode == ControlMode.Software) {
         ADLFanSpeedValue adlf = new ADLFanSpeedValue();
         adlf.SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_PERCENT;
         adlf.Flags = ADL.ADL_DL_FANCTRL_FLAG_USER_DEFINED_SPEED;
@@ -163,12 +160,10 @@ namespace OpenHardwareMonitor.Hardware.ATI {
       get { return HardwareType.GpuAti; }
     }
 
-    private void GetODNTemperature(ADLODNTemperatureType type, 
-      Sensor sensor) 
-    {
+    private void GetODNTemperature(ADLODNTemperatureType type,
+      Sensor sensor) {
       if (ADL.ADL2_OverdriveN_Temperature_Get(context, adapterIndex,
-        type, out int temperature) == ADLStatus.OK) 
-      {
+        type, out int temperature) == ADLStatus.OK) {
         sensor.Value = 0.001f * temperature;
         ActivateSensor(sensor);
       } else {
@@ -176,11 +171,9 @@ namespace OpenHardwareMonitor.Hardware.ATI {
       }
     }
 
-    private void GetOD6Power(ADLODNCurrentPowerType type, Sensor sensor) 
-    {
-      if (ADL.ADL2_Overdrive6_CurrentPower_Get(context, adapterIndex, type, 
-        out int power) == ADLStatus.OK) 
-      {
+    private void GetOD6Power(ADLODNCurrentPowerType type, Sensor sensor) {
+      if (ADL.ADL2_Overdrive6_CurrentPower_Get(context, adapterIndex, type,
+        out int power) == ADLStatus.OK) {
         sensor.Value = power * (1.0f / 0xFF);
         ActivateSensor(sensor);
       } else {
@@ -211,7 +204,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         r.Append(" Enabled: ");
         r.AppendLine(enabled.ToString(CultureInfo.InvariantCulture));
         r.Append(" Version: ");
-        r.AppendLine(version.ToString(CultureInfo.InvariantCulture));        
+        r.AppendLine(version.ToString(CultureInfo.InvariantCulture));
       } catch (Exception e) {
         r.AppendLine(" Status: " + e.Message);
       }
@@ -257,11 +250,11 @@ namespace OpenHardwareMonitor.Hardware.ATI {
       r.AppendLine();
       try {
         var adlt = new ADLTemperature();
-        var status = ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0, 
+        var status = ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0,
           ref adlt);
         r.Append(" Status: ");
         r.AppendLine(status.ToString());
-        r.AppendFormat(" Value: {0}{1}", 
+        r.AppendFormat(" Value: {0}{1}",
           0.001f * adlt.Temperature, Environment.NewLine);
       } catch (Exception e) {
         r.AppendLine(" Status: " + e.Message);
@@ -334,7 +327,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
               r.AppendFormat(" Power[{0}].Status: {1}{2}", pt,
                 status.ToString(), Environment.NewLine);
             }
-          }          
+          }
         } catch (EntryPointNotFoundException) {
           r.AppendLine(" Status: Entry point not found");
         } catch (Exception e) {
@@ -371,46 +364,46 @@ namespace OpenHardwareMonitor.Hardware.ATI {
       if (context != IntPtr.Zero) {
         r.AppendLine("OverdriveN Performance Status");
         r.AppendLine();
-        try {          
-          var status = ADL.ADL2_OverdriveN_PerformanceStatus_Get(context, 
+        try {
+          var status = ADL.ADL2_OverdriveN_PerformanceStatus_Get(context,
             adapterIndex, out var ps);
           r.Append(" Status: ");
           r.AppendLine(status.ToString());
-          r.AppendFormat(" CoreClock: {0}{1}", 
+          r.AppendFormat(" CoreClock: {0}{1}",
             ps.CoreClock, Environment.NewLine);
-          r.AppendFormat(" MemoryClock: {0}{1}", 
+          r.AppendFormat(" MemoryClock: {0}{1}",
             ps.MemoryClock, Environment.NewLine);
-          r.AppendFormat(" DCEFClock: {0}{1}", 
+          r.AppendFormat(" DCEFClock: {0}{1}",
             ps.DCEFClock, Environment.NewLine);
-          r.AppendFormat(" GFXClock: {0}{1}", 
+          r.AppendFormat(" GFXClock: {0}{1}",
             ps.GFXClock, Environment.NewLine);
-          r.AppendFormat(" UVDClock: {0}{1}", 
+          r.AppendFormat(" UVDClock: {0}{1}",
             ps.UVDClock, Environment.NewLine);
-          r.AppendFormat(" VCEClock: {0}{1}", 
+          r.AppendFormat(" VCEClock: {0}{1}",
             ps.VCEClock, Environment.NewLine);
-          r.AppendFormat(" GPUActivityPercent: {0}{1}", 
+          r.AppendFormat(" GPUActivityPercent: {0}{1}",
             ps.GPUActivityPercent, Environment.NewLine);
-          r.AppendFormat(" CurrentCorePerformanceLevel: {0}{1}", 
+          r.AppendFormat(" CurrentCorePerformanceLevel: {0}{1}",
             ps.CurrentCorePerformanceLevel, Environment.NewLine);
-          r.AppendFormat(" CurrentMemoryPerformanceLevel: {0}{1}", 
+          r.AppendFormat(" CurrentMemoryPerformanceLevel: {0}{1}",
             ps.CurrentMemoryPerformanceLevel, Environment.NewLine);
-          r.AppendFormat(" CurrentDCEFPerformanceLevel: {0}{1}", 
+          r.AppendFormat(" CurrentDCEFPerformanceLevel: {0}{1}",
             ps.CurrentDCEFPerformanceLevel, Environment.NewLine);
-          r.AppendFormat(" CurrentGFXPerformanceLevel: {0}{1}", 
+          r.AppendFormat(" CurrentGFXPerformanceLevel: {0}{1}",
             ps.CurrentGFXPerformanceLevel, Environment.NewLine);
-          r.AppendFormat(" UVDPerformanceLevel: {0}{1}", 
+          r.AppendFormat(" UVDPerformanceLevel: {0}{1}",
             ps.UVDPerformanceLevel, Environment.NewLine);
-          r.AppendFormat(" VCEPerformanceLevel: {0}{1}", 
+          r.AppendFormat(" VCEPerformanceLevel: {0}{1}",
             ps.VCEPerformanceLevel, Environment.NewLine);
-          r.AppendFormat(" CurrentBusSpeed: {0}{1}", 
+          r.AppendFormat(" CurrentBusSpeed: {0}{1}",
             ps.CurrentBusSpeed, Environment.NewLine);
-          r.AppendFormat(" CurrentBusLanes: {0}{1}", 
+          r.AppendFormat(" CurrentBusLanes: {0}{1}",
             ps.CurrentBusLanes, Environment.NewLine);
-          r.AppendFormat(" MaximumBusLanes: {0}{1}", 
+          r.AppendFormat(" MaximumBusLanes: {0}{1}",
             ps.MaximumBusLanes, Environment.NewLine);
-          r.AppendFormat(" VDDC: {0}{1}", 
+          r.AppendFormat(" VDDC: {0}{1}",
             ps.VDDC, Environment.NewLine);
-          r.AppendFormat(" VDDCI: {0}{1}", 
+          r.AppendFormat(" VDDCI: {0}{1}",
             ps.VDDCI, Environment.NewLine);
         } catch (EntryPointNotFoundException) {
           r.AppendLine(" Status: Entry point not found");
@@ -424,7 +417,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         r.AppendLine("Performance Metrics");
         r.AppendLine();
         try {
-          var status = ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex, 
+          var status = ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex,
             out var data);
           if (status == ADLStatus.OK) {
             for (int i = 0; i < data.Sensors.Length; i++) {
@@ -450,9 +443,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
       return r.ToString();
     }
 
-    private void GetPMLog(ADLPMLogDataOutput data, 
-      ADLSensorType sensorType, Sensor sensor, float factor = 1.0f) 
-    {
+    private void GetPMLog(ADLPMLogDataOutput data,
+      ADLSensorType sensorType, Sensor sensor, float factor = 1.0f) {
       int i = (int)sensorType;
       if (i < data.Sensors.Length && data.Sensors[i].Supported) {
         sensor.Value = data.Sensors[i].Value * factor;
@@ -461,10 +453,9 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     }
 
     public override void Update() {
-      if (context != IntPtr.Zero && overdriveVersion >= 8 && 
-        ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex, 
-        out var data) == ADLStatus.OK) 
-      {
+      if (context != IntPtr.Zero && overdriveVersion >= 8 &&
+        ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex,
+        out var data) == ADLStatus.OK) {
         GetPMLog(data, ADLSensorType.TEMPERATURE_EDGE, temperatureCore);
         GetPMLog(data, ADLSensorType.TEMPERATURE_MEM, temperatureMemory);
         GetPMLog(data, ADLSensorType.TEMPERATURE_VRVDDC, temperatureVrmCore);
@@ -500,8 +491,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         } else {
           ADLTemperature adlt = new ADLTemperature();
           if (ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0, ref adlt)
-            == ADLStatus.OK) 
-          {
+            == ADLStatus.OK) {
             temperatureCore.Value = 0.001f * adlt.Temperature;
             ActivateSensor(temperatureCore);
           } else {
@@ -519,8 +509,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         ADLFanSpeedValue adlf = new ADLFanSpeedValue();
         adlf.SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_RPM;
         if (ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf)
-          == ADLStatus.OK) 
-        {
+          == ADLStatus.OK) {
           fan.Value = adlf.FanSpeed;
           ActivateSensor(fan);
         } else {
@@ -530,8 +519,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         adlf = new ADLFanSpeedValue();
         adlf.SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_PERCENT;
         if (ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf)
-          == ADLStatus.OK) 
-        {
+          == ADLStatus.OK) {
           controlSensor.Value = adlf.FanSpeed;
           ActivateSensor(controlSensor);
         } else {
@@ -540,8 +528,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
         ADLPMActivity adlp = new ADLPMActivity();
         if (ADL.ADL_Overdrive5_CurrentActivity_Get(adapterIndex, ref adlp)
-          == ADLStatus.OK) 
-        {
+          == ADLStatus.OK) {
           if (adlp.EngineClock > 0) {
             coreClock.Value = 0.01f * adlp.EngineClock;
             ActivateSensor(coreClock);

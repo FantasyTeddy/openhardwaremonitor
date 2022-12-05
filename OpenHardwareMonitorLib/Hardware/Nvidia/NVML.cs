@@ -21,7 +21,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate NvmlReturn nvmlInit_v2Delegate();
     private static readonly nvmlInit_v2Delegate nvmlInit_v2;
-      
+
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate NvmlReturn nvmlShutdownDelegate();
     public static readonly nvmlShutdownDelegate NvmlShutdown;
@@ -34,7 +34,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate NvmlReturn nvmlDeviceGetPowerUsageDelegate(
       NvmlDevice device, out int power);
-    public static readonly nvmlDeviceGetPowerUsageDelegate 
+    public static readonly nvmlDeviceGetPowerUsageDelegate
       NvmlDeviceGetPowerUsage;
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -78,19 +78,19 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     static NVML() {
-      nvmlInit = 
+      nvmlInit =
         CreateDelegate<nvmlInitDelegate>(
         "nvmlInit");
-      nvmlInit_v2 = 
+      nvmlInit_v2 =
         CreateDelegate<nvmlInit_v2Delegate>(
         "nvmlInit_v2");
-      NvmlShutdown = 
+      NvmlShutdown =
         CreateDelegate<nvmlShutdownDelegate>(
         "nvmlShutdown");
-      NvmlDeviceGetHandleByPciBusId = 
+      NvmlDeviceGetHandleByPciBusId =
         CreateDelegate<nvmlDeviceGetHandleByPciBusIdDelegate>(
         "nvmlDeviceGetHandleByPciBusId_v2");
-      NvmlDeviceGetPowerUsage = 
+      NvmlDeviceGetPowerUsage =
         CreateDelegate<nvmlDeviceGetPowerUsageDelegate>(
         "nvmlDeviceGetPowerUsage");
       NvmlDeviceGetPcieThroughput =
@@ -105,7 +105,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct NvmlDevice {
-      private readonly IntPtr ptr;      
+      private readonly IntPtr ptr;
     }
 
     internal enum NvmlPcieUtilCounter {

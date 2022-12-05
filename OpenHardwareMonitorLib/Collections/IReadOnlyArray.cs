@@ -17,6 +17,6 @@ namespace OpenHardwareMonitor.Collections {
     T this[int index] { get; }
 
     int Length { get; }
-    
+
   }
 }

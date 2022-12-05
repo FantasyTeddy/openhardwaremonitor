@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace OpenHardwareMonitor.Hardware.ATI {
-  
+
   [StructLayout(LayoutKind.Sequential)]
   internal struct ADLAdapterInfo {
     public int Size;
@@ -216,7 +216,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     /// <summary>
     /// All OK but need mode change.
     /// </summary>
-    OK_MODE_CHANGE =  2,
+    OK_MODE_CHANGE = 2,
 
     /// <summary>
     /// All OK, but with warning.
@@ -247,7 +247,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     /// <summary>
     /// One of the parameter size is invalid.
     /// </summary>
-    ERR_INVALID_PARAM_SIZE =  -4,
+    ERR_INVALID_PARAM_SIZE = -4,
 
     /// <summary>
     /// Invalid ADL index passed.
@@ -298,7 +298,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     /// <summary>
     /// There's no Linux XDisplay in Linux Console environment. 
     /// </summary>
-    ERR_NO_XDISPLAY = -21    
+    ERR_NO_XDISPLAY = -21
   }
 
   internal class ADL {
@@ -330,11 +330,11 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
     public delegate ADLStatus ADL_Main_Control_DestroyDelegate();
     public delegate ADLStatus ADL_Adapter_NumberOfAdapters_GetDelegate(
-      ref int numAdapters);    
+      ref int numAdapters);
     public delegate ADLStatus ADL_Adapter_ID_GetDelegate(int adapterIndex,
       out int adapterID);
     public delegate ADLStatus ADL_Display_AdapterID_GetDelegate(int adapterIndex,
-      out int adapterID);      	
+      out int adapterID);
     public delegate int ADL_Adapter_Active_GetDelegate(int adapterIndex,
       out int status);
     public delegate ADLStatus ADL_Overdrive5_CurrentActivity_GetDelegate(
@@ -342,23 +342,23 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     public delegate ADLStatus ADL_Overdrive5_Temperature_GetDelegate(int adapterIndex,
         int thermalControllerIndex, ref ADLTemperature temperature);
     public delegate ADLStatus ADL_Overdrive5_FanSpeed_GetDelegate(int adapterIndex,
-        int thermalControllerIndex, ref	ADLFanSpeedValue fanSpeedValue);
+        int thermalControllerIndex, ref ADLFanSpeedValue fanSpeedValue);
     public delegate ADLStatus ADL_Overdrive5_FanSpeedInfo_GetDelegate(
       int adapterIndex, int thermalControllerIndex,
       ref ADLFanSpeedInfo fanSpeedInfo);
     public delegate ADLStatus ADL_Overdrive5_FanSpeedToDefault_SetDelegate(
       int adapterIndex, int thermalControllerIndex);
     public delegate ADLStatus ADL_Overdrive5_FanSpeed_SetDelegate(int adapterIndex,
-      int thermalControllerIndex, ref	ADLFanSpeedValue fanSpeedValue);
+      int thermalControllerIndex, ref ADLFanSpeedValue fanSpeedValue);
     public delegate ADLStatus ADL_Overdrive_CapsDelegate(int adapterIndex,
       out int supported, out int enabled, out int version);
     private delegate ADLStatus ADL2_Main_Control_CreateDelegate(
-      ADL_Main_Memory_AllocDelegate callback, int enumConnectedAdapters, 
+      ADL_Main_Memory_AllocDelegate callback, int enumConnectedAdapters,
       out IntPtr context);
     public delegate ADLStatus ADL2_Main_Control_DestroyDelegate(IntPtr context);
     public delegate ADLStatus ADL2_OverdriveN_Temperature_GetDelegate(IntPtr context,
       int adapterIndex, ADLODNTemperatureType temperatureType,
-      out int temperature);                        
+      out int temperature);
     public delegate ADLStatus ADL2_Overdrive6_CurrentPower_GetDelegate(IntPtr context,
       int adapterIndex, ADLODNCurrentPowerType powerType,
       out int currentValue);
@@ -367,7 +367,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     public delegate ADLStatus ADL_Overdrive5_ODParameters_GetDelegate(
       int adapterIndex, out ADLODParameters parameters);
     public delegate ADLStatus ADL2_OverdriveN_PerformanceStatus_GetDelegate(
-      IntPtr context, int adapterIndex, 
+      IntPtr context, int adapterIndex,
       out ADLODNPerformanceStatus performanceStatus);
     public delegate ADLStatus ADL_Graphics_Versions_GetDelegate(
       out ADLVersionsInfo versionInfo);
@@ -381,11 +381,11 @@ namespace OpenHardwareMonitor.Hardware.ATI {
       ADL_Main_Control_Destroy;
     public static ADL_Adapter_NumberOfAdapters_GetDelegate
       ADL_Adapter_NumberOfAdapters_Get;
-    public static ADL_Adapter_ID_GetDelegate 
+    public static ADL_Adapter_ID_GetDelegate
       _ADL_Adapter_ID_Get;
-    public static ADL_Display_AdapterID_GetDelegate 
+    public static ADL_Display_AdapterID_GetDelegate
       _ADL_Display_AdapterID_Get;
-    public static ADL_Adapter_Active_GetDelegate 
+    public static ADL_Adapter_Active_GetDelegate
       ADL_Adapter_Active_Get;
     public static ADL_Overdrive5_CurrentActivity_GetDelegate
       ADL_Overdrive5_CurrentActivity_Get;
@@ -399,7 +399,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
       ADL_Overdrive5_FanSpeedToDefault_Set;
     public static ADL_Overdrive5_FanSpeed_SetDelegate
       ADL_Overdrive5_FanSpeed_Set;
-    public static ADL_Overdrive_CapsDelegate 
+    public static ADL_Overdrive_CapsDelegate
       ADL_Overdrive_Caps;
     private static ADL2_Main_Control_CreateDelegate
       _ADL2_Main_Control_Create;
@@ -421,8 +421,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     private static string dllName;
 
     private static void GetDelegate<T>(string entryPoint, out T newDelegate)
-      where T : class 
-    {
+      where T : class {
       DllImportAttribute attribute = new DllImportAttribute(dllName);
       attribute.CallingConvention = CallingConvention.Cdecl;
       attribute.PreserveSig = true;
@@ -446,7 +445,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         out ADL_Adapter_NumberOfAdapters_Get);
       GetDelegate("ADL_Adapter_ID_Get",
         out _ADL_Adapter_ID_Get);
-      GetDelegate("ADL_Display_AdapterID_Get", 
+      GetDelegate("ADL_Display_AdapterID_Get",
         out _ADL_Display_AdapterID_Get);
       GetDelegate("ADL_Adapter_Active_Get",
         out ADL_Adapter_Active_Get);
@@ -462,7 +461,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         out ADL_Overdrive5_FanSpeedToDefault_Set);
       GetDelegate("ADL_Overdrive5_FanSpeed_Set",
         out ADL_Overdrive5_FanSpeed_Set);
-      GetDelegate("ADL_Overdrive_Caps", 
+      GetDelegate("ADL_Overdrive_Caps",
         out ADL_Overdrive_Caps);
       GetDelegate("ADL2_Main_Control_Create",
         out _ADL2_Main_Control_Create);
@@ -480,7 +479,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         out ADL2_OverdriveN_PerformanceStatus_Get);
       GetDelegate("ADL_Graphics_Versions_Get",
         out ADL_Graphics_Versions_Get);
-  }
+    }
 
     static ADL() {
       CreateDelegates("atiadlxx");
@@ -504,8 +503,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     }
 
     public static ADLStatus ADL2_Main_Control_Create(int enumConnectedAdapters,
-      out IntPtr context) 
-    {
+      out IntPtr context) {
       try {
         var result = _ADL2_Main_Control_Create(Main_Memory_Alloc,
           enumConnectedAdapters, out context);
@@ -516,7 +514,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         context = IntPtr.Zero;
         return ADLStatus.ERR;
       }
-     }
+    }
 
     public static ADLStatus ADL_Adapter_AdapterInfo_Get(ADLAdapterInfo[] info) {
       int elementSize = Marshal.SizeOf(typeof(ADLAdapterInfo));
@@ -566,7 +564,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
     // create a Main_Memory_Alloc delegate and keep it alive
     private static ADL_Main_Memory_AllocDelegate Main_Memory_Alloc =
-      delegate(int size) {
+      delegate (int size) {
         return Marshal.AllocHGlobal(size);
       };
 

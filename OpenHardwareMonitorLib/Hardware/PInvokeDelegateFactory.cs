@@ -19,7 +19,7 @@ namespace OpenHardwareMonitor.Hardware {
 
   internal static class PInvokeDelegateFactory {
 
-    private static readonly ModuleBuilder moduleBuilder = 
+    private static readonly ModuleBuilder moduleBuilder =
       AppDomain.CurrentDomain.DefineDynamicAssembly(
         new AssemblyName("PInvokeDelegateFactoryInternalAssembly"),
         AssemblyBuilderAccess.Run).DefineDynamicModule(
@@ -30,8 +30,7 @@ namespace OpenHardwareMonitor.Hardware {
 
     public static void CreateDelegate<T>(DllImportAttribute dllImportAttribute,
       out T newDelegate, DllImportSearchPath dllImportSearchPath =
-      DllImportSearchPath.System32) where T : class 
-    {
+      DllImportSearchPath.System32) where T : class {
       Type wrapperType;
       Pair<DllImportAttribute, Type> key =
         new Pair<DllImportAttribute, Type>(dllImportAttribute, typeof(T));
@@ -48,8 +47,7 @@ namespace OpenHardwareMonitor.Hardware {
 
     private static Type CreateWrapperType(Type delegateType,
       DllImportAttribute dllImportAttribute,
-      DllImportSearchPath dllImportSearchPath)
-    {
+      DllImportSearchPath dllImportSearchPath) {
 
       TypeBuilder typeBuilder = moduleBuilder.DefineType(
         "PInvokeDelegateFactoryInternalWrapperType" + wrapperTypes.Count);

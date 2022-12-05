@@ -18,8 +18,7 @@ namespace OpenHardwareMonitor.Hardware.RAM {
     private Sensor availableMemory;
 
     public GenericRAM(string name, ISettings settings)
-      : base(name, new Identifier("ram"), settings)
-    {   
+      : base(name, new Identifier("ram"), settings) {
       loadSensor = new Sensor("Memory", 0, SensorType.Load, this, settings);
       ActivateSensor(loadSensor);
 
@@ -27,7 +26,7 @@ namespace OpenHardwareMonitor.Hardware.RAM {
         settings);
       ActivateSensor(usedMemory);
 
-      availableMemory = new Sensor("Available Memory", 1, SensorType.Data, this, 
+      availableMemory = new Sensor("Available Memory", 1, SensorType.Data, this,
         settings);
       ActivateSensor(availableMemory);
     }
@@ -50,7 +49,7 @@ namespace OpenHardwareMonitor.Hardware.RAM {
         (100.0f * status.AvailablePhysicalMemory) /
         status.TotalPhysicalMemory;
 
-      usedMemory.Value = (float)(status.TotalPhysicalMemory 
+      usedMemory.Value = (float)(status.TotalPhysicalMemory
         - status.AvailablePhysicalMemory) / (1024 * 1024 * 1024);
 
       availableMemory.Value = (float)status.AvailablePhysicalMemory /

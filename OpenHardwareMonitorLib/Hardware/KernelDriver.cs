@@ -19,12 +19,12 @@ namespace OpenHardwareMonitor.Hardware {
 
     private string id;
 
-    private SafeFileHandle device; 
-    
+    private SafeFileHandle device;
+
     public KernelDriver(string id) {
       this.id = id;
     }
-   
+
     public bool Install(string path, out string errorMessage) {
       IntPtr manager = NativeMethods.OpenSCManager(null, null,
         ServiceControlManagerAccessRights.SC_MANAGER_ALL_ACCESS);
@@ -64,7 +64,7 @@ namespace OpenHardwareMonitor.Hardware {
 
       NativeMethods.CloseServiceHandle(service);
       NativeMethods.CloseServiceHandle(manager);
-      
+
       try {
         // restrict the driver access to system (SY) and builtin admins (BA)
         // TODO: replace with a call to IoCreateDeviceSecure in the driver
@@ -108,9 +108,8 @@ namespace OpenHardwareMonitor.Hardware {
       return b;
     }
 
-    public bool DeviceIOControl<T>(IOControlCode ioControlCode, object inBuffer, 
-      ref T outBuffer) 
-    {
+    public bool DeviceIOControl<T>(IOControlCode ioControlCode, object inBuffer,
+      ref T outBuffer) {
       if (device == null)
         return false;
 
@@ -137,7 +136,7 @@ namespace OpenHardwareMonitor.Hardware {
       ServiceControlManagerAccessRights.SC_MANAGER_ALL_ACCESS);
 
       if (manager == IntPtr.Zero)
-        return false;      
+        return false;
 
       IntPtr service = NativeMethods.OpenService(manager, id,
         ServiceAccessRights.SERVICE_ALL_ACCESS);
@@ -146,14 +145,14 @@ namespace OpenHardwareMonitor.Hardware {
         return true;
 
       ServiceStatus status = new ServiceStatus();
-      NativeMethods.ControlService(service, ServiceControl.SERVICE_CONTROL_STOP, 
+      NativeMethods.ControlService(service, ServiceControl.SERVICE_CONTROL_STOP,
         ref status);
 
       NativeMethods.DeleteService(service);
 
       NativeMethods.CloseServiceHandle(service);
       NativeMethods.CloseServiceHandle(manager);
-      
+
       return true;
     }
 
@@ -249,7 +248,7 @@ namespace OpenHardwareMonitor.Hardware {
       [DllImport(ADVAPI, CallingConvention = CallingConvention.Winapi,
         SetLastError = true)]
       public static extern IntPtr CreateService(IntPtr hSCManager,
-        string lpServiceName, string lpDisplayName, 
+        string lpServiceName, string lpDisplayName,
         ServiceAccessRights dwDesiredAccess, ServiceType dwServiceType,
         StartType dwStartType, ErrorControl dwErrorControl,
         string lpBinaryPathName, string lpLoadOrderGroup, string lpdwTagId,
@@ -268,7 +267,7 @@ namespace OpenHardwareMonitor.Hardware {
       [DllImport(ADVAPI, CallingConvention = CallingConvention.Winapi,
         SetLastError = true)]
       [return: MarshalAs(UnmanagedType.Bool)]
-      public static extern bool StartService(IntPtr hService, 
+      public static extern bool StartService(IntPtr hService,
         uint dwNumServiceArgs, string[] lpServiceArgVectors);
 
       [DllImport(ADVAPI, CallingConvention = CallingConvention.Winapi,
@@ -279,17 +278,17 @@ namespace OpenHardwareMonitor.Hardware {
 
       [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi)]
       public static extern bool DeviceIoControl(SafeFileHandle device,
-        IOControlCode ioControlCode, 
-        [MarshalAs(UnmanagedType.AsAny)] [In] object inBuffer, 
+        IOControlCode ioControlCode,
+        [MarshalAs(UnmanagedType.AsAny)][In] object inBuffer,
         uint inBufferSize,
-        [MarshalAs(UnmanagedType.AsAny)] [Out] object outBuffer,
+        [MarshalAs(UnmanagedType.AsAny)][Out] object outBuffer,
         uint nOutBufferSize, out uint bytesReturned, IntPtr overlapped);
 
-      [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi, 
+      [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi,
         SetLastError = true)]
       public static extern IntPtr CreateFile(string lpFileName,
-        FileAccess dwDesiredAccess, uint dwShareMode, 
-        IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition, 
+        FileAccess dwDesiredAccess, uint dwShareMode,
+        IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition,
         FileAttributes dwFlagsAndAttributes, IntPtr hTemplateFile);
     }
   }

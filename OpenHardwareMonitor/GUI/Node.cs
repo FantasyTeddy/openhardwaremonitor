@@ -98,7 +98,7 @@ namespace OpenHardwareMonitor.GUI {
       get { return visible; }
       set {
         if (value != visible) {
-          visible = value;          
+          visible = value;
           TreeModel model = RootTreeModel();
           if (model != null && parent != null) {
             int index = 0;
@@ -110,8 +110,8 @@ namespace OpenHardwareMonitor.GUI {
                 index++;
             }
             if (model.ForceVisible) {
-                model.OnNodeChanged(parent, index, this);
-            } else {              
+              model.OnNodeChanged(parent, index, this);
+            } else {
               if (value)
                 model.OnNodeInserted(parent, index, this);
               else
@@ -166,7 +166,7 @@ namespace OpenHardwareMonitor.GUI {
         base.RemoveItem(index);
 
         TreeModel model = owner.RootTreeModel();
-        if (model != null) 
+        if (model != null)
           model.OnStructureChanged(owner);
         if (owner.NodeRemoved != null)
           owner.NodeRemoved(item);

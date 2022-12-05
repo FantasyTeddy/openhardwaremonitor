@@ -31,7 +31,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             var cpuid = CPUID.Get(i, j);
             if (cpuid != null)
               threads.Add(cpuid);
-          } catch (ArgumentOutOfRangeException) { 
+          } catch (ArgumentOutOfRangeException) {
           }
         }
       }
@@ -59,7 +59,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
     private static CPUID[][] GroupThreadsByCore(IEnumerable<CPUID> threads) {
 
-      SortedDictionary<uint, List<CPUID>> cores = 
+      SortedDictionary<uint, List<CPUID>> cores =
         new SortedDictionary<uint, List<CPUID>>();
       foreach (CPUID thread in threads) {
         List<CPUID> coreList;
@@ -89,7 +89,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
       foreach (CPUID[] threads in processorThreads) {
         if (threads.Length == 0)
           continue;
-            
+
         CPUID[][] coreThreads = GroupThreadsByCore(threads);
 
         this.threads[index] = coreThreads;
@@ -118,7 +118,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
               default:
                 hardware.Add(new GenericCPU(index, coreThreads, settings));
                 break;
-            } break;
+            }
+            break;
           default:
             hardware.Add(new GenericCPU(index, coreThreads, settings));
             break;
@@ -127,16 +128,15 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         index++;
       }
     }
-    
+
     public IHardware[] Hardware {
       get {
         return hardware.ToArray();
       }
     }
 
-    private static void AppendCpuidData(StringBuilder r, uint[,] data, 
-      uint offset) 
-    {
+    private static void AppendCpuidData(StringBuilder r, uint[,] data,
+      uint offset) {
       for (int i = 0; i < data.GetLength(0); i++) {
         r.Append(" ");
         r.Append((i + offset).ToString("X8", CultureInfo.InvariantCulture));
@@ -151,9 +151,9 @@ namespace OpenHardwareMonitor.Hardware.CPU {
     public string GetReport() {
       if (threads == null)
         return null;
-      
+
       StringBuilder r = new StringBuilder();
-      
+
       r.AppendLine("CPUID");
       r.AppendLine();
 
@@ -165,14 +165,14 @@ namespace OpenHardwareMonitor.Hardware.CPU {
           Environment.NewLine);
         r.AppendFormat("Processor Brand: {0}{1}", threads[i][0][0].BrandString,
           Environment.NewLine);
-        r.AppendFormat("Family: 0x{0}{1}", 
-          threads[i][0][0].Family.ToString("X", CultureInfo.InvariantCulture), 
+        r.AppendFormat("Family: 0x{0}{1}",
+          threads[i][0][0].Family.ToString("X", CultureInfo.InvariantCulture),
           Environment.NewLine);
         r.AppendFormat("Model: 0x{0}{1}",
-          threads[i][0][0].Model.ToString("X", CultureInfo.InvariantCulture), 
+          threads[i][0][0].Model.ToString("X", CultureInfo.InvariantCulture),
           Environment.NewLine);
         r.AppendFormat("Stepping: 0x{0}{1}",
-          threads[i][0][0].Stepping.ToString("X", CultureInfo.InvariantCulture), 
+          threads[i][0][0].Stepping.ToString("X", CultureInfo.InvariantCulture),
           Environment.NewLine);
         r.AppendLine();
 
@@ -193,7 +193,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             r.AppendLine();
           }
       }
-      return r.ToString(); 
+      return r.ToString();
     }
 
     public void Close() {

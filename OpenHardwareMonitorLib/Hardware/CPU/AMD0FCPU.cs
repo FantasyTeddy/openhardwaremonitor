@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace OpenHardwareMonitor.Hardware.CPU {
   internal sealed class AMD0FCPU : AMDCPU {
-    
+
     private readonly Sensor[] coreTemperatures;
     private readonly Sensor[] coreClocks;
     private readonly Sensor busClock;
@@ -25,19 +25,18 @@ namespace OpenHardwareMonitor.Hardware.CPU {
     private const byte MISCELLANEOUS_CONTROL_FUNCTION = 3;
     private const ushort MISCELLANEOUS_CONTROL_DEVICE_ID = 0x1103;
     private const uint THERMTRIP_STATUS_REGISTER = 0xE4;
-    
+
     private readonly byte thermSenseCoreSelCPU0;
     private readonly byte thermSenseCoreSelCPU1;
     private readonly uint miscellaneousControlAddress;
 
     public AMD0FCPU(int processorIndex, CPUID[][] cpuid, ISettings settings)
-      : base(processorIndex, cpuid, settings) 
-    {
+      : base(processorIndex, cpuid, settings) {
       float offset = -49.0f;
 
       // AM2+ 65nm +21 offset
       uint model = cpuid[0][0].Model;
-      if (model >= 0x69 && model != 0xc1 && model != 0x6c && model != 0x7c) 
+      if (model >= 0x69 && model != 0xc1 && model != 0x6c && model != 0x7c)
         offset += 21;
 
       if (model < 40) {
@@ -51,15 +50,14 @@ namespace OpenHardwareMonitor.Hardware.CPU {
       }
 
       // check if processor supports a digital thermal sensor 
-      if (cpuid[0][0].ExtData.GetLength(0) > 7 && 
-        (cpuid[0][0].ExtData[7, 3] & 1) != 0) 
-      {
+      if (cpuid[0][0].ExtData.GetLength(0) > 7 &&
+        (cpuid[0][0].ExtData[7, 3] & 1) != 0) {
         coreTemperatures = new Sensor[coreCount];
         for (int i = 0; i < coreCount; i++) {
           coreTemperatures[i] =
             new Sensor("Core #" + (i + 1), i, SensorType.Temperature,
-              this, new [] { new ParameterDescription("Offset [°C]", 
-                  "Temperature offset of the thermal sensor.\n" + 
+              this, new[] { new ParameterDescription("Offset [°C]",
+                  "Temperature offset of the thermal sensor.\n" +
                   "Temperature = Value + Offset.", offset)
           }, settings);
         }
@@ -79,11 +77,11 @@ namespace OpenHardwareMonitor.Hardware.CPU {
           ActivateSensor(coreClocks[i]);
       }
 
-      Update();                   
+      Update();
     }
 
     protected override uint[] GetMSRs() {
-      return new [] { FIDVID_STATUS };
+      return new[] { FIDVID_STATUS };
     }
 
     public override string GetReport() {
@@ -91,7 +89,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
       r.Append(base.GetReport());
 
       r.Append("Miscellaneous Control Address: 0x");
-      r.AppendLine((miscellaneousControlAddress).ToString("X", 
+      r.AppendLine((miscellaneousControlAddress).ToString("X",
         CultureInfo.InvariantCulture));
       r.AppendLine();
 
@@ -101,7 +99,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
     public override void Update() {
       base.Update();
 
-      if (Ring0.WaitPciBusMutex(10)) { 
+      if (Ring0.WaitPciBusMutex(10)) {
 
         if (miscellaneousControlAddress != Ring0.InvalidPciAddress) {
           for (uint i = 0; i < coreTemperatures.Length; i++) {
@@ -110,10 +108,9 @@ namespace OpenHardwareMonitor.Hardware.CPU {
               i > 0 ? thermSenseCoreSelCPU1 : thermSenseCoreSelCPU0)) {
               uint value;
               if (Ring0.ReadPciConfig(
-                miscellaneousControlAddress, THERMTRIP_STATUS_REGISTER, 
-                out value)) 
-              {
-                coreTemperatures[i].Value = ((value >> 16) & 0xFF) + 
+                miscellaneousControlAddress, THERMTRIP_STATUS_REGISTER,
+                out value)) {
+                coreTemperatures[i].Value = ((value >> 16) & 0xFF) +
                   coreTemperatures[i].Parameters[0].Value;
                 ActivateSensor(coreTemperatures[i]);
               } else {
@@ -133,14 +130,13 @@ namespace OpenHardwareMonitor.Hardware.CPU {
           Thread.Sleep(1);
 
           uint eax, edx;
-          if (Ring0.RdmsrTx(FIDVID_STATUS, out eax, out edx, 
-            cpuid[i][0].Affinity)) 
-          {
+          if (Ring0.RdmsrTx(FIDVID_STATUS, out eax, out edx,
+            cpuid[i][0].Affinity)) {
             // CurrFID can be found in eax bits 0-5, MaxFID in 16-21
             // 8-13 hold StartFID, we don't use that here.
             double curMP = 0.5 * ((eax & 0x3F) + 8);
             double maxMP = 0.5 * ((eax >> 16 & 0x3F) + 8);
-            coreClocks[i].Value = 
+            coreClocks[i].Value =
               (float)(curMP * TimeStampCounterFrequency / maxMP);
             newBusClock = (float)(TimeStampCounterFrequency / maxMP);
           } else {
@@ -154,7 +150,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
           ActivateSensor(this.busClock);
         }
       }
-    }  
- 
+    }
+
   }
 }

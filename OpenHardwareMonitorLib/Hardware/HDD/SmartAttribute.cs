@@ -21,7 +21,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     /// </summary>
     /// <param name="identifier">The SMART identifier of the attribute.</param>
     /// <param name="name">The name of the attribute.</param>
-    public SmartAttribute(byte identifier, string name) : 
+    public SmartAttribute(byte identifier, string name) :
       this(identifier, name, null, null, 0, null) { }
 
     /// <summary>
@@ -53,10 +53,9 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     /// <param name="parameterDescriptions">Description for the parameters of the sensor 
     /// (or null).</param>
     public SmartAttribute(byte identifier, string name,
-      RawValueConversion rawValueConversion, SensorType? sensorType, 
+      RawValueConversion rawValueConversion, SensorType? sensorType,
       int sensorChannel, string sensorName, bool defaultHiddenSensor = false,
-      ParameterDescription[] parameterDescriptions = null) 
-    {
+      ParameterDescription[] parameterDescriptions = null) {
       this.Identifier = identifier;
       this.Name = name;
       this.rawValueConversion = rawValueConversion;
@@ -90,9 +89,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       }
     }
 
-    public float ConvertValue(DriveAttributeValue value, 
-      IReadOnlyArray<IParameter> parameters) 
-    {
+    public float ConvertValue(DriveAttributeValue value,
+      IReadOnlyArray<IParameter> parameters) {
       if (rawValueConversion == null) {
         return value.AttrValue;
       } else {

@@ -39,7 +39,7 @@ namespace OpenHardwareMonitor.WMI {
 
       this.sensor = sensor;
     }
-    
+
     public void Update() {
       Value = (sensor.Value != null) ? (float)sensor.Value : 0;
 

@@ -15,7 +15,7 @@ namespace OpenHardwareMonitor.Utilities {
 
   public class HttpUtility {
     public static string UrlEncode(string s) {
- 
+
       int maxLength = 32765;
       var sb = new StringBuilder();
       int imax = s.Length / maxLength;

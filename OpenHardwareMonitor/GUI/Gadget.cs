@@ -19,7 +19,7 @@ namespace OpenHardwareMonitor.GUI {
 
     public Gadget() {
       this.window = new GadgetWindow();
-      this.window.Paint += delegate(object sender, PaintEventArgs e) {
+      this.window.Paint += delegate (object sender, PaintEventArgs e) {
         OnPaint(e);
       };
     }
@@ -48,9 +48,9 @@ namespace OpenHardwareMonitor.GUI {
 
     public virtual Size Size {
       get {
-        return window.Size; 
+        return window.Size;
       }
-      set {        
+      set {
         this.window.Size = value;
       }
     }
@@ -128,7 +128,7 @@ namespace OpenHardwareMonitor.GUI {
           if (VisibleChanged != null)
             VisibleChanged(this, EventArgs.Empty);
           if (value)
-            Redraw();          
+            Redraw();
         }
       }
     }
@@ -140,6 +140,6 @@ namespace OpenHardwareMonitor.GUI {
     }
 
     protected abstract void OnPaint(PaintEventArgs e);
-  
+
   }
 }

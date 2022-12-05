@@ -17,11 +17,11 @@ namespace OpenHardwareMonitor.GUI {
     private static ShowDesktop instance = new ShowDesktop();
 
     public delegate void ShowDesktopChangedEventHandler(bool showDesktop);
-    
+
     private event ShowDesktopChangedEventHandler ShowDesktopChangedEvent;
 
     private System.Threading.Timer timer;
-    private bool showDesktop = false;   
+    private bool showDesktop = false;
     private NativeWindow referenceWindow;
     private string referenceWindowCaption =
       "OpenHardwareMonitorShowDesktopReferenceWindow";
@@ -33,9 +33,9 @@ namespace OpenHardwareMonitor.GUI {
       cp.ExStyle = GadgetWindow.WS_EX_TOOLWINDOW;
       cp.Caption = referenceWindowCaption;
       referenceWindow.CreateHandle(cp);
-      NativeMethods.SetWindowPos(referenceWindow.Handle, 
-        GadgetWindow.HWND_BOTTOM, 0, 0, 0, 0, GadgetWindow.SWP_NOMOVE | 
-        GadgetWindow.SWP_NOSIZE | GadgetWindow.SWP_NOACTIVATE | 
+      NativeMethods.SetWindowPos(referenceWindow.Handle,
+        GadgetWindow.HWND_BOTTOM, 0, 0, 0, 0, GadgetWindow.SWP_NOMOVE |
+        GadgetWindow.SWP_NOSIZE | GadgetWindow.SWP_NOACTIVATE |
         GadgetWindow.SWP_NOSENDCHANGING);
 
       // start a repeated timer to detect "Show Desktop" events 
@@ -111,7 +111,7 @@ namespace OpenHardwareMonitor.GUI {
     public event ShowDesktopChangedEventHandler ShowDesktopChanged {
       add {
         // start the monitor timer when someone is listening
-        if (ShowDesktopChangedEvent == null)           
+        if (ShowDesktopChangedEvent == null)
           StartTimer();
         ShowDesktopChangedEvent += value;
       }
@@ -140,6 +140,6 @@ namespace OpenHardwareMonitor.GUI {
       [DllImport(USER, CallingConvention = CallingConvention.Winapi)]
       public static extern int GetWindowThreadProcessId(IntPtr hWnd,
         out int processId);
-    }  
+    }
   }
 }

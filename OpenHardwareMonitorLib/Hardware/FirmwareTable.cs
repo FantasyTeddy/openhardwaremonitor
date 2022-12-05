@@ -22,13 +22,12 @@ namespace OpenHardwareMonitor.Hardware {
     }
 
     public static byte[] GetTable(Provider provider, int table) {
-      
+
       int size;
       try {
-        size = NativeMethods.GetSystemFirmwareTable(provider, table, 
+        size = NativeMethods.GetSystemFirmwareTable(provider, table,
           IntPtr.Zero, 0);
-      } catch (DllNotFoundException) { return null; } 
-        catch (EntryPointNotFoundException) { return null; }
+      } catch (DllNotFoundException) { return null; } catch (EntryPointNotFoundException) { return null; }
 
       if (size <= 0)
         return null;
@@ -51,8 +50,7 @@ namespace OpenHardwareMonitor.Hardware {
       try {
         size = NativeMethods.EnumSystemFirmwareTables(
           provider, IntPtr.Zero, 0);
-      } catch (DllNotFoundException) { return null; } 
-        catch (EntryPointNotFoundException) { return null; }
+      } catch (DllNotFoundException) { return null; } catch (EntryPointNotFoundException) { return null; }
 
       IntPtr nativeBuffer = Marshal.AllocHGlobal(size);
       NativeMethods.EnumSystemFirmwareTables(
@@ -62,7 +60,7 @@ namespace OpenHardwareMonitor.Hardware {
       Marshal.FreeHGlobal(nativeBuffer);
 
       string[] result = new string[size / 4];
-      for (int i = 0; i < result.Length; i++) 
+      for (int i = 0; i < result.Length; i++)
         result[i] = Encoding.ASCII.GetString(buffer, 4 * i, 4);
 
       return result;

@@ -320,7 +320,7 @@ namespace OpenHardwareMonitor.GUI {
       else
         windowsNotifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
     }
-    
+
     private class NotifyIconWindowsImplementation : Component {
 
       private static int nextId = 0;
@@ -608,7 +608,7 @@ namespace OpenHardwareMonitor.GUI {
               window.DefWndProc(ref message);
               return;
             }
-            commandDispatch.Invoke(null, new object[] { 
+            commandDispatch.Invoke(null, new object[] {
             message.WParam.ToInt32() & 0xFFFF });
             return;
           case WM_INITMENUPOPUP:

@@ -21,7 +21,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
       : base(processorIndex, cpuid, settings) { }
 
     protected uint GetPciAddress(byte function, ushort deviceId) {
-      
+
       // assemble the pci address
       uint address = Ring0.GetPciAddress(PCI_BUS,
         (byte)(PCI_BASE_DEVICE + processorIndex), function);
@@ -31,7 +31,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
       if (!Ring0.ReadPciConfig(
         address, DEVICE_VENDOR_ID_REGISTER, out deviceVendor))
         return Ring0.InvalidPciAddress;
-      
+
       if (deviceVendor != (deviceId << 16 | AMD_VENDOR_ID))
         return Ring0.InvalidPciAddress;
 

@@ -39,7 +39,7 @@ namespace OpenHardwareMonitor.GUI {
 
     public StartupManager() {
       if (Hardware.OperatingSystem.IsUnix) {
-        scheduler = null;        
+        scheduler = null;
         isAvailable = false;
         return;
       }
@@ -57,13 +57,13 @@ namespace OpenHardwareMonitor.GUI {
             try {
               // check if the taskscheduler is running
               IRunningTaskCollection collection = scheduler.GetRunningTasks(0);
-            } catch (ArgumentException) { }            
+            } catch (ArgumentException) { }
 
             ITaskFolder folder = scheduler.GetFolder("\\Open Hardware Monitor");
             IRegisteredTask task = folder.GetTask("Startup");
-            startup = (task != null) && 
+            startup = (task != null) &&
               (task.Definition.Triggers.Count > 0) &&
-              (task.Definition.Triggers[1].Type == 
+              (task.Definition.Triggers[1].Type ==
                 TASK_TRIGGER_TYPE2.TASK_TRIGGER_LOGON) &&
               (task.Definition.Actions.Count > 0) &&
               (task.Definition.Actions[1].Type ==
@@ -71,7 +71,7 @@ namespace OpenHardwareMonitor.GUI {
               (task.Definition.Actions[1] as IExecAction != null) &&
               ((task.Definition.Actions[1] as IExecAction).Path ==
                 Application.ExecutablePath);
-              
+
           } catch (IOException) {
             startup = false;
           } catch (UnauthorizedAccessException) {
@@ -81,7 +81,7 @@ namespace OpenHardwareMonitor.GUI {
           } catch (NotImplementedException) {
             scheduler = null;
           }
-        } 
+        }
       } else {
         scheduler = null;
       }
@@ -95,7 +95,7 @@ namespace OpenHardwareMonitor.GUI {
               string value = (string)key.GetValue("OpenHardwareMonitor");
               if (value != null)
                 startup = value == Application.ExecutablePath;
-            }            
+            }
           }
           isAvailable = true;
         } catch (SecurityException) {
@@ -149,7 +149,7 @@ namespace OpenHardwareMonitor.GUI {
     }
 
     private void CreateRegistryRun() {
-      RegistryKey key = Registry.CurrentUser.CreateSubKey(REGISTRY_RUN);     
+      RegistryKey key = Registry.CurrentUser.CreateSubKey(REGISTRY_RUN);
       key.SetValue("OpenHardwareMonitor", Application.ExecutablePath);
     }
 
@@ -167,7 +167,7 @@ namespace OpenHardwareMonitor.GUI {
         return startup;
       }
       set {
-        if (startup != value) {          
+        if (startup != value) {
           if (isAvailable) {
             if (scheduler != null) {
               if (value)

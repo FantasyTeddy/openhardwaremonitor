@@ -9,7 +9,7 @@
 */
 
 namespace OpenHardwareMonitor.Hardware {
-  
+
   public interface IElement {
     // accept visitor on this element
     void Accept(IVisitor visitor);

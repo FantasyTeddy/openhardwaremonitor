@@ -32,7 +32,7 @@ namespace OpenHardwareMonitor.Collections {
       if (capacity < 0)
         throw new ArgumentOutOfRangeException("capacity");
       this.array = new T[capacity];
-      this.head = 0; 
+      this.head = 0;
       this.tail = 0;
       this.size = 0;
     }
@@ -58,7 +58,7 @@ namespace OpenHardwareMonitor.Collections {
     }
 
     public void Clear() {
-      
+
       // remove potential references 
       if (head < tail) {
         Array.Clear(array, head, size);

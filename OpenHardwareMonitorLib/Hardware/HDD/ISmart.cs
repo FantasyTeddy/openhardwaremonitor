@@ -24,7 +24,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     DriveThresholdValue[] ReadSmartThresholds(IntPtr handle, int driveNumber);
 
     bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber,
-      out string name, out string firmwareRevision); 
+      out string name, out string firmwareRevision);
 
     void CloseHandle(IntPtr handle);
 

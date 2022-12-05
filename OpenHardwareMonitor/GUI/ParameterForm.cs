@@ -24,7 +24,7 @@ namespace OpenHardwareMonitor.GUI {
     public ParameterForm() {
       InitializeComponent();
     }
-    
+
     public IReadOnlyArray<IParameter> Parameters {
       get {
         return parameters;
@@ -51,7 +51,7 @@ namespace OpenHardwareMonitor.GUI {
         }
       }
 
-      public ParameterRow(IParameter parameter){
+      public ParameterRow(IParameter parameter) {
         this.parameter = parameter;
         this.value = parameter.Value;
         this.isDefault = parameter.IsDefault;
@@ -63,7 +63,7 @@ namespace OpenHardwareMonitor.GUI {
 
       public float Value {
         get { return value; }
-        set {            
+        set {
           this.isDefault = false;
           this.value = value;
           NotifyPropertyChanged("Default");
@@ -83,22 +83,20 @@ namespace OpenHardwareMonitor.GUI {
       }
     }
 
-    private void dataGridView_RowEnter(object sender, 
-      DataGridViewCellEventArgs e) 
-    {
+    private void dataGridView_RowEnter(object sender,
+      DataGridViewCellEventArgs e) {
       if (e.RowIndex >= 0 && e.RowIndex < parameters.Length)
         descriptionLabel.Text = parameters[e.RowIndex].Description;
       else
         descriptionLabel.Text = "";
     }
 
-    private void dataGridView_CellValidating(object sender, 
-      DataGridViewCellValidatingEventArgs e) 
-    {
+    private void dataGridView_CellValidating(object sender,
+      DataGridViewCellValidatingEventArgs e) {
       float value;
       if (e.ColumnIndex == 2 &&
         !float.TryParse(e.FormattedValue.ToString(), out value)) {
-        dataGridView.Rows[e.RowIndex].Cells[0].ErrorText = 
+        dataGridView.Rows[e.RowIndex].Cells[0].ErrorText =
           "Invalid value";
         e.Cancel = true;
       }
@@ -119,11 +117,10 @@ namespace OpenHardwareMonitor.GUI {
       }
     }
 
-    private void dataGridView_CurrentCellDirtyStateChanged(object sender, 
+    private void dataGridView_CurrentCellDirtyStateChanged(object sender,
       EventArgs e) {
       if (dataGridView.CurrentCell is DataGridViewCheckBoxCell ||
-        dataGridView.CurrentCell is DataGridViewComboBoxCell) 
-      {
+        dataGridView.CurrentCell is DataGridViewComboBoxCell) {
         dataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
       }
     }

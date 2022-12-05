@@ -18,7 +18,7 @@ using OpenHardwareMonitor.Hardware;
 namespace OpenHardwareMonitor.Utilities {
   public class Logger {
 
-    private const string fileNameFormat = 
+    private const string fileNameFormat =
       "OpenHardwareMonitorLog-{0:yyyy-MM-dd}.csv";
 
     private readonly IComputer computer;
@@ -33,7 +33,7 @@ namespace OpenHardwareMonitor.Utilities {
     public Logger(IComputer computer) {
       this.computer = computer;
       this.computer.HardwareAdded += HardwareAdded;
-      this.computer.HardwareRemoved += HardwareRemoved;      
+      this.computer.HardwareRemoved += HardwareRemoved;
     }
 
     private void HardwareRemoved(IHardware hardware) {
@@ -85,12 +85,12 @@ namespace OpenHardwareMonitor.Utilities {
 
       try {
         String line;
-        using (StreamReader reader = new StreamReader(fileName)) 
-          line = reader.ReadLine(); 
-       
+        using (StreamReader reader = new StreamReader(fileName))
+          line = reader.ReadLine();
+
         if (string.IsNullOrEmpty(line))
           return false;
-        
+
         identifiers = line.Split(',').Skip(1).ToArray();
       } catch {
         identifiers = null;
@@ -146,11 +146,11 @@ namespace OpenHardwareMonitor.Utilities {
 
     public TimeSpan LoggingInterval { get; set; }
 
-    public void Log() {      
+    public void Log() {
       var now = DateTime.Now;
 
       if (lastLoggedTime + LoggingInterval - new TimeSpan(5000000) > now)
-        return;      
+        return;
 
       if (day != now.Date || !File.Exists(fileName)) {
         day = now.Date;

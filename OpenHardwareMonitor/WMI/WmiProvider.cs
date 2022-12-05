@@ -43,7 +43,7 @@ namespace OpenHardwareMonitor.WMI {
     }
 
     #region Eventhandlers
-    
+
     private void ComputerHardwareAdded(IHardware hardware) {
       if (!Exists(hardware.Identifier.ToString())) {
         foreach (ISensor sensor in hardware.Sensors)
@@ -76,10 +76,10 @@ namespace OpenHardwareMonitor.WMI {
     private void ComputerHardwareRemoved(IHardware hardware) {
       hardware.SensorAdded -= HardwareSensorAdded;
       hardware.SensorRemoved -= HardwareSensorRemoved;
-      
-      foreach (ISensor sensor in hardware.Sensors) 
+
+      foreach (ISensor sensor in hardware.Sensors)
         HardwareSensorRemoved(sensor);
-      
+
       foreach (IHardware subHardware in hardware.SubHardware)
         ComputerHardwareRemoved(subHardware);
 
@@ -93,7 +93,7 @@ namespace OpenHardwareMonitor.WMI {
     #endregion
 
     #region Helpers
-    
+
     private bool Exists(string identifier) {
       return activeInstances.Exists(h => h.Identifier == identifier);
     }

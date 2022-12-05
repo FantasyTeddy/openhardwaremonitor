@@ -11,14 +11,14 @@
 namespace OpenHardwareMonitor.Hardware {
 
   public delegate void SensorEventHandler(ISensor sensor);
-  
+
   public enum HardwareType {
     Mainboard,
     SuperIO,
     CPU,
     RAM,
     GpuNvidia,
-    GpuAti,    
+    GpuAti,
     TBalancer,
     Heatmaster,
     HDD

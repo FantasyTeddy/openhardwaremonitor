@@ -72,7 +72,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
       if ((options & 0x10) > 0) {
 
         // disable the i/o space lock
-        WriteByte(NUVOTON_HARDWARE_MONITOR_IO_SPACE_LOCK, 
+        WriteByte(NUVOTON_HARDWARE_MONITOR_IO_SPACE_LOCK,
           (byte)(options & ~0x10));
       }
     }

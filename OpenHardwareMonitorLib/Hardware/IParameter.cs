@@ -14,7 +14,7 @@ namespace OpenHardwareMonitor.Hardware {
 
     ISensor Sensor { get; }
     Identifier Identifier { get; }
-    
+
     string Name { get; }
     string Description { get; }
     float Value { get; set; }

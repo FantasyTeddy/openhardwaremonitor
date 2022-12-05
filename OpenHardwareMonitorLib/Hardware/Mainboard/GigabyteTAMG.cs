@@ -14,7 +14,7 @@ using System.IO.Compression;
 using System.Text;
 
 namespace OpenHardwareMonitor.Hardware.Mainboard {
-  
+
   internal class GigabyteTAMG {
     private byte[] table;
 
@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
     private enum SensorType {
       Voltage = 1,
-      Temperature = 2,      
+      Temperature = 2,
       Fan = 4,
       Case = 8,
     }
@@ -39,7 +39,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         throw new ArgumentNullException("table");
 
       this.table = table;
-      
+
       int index = IndexOf(table, Encoding.ASCII.GetBytes("$HEALTH$"), 0);
 
       if (index >= 0) {
@@ -71,7 +71,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
           } catch (IOException) { sensors = new Sensor[0]; }
         }
       } else {
-        sensors = new Sensor[0]; 
+        sensors = new Sensor[0];
       }
     }
 
@@ -87,7 +87,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             break;
           }
         }
-        if (found) 
+        if (found)
           return i;
       }
       return -1;
@@ -97,7 +97,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
       string base64;
       using (MemoryStream m = new MemoryStream()) {
         using (GZipStream c = new GZipStream(m, CompressionMode.Compress)) {
-          c.Write(table, 0, table.Length);          
+          c.Write(table, 0, table.Length);
         }
         base64 = Convert.ToBase64String(m.ToArray());
       }

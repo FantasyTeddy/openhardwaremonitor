@@ -15,7 +15,7 @@ namespace OpenHardwareMonitor.Hardware {
   /// </summary>
   internal struct GroupAffinity {
 
-    public static GroupAffinity Undefined = 
+    public static GroupAffinity Undefined =
       new GroupAffinity(ushort.MaxValue, 0);
 
     public GroupAffinity(ushort group, ulong mask) {

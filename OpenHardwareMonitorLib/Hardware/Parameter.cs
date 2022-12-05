@@ -16,9 +16,9 @@ namespace OpenHardwareMonitor.Hardware {
   internal struct ParameterDescription {
     private readonly string name;
     private readonly string description;
-    private readonly float defaultValue;    
+    private readonly float defaultValue;
 
-    public ParameterDescription(string name, string description, 
+    public ParameterDescription(string name, string description,
       float defaultValue) {
       this.name = name;
       this.description = description;
@@ -39,9 +39,8 @@ namespace OpenHardwareMonitor.Hardware {
     private bool isDefault;
     private readonly ISettings settings;
 
-    public Parameter(ParameterDescription description, ISensor sensor, 
-      ISettings settings) 
-    {
+    public Parameter(ParameterDescription description, ISensor sensor,
+      ISettings settings) {
       this.sensor = sensor;
       this.description = description;
       this.settings = settings;
@@ -85,8 +84,8 @@ namespace OpenHardwareMonitor.Hardware {
       }
     }
 
-    public float DefaultValue { 
-      get { return description.DefaultValue; } 
+    public float DefaultValue {
+      get { return description.DefaultValue; }
     }
 
     public bool IsDefault {

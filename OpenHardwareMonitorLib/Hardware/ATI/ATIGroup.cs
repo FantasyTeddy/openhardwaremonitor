@@ -56,8 +56,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         if (adlStatus == ADLStatus.OK) {
           int numberOfAdapters = 0;
           ADL.ADL_Adapter_NumberOfAdapters_Get(ref numberOfAdapters);
-          
-          report.Append("Number of adapters: "); 
+
+          report.Append("Number of adapters: ");
           report.AppendLine(numberOfAdapters.ToString(CultureInfo.InvariantCulture));
           report.AppendLine();
 
@@ -72,12 +72,12 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                 ADL.ADL_Adapter_ID_Get(adapterInfo[i].AdapterIndex,
                   out adapterID);
 
-                report.Append("AdapterIndex: "); 
+                report.Append("AdapterIndex: ");
                 report.AppendLine(i.ToString(CultureInfo.InvariantCulture));
-                report.Append("isActive: "); 
+                report.Append("isActive: ");
                 report.AppendLine(isActive.ToString(CultureInfo.InvariantCulture));
-                report.Append("AdapterName: "); 
-                report.AppendLine(adapterInfo[i].AdapterName);     
+                report.Append("AdapterName: ");
+                report.AppendLine(adapterInfo[i].AdapterName);
                 report.Append("UDID: ");
                 report.AppendLine(adapterInfo[i].UDID);
                 report.Append("Present: ");
@@ -96,12 +96,11 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                 report.AppendLine(adapterInfo[i].FunctionNumber.ToString(
                   CultureInfo.InvariantCulture));
                 report.Append("AdapterID: 0x");
-                report.AppendLine(adapterID.ToString("X", 
+                report.AppendLine(adapterID.ToString("X",
                   CultureInfo.InvariantCulture));
 
                 if (!string.IsNullOrEmpty(adapterInfo[i].UDID) &&
-                  adapterInfo[i].VendorID == ADL.ATI_VENDOR_ID) 
-                {
+                  adapterInfo[i].VendorID == ADL.ATI_VENDOR_ID) {
                   bool found = false;
                   foreach (ATIGPU gpu in hardware)
                     if (gpu.BusNumber == adapterInfo[i].BusNumber &&
@@ -126,12 +125,11 @@ namespace OpenHardwareMonitor.Hardware.ATI {
               }
           }
         }
-      } catch (DllNotFoundException) { } 
-        catch (EntryPointNotFoundException e) {
-          report.AppendLine();
-          report.AppendLine(e.ToString());
-          report.AppendLine();        
-        }
+      } catch (DllNotFoundException) { } catch (EntryPointNotFoundException e) {
+        report.AppendLine();
+        report.AppendLine(e.ToString());
+        report.AppendLine();
+      }
     }
 
     public IHardware[] Hardware {

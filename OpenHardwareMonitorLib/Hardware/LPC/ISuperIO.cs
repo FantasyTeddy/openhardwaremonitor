@@ -20,7 +20,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
     float?[] Controls { get; }
 
     // set control value, null = auto    
-    void SetControl(int index, byte? value);         
+    void SetControl(int index, byte? value);
 
     // read and write GPIO
     byte? ReadGPIO(int index);

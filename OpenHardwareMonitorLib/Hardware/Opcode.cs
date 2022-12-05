@@ -14,11 +14,11 @@ using System.Runtime.InteropServices;
 
 namespace OpenHardwareMonitor.Hardware {
   internal static class Opcode {
-    
+
     private static IntPtr codeBuffer;
     private static ulong size;
 
-    public static void Open() {              
+    public static void Open() {
       byte[] rdtscCode;
       byte[] cpuidCode;
       if (IntPtr.Size == 4) {
@@ -26,18 +26,18 @@ namespace OpenHardwareMonitor.Hardware {
         cpuidCode = CPUID_32;
       } else {
         rdtscCode = RDTSC_64;
-        
+
         if (OperatingSystem.IsUnix) { // Unix
           cpuidCode = CPUID_64_LINUX;
         } else { // Windows
           cpuidCode = CPUID_64_WINDOWS;
         }
       }
-      
+
       size = (ulong)(rdtscCode.Length + cpuidCode.Length);
 
       if (OperatingSystem.IsUnix) { // Unix   
-        Assembly assembly = 
+        Assembly assembly =
           Assembly.Load("Mono.Posix, Version=2.0.0.0, Culture=neutral, " +
           "PublicKeyToken=0738eb9f132ed756");
 
@@ -54,12 +54,12 @@ namespace OpenHardwareMonitor.Hardware {
         object mmapFlagsParam = Enum.ToObject(mmapFlags,
           (int)mmapFlags.GetField("MAP_ANONYMOUS").GetValue(null) |
           (int)mmapFlags.GetField("MAP_PRIVATE").GetValue(null));
-        
-        codeBuffer = (IntPtr)mmap.Invoke(null, new object[] { IntPtr.Zero, 
-          size, mmapProtsParam, mmapFlagsParam, -1, 0 });        
+
+        codeBuffer = (IntPtr)mmap.Invoke(null, new object[] { IntPtr.Zero,
+          size, mmapProtsParam, mmapFlagsParam, -1, 0 });
       } else { // Windows
         codeBuffer = NativeMethods.VirtualAlloc(IntPtr.Zero,
-          (UIntPtr)size, AllocationType.COMMIT | AllocationType.RESERVE, 
+          (UIntPtr)size, AllocationType.COMMIT | AllocationType.RESERVE,
           MemoryProtection.EXECUTE_READWRITE);
       }
 
@@ -72,13 +72,13 @@ namespace OpenHardwareMonitor.Hardware {
       Marshal.Copy(cpuidCode, 0, cpuidAddress, cpuidCode.Length);
 
       Cpuid = Marshal.GetDelegateForFunctionPointer(
-        cpuidAddress, typeof(CpuidDelegate)) as CpuidDelegate;         
+        cpuidAddress, typeof(CpuidDelegate)) as CpuidDelegate;
     }
 
     public static void Close() {
       Rdtsc = null;
       Cpuid = null;
-      
+
       if (OperatingSystem.IsUnix) { // Unix
         Assembly assembly =
           Assembly.Load("Mono.Posix, Version=2.0.0.0, Culture=neutral, " +
@@ -89,8 +89,8 @@ namespace OpenHardwareMonitor.Hardware {
         munmap.Invoke(null, new object[] { codeBuffer, size });
 
       } else { // Windows
-        NativeMethods.VirtualFree(codeBuffer, UIntPtr.Zero, 
-          FreeType.RELEASE);        
+        NativeMethods.VirtualFree(codeBuffer, UIntPtr.Zero,
+          FreeType.RELEASE);
       }
     }
 
@@ -114,7 +114,7 @@ namespace OpenHardwareMonitor.Hardware {
       0x48, 0x0B, 0xC2,               // or rax, rdx  
       0xC3                            // ret  
     };
-    
+
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     public delegate bool CpuidDelegate(uint index, uint ecxValue,
       out uint eax, out uint ebx, out uint ecx, out uint edx);
@@ -165,7 +165,7 @@ namespace OpenHardwareMonitor.Hardware {
       0xC9,                           // leave  
       0xC2, 0x18, 0x00                // ret 18h  
     };
-             
+
     private static readonly byte[] CPUID_64_WINDOWS = new byte[] {
       0x48, 0x89, 0x5C, 0x24, 0x08,   // mov qword ptr [rsp+8], rbx  
       0x8B, 0xC1,                     // mov eax, ecx  
@@ -180,7 +180,7 @@ namespace OpenHardwareMonitor.Hardware {
       0x89, 0x10,                     // mov dword ptr [rax], edx  
       0xC3                            // ret  
     };
-    
+
     private static readonly byte[] CPUID_64_LINUX = new byte[] {
       0x49, 0x89, 0xD2,               // mov r10, rdx
       0x49, 0x89, 0xCB,               // mov r11, rcx
@@ -196,23 +196,22 @@ namespace OpenHardwareMonitor.Hardware {
       0xC3,                           // ret
     };
 
-    public static bool CpuidTx(uint index, uint ecxValue, 
-      out uint eax, out uint ebx, out uint ecx, out uint edx, 
-      GroupAffinity affinity) 
-    {      
+    public static bool CpuidTx(uint index, uint ecxValue,
+      out uint eax, out uint ebx, out uint ecx, out uint edx,
+      GroupAffinity affinity) {
       var previousAffinity = ThreadAffinity.Set(affinity);
 
       if (previousAffinity == GroupAffinity.Undefined) {
         eax = ebx = ecx = edx = 0;
         return false;
-      } 
+      }
 
       Cpuid(index, ecxValue, out eax, out ebx, out ecx, out edx);
 
-      ThreadAffinity.Set(previousAffinity);      
+      ThreadAffinity.Set(previousAffinity);
       return true;
     }
-    
+
     [Flags()]
     public enum AllocationType : uint {
       COMMIT = 0x1000,
@@ -245,7 +244,7 @@ namespace OpenHardwareMonitor.Hardware {
       RELEASE = 0x8000
     }
 
-    private static class NativeMethods {      
+    private static class NativeMethods {
       private const string KERNEL = "kernel32.dll";
 
       [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi)]
@@ -254,7 +253,7 @@ namespace OpenHardwareMonitor.Hardware {
 
       [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi)]
       public static extern bool VirtualFree(IntPtr lpAddress, UIntPtr dwSize,
-        FreeType dwFreeType);                 
+        FreeType dwFreeType);
     }
   }
 }

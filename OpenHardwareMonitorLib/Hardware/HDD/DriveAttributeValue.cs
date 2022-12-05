@@ -21,6 +21,6 @@ namespace OpenHardwareMonitor.Hardware.HDD {
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
     public byte[] RawValue;
     public byte Reserved;
-  }  
+  }
 
 }

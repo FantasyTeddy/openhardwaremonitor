@@ -24,8 +24,7 @@ namespace OpenHardwareMonitor.GUI {
     private NotifyIconAdv mainIcon;
 
     public SystemTray(IComputer computer, PersistentSettings settings,
-      UnitManager unitManager) 
-    {
+      UnitManager unitManager) {
       this.computer = computer;
       this.settings = settings;
       this.unitManager = unitManager;
@@ -36,18 +35,18 @@ namespace OpenHardwareMonitor.GUI {
 
       ContextMenu contextMenu = new ContextMenu();
       MenuItem hideShowItem = new MenuItem("Hide/Show");
-      hideShowItem.Click += delegate(object obj, EventArgs args) {
+      hideShowItem.Click += delegate (object obj, EventArgs args) {
         SendHideShowCommand();
       };
       contextMenu.MenuItems.Add(hideShowItem);
-      contextMenu.MenuItems.Add(new MenuItem("-"));      
+      contextMenu.MenuItems.Add(new MenuItem("-"));
       MenuItem exitItem = new MenuItem("Exit");
-      exitItem.Click += delegate(object obj, EventArgs args) {
+      exitItem.Click += delegate (object obj, EventArgs args) {
         SendExitCommand();
       };
       contextMenu.MenuItems.Add(exitItem);
       this.mainIcon.ContextMenu = contextMenu;
-      this.mainIcon.DoubleClick += delegate(object obj, EventArgs args) {
+      this.mainIcon.DoubleClick += delegate (object obj, EventArgs args) {
         SendHideShowCommand();
       };
       this.mainIcon.Icon = EmbeddedResources.GetIcon("smallicon.ico");
@@ -57,7 +56,7 @@ namespace OpenHardwareMonitor.GUI {
     private void HardwareRemoved(IHardware hardware) {
       hardware.SensorAdded -= new SensorEventHandler(SensorAdded);
       hardware.SensorRemoved -= new SensorEventHandler(SensorRemoved);
-      foreach (ISensor sensor in hardware.Sensors) 
+      foreach (ISensor sensor in hardware.Sensors)
         SensorRemoved(sensor);
       foreach (IHardware subHardware in hardware.SubHardware)
         HardwareRemoved(subHardware);
@@ -73,13 +72,13 @@ namespace OpenHardwareMonitor.GUI {
     }
 
     private void SensorAdded(ISensor sensor) {
-      if (settings.GetValue(new Identifier(sensor.Identifier, 
-        "tray").ToString(), false)) 
-        Add(sensor, false);   
+      if (settings.GetValue(new Identifier(sensor.Identifier,
+        "tray").ToString(), false))
+        Add(sensor, false);
     }
 
     private void SensorRemoved(ISensor sensor) {
-      if (Contains(sensor)) 
+      if (Contains(sensor))
         Remove(sensor, false);
     }
 
@@ -104,7 +103,7 @@ namespace OpenHardwareMonitor.GUI {
     public void Add(ISensor sensor, bool balloonTip) {
       if (Contains(sensor)) {
         return;
-      } else {        
+      } else {
         list.Add(new SensorNotifyIcon(this, sensor, balloonTip, settings, unitManager));
         UpdateMainIconVisibilty();
         settings.SetValue(new Identifier(sensor.Identifier, "tray").ToString(), true);
@@ -129,7 +128,7 @@ namespace OpenHardwareMonitor.GUI {
       if (instance != null) {
         list.Remove(instance);
         UpdateMainIconVisibilty();
-        instance.Dispose();        
+        instance.Dispose();
       }
     }
 

@@ -22,9 +22,8 @@ namespace OpenHardwareMonitor.GUI {
 
     private List<TypeNode> typeNodes = new List<TypeNode>();
 
-    public HardwareNode(IHardware hardware, PersistentSettings settings, 
-      UnitManager unitManager) : base() 
-    {
+    public HardwareNode(IHardware hardware, PersistentSettings settings,
+      UnitManager unitManager) : base() {
       this.settings = settings;
       this.unitManager = unitManager;
       this.hardware = hardware;
@@ -36,11 +35,11 @@ namespace OpenHardwareMonitor.GUI {
       foreach (ISensor sensor in hardware.Sensors)
         SensorAdded(sensor);
 
-      hardware.SensorAdded +=new SensorEventHandler(SensorAdded);
+      hardware.SensorAdded += new SensorEventHandler(SensorAdded);
       hardware.SensorRemoved += new SensorEventHandler(SensorRemoved);
 
       this.expandedIdentifier = new Identifier(hardware.Identifier, "expanded");
-      base.IsExpanded = 
+      base.IsExpanded =
         settings.GetValue(expandedIdentifier.ToString(), base.IsExpanded);
     }
 
@@ -65,14 +64,14 @@ namespace OpenHardwareMonitor.GUI {
       }
     }
 
-    private void UpdateNode(TypeNode node) {  
+    private void UpdateNode(TypeNode node) {
       if (node.Nodes.Count > 0) {
         if (!Nodes.Contains(node)) {
           int i = 0;
           while (i < Nodes.Count &&
             ((TypeNode)Nodes[i]).SensorType < node.SensorType)
             i++;
-          Nodes.Insert(i, node);  
+          Nodes.Insert(i, node);
         }
       } else {
         if (Nodes.Contains(node))
@@ -82,7 +81,7 @@ namespace OpenHardwareMonitor.GUI {
 
     private void SensorRemoved(ISensor sensor) {
       foreach (TypeNode typeNode in typeNodes)
-        if (typeNode.SensorType == sensor.SensorType) { 
+        if (typeNode.SensorType == sensor.SensorType) {
           SensorNode sensorNode = null;
           foreach (Node node in typeNode.Nodes) {
             SensorNode n = node as SensorNode;
@@ -118,7 +117,7 @@ namespace OpenHardwareMonitor.GUI {
       foreach (TypeNode typeNode in typeNodes)
         if (typeNode.SensorType == sensor.SensorType) {
           InsertSorted(typeNode, sensor);
-          UpdateNode(typeNode);          
+          UpdateNode(typeNode);
         }
       if (PlotSelectionChanged != null)
         PlotSelectionChanged(this, null);

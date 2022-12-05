@@ -18,7 +18,7 @@ namespace OpenHardwareMonitor.Utilities {
     public static Image GetImage(string name) {
       name = "OpenHardwareMonitor.Resources." + name;
 
-      string[] names = 
+      string[] names =
         Assembly.GetExecutingAssembly().GetManifestResourceNames();
       for (int i = 0; i < names.Length; i++) {
         if (names[i].Replace('\\', '.') == name) {
@@ -37,9 +37,9 @@ namespace OpenHardwareMonitor.Utilities {
             return bitmap;
           }
         }
-      } 
+      }
 
-      return new Bitmap(1, 1);    
+      return new Bitmap(1, 1);
     }
 
     public static Icon GetIcon(string name) {
@@ -53,11 +53,11 @@ namespace OpenHardwareMonitor.Utilities {
             GetManifestResourceStream(names[i])) {
             return new Icon(stream);
           }
-        }          
-      } 
+        }
+      }
 
       return null;
     }
-         
+
   }
 }

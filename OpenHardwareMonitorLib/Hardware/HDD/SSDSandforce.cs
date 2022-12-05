@@ -30,35 +30,34 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       new SmartAttribute(0xB5, SmartNames.AlternativeProgramFailCount, RawToInt),
       new SmartAttribute(0xB6, SmartNames.AlternativeEraseFailCount, RawToInt),
       new SmartAttribute(0xBB, SmartNames.UncorrectableErrorCount, RawToInt),
-      new SmartAttribute(0xC2, SmartNames.Temperature, 
-        (byte[] raw, byte value, IReadOnlyArray<IParameter> p) 
-          => { return value + (p == null ? 0 : p[0].Value); }, 
-        SensorType.Temperature, 0, SmartNames.Temperature, true, 
-        new[] { new ParameterDescription("Offset [°C]", 
-                  "Temperature offset of the thermal sensor.\n" + 
-                  "Temperature = Value + Offset.", 0) }), 
-      new SmartAttribute(0xC3, SmartNames.UnrecoverableEcc), 
+      new SmartAttribute(0xC2, SmartNames.Temperature,
+        (byte[] raw, byte value, IReadOnlyArray<IParameter> p)
+          => { return value + (p == null ? 0 : p[0].Value); },
+        SensorType.Temperature, 0, SmartNames.Temperature, true,
+        new[] { new ParameterDescription("Offset [°C]",
+                  "Temperature offset of the thermal sensor.\n" +
+                  "Temperature = Value + Offset.", 0) }),
+      new SmartAttribute(0xC3, SmartNames.UnrecoverableEcc),
       new SmartAttribute(0xC4, SmartNames.ReallocationEventCount, RawToInt),
-      new SmartAttribute(0xE7, SmartNames.RemainingLife, null, 
+      new SmartAttribute(0xE7, SmartNames.RemainingLife, null,
         SensorType.Level, 0, SmartNames.RemainingLife),
       new SmartAttribute(0xE9, SmartNames.ControllerWritesToNAND, RawToInt,
         SensorType.Data, 0, SmartNames.ControllerWritesToNAND),
-      new SmartAttribute(0xEA, SmartNames.HostWritesToController, RawToInt, 
+      new SmartAttribute(0xEA, SmartNames.HostWritesToController, RawToInt,
         SensorType.Data, 1, SmartNames.HostWritesToController),
-      new SmartAttribute(0xF1, SmartNames.HostWrites, RawToInt, 
+      new SmartAttribute(0xF1, SmartNames.HostWrites, RawToInt,
         SensorType.Data, 1, SmartNames.HostWrites),
-      new SmartAttribute(0xF2, SmartNames.HostReads, RawToInt, 
+      new SmartAttribute(0xF2, SmartNames.HostReads, RawToInt,
         SensorType.Data, 2, SmartNames.HostReads)
     };
 
     private Sensor writeAmplification;
 
-    public SSDSandforce(ISmart smart, string name, string firmwareRevision, 
-      int index, ISettings settings) 
-      : base(smart, name, firmwareRevision,  index, smartAttributes, settings) 
-    {
-      this.writeAmplification = new Sensor("Write Amplification", 1, 
-        SensorType.Factor, this, settings);    
+    public SSDSandforce(ISmart smart, string name, string firmwareRevision,
+      int index, ISettings settings)
+      : base(smart, name, firmwareRevision, index, smartAttributes, settings) {
+      this.writeAmplification = new Sensor("Write Amplification", 1,
+        SensorType.Factor, this, settings);
     }
 
     public override void UpdateAdditionalSensors(DriveAttributeValue[] values) {

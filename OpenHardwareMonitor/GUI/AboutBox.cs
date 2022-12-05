@@ -17,7 +17,7 @@ namespace OpenHardwareMonitor.GUI {
     public AboutBox() {
       InitializeComponent();
       this.Font = SystemFonts.MessageBoxFont;
-      this.label3.Text = "Version " + 
+      this.label3.Text = "Version " +
         System.Windows.Forms.Application.ProductVersion;
 
       projectLinkLabel.Links.Remove(projectLinkLabel.Links[0]);
@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.GUI {
         "License.html");
     }
 
-    private void linkLabel_LinkClicked(object sender, 
+    private void linkLabel_LinkClicked(object sender,
       LinkLabelLinkClickedEventArgs e) {
       try {
         Process.Start(new ProcessStartInfo(e.Link.LinkData.ToString()));

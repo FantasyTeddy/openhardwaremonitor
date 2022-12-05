@@ -16,7 +16,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
     ATK0110 = 0x0110,
 
     F71858 = 0x0507,
-    F71862 = 0x0601, 
+    F71862 = 0x0601,
     F71869 = 0x0814,
     F71869A = 0x1007,
     F71878AD = 0x1106,
@@ -42,7 +42,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
     IT8728F = 0x8728,
     IT879XE = 0x8733, // IT8792E, IT8795E
     IT8771E = 0x8771,
-    IT8772E = 0x8772,    
+    IT8772E = 0x8772,
 
     NCT6771F = 0xB470,
     NCT6776F = 0xC330,
@@ -60,7 +60,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
     W83627DHG = 0xA020,
     W83627DHGP = 0xB070,
-    W83627EHF = 0x8800,    
+    W83627EHF = 0x8800,
     W83627HF = 0x5200,
     W83627THF = 0x8280,
     W83667HG = 0xA510,
@@ -96,14 +96,14 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         case Chip.IT8705F: return "ITE IT8705F";
         case Chip.IT8712F: return "ITE IT8712F";
         case Chip.IT8716F: return "ITE IT8716F";
-        case Chip.IT8718F: return "ITE IT8718F";        
+        case Chip.IT8718F: return "ITE IT8718F";
         case Chip.IT8720F: return "ITE IT8720F";
         case Chip.IT8721F: return "ITE IT8721F";
         case Chip.IT8726F: return "ITE IT8726F";
         case Chip.IT8728F: return "ITE IT8728F";
         case Chip.IT879XE: return "ITE IT879XE";
         case Chip.IT8771E: return "ITE IT8771E";
-        case Chip.IT8772E: return "ITE IT8772E";        
+        case Chip.IT8772E: return "ITE IT8772E";
 
         case Chip.NCT610X: return "Nuvoton NCT610X";
 

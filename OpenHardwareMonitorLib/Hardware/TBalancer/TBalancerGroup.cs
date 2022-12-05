@@ -28,18 +28,14 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
           report.AppendLine("Status: FT_CreateDeviceInfoList failed");
           return;
         }
-      } catch (DllNotFoundException) { return; } 
-        catch (ArgumentNullException) { return; }
-        catch (EntryPointNotFoundException) { return; }
-        catch (BadImageFormatException) { return; }
-   
+      } catch (DllNotFoundException) { return; } catch (ArgumentNullException) { return; } catch (EntryPointNotFoundException) { return; } catch (BadImageFormatException) { return; }
+
       FT_DEVICE_INFO_NODE[] info = new FT_DEVICE_INFO_NODE[numDevices];
-      if (FTD2XX.FT_GetDeviceInfoList(info, ref numDevices) != FT_STATUS.FT_OK) 
-      {
-        report.AppendLine("Status: FT_GetDeviceInfoList failed");        
+      if (FTD2XX.FT_GetDeviceInfoList(info, ref numDevices) != FT_STATUS.FT_OK) {
+        report.AppendLine("Status: FT_GetDeviceInfoList failed");
         return;
       }
- 
+
       // make sure numDevices is not larger than the info array
       if (numDevices > info.Length)
         numDevices = (uint)info.Length;
@@ -65,11 +61,11 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
         FTD2XX.FT_SetBaudRate(handle, 19200);
         FTD2XX.FT_SetDataCharacteristics(handle, 8, 1, 0);
-        FTD2XX.FT_SetFlowControl(handle, FT_FLOW_CONTROL.FT_FLOW_RTS_CTS, 0x11, 
+        FTD2XX.FT_SetFlowControl(handle, FT_FLOW_CONTROL.FT_FLOW_RTS_CTS, 0x11,
           0x13);
         FTD2XX.FT_SetTimeouts(handle, 1000, 1000);
         FTD2XX.FT_Purge(handle, FT_PURGE.FT_PURGE_ALL);
-        
+
         status = FTD2XX.Write(handle, new byte[] { 0x38 });
         if (status != FT_STATUS.FT_OK) {
           report.AppendLine("Write Status: " + status);
@@ -121,7 +117,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
         if (isValid) {
           report.AppendLine("Status: OK");
-          hardware.Add(new TBalancer(i, protocolVersion, settings));          
+          hardware.Add(new TBalancer(i, protocolVersion, settings));
         }
 
         if (i < numDevices - 1)

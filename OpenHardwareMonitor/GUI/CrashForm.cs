@@ -30,7 +30,7 @@ namespace OpenHardwareMonitor.GUI {
         exception = value;
         StringBuilder s = new StringBuilder();
         Version version = typeof(CrashForm).Assembly.GetName().Version;
-        s.Append("Version: "); s.AppendLine(version.ToString());        
+        s.Append("Version: "); s.AppendLine(version.ToString());
         s.AppendLine();
         s.AppendLine(exception.ToString());
         s.AppendLine();
@@ -38,13 +38,13 @@ namespace OpenHardwareMonitor.GUI {
           s.AppendLine(exception.InnerException.ToString());
           s.AppendLine();
         }
-        s.Append("Common Language Runtime: "); 
+        s.Append("Common Language Runtime: ");
         s.AppendLine(Environment.Version.ToString());
         s.Append("Operating System: ");
         s.AppendLine(Environment.OSVersion.ToString());
         s.Append("Process Type: ");
         s.AppendLine(IntPtr.Size == 4 ? "32-Bit" : "64-Bit");
-        reportTextBox.Text = s.ToString();        
+        reportTextBox.Text = s.ToString();
       }
     }
 
@@ -81,11 +81,11 @@ namespace OpenHardwareMonitor.GUI {
 
           Close();
         } catch (WebException) {
-          MessageBox.Show("Sending the crash report failed.", "Error", 
+          MessageBox.Show("Sending the crash report failed.", "Error",
             MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
       } catch {
       }
     }
-  }  
+  }
 }
