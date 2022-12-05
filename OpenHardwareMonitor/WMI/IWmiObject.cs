@@ -9,7 +9,7 @@
 */
 
 namespace OpenHardwareMonitor.WMI {
-    interface IWmiObject {
+    internal interface IWmiObject {
         // Both of these get exposed to WMI
         string Name { get; }
         string Identifier { get; }
