@@ -19,7 +19,7 @@ using OpenHardwareMonitor.Hardware;
 namespace OpenHardwareMonitor.Utilities {
     public class PersistentSettings : ISettings {
 
-        private IDictionary<string, string> settings =
+        private readonly IDictionary<string, string> settings =
           new Dictionary<string, string>();
 
         public void Load(string fileName) {

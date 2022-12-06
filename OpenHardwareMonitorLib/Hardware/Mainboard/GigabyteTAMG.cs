@@ -16,9 +16,9 @@ using System.Text;
 namespace OpenHardwareMonitor.Hardware.Mainboard {
 
     internal class GigabyteTAMG {
-        private byte[] table;
+        private readonly byte[] table;
 
-        private Sensor[] sensors;
+        private readonly Sensor[] sensors;
 
         private struct Sensor {
             public string Name;

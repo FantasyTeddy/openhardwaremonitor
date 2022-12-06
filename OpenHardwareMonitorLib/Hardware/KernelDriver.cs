@@ -17,7 +17,7 @@ using Microsoft.Win32.SafeHandles;
 namespace OpenHardwareMonitor.Hardware {
     internal class KernelDriver {
 
-        private string id;
+        private readonly string id;
 
         private SafeFileHandle device;
 

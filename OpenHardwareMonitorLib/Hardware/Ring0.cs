@@ -26,7 +26,7 @@ namespace OpenHardwareMonitor.Hardware {
         private static readonly StringBuilder report = new StringBuilder();
 
         private const uint OLS_TYPE = 40000;
-        private static IOControlCode
+        private static readonly IOControlCode
           IOCTL_OLS_GET_REFCOUNT = new IOControlCode(OLS_TYPE, 0x801,
             IOControlCode.Access.Any),
           IOCTL_OLS_GET_DRIVER_VERSION = new IOControlCode(OLS_TYPE, 0x800,

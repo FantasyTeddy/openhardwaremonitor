@@ -32,7 +32,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         private const uint FAMILY_17H_M01H_THM_TCON_TEMP_RANGE_SEL = 0x80000;
         private uint FAMILY_17H_M70H_CCD_TEMP(uint i) { return 0x00059954 + i * 4; }
         private const uint FAMILY_17H_M70H_CCD_TEMP_VALID = 0x800;
-        private uint maxCcdCount;
+        private readonly uint maxCcdCount;
 
         private const uint MSR_RAPL_PWR_UNIT = 0xC0010299;
         private const uint MSR_CORE_ENERGY_STAT = 0xC001029A;
@@ -40,7 +40,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         private const uint MSR_P_STATE_0 = 0xC0010064;
         private const uint MSR_FAMILY_17H_P_STATE = 0xc0010293;
 
-        private float energyUnitMultiplier = 0;
+        private readonly float energyUnitMultiplier = 0;
         private uint lastEnergyConsumed;
         private DateTime lastEnergyTime;
 
@@ -50,7 +50,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             public string Name { get; set; }
             public float Offset { get; set; }
         }
-        private IEnumerable<TctlOffsetItem> tctlOffsetItems = new[] {
+        private readonly IEnumerable<TctlOffsetItem> tctlOffsetItems = new[] {
       new TctlOffsetItem { Name = "AMD Ryzen 5 1600X", Offset = 20.0f },
       new TctlOffsetItem { Name = "AMD Ryzen 7 1700X", Offset = 20.0f },
       new TctlOffsetItem { Name = "AMD Ryzen 7 1800X", Offset = 20.0f },

@@ -18,10 +18,10 @@ namespace OpenHardwareMonitor.GUI {
 
         private event ShowDesktopChangedEventHandler ShowDesktopChangedEvent;
 
-        private System.Threading.Timer timer;
+        private readonly System.Threading.Timer timer;
         private bool showDesktop = false;
-        private NativeWindow referenceWindow;
-        private string referenceWindowCaption =
+        private readonly NativeWindow referenceWindow;
+        private readonly string referenceWindowCaption =
           "OpenHardwareMonitorShowDesktopReferenceWindow";
 
         private ShowDesktop() {

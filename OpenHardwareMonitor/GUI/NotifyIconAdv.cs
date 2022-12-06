@@ -19,8 +19,8 @@ namespace OpenHardwareMonitor.GUI {
 
     public class NotifyIconAdv : IDisposable {
 
-        private NotifyIcon genericNotifyIcon;
-        private NotifyIconWindowsImplementation windowsNotifyIcon;
+        private readonly NotifyIcon genericNotifyIcon;
+        private readonly NotifyIconWindowsImplementation windowsNotifyIcon;
 
         public NotifyIconAdv() {
             if (Hardware.OperatingSystem.IsUnix) { // Unix
@@ -325,15 +325,15 @@ namespace OpenHardwareMonitor.GUI {
 
             private static int nextId = 0;
 
-            private object syncObj = new object();
+            private readonly object syncObj = new object();
             private Icon icon;
             private string text = "";
-            private int id;
+            private readonly int id;
             private bool created;
             private NotifyIconNativeWindow window;
             private bool doubleClickDown;
             private bool visible;
-            private MethodInfo commandDispatch;
+            private readonly MethodInfo commandDispatch;
 
             public event EventHandler BalloonTipClicked;
             public event EventHandler BalloonTipClosed;
@@ -679,7 +679,7 @@ namespace OpenHardwareMonitor.GUI {
             }
 
             private class NotifyIconNativeWindow : NativeWindow {
-                private NotifyIconWindowsImplementation reference;
+                private readonly NotifyIconWindowsImplementation reference;
                 private GCHandle referenceHandle;
 
                 internal NotifyIconNativeWindow(NotifyIconWindowsImplementation component) {
@@ -735,7 +735,7 @@ namespace OpenHardwareMonitor.GUI {
             private const int NIN_BALLOONTIMEOUT = 0x404;
             private const int NIN_BALLOONUSERCLICK = 0x405;
 
-            private static int WM_TASKBARCREATED =
+            private static readonly int WM_TASKBARCREATED =
               NativeMethods.RegisterWindowMessage("TaskbarCreated");
 
             private enum NotifyIconMessage : int {
@@ -763,7 +763,7 @@ namespace OpenHardwareMonitor.GUI {
 
                 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
                 public class NotifyIconData {
-                    private int Size = Marshal.SizeOf(typeof(NotifyIconData));
+                    private readonly int Size = Marshal.SizeOf(typeof(NotifyIconData));
                     public IntPtr Window;
                     public int ID;
                     public NotifyIconDataFlags Flags;

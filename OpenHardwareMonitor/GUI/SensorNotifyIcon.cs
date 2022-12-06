@@ -21,17 +21,17 @@ using OpenHardwareMonitor.Utilities;
 namespace OpenHardwareMonitor.GUI {
     public class SensorNotifyIcon : IDisposable {
 
-        private UnitManager unitManager;
-        private NotifyIconAdv notifyIcon;
-        private Bitmap bitmap;
-        private Graphics graphics;
+        private readonly UnitManager unitManager;
+        private readonly NotifyIconAdv notifyIcon;
+        private readonly Bitmap bitmap;
+        private readonly Graphics graphics;
         private Color color;
         private Color darkColor;
         private Brush brush;
         private Brush darkBrush;
-        private Pen pen;
-        private Font font;
-        private Font smallFont;
+        private readonly Pen pen;
+        private readonly Font font;
+        private readonly Font smallFont;
 
         public SensorNotifyIcon(SystemTray sensorSystemTray, ISensor sensor,
           bool balloonTip, PersistentSettings settings, UnitManager unitManager) {

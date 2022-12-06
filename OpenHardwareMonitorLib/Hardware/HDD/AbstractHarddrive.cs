@@ -23,7 +23,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         private const int UPDATE_DIVIDER = 30; // update only every 30s
 
         // array of all harddrive types, matching type is searched in this order
-        private static Type[] hddTypes = {
+        private static readonly Type[] hddTypes = {
       typeof(SSDPlextor),
       typeof(SSDIntel),
       typeof(SSDSandforce),
@@ -33,17 +33,17 @@ namespace OpenHardwareMonitor.Hardware.HDD {
       typeof(GenericHarddisk)
     };
 
-        private string firmwareRevision;
+        private readonly string firmwareRevision;
         private readonly ISmart smart;
 
         private readonly IntPtr handle;
         private readonly int index;
         private int count;
 
-        private IList<SmartAttribute> smartAttributes;
+        private readonly IList<SmartAttribute> smartAttributes;
         private IDictionary<SmartAttribute, Sensor> sensors;
 
-        private DriveInfo[] driveInfos;
+        private readonly DriveInfo[] driveInfos;
         private Sensor usageSensor;
 
         protected AbstractHarddrive(ISmart smart, string name,

@@ -118,7 +118,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
         private class LMChip : ISuperIO {
 
-            private string path;
+            private readonly string path;
             private readonly FileStream[] voltageStreams;
             private readonly FileStream[] temperatureStreams;
             private readonly FileStream[] fanStreams;

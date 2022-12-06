@@ -14,7 +14,7 @@ using OpenHardwareMonitor.Hardware;
 
 namespace OpenHardwareMonitor.GUI {
     public class HardwareTypeImage {
-        private IDictionary<HardwareType, Image> images =
+        private readonly IDictionary<HardwareType, Image> images =
           new Dictionary<HardwareType, Image>();
 
         private HardwareTypeImage() { }

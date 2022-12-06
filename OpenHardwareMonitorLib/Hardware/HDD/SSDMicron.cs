@@ -62,8 +62,8 @@ RequireSmart(0xCA), RequireSmart(0xCE)]
       new SmartAttribute(0xF8, SmartNames.FTLProgramNANDPagesCount, RawToInt)
         };
 
-        private Sensor temperature;
-        private Sensor writeAmplification;
+        private readonly Sensor temperature;
+        private readonly Sensor writeAmplification;
 
         public SSDMicron(ISmart smart, string name, string firmwareRevision,
           int index, ISettings settings)

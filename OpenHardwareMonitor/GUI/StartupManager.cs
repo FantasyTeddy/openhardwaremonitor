@@ -20,7 +20,7 @@ using OpenHardwareMonitor.TaskScheduler;
 namespace OpenHardwareMonitor.GUI {
     public class StartupManager {
 
-        private TaskSchedulerClass scheduler;
+        private readonly TaskSchedulerClass scheduler;
         private bool startup;
         private const string REGISTRY_RUN =
           @"Software\Microsoft\Windows\CurrentVersion\Run";

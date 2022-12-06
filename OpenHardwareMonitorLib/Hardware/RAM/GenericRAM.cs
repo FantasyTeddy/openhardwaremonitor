@@ -13,9 +13,9 @@ using System.Runtime.InteropServices;
 namespace OpenHardwareMonitor.Hardware.RAM {
     internal class GenericRAM : Hardware {
 
-        private Sensor loadSensor;
-        private Sensor usedMemory;
-        private Sensor availableMemory;
+        private readonly Sensor loadSensor;
+        private readonly Sensor usedMemory;
+        private readonly Sensor availableMemory;
 
         public GenericRAM(string name, ISettings settings)
           : base(name, new Identifier("ram"), settings) {

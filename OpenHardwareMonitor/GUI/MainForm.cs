@@ -27,46 +27,46 @@ using OpenHardwareMonitor.WMI;
 namespace OpenHardwareMonitor.GUI {
     public partial class MainForm : Form {
 
-        private PersistentSettings settings;
-        private UnitManager unitManager;
-        private Computer computer;
-        private Node root;
-        private TreeModel treeModel;
+        private readonly PersistentSettings settings;
+        private readonly UnitManager unitManager;
+        private readonly Computer computer;
+        private readonly Node root;
+        private readonly TreeModel treeModel;
         private IDictionary<ISensor, Color> sensorPlotColors =
           new Dictionary<ISensor, Color>();
-        private Color[] plotColorPalette;
-        private SystemTray systemTray;
-        private StartupManager startupManager = new StartupManager();
-        private UpdateVisitor updateVisitor = new UpdateVisitor();
-        private SensorGadget gadget;
+        private readonly Color[] plotColorPalette;
+        private readonly SystemTray systemTray;
+        private readonly StartupManager startupManager = new StartupManager();
+        private readonly UpdateVisitor updateVisitor = new UpdateVisitor();
+        private readonly SensorGadget gadget;
         private Form plotForm;
-        private PlotPanel plotPanel;
+        private readonly PlotPanel plotPanel;
 
-        private UserOption showHiddenSensors;
+        private readonly UserOption showHiddenSensors;
         private UserOption showPlot;
-        private UserOption showValue;
-        private UserOption showMin;
-        private UserOption showMax;
-        private UserOption startMinimized;
-        private UserOption minimizeToTray;
-        private UserOption minimizeOnClose;
-        private UserOption autoStart;
+        private readonly UserOption showValue;
+        private readonly UserOption showMin;
+        private readonly UserOption showMax;
+        private readonly UserOption startMinimized;
+        private readonly UserOption minimizeToTray;
+        private readonly UserOption minimizeOnClose;
+        private readonly UserOption autoStart;
 
-        private UserOption readMainboardSensors;
-        private UserOption readCpuSensors;
-        private UserOption readRamSensors;
-        private UserOption readGpuSensors;
-        private UserOption readFanControllersSensors;
-        private UserOption readHddSensors;
+        private readonly UserOption readMainboardSensors;
+        private readonly UserOption readCpuSensors;
+        private readonly UserOption readRamSensors;
+        private readonly UserOption readGpuSensors;
+        private readonly UserOption readFanControllersSensors;
+        private readonly UserOption readHddSensors;
 
-        private UserOption showGadget;
+        private readonly UserOption showGadget;
         private UserRadioGroup plotLocation;
-        private WmiProvider wmiProvider;
+        private readonly WmiProvider wmiProvider;
 
-        private UserOption runWebServer;
-        private UserOption logSensors;
-        private UserRadioGroup loggingInterval;
-        private Logger logger;
+        private readonly UserOption runWebServer;
+        private readonly UserOption logSensors;
+        private readonly UserRadioGroup loggingInterval;
+        private readonly Logger logger;
 
         private bool selectionDragging = false;
 

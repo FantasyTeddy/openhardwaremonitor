@@ -16,12 +16,12 @@ using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
     public class SystemTray : IDisposable {
-        private IComputer computer;
-        private PersistentSettings settings;
-        private UnitManager unitManager;
-        private List<SensorNotifyIcon> list = new List<SensorNotifyIcon>();
+        private readonly IComputer computer;
+        private readonly PersistentSettings settings;
+        private readonly UnitManager unitManager;
+        private readonly List<SensorNotifyIcon> list = new List<SensorNotifyIcon>();
         private bool mainIconEnabled = false;
-        private NotifyIconAdv mainIcon;
+        private readonly NotifyIconAdv mainIcon;
 
         public SystemTray(IComputer computer, PersistentSettings settings,
           UnitManager unitManager) {

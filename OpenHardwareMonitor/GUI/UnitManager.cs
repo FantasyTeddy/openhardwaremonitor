@@ -19,7 +19,7 @@ namespace OpenHardwareMonitor.GUI {
 
     public class UnitManager {
 
-        private PersistentSettings settings;
+        private readonly PersistentSettings settings;
         private TemperatureUnit temperatureUnit;
 
         public UnitManager(PersistentSettings settings) {

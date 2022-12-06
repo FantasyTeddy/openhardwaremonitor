@@ -17,7 +17,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
     internal class DebugSmart : ISmart {
 
-        private Drive[] drives = {
+        private readonly Drive[] drives = {
       new Drive("KINGSTON SNV425S264GB", null, 16,
         @" 01 000000000000 100 100      
            02 000000000000 100 100      

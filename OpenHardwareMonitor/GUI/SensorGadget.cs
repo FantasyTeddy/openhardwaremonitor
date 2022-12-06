@@ -20,7 +20,7 @@ using OpenHardwareMonitor.Utilities;
 namespace OpenHardwareMonitor.GUI {
     public class SensorGadget : Gadget {
 
-        private UnitManager unitManager;
+        private readonly UnitManager unitManager;
 
         private Image back = Utilities.EmbeddedResources.GetImage("gadget.png");
         private Image image = null;
@@ -44,13 +44,13 @@ namespace OpenHardwareMonitor.GUI {
         private int bottomMargin;
         private int progressWidth;
 
-        private IDictionary<IHardware, IList<ISensor>> sensors =
+        private readonly IDictionary<IHardware, IList<ISensor>> sensors =
           new SortedDictionary<IHardware, IList<ISensor>>(new HardwareComparer());
 
-        private PersistentSettings settings;
-        private UserOption hardwareNames;
-        private UserOption alwaysOnTop;
-        private UserOption lockPositionAndSize;
+        private readonly PersistentSettings settings;
+        private readonly UserOption hardwareNames;
+        private readonly UserOption alwaysOnTop;
+        private readonly UserOption lockPositionAndSize;
 
         private Font largeFont;
         private Font smallFont;

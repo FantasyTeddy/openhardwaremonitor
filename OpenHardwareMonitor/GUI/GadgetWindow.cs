@@ -26,7 +26,7 @@ namespace OpenHardwareMonitor.GUI {
         private byte opacity = 255;
         private Point location = new Point(100, 100);
         private Size size = new Size(130, 84);
-        private MethodInfo commandDispatch;
+        private readonly MethodInfo commandDispatch;
         private IntPtr handleBitmapDC;
         private Size bufferSize;
         private Graphics graphics;

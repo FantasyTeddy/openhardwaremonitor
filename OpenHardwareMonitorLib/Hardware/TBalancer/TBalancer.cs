@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         private readonly List<ISensor> deactivating = new List<ISensor>();
 
         private FT_HANDLE handle;
-        private byte[] data = new byte[285];
+        private readonly byte[] data = new byte[285];
         private byte[] primaryData = new byte[0];
         private byte[] alternativeData = new byte[0];
 

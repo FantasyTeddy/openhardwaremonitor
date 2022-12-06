@@ -15,7 +15,7 @@ using System.Windows.Forms;
 namespace OpenHardwareMonitor.GUI {
     public abstract class Gadget : IDisposable {
 
-        private GadgetWindow window;
+        private readonly GadgetWindow window;
 
         public Gadget() {
             this.window = new GadgetWindow();

@@ -51,7 +51,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         SensorType.Data, 2, SmartNames.HostReads)
         };
 
-        private Sensor writeAmplification;
+        private readonly Sensor writeAmplification;
 
         public SSDSandforce(ISmart smart, string name, string firmwareRevision,
           int index, ISettings settings)

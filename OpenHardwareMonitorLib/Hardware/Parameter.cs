@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.Hardware {
     }
 
     internal class Parameter : IParameter {
-        private ParameterDescription description;
+        private readonly ParameterDescription description;
         private float value;
         private bool isDefault;
         private readonly ISettings settings;

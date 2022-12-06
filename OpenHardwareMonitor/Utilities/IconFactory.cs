@@ -147,7 +147,7 @@ namespace OpenHardwareMonitor.Utilities {
             }
         }
 
-        private static BinaryWriter binaryWriter =
+        private static readonly BinaryWriter binaryWriter =
           new BinaryWriter(new MemoryStream());
 
         public static Icon Create(byte[] colors, int width, int height,

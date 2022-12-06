@@ -11,7 +11,7 @@
 namespace OpenHardwareMonitor.Hardware.RAM {
     internal class RAMGroup : IGroup {
 
-        private Hardware[] hardware;
+        private readonly Hardware[] hardware;
 
         public RAMGroup(SMBIOS smbios, ISettings settings) {
 

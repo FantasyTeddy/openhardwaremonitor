@@ -23,10 +23,10 @@ using OpenHardwareMonitor.Hardware;
 namespace OpenHardwareMonitor.Utilities {
 
     public class HttpServer {
-        private HttpListener listener;
+        private readonly HttpListener listener;
         private int nodeCount;
         private Thread listenerThread;
-        private Node root;
+        private readonly Node root;
 
         public HttpServer(Node node, int port) {
             root = node;

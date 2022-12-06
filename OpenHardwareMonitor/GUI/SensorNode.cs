@@ -15,9 +15,9 @@ using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
     public class SensorNode : Node {
-        private PersistentSettings settings;
-        private UnitManager unitManager;
-        private string fixedFormat;
+        private readonly PersistentSettings settings;
+        private readonly UnitManager unitManager;
+        private readonly string fixedFormat;
         private bool plot = false;
         private Color? penColor = null;
 

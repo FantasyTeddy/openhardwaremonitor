@@ -32,8 +32,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         private readonly byte[] FAN_PWM_REG =
           new byte[] { 0xA3, 0xB3, 0xC3, 0xD3 };
 
-        private bool[] restoreDefaultFanPwmControlRequired = new bool[4];
-        private byte[] initialFanPwmControl = new byte[4];
+        private readonly bool[] restoreDefaultFanPwmControlRequired = new bool[4];
+        private readonly byte[] initialFanPwmControl = new byte[4];
 
         private byte ReadByte(byte register) {
             Ring0.WriteIoPort(

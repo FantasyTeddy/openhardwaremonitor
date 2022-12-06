@@ -20,7 +20,7 @@ namespace OpenHardwareMonitor.GUI {
         private readonly UnitManager unitManager;
         private readonly Identifier expandedIdentifier;
 
-        private List<TypeNode> typeNodes = new List<TypeNode>();
+        private readonly List<TypeNode> typeNodes = new List<TypeNode>();
 
         public HardwareNode(IHardware hardware, PersistentSettings settings,
           UnitManager unitManager) : base() {

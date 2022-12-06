@@ -43,7 +43,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         private readonly Sensor controlSensor;
         private readonly Control fanControl;
 
-        private IntPtr context;
+        private readonly IntPtr context;
         private readonly int overdriveVersion;
 
         public ATIGPU(string name, int adapterIndex, int busNumber,

@@ -14,7 +14,7 @@ using OpenHardwareMonitor.Hardware;
 namespace OpenHardwareMonitor.WMI {
     [InstrumentationClass(InstrumentationType.Instance)]
     public class Sensor : IWmiObject {
-        private ISensor sensor;
+        private readonly ISensor sensor;
 
         #region WMI Exposed
 

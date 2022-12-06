@@ -14,7 +14,7 @@ using OpenHardwareMonitor.Collections;
 namespace OpenHardwareMonitor.Hardware.HDD {
     internal class SmartAttribute {
 
-        private RawValueConversion rawValueConversion;
+        private readonly RawValueConversion rawValueConversion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartAttribute"/> class.

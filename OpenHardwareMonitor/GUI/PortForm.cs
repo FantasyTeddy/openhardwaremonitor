@@ -16,8 +16,8 @@ using System.Windows.Forms;
 
 namespace OpenHardwareMonitor.GUI {
     public partial class PortForm : Form {
-        private MainForm parent;
-        private string localIP;
+        private readonly MainForm parent;
+        private readonly string localIP;
         public PortForm(MainForm m) {
             InitializeComponent();
             parent = m;

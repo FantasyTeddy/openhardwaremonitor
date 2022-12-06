@@ -14,11 +14,11 @@ using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
     public class UserRadioGroup {
-        private string name;
+        private readonly string name;
         private int value;
-        private MenuItem[] menuItems;
+        private readonly MenuItem[] menuItems;
         private event EventHandler changed;
-        private PersistentSettings settings;
+        private readonly PersistentSettings settings;
 
         public UserRadioGroup(string name, int value,
           MenuItem[] menuItems, PersistentSettings settings) {

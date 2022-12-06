@@ -14,7 +14,7 @@ namespace OpenHardwareMonitor.Hardware {
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct IOControlCode {
-        private uint code;
+        private readonly uint code;
 
         public IOControlCode(uint deviceType, uint function, Access access) :
           this(deviceType, function, Method.Buffered, access) { }

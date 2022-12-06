@@ -151,7 +151,7 @@ namespace OpenHardwareMonitor.Collections {
 
         private struct Enumerator : IEnumerator<T>, IEnumerator {
 
-            private RingCollection<T> collection;
+            private readonly RingCollection<T> collection;
             private int index;
 
             public Enumerator(RingCollection<T> collection) {

@@ -63,9 +63,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         private readonly int maxFanCount;
         private readonly int minFanCount;
 
-        private bool[] restoreDefaultFanControlRequired = new bool[7];
-        private byte[] initialFanControlMode = new byte[7];
-        private byte[] initialFanPwmCommand = new byte[7];
+        private readonly bool[] restoreDefaultFanControlRequired = new bool[7];
+        private readonly byte[] initialFanControlMode = new byte[7];
+        private readonly byte[] initialFanPwmCommand = new byte[7];
 
         private readonly ushort[] voltageRegisters;
         private readonly ushort voltageVBatRegister;

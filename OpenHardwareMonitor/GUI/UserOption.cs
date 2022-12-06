@@ -14,11 +14,11 @@ using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
     public class UserOption {
-        private string name;
+        private readonly string name;
         private bool value;
-        private MenuItem menuItem;
+        private readonly MenuItem menuItem;
         private event EventHandler changed;
-        private PersistentSettings settings;
+        private readonly PersistentSettings settings;
 
         public UserOption(string name, bool value,
           MenuItem menuItem, PersistentSettings settings) {

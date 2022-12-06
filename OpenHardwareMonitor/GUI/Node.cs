@@ -16,7 +16,7 @@ using System.Drawing;
 namespace OpenHardwareMonitor.GUI {
     public class Node {
         private Node parent;
-        private NodeCollection nodes;
+        private readonly NodeCollection nodes;
 
         private string text;
         private Image image;
@@ -124,7 +124,7 @@ namespace OpenHardwareMonitor.GUI {
         public event NodeEventHandler NodeRemoved;
 
         private class NodeCollection : Collection<Node> {
-            private Node owner;
+            private readonly Node owner;
 
             public NodeCollection(Node owner) {
                 this.owner = owner;
