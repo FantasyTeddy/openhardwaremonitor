@@ -489,8 +489,7 @@ namespace OpenHardwareMonitor.GUI {
                     return;
                 }
 
-                if (ContextMenuStrip != null)
-                    ContextMenuStrip.GetType().InvokeMember("ShowInTaskbar",
+                ContextMenuStrip?.GetType().InvokeMember("ShowInTaskbar",
                       BindingFlags.NonPublic | BindingFlags.InvokeMethod |
                       BindingFlags.Instance, null, ContextMenuStrip,
                       new object[] { p.x, p.y });

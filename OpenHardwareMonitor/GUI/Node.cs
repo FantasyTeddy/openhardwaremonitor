@@ -53,10 +53,8 @@ namespace OpenHardwareMonitor.GUI {
             get { return parent; }
             set {
                 if (value != parent) {
-                    if (parent != null)
-                        parent.nodes.Remove(this);
-                    if (value != null)
-                        value.nodes.Add(this);
+                    parent?.nodes.Remove(this);
+                    value?.nodes.Add(this);
                 }
             }
         }
@@ -147,14 +145,12 @@ namespace OpenHardwareMonitor.GUI {
                     throw new ArgumentNullException("item");
 
                 if (item.parent != owner) {
-                    if (item.parent != null)
-                        item.parent.nodes.Remove(item);
+                    item.parent?.nodes.Remove(item);
                     item.parent = owner;
                     base.InsertItem(index, item);
 
                     TreeModel model = owner.RootTreeModel();
-                    if (model != null)
-                        model.OnStructureChanged(owner);
+                    model?.OnStructureChanged(owner);
                     if (owner.NodeAdded != null)
                         owner.NodeAdded(item);
                 }
@@ -166,8 +162,7 @@ namespace OpenHardwareMonitor.GUI {
                 base.RemoveItem(index);
 
                 TreeModel model = owner.RootTreeModel();
-                if (model != null)
-                    model.OnStructureChanged(owner);
+                model?.OnStructureChanged(owner);
                 if (owner.NodeRemoved != null)
                     owner.NodeRemoved(item);
             }

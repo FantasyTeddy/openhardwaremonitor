@@ -409,9 +409,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         }
 
         public override void Close() {
-            if (temperatureStream != null) {
-                temperatureStream.Close();
-            }
+            temperatureStream?.Close();
             base.Close();
         }
     }

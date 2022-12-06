@@ -580,11 +580,9 @@ namespace OpenHardwareMonitor.GUI {
             treeView.Invalidate();
             plotPanel.InvalidatePlot();
             systemTray.Redraw();
-            if (gadget != null)
-                gadget.Redraw();
+            gadget?.Redraw();
 
-            if (wmiProvider != null)
-                wmiProvider.Update();
+            wmiProvider?.Update();
 
 
             if (logSensors != null && logSensors.Value && delayCount >= 4)

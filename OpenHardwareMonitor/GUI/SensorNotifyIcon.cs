@@ -139,26 +139,21 @@ namespace OpenHardwareMonitor.GUI {
                   this.color.B / 3);
                 Brush brush = this.brush;
                 this.brush = new SolidBrush(this.color);
-                if (brush != null)
-                    brush.Dispose();
+                brush?.Dispose();
                 Brush darkBrush = this.darkBrush;
                 this.darkBrush = new SolidBrush(this.darkColor);
-                if (darkBrush != null)
-                    darkBrush.Dispose();
+                darkBrush?.Dispose();
             }
         }
 
         public void Dispose() {
             Icon icon = notifyIcon.Icon;
             notifyIcon.Icon = null;
-            if (icon != null)
-                icon.Dispose();
+            icon?.Dispose();
             notifyIcon.Dispose();
 
-            if (brush != null)
-                brush.Dispose();
-            if (darkBrush != null)
-                darkBrush.Dispose();
+            brush?.Dispose();
+            darkBrush?.Dispose();
             pen.Dispose();
             graphics.Dispose();
             bitmap.Dispose();
@@ -277,8 +272,7 @@ namespace OpenHardwareMonitor.GUI {
                     break;
             }
 
-            if (icon != null)
-                icon.Dispose();
+            icon?.Dispose();
 
             string format = "";
             switch (sensor.SensorType) {

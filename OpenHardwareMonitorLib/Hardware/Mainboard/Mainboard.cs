@@ -113,8 +113,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         public void Update() { }
 
         public void Close() {
-            if (lmSensors != null)
-                lmSensors.Close();
+            lmSensors?.Close();
             foreach (Hardware hardware in superIOHardware)
                 hardware.Close();
         }
