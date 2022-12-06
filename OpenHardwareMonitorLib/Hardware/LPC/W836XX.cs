@@ -253,8 +253,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             for (int i = FAN_BIT_REG.Length - 1; i >= 0; i--) {
                 byte oldByte = (byte)(bits & 0xFF);
                 byte newByte = (byte)(newBits & 0xFF);
-                bits = bits >> 8;
-                newBits = newBits >> 8;
+                bits >>= 8;
+                newBits >>= 8;
                 if (oldByte != newByte)
                     WriteByte(0, FAN_BIT_REG[i], newByte);
             }

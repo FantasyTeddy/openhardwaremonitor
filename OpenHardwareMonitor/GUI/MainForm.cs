@@ -911,8 +911,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void treeView_MouseMove(object sender, MouseEventArgs e) {
-            selectionDragging = selectionDragging &
-              (e.Button & (MouseButtons.Left | MouseButtons.Right)) > 0;
+            selectionDragging &= (e.Button & (MouseButtons.Left | MouseButtons.Right)) > 0;
 
             if (selectionDragging)
                 treeView.SelectedNode = treeView.GetNodeAt(e.Location);
