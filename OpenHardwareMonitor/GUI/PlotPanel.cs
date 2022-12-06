@@ -40,11 +40,12 @@ namespace OpenHardwareMonitor.GUI {
 
             this.model = CreatePlotModel();
 
-            this.plot = new Plot();
-            this.plot.Dock = DockStyle.Fill;
-            this.plot.Model = model;
-            this.plot.BackColor = Color.White;
-            this.plot.ContextMenu = CreateMenu();
+            this.plot = new Plot {
+                Dock = DockStyle.Fill,
+                Model = model,
+                BackColor = Color.White,
+                ContextMenu = CreateMenu()
+            };
 
             UpdateAxesPosition();
 
@@ -131,31 +132,33 @@ namespace OpenHardwareMonitor.GUI {
               settings.GetValue("plotPanel.MaxTimeSpan", 10.0f * 60));
             timeAxis.StringFormat = "h:mm";
 
-            var units = new Dictionary<SensorType, string>();
-            units.Add(SensorType.Voltage, "V");
-            units.Add(SensorType.Clock, "MHz");
-            units.Add(SensorType.Temperature, "°C");
-            units.Add(SensorType.Load, "%");
-            units.Add(SensorType.Fan, "RPM");
-            units.Add(SensorType.Flow, "L/h");
-            units.Add(SensorType.Control, "%");
-            units.Add(SensorType.Level, "%");
-            units.Add(SensorType.Factor, "1");
-            units.Add(SensorType.Power, "W");
-            units.Add(SensorType.Data, "GB");
+            var units = new Dictionary<SensorType, string> {
+                { SensorType.Voltage, "V" },
+                { SensorType.Clock, "MHz" },
+                { SensorType.Temperature, "°C" },
+                { SensorType.Load, "%" },
+                { SensorType.Fan, "RPM" },
+                { SensorType.Flow, "L/h" },
+                { SensorType.Control, "%" },
+                { SensorType.Level, "%" },
+                { SensorType.Factor, "1" },
+                { SensorType.Power, "W" },
+                { SensorType.Data, "GB" }
+            };
 
             foreach (SensorType type in Enum.GetValues(typeof(SensorType))) {
-                var axis = new LinearAxis();
-                axis.Position = AxisPosition.Left;
-                axis.MajorGridlineStyle = LineStyle.Solid;
-                axis.MajorGridlineThickness = 1;
-                axis.MajorGridlineColor = timeAxis.MajorGridlineColor;
-                axis.MinorGridlineStyle = LineStyle.Solid;
-                axis.MinorGridlineThickness = 1;
-                axis.MinorGridlineColor = timeAxis.MinorGridlineColor;
-                axis.AxislineStyle = LineStyle.Solid;
-                axis.Title = type.ToString();
-                axis.Key = type.ToString();
+                var axis = new LinearAxis {
+                    Position = AxisPosition.Left,
+                    MajorGridlineStyle = LineStyle.Solid,
+                    MajorGridlineThickness = 1,
+                    MajorGridlineColor = timeAxis.MajorGridlineColor,
+                    MinorGridlineStyle = LineStyle.Solid,
+                    MinorGridlineThickness = 1,
+                    MinorGridlineColor = timeAxis.MinorGridlineColor,
+                    AxislineStyle = LineStyle.Solid,
+                    Title = type.ToString(),
+                    Key = type.ToString()
+                };
 
                 axis.Zoom(
                   settings.GetValue("plotPanel.Min" + axis.Key, float.NaN),

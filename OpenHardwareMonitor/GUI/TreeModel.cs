@@ -21,8 +21,9 @@ namespace OpenHardwareMonitor.GUI {
         private bool forceVisible = false;
 
         public TreeModel() {
-            root = new Node();
-            root.Model = this;
+            root = new Node {
+                Model = this
+            };
         }
 
         public TreePath GetPath(Node node) {

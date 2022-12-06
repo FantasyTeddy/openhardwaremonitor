@@ -101,9 +101,10 @@ namespace OpenHardwareMonitor.GUI {
             Font = SystemFonts.MessageBoxFont;
             treeView.Font = SystemFonts.MessageBoxFont;
 
-            plotPanel = new PlotPanel(settings, unitManager);
-            plotPanel.Font = SystemFonts.MessageBoxFont;
-            plotPanel.Dock = DockStyle.Fill;
+            plotPanel = new PlotPanel(settings, unitManager) {
+                Font = SystemFonts.MessageBoxFont,
+                Dock = DockStyle.Fill
+            };
 
             nodeCheckBox.IsVisibleValueNeeded += nodeCheckBox_IsVisibleValueNeeded;
             nodeTextBoxText.DrawText += nodeTextBoxText_DrawText;
@@ -124,8 +125,9 @@ namespace OpenHardwareMonitor.GUI {
                   column.Width)));
 
             treeModel = new TreeModel();
-            root = new Node(System.Environment.MachineName);
-            root.Image = Utilities.EmbeddedResources.GetImage("computer.png");
+            root = new Node(System.Environment.MachineName) {
+                Image = Utilities.EmbeddedResources.GetImage("computer.png")
+            };
 
             treeModel.Nodes.Add(root);
             treeView.Model = treeModel;
@@ -354,10 +356,11 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void InitializePlotForm() {
-            plotForm = new Form();
-            plotForm.FormBorderStyle = FormBorderStyle.SizableToolWindow;
-            plotForm.ShowInTaskbar = false;
-            plotForm.StartPosition = FormStartPosition.Manual;
+            plotForm = new Form {
+                FormBorderStyle = FormBorderStyle.SizableToolWindow,
+                ShowInTaskbar = false,
+                StartPosition = FormStartPosition.Manual
+            };
             AddOwnedForm(plotForm);
             plotForm.Bounds = new Rectangle {
                 X = settings.GetValue("plotForm.Location.X", -100000),
@@ -711,8 +714,9 @@ namespace OpenHardwareMonitor.GUI {
                     {
                         MenuItem item = new MenuItem("Pen Color...");
                         item.Click += delegate (object obj, EventArgs args) {
-                            ColorDialog dialog = new ColorDialog();
-                            dialog.Color = node.PenColor.GetValueOrDefault();
+                            ColorDialog dialog = new ColorDialog {
+                                Color = node.PenColor.GetValueOrDefault()
+                            };
                             if (dialog.ShowDialog() == DialogResult.OK)
                                 node.PenColor = dialog.Color;
                         };
@@ -727,8 +731,9 @@ namespace OpenHardwareMonitor.GUI {
                     }
                     treeContextMenu.MenuItems.Add(new MenuItem("-"));
                     {
-                        MenuItem item = new MenuItem("Show in Tray");
-                        item.Checked = systemTray.Contains(node.Sensor);
+                        MenuItem item = new MenuItem("Show in Tray") {
+                            Checked = systemTray.Contains(node.Sensor)
+                        };
                         item.Click += delegate (object obj, EventArgs args) {
                             if (item.Checked)
                                 systemTray.Remove(node.Sensor);
@@ -738,8 +743,9 @@ namespace OpenHardwareMonitor.GUI {
                         treeContextMenu.MenuItems.Add(item);
                     }
                     if (gadget != null) {
-                        MenuItem item = new MenuItem("Show in Gadget");
-                        item.Checked = gadget.Contains(node.Sensor);
+                        MenuItem item = new MenuItem("Show in Gadget") {
+                            Checked = gadget.Contains(node.Sensor)
+                        };
                         item.Click += delegate (object obj, EventArgs args) {
                             if (item.Checked) {
                                 gadget.Remove(node.Sensor);
@@ -753,8 +759,9 @@ namespace OpenHardwareMonitor.GUI {
                         treeContextMenu.MenuItems.Add(new MenuItem("-"));
                         IControl control = node.Sensor.Control;
                         MenuItem controlItem = new MenuItem("Control");
-                        MenuItem defaultItem = new MenuItem("Default");
-                        defaultItem.Checked = control.ControlMode == ControlMode.Default;
+                        MenuItem defaultItem = new MenuItem("Default") {
+                            Checked = control.ControlMode == ControlMode.Default
+                        };
                         controlItem.MenuItems.Add(defaultItem);
                         defaultItem.Click += delegate (object obj, EventArgs args) {
                             control.SetDefault();
@@ -765,8 +772,9 @@ namespace OpenHardwareMonitor.GUI {
                         for (int i = 0; i <= 100; i += 5) {
                             if (i <= control.MaxSoftwareValue &&
                                 i >= control.MinSoftwareValue) {
-                                MenuItem item = new MenuItem(i + " %");
-                                item.RadioCheck = true;
+                                MenuItem item = new MenuItem(i + " %") {
+                                    RadioCheck = true
+                                };
                                 manualItem.MenuItems.Add(item);
                                 item.Checked = control.ControlMode == ControlMode.Software &&
                                   Math.Round(control.SoftwareValue) == i;
@@ -846,8 +854,9 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void ShowParameterForm(ISensor sensor) {
-            ParameterForm form = new ParameterForm();
-            form.Parameters = sensor.Parameters;
+            ParameterForm form = new ParameterForm {
+                Parameters = sensor.Parameters
+            };
             form.captionLabel.Text = sensor.Name;
             form.ShowDialog();
         }
@@ -874,8 +883,9 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void sumbitReportMenuItem_Click(object sender, EventArgs e) {
-            ReportForm form = new ReportForm();
-            form.Report = computer.GetReport();
+            ReportForm form = new ReportForm {
+                Report = computer.GetReport()
+            };
             form.ShowDialog();
         }
 

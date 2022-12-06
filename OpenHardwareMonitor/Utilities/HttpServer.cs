@@ -36,8 +36,9 @@ namespace OpenHardwareMonitor.Utilities {
             nodeCount = 0;
 
             try {
-                listener = new HttpListener();
-                listener.IgnoreWriteExceptions = true;
+                listener = new HttpListener {
+                    IgnoreWriteExceptions = true
+                };
             } catch (PlatformNotSupportedException) {
                 listener = null;
             }

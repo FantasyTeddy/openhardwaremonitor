@@ -66,8 +66,9 @@ namespace OpenHardwareMonitor.GUI {
             contextMenu.MenuItems.Add(removeItem);
             MenuItem colorItem = new MenuItem("Change Color...");
             colorItem.Click += delegate (object obj, EventArgs args) {
-                ColorDialog dialog = new ColorDialog();
-                dialog.Color = Color;
+                ColorDialog dialog = new ColorDialog {
+                    Color = Color
+                };
                 if (dialog.ShowDialog() == DialogResult.OK) {
                     Color = dialog.Color;
                     settings.SetValue(new Identifier(sensor.Identifier,

@@ -124,10 +124,11 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
         private void SoftwareControlValueChanged(IControl control) {
             if (control.ControlMode == ControlMode.Software) {
-                ADLFanSpeedValue adlf = new ADLFanSpeedValue();
-                adlf.SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_PERCENT;
-                adlf.Flags = ADL.ADL_DL_FANCTRL_FLAG_USER_DEFINED_SPEED;
-                adlf.FanSpeed = (int)control.SoftwareValue;
+                ADLFanSpeedValue adlf = new ADLFanSpeedValue {
+                    SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_PERCENT,
+                    Flags = ADL.ADL_DL_FANCTRL_FLAG_USER_DEFINED_SPEED,
+                    FanSpeed = (int)control.SoftwareValue
+                };
                 ADL.ADL_Overdrive5_FanSpeed_Set(adapterIndex, 0, ref adlf);
             }
         }
@@ -264,8 +265,9 @@ namespace OpenHardwareMonitor.Hardware.ATI {
             r.AppendLine("Overdrive5 FanSpeed");
             r.AppendLine();
             try {
-                var adlf = new ADLFanSpeedValue();
-                adlf.SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_RPM;
+                var adlf = new ADLFanSpeedValue {
+                    SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_RPM
+                };
                 var status = ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf);
                 r.Append(" Status RPM: ");
                 r.AppendLine(status.ToString());
@@ -506,8 +508,9 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                     GetOD6Power(ADLODNCurrentPowerType.SOCKET_POWER, powerSocket);
                 }
 
-                ADLFanSpeedValue adlf = new ADLFanSpeedValue();
-                adlf.SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_RPM;
+                ADLFanSpeedValue adlf = new ADLFanSpeedValue {
+                    SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_RPM
+                };
                 if (ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf)
                   == ADLStatus.OK) {
                     fan.Value = adlf.FanSpeed;
@@ -516,8 +519,9 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                     fan.Value = null;
                 }
 
-                adlf = new ADLFanSpeedValue();
-                adlf.SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_PERCENT;
+                adlf = new ADLFanSpeedValue {
+                    SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_PERCENT
+                };
                 if (ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf)
                   == ADLStatus.OK) {
                     controlSensor.Value = adlf.FanSpeed;

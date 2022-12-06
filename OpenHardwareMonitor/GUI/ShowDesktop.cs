@@ -29,9 +29,10 @@ namespace OpenHardwareMonitor.GUI {
         private ShowDesktop() {
             // create a reference window to detect show desktop
             referenceWindow = new NativeWindow();
-            CreateParams cp = new CreateParams();
-            cp.ExStyle = GadgetWindow.WS_EX_TOOLWINDOW;
-            cp.Caption = referenceWindowCaption;
+            CreateParams cp = new CreateParams {
+                ExStyle = GadgetWindow.WS_EX_TOOLWINDOW,
+                Caption = referenceWindowCaption
+            };
             referenceWindow.CreateHandle(cp);
             NativeMethods.SetWindowPos(referenceWindow.Handle,
               GadgetWindow.HWND_BOTTOM, 0, 0, 0, 0, GadgetWindow.SWP_NOMOVE |

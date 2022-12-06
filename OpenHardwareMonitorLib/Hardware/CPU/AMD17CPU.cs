@@ -142,8 +142,9 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         }
 
         private IList<uint> GetSmnRegisters() {
-            var registers = new List<uint>();
-            registers.Add(FAMILY_17H_M01H_THM_TCON_TEMP);
+            var registers = new List<uint> {
+                FAMILY_17H_M01H_THM_TCON_TEMP
+            };
             for (uint i = 0; i < maxCcdCount; i++) {
                 registers.Add(FAMILY_17H_M70H_CCD_TEMP(i));
             }

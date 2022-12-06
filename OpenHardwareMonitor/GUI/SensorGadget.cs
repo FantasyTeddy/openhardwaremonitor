@@ -67,16 +67,19 @@ namespace OpenHardwareMonitor.GUI {
 
             this.darkWhite = new SolidBrush(Color.FromArgb(0xF0, 0xF0, 0xF0));
 
-            this.stringFormat = new StringFormat();
-            this.stringFormat.FormatFlags = StringFormatFlags.NoWrap;
+            this.stringFormat = new StringFormat {
+                FormatFlags = StringFormatFlags.NoWrap
+            };
 
-            this.trimStringFormat = new StringFormat();
-            this.trimStringFormat.Trimming = StringTrimming.EllipsisCharacter;
-            this.trimStringFormat.FormatFlags = StringFormatFlags.NoWrap;
+            this.trimStringFormat = new StringFormat {
+                Trimming = StringTrimming.EllipsisCharacter,
+                FormatFlags = StringFormatFlags.NoWrap
+            };
 
-            this.alignRightStringFormat = new StringFormat();
-            this.alignRightStringFormat.Alignment = StringAlignment.Far;
-            this.alignRightStringFormat.FormatFlags = StringFormatFlags.NoWrap;
+            this.alignRightStringFormat = new StringFormat {
+                Alignment = StringAlignment.Far,
+                FormatFlags = StringFormatFlags.NoWrap
+            };
 
             if (File.Exists("gadget_background.png")) {
                 try {
@@ -144,8 +147,9 @@ namespace OpenHardwareMonitor.GUI {
                     case 3: size = 11f; name = "Very Large"; break;
                     default: throw new NotImplementedException();
                 }
-                MenuItem item = new MenuItem(name);
-                item.Checked = fontSize == size;
+                MenuItem item = new MenuItem(name) {
+                    Checked = fontSize == size
+                };
                 item.Click += delegate (object sender, EventArgs e) {
                     SetFontSize(size);
                     settings.SetValue("sensorGadget.FontSize", size);

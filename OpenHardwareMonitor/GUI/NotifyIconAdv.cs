@@ -503,9 +503,10 @@ namespace OpenHardwareMonitor.GUI {
                 lock (syncObj) {
                     window.LockReference(showNotifyIcon);
 
-                    NativeMethods.NotifyIconData data = new NativeMethods.NotifyIconData();
-                    data.CallbackMessage = WM_TRAYMOUSEMESSAGE;
-                    data.Flags = NativeMethods.NotifyIconDataFlags.Message;
+                    NativeMethods.NotifyIconData data = new NativeMethods.NotifyIconData {
+                        CallbackMessage = WM_TRAYMOUSEMESSAGE,
+                        Flags = NativeMethods.NotifyIconDataFlags.Message
+                    };
 
                     if (showNotifyIcon && window.Handle == IntPtr.Zero)
                         window.CreateHandle(new CreateParams());
