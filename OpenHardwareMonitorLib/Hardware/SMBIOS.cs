@@ -22,11 +22,6 @@ namespace OpenHardwareMonitor.Hardware {
         private readonly Structure[] table;
 
         private readonly Version version;
-        private readonly BIOSInformation biosInformation;
-        private readonly SystemInformation systemInformation;
-        private readonly BaseBoardInformation baseBoardInformation;
-        private readonly ProcessorInformation processorInformation;
-        private readonly MemoryDevice[] memoryDevices;
 
         private static string ReadSysFS(string path) {
             try {
@@ -49,20 +44,20 @@ namespace OpenHardwareMonitor.Hardware {
                 string boardVendor = ReadSysFS("/sys/class/dmi/id/board_vendor");
                 string boardName = ReadSysFS("/sys/class/dmi/id/board_name");
                 string boardVersion = ReadSysFS("/sys/class/dmi/id/board_version");
-                this.baseBoardInformation = new BaseBoardInformation(
+                Board = new BaseBoardInformation(
                   boardVendor, boardName, boardVersion, null);
 
                 string systemVendor = ReadSysFS("/sys/class/dmi/id/sys_vendor");
                 string productName = ReadSysFS("/sys/class/dmi/id/product_name");
                 string productVersion = ReadSysFS("/sys/class/dmi/id/product_version");
-                this.systemInformation = new SystemInformation(systemVendor,
+                System = new SystemInformation(systemVendor,
                   productName, productVersion, null, null);
 
                 string biosVendor = ReadSysFS("/sys/class/dmi/id/bios_vendor");
                 string biosVersion = ReadSysFS("/sys/class/dmi/id/bios_version");
-                this.biosInformation = new BIOSInformation(biosVendor, biosVersion);
+                BIOS = new BIOSInformation(biosVendor, biosVersion);
 
-                this.memoryDevices = new MemoryDevice[0];
+                MemoryDevices = new MemoryDevice[0];
             } else {
                 List<Structure> structureList = new List<Structure>();
                 List<MemoryDevice> memoryDeviceList = new List<MemoryDevice>();
@@ -119,21 +114,21 @@ namespace OpenHardwareMonitor.Hardware {
                         offset++;
                         switch (type) {
                             case 0x00:
-                                this.biosInformation = new BIOSInformation(
+                                BIOS = new BIOSInformation(
                                   type, handle, data, stringsList.ToArray());
-                                structureList.Add(this.biosInformation); break;
+                                structureList.Add(BIOS); break;
                             case 0x01:
-                                this.systemInformation = new SystemInformation(
+                                System = new SystemInformation(
                                   type, handle, data, stringsList.ToArray());
-                                structureList.Add(this.systemInformation); break;
+                                structureList.Add(System); break;
                             case 0x02:
-                                this.baseBoardInformation = new BaseBoardInformation(
+                                Board = new BaseBoardInformation(
                                   type, handle, data, stringsList.ToArray());
-                                structureList.Add(this.baseBoardInformation); break;
+                                structureList.Add(Board); break;
                             case 0x04:
-                                this.processorInformation = new ProcessorInformation(
+                                Processor = new ProcessorInformation(
                                   type, handle, data, stringsList.ToArray());
-                                structureList.Add(this.processorInformation); break;
+                                structureList.Add(Processor); break;
                             case 0x11:
                                 MemoryDevice m = new MemoryDevice(
                                   type, handle, data, stringsList.ToArray());
@@ -146,7 +141,7 @@ namespace OpenHardwareMonitor.Hardware {
                     }
                 }
 
-                memoryDevices = memoryDeviceList.ToArray();
+                MemoryDevices = memoryDeviceList.ToArray();
                 table = structureList.ToArray();
             }
         }
@@ -238,31 +233,18 @@ namespace OpenHardwareMonitor.Hardware {
             return r.ToString();
         }
 
-        public BIOSInformation BIOS {
-            get { return biosInformation; }
-        }
+        public BIOSInformation BIOS { get; }
 
-        public SystemInformation System {
-            get { return systemInformation; }
-        }
+        public SystemInformation System { get; }
 
-        public BaseBoardInformation Board {
-            get { return baseBoardInformation; }
-        }
+        public BaseBoardInformation Board { get; }
 
 
-        public ProcessorInformation Processor {
-            get { return processorInformation; }
-        }
+        public ProcessorInformation Processor { get; }
 
-        public MemoryDevice[] MemoryDevices {
-            get { return memoryDevices; }
-        }
+        public MemoryDevice[] MemoryDevices { get; }
 
         public class Structure {
-            private readonly byte type;
-            private readonly ushort handle;
-
             private readonly byte[] data;
             private readonly string[] strings;
 
@@ -289,113 +271,97 @@ namespace OpenHardwareMonitor.Hardware {
             }
 
             public Structure(byte type, ushort handle, byte[] data, string[] strings) {
-                this.type = type;
-                this.handle = handle;
+                Type = type;
+                Handle = handle;
                 this.data = data;
                 this.strings = strings;
             }
 
-            public byte Type { get { return type; } }
+            public byte Type { get; }
 
-            public ushort Handle { get { return handle; } }
+            public ushort Handle { get; }
         }
 
         public class BIOSInformation : Structure {
 
-            private readonly string vendor;
-            private readonly string version;
-
             public BIOSInformation(string vendor, string version)
               : base(0x00, 0, null, null) {
-                this.vendor = vendor;
-                this.version = version;
+                Vendor = vendor;
+                Version = version;
             }
 
             public BIOSInformation(byte type, ushort handle, byte[] data,
               string[] strings)
               : base(type, handle, data, strings) {
-                this.vendor = GetString(0x04);
-                this.version = GetString(0x05);
+                Vendor = GetString(0x04);
+                Version = GetString(0x05);
             }
 
-            public string Vendor { get { return vendor; } }
+            public string Vendor { get; }
 
-            public string Version { get { return version; } }
+            public string Version { get; }
         }
 
         public class SystemInformation : Structure {
-
-            private readonly string manufacturerName;
-            private readonly string productName;
-            private readonly string version;
-            private readonly string serialNumber;
-            private readonly string family;
-
             public SystemInformation(string manufacturerName, string productName,
               string version, string serialNumber, string family)
               : base(0x01, 0, null, null) {
-                this.manufacturerName = manufacturerName;
-                this.productName = productName;
-                this.version = version;
-                this.serialNumber = serialNumber;
-                this.family = family;
+                ManufacturerName = manufacturerName;
+                ProductName = productName;
+                Version = version;
+                SerialNumber = serialNumber;
+                Family = family;
             }
 
             public SystemInformation(byte type, ushort handle, byte[] data,
               string[] strings)
               : base(type, handle, data, strings) {
-                this.manufacturerName = GetString(0x04);
-                this.productName = GetString(0x05);
-                this.version = GetString(0x06);
-                this.serialNumber = GetString(0x07);
-                this.family = GetString(0x1A);
+                ManufacturerName = GetString(0x04);
+                ProductName = GetString(0x05);
+                Version = GetString(0x06);
+                SerialNumber = GetString(0x07);
+                Family = GetString(0x1A);
             }
 
-            public string ManufacturerName { get { return manufacturerName; } }
+            public string ManufacturerName { get; }
 
-            public string ProductName { get { return productName; } }
+            public string ProductName { get; }
 
-            public string Version { get { return version; } }
+            public string Version { get; }
 
-            public string SerialNumber { get { return serialNumber; } }
+            public string SerialNumber { get; }
 
-            public string Family { get { return family; } }
+            public string Family { get; }
 
         }
 
         public class BaseBoardInformation : Structure {
-
-            private readonly string manufacturerName;
-            private readonly string productName;
-            private readonly string version;
-            private readonly string serialNumber;
-
             public BaseBoardInformation(string manufacturerName, string productName,
               string version, string serialNumber)
               : base(0x02, 0, null, null) {
-                this.manufacturerName = manufacturerName;
-                this.productName = productName;
-                this.version = version;
-                this.serialNumber = serialNumber;
+                ManufacturerName = manufacturerName;
+                ProductName = productName;
+                Version = version;
+                SerialNumber = serialNumber;
             }
 
             public BaseBoardInformation(byte type, ushort handle, byte[] data,
               string[] strings)
               : base(type, handle, data, strings) {
 
-                this.manufacturerName = GetString(0x04).Trim();
-                this.productName = GetString(0x05).Trim();
-                this.version = GetString(0x06).Trim();
-                this.serialNumber = GetString(0x07).Trim();
+                ManufacturerName = GetString(0x04).Trim();
+                ProductName = GetString(0x05).Trim();
+                Version = GetString(0x06).Trim();
+                SerialNumber = GetString(0x07).Trim();
             }
 
-            public string ManufacturerName { get { return manufacturerName; } }
+            public string ManufacturerName { get; }
 
-            public string ProductName { get { return productName; } }
+            public string ProductName { get; }
 
-            public string Version { get { return version; } }
+            public string Version { get; }
 
-            public string SerialNumber { get { return serialNumber; } }
+            public string SerialNumber { get; }
 
         }
 
@@ -426,36 +392,28 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public class MemoryDevice : Structure {
-
-            private readonly string deviceLocator;
-            private readonly string bankLocator;
-            private readonly string manufacturerName;
-            private readonly string serialNumber;
-            private readonly string partNumber;
-            private readonly int speed;
-
             public MemoryDevice(byte type, ushort handle, byte[] data,
               string[] strings)
               : base(type, handle, data, strings) {
-                this.deviceLocator = GetString(0x10).Trim();
-                this.bankLocator = GetString(0x11).Trim();
-                this.manufacturerName = GetString(0x17).Trim();
-                this.serialNumber = GetString(0x18).Trim();
-                this.partNumber = GetString(0x1A).Trim();
-                this.speed = GetWord(0x15);
+                DeviceLocator = GetString(0x10).Trim();
+                BankLocator = GetString(0x11).Trim();
+                ManufacturerName = GetString(0x17).Trim();
+                SerialNumber = GetString(0x18).Trim();
+                PartNumber = GetString(0x1A).Trim();
+                Speed = GetWord(0x15);
             }
 
-            public string DeviceLocator { get { return deviceLocator; } }
+            public string DeviceLocator { get; }
 
-            public string BankLocator { get { return bankLocator; } }
+            public string BankLocator { get; }
 
-            public string ManufacturerName { get { return manufacturerName; } }
+            public string ManufacturerName { get; }
 
-            public string SerialNumber { get { return serialNumber; } }
+            public string SerialNumber { get; }
 
-            public string PartNumber { get { return partNumber; } }
+            public string PartNumber { get; }
 
-            public int Speed { get { return speed; } }
+            public int Speed { get; }
 
         }
     }

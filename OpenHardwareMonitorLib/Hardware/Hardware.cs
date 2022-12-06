@@ -13,8 +13,6 @@ using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware {
     internal abstract class Hardware : IHardware {
-
-        private readonly Identifier identifier;
         protected readonly string name;
         private string customName;
         protected readonly ISettings settings;
@@ -22,7 +20,7 @@ namespace OpenHardwareMonitor.Hardware {
 
         public Hardware(string name, Identifier identifier, ISettings settings) {
             this.settings = settings;
-            this.identifier = identifier;
+            Identifier = identifier;
             this.name = name;
             this.customName = settings.GetValue(
               new Identifier(Identifier, "name").ToString(), name);
@@ -66,11 +64,7 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public Identifier Identifier {
-            get {
-                return identifier;
-            }
-        }
+        public Identifier Identifier { get; }
 
 #pragma warning disable 67
         public event SensorEventHandler SensorAdded;

@@ -368,7 +368,6 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         public delegate NvStatus NvAPI_GPU_ClientFanCoolersGetStatusDelegate(
           NvPhysicalGpuHandle gpuHandle, ref NvFanCoolersStatus fanCoolersStatus);
 
-        private static readonly bool available;
         private static readonly nvapi_QueryInterfaceDelegate nvapi_QueryInterface;
         private static readonly NvAPI_InitializeDelegate NvAPI_Initialize;
         private static readonly NvAPI_GPU_GetFullNameDelegate
@@ -483,13 +482,11 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                 GetDelegate(0x1BE0B8E5, out NvAPI_GPU_GetBusId);
                 GetDelegate(0x35AED5E8, out NvAPI_GPU_ClientFanCoolersGetStatus);
 
-                available = true;
+                IsAvailable = true;
             }
         }
 
-        public static bool IsAvailable {
-            get { return available; }
-        }
+        public static bool IsAvailable { get; private set; }
 
     }
 }

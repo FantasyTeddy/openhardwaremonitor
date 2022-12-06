@@ -47,12 +47,12 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         public static NvmlReturn NvmlInit() {
             try {
                 var result = nvmlInit_v2();
-                initialized = result == NvmlReturn.Success;
+                IsInitialized = result == NvmlReturn.Success;
                 return result;
             } catch {
                 try {
                     var result = nvmlInit();
-                    initialized = result == NvmlReturn.Success;
+                    IsInitialized = result == NvmlReturn.Success;
                     return result;
                 } catch {
                     return NvmlReturn.ErrorLibraryNotFound;
@@ -98,10 +98,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
               "nvmlDeviceGetPcieThroughput");
         }
 
-        private static bool initialized;
-        public static bool IsInitialized {
-            get { return initialized; }
-        }
+        public static bool IsInitialized { get; private set; }
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct NvmlDevice {

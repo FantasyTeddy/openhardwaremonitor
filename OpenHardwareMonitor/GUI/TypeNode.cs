@@ -15,14 +15,13 @@ namespace OpenHardwareMonitor.GUI {
     public class TypeNode : Node {
 
         private readonly PersistentSettings settings;
-        private readonly SensorType sensorType;
         private readonly IHardware hardware;
         private readonly Identifier expandedIdentifier;
 
         public TypeNode(SensorType sensorType, IHardware hardware,
           PersistentSettings settings) : base() {
             this.settings = settings;
-            this.sensorType = sensorType;
+            SensorType = sensorType;
             this.hardware = hardware;
 
             switch (sensorType) {
@@ -108,9 +107,7 @@ namespace OpenHardwareMonitor.GUI {
             IsVisible = false;
         }
 
-        public SensorType SensorType {
-            get { return sensorType; }
-        }
+        public SensorType SensorType { get; }
 
         public override bool IsExpanded {
             get {

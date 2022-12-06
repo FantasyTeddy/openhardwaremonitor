@@ -31,16 +31,13 @@ namespace OpenHardwareMonitor.Hardware {
     }
 
     public struct SensorValue {
-        private readonly float value;
-        private readonly DateTime time;
-
         public SensorValue(float value, DateTime time) {
-            this.value = value;
-            this.time = time;
+            Value = value;
+            Time = time;
         }
 
-        public float Value { get { return value; } }
-        public DateTime Time { get { return time; } }
+        public float Value { get; }
+        public DateTime Time { get; }
     }
 
     public interface ISensor : IElement {

@@ -18,7 +18,6 @@ namespace OpenHardwareMonitor.GUI {
 
         private readonly PersistentSettings settings;
         private readonly UnitManager unitManager;
-        private readonly IHardware hardware;
         private readonly Identifier expandedIdentifier;
 
         private List<TypeNode> typeNodes = new List<TypeNode>();
@@ -27,7 +26,7 @@ namespace OpenHardwareMonitor.GUI {
           UnitManager unitManager) : base() {
             this.settings = settings;
             this.unitManager = unitManager;
-            this.hardware = hardware;
+            Hardware = hardware;
             Image = HardwareTypeImage.Instance.GetImage(hardware.HardwareType);
 
             foreach (SensorType sensorType in Enum.GetValues(typeof(SensorType)))
@@ -45,13 +44,11 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public override string Text {
-            get { return hardware.Name; }
-            set { hardware.Name = value; }
+            get { return Hardware.Name; }
+            set { Hardware.Name = value; }
         }
 
-        public IHardware Hardware {
-            get { return hardware; }
-        }
+        public IHardware Hardware { get; }
 
         public override bool IsExpanded {
             get {

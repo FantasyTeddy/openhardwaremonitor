@@ -22,8 +22,6 @@ namespace OpenHardwareMonitor.GUI {
 
         private TaskSchedulerClass scheduler;
         private bool startup;
-        private bool isAvailable;
-
         private const string REGISTRY_RUN =
           @"Software\Microsoft\Windows\CurrentVersion\Run";
 
@@ -40,7 +38,7 @@ namespace OpenHardwareMonitor.GUI {
         public StartupManager() {
             if (Hardware.OperatingSystem.IsUnix) {
                 scheduler = null;
-                isAvailable = false;
+                IsAvailable = false;
                 return;
             }
 
@@ -97,12 +95,12 @@ namespace OpenHardwareMonitor.GUI {
                                 startup = value == Application.ExecutablePath;
                         }
                     }
-                    isAvailable = true;
+                    IsAvailable = true;
                 } catch (SecurityException) {
-                    isAvailable = false;
+                    IsAvailable = false;
                 }
             } else {
-                isAvailable = true;
+                IsAvailable = true;
             }
         }
 
@@ -158,9 +156,7 @@ namespace OpenHardwareMonitor.GUI {
             key.DeleteValue("OpenHardwareMonitor");
         }
 
-        public bool IsAvailable {
-            get { return isAvailable; }
-        }
+        public bool IsAvailable { get; }
 
         public bool Startup {
             get {
@@ -168,7 +164,7 @@ namespace OpenHardwareMonitor.GUI {
             }
             set {
                 if (startup != value) {
-                    if (isAvailable) {
+                    if (IsAvailable) {
                         if (scheduler != null) {
                             if (value)
                                 CreateSchedulerTask();

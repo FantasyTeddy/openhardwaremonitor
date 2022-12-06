@@ -24,19 +24,12 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
         protected readonly int processorIndex;
         protected readonly int coreCount;
-
-        private readonly bool hasModelSpecificRegisters;
-
-        private readonly bool hasTimeStampCounter;
         private readonly bool isInvariantTimeStampCounter;
         private readonly double estimatedTimeStampCounterFrequency;
         private readonly double estimatedTimeStampCounterFrequencyError;
 
         private ulong lastTimeStampCount;
         private long lastTime;
-        private double timeStampCounterFrequency;
-
-
         private readonly Vendor vendor;
 
         private readonly CPULoad cpuLoad;
@@ -67,16 +60,16 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             // check if processor has MSRs
             if (cpuid[0][0].Data.GetLength(0) > 1
               && (cpuid[0][0].Data[1, 3] & 0x20) != 0)
-                hasModelSpecificRegisters = true;
+                HasModelSpecificRegisters = true;
             else
-                hasModelSpecificRegisters = false;
+                HasModelSpecificRegisters = false;
 
             // check if processor has a TSC
             if (cpuid[0][0].Data.GetLength(0) > 1
               && (cpuid[0][0].Data[1, 3] & 0x10) != 0)
-                hasTimeStampCounter = true;
+                HasTimeStampCounter = true;
             else
-                hasTimeStampCounter = false;
+                HasTimeStampCounter = false;
 
             // check if processor supports an invariant TSC 
             if (cpuid[0][0].ExtData.GetLength(0) > 7
@@ -101,7 +94,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                     ActivateSensor(totalLoad);
             }
 
-            if (hasTimeStampCounter) {
+            if (HasTimeStampCounter) {
                 var previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
 
                 EstimateTimeStampCounterFrequency(
@@ -113,7 +106,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 estimatedTimeStampCounterFrequency = 0;
             }
 
-            timeStampCounterFrequency = estimatedTimeStampCounterFrequency;
+            TimeStampCounterFrequency = estimatedTimeStampCounterFrequency;
         }
 
         private static Identifier CreateIdentifier(Vendor vendor,
@@ -213,7 +206,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
               Environment.NewLine);
             r.AppendLine(string.Format(CultureInfo.InvariantCulture,
               "Timer Frequency: {0} MHz", Stopwatch.Frequency * 1e-6));
-            r.AppendLine("Time Stamp Counter: " + (hasTimeStampCounter ? (
+            r.AppendLine("Time Stamp Counter: " + (HasTimeStampCounter ? (
               isInvariantTimeStampCounter ? "Invariant" : "Not Invariant") : "None"));
             r.AppendLine(string.Format(CultureInfo.InvariantCulture,
               "Estimated Time Stamp Counter Frequency: {0} MHz",
@@ -224,7 +217,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
               estimatedTimeStampCounterFrequencyError * 1e5) * 1e-5));
             r.AppendLine(string.Format(CultureInfo.InvariantCulture,
               "Time Stamp Counter Frequency: {0} MHz",
-              Math.Round(timeStampCounterFrequency * 100) * 0.01));
+              Math.Round(TimeStampCounterFrequency * 100) * 0.01));
             r.AppendLine();
 
             uint[] msrArray = GetMSRs();
@@ -246,20 +239,14 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             get { return HardwareType.CPU; }
         }
 
-        public bool HasModelSpecificRegisters {
-            get { return hasModelSpecificRegisters; }
-        }
+        public bool HasModelSpecificRegisters { get; }
 
-        public bool HasTimeStampCounter {
-            get { return hasTimeStampCounter; }
-        }
+        public bool HasTimeStampCounter { get; }
 
-        public double TimeStampCounterFrequency {
-            get { return timeStampCounterFrequency; }
-        }
+        public double TimeStampCounterFrequency { get; private set; }
 
         public override void Update() {
-            if (hasTimeStampCounter && isInvariantTimeStampCounter) {
+            if (HasTimeStampCounter && isInvariantTimeStampCounter) {
 
                 // make sure always the same thread is used
                 var previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
@@ -283,7 +270,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                     if (lastTime != 0 && delta > 0.5 && delta < 2) {
 
                         // update the TSC frequency with the new value
-                        timeStampCounterFrequency =
+                        TimeStampCounterFrequency =
                           (timeStampCount - lastTimeStampCount) / (1e6 * delta);
                     }
 

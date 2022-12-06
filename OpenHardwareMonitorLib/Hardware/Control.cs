@@ -15,30 +15,26 @@ namespace OpenHardwareMonitor.Hardware {
     internal delegate void ControlEventHandler(Control control);
 
     internal class Control : IControl {
-
-        private readonly Identifier identifier;
         private readonly ISettings settings;
         private ControlMode mode;
         private float softwareValue;
-        private float minSoftwareValue;
-        private float maxSoftwareValue;
 
         public Control(ISensor sensor, ISettings settings, float minSoftwareValue,
           float maxSoftwareValue) {
-            this.identifier = new Identifier(sensor.Identifier, "control");
+            Identifier = new Identifier(sensor.Identifier, "control");
             this.settings = settings;
-            this.minSoftwareValue = minSoftwareValue;
-            this.maxSoftwareValue = maxSoftwareValue;
+            MinSoftwareValue = minSoftwareValue;
+            MaxSoftwareValue = maxSoftwareValue;
 
             if (!float.TryParse(settings.GetValue(
-                new Identifier(identifier, "value").ToString(), "0"),
+                new Identifier(Identifier, "value").ToString(), "0"),
               NumberStyles.Float, CultureInfo.InvariantCulture,
               out this.softwareValue)) {
                 this.softwareValue = 0;
             }
             int mode;
             if (!int.TryParse(settings.GetValue(
-                new Identifier(identifier, "mode").ToString(),
+                new Identifier(Identifier, "mode").ToString(),
                 ((int)ControlMode.Undefined).ToString(CultureInfo.InvariantCulture)),
               NumberStyles.Integer, CultureInfo.InvariantCulture,
               out mode)) {
@@ -48,11 +44,7 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public Identifier Identifier {
-            get {
-                return identifier;
-            }
-        }
+        public Identifier Identifier { get; }
 
         public ControlMode ControlMode {
             get {
@@ -63,7 +55,7 @@ namespace OpenHardwareMonitor.Hardware {
                     mode = value;
                     if (ControlModeChanged != null)
                         ControlModeChanged(this);
-                    this.settings.SetValue(new Identifier(identifier, "mode").ToString(),
+                    this.settings.SetValue(new Identifier(Identifier, "mode").ToString(),
                       ((int)mode).ToString(CultureInfo.InvariantCulture));
                 }
             }
@@ -78,7 +70,7 @@ namespace OpenHardwareMonitor.Hardware {
                     softwareValue = value;
                     if (SoftwareControlValueChanged != null)
                         SoftwareControlValueChanged(this);
-                    this.settings.SetValue(new Identifier(identifier,
+                    this.settings.SetValue(new Identifier(Identifier,
                       "value").ToString(),
                       value.ToString(CultureInfo.InvariantCulture));
                 }
@@ -89,17 +81,9 @@ namespace OpenHardwareMonitor.Hardware {
             ControlMode = ControlMode.Default;
         }
 
-        public float MinSoftwareValue {
-            get {
-                return minSoftwareValue;
-            }
-        }
+        public float MinSoftwareValue { get; }
 
-        public float MaxSoftwareValue {
-            get {
-                return maxSoftwareValue;
-            }
-        }
+        public float MaxSoftwareValue { get; }
 
         public void SetSoftware(float value) {
             ControlMode = ControlMode.Software;

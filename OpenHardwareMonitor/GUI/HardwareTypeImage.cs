@@ -14,16 +14,12 @@ using OpenHardwareMonitor.Hardware;
 
 namespace OpenHardwareMonitor.GUI {
     public class HardwareTypeImage {
-        private static HardwareTypeImage instance = new HardwareTypeImage();
-
         private IDictionary<HardwareType, Image> images =
           new Dictionary<HardwareType, Image>();
 
         private HardwareTypeImage() { }
 
-        public static HardwareTypeImage Instance {
-            get { return instance; }
-        }
+        public static HardwareTypeImage Instance { get; } = new HardwareTypeImage();
 
         public Image GetImage(HardwareType hardwareType) {
             Image image;

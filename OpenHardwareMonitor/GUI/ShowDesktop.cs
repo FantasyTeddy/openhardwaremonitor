@@ -14,8 +14,6 @@ using System.Windows.Forms;
 
 namespace OpenHardwareMonitor.GUI {
     public class ShowDesktop {
-        private static ShowDesktop instance = new ShowDesktop();
-
         public delegate void ShowDesktopChangedEventHandler(bool showDesktop);
 
         private event ShowDesktopChangedEventHandler ShowDesktopChangedEvent;
@@ -104,9 +102,7 @@ namespace OpenHardwareMonitor.GUI {
             }
         }
 
-        public static ShowDesktop Instance {
-            get { return instance; }
-        }
+        public static ShowDesktop Instance { get; } = new ShowDesktop();
 
         // notify when the "show desktop" mode is changed
         public event ShowDesktopChangedEventHandler ShowDesktopChanged {

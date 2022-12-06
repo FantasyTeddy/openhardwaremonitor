@@ -22,12 +22,10 @@ namespace OpenHardwareMonitor.GUI {
     public class GadgetWindow : NativeWindow, IDisposable {
 
         private bool visible = false;
-        private bool lockPositionAndSize = false;
         private bool alwaysOnTop = false;
         private byte opacity = 255;
         private Point location = new Point(100, 100);
         private Size size = new Size(130, 84);
-        private ContextMenu contextMenu = null;
         private MethodInfo commandDispatch;
         private IntPtr handleBitmapDC;
         private Size bufferSize;
@@ -75,7 +73,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void ShowContextMenu(Point position) {
-            NativeMethods.TrackPopupMenuEx(contextMenu.Handle,
+            NativeMethods.TrackPopupMenuEx(ContextMenu.Handle,
               TPM_RIGHTBUTTON | TPM_VERTICAL, position.X,
               position.Y, Handle, IntPtr.Zero);
         }
@@ -129,7 +127,7 @@ namespace OpenHardwareMonitor.GUI {
                     }
                     break;
                 case WM_NCRBUTTONUP: {
-                        if (contextMenu != null)
+                        if (ContextMenu != null)
                             ShowContextMenu(new Point(
                               Macros.GET_X_LPARAM(message.LParam),
                               Macros.GET_Y_LPARAM(message.LParam)
@@ -141,7 +139,7 @@ namespace OpenHardwareMonitor.GUI {
                         WindowPos wp = (WindowPos)Marshal.PtrToStructure(
                           message.LParam, typeof(WindowPos));
 
-                        if (!lockPositionAndSize) {
+                        if (!LockPositionAndSize) {
                             // prevent the window from leaving the screen
                             if ((wp.flags & SWP_NOMOVE) == 0) {
                                 Rectangle rect = Screen.GetWorkingArea(
@@ -311,14 +309,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         // if locked, the window can not be moved or resized
-        public bool LockPositionAndSize {
-            get {
-                return lockPositionAndSize;
-            }
-            set {
-                lockPositionAndSize = value;
-            }
-        }
+        public bool LockPositionAndSize { get; set; } = false;
 
         public bool AlwaysOnTop {
             get {
@@ -375,14 +366,7 @@ namespace OpenHardwareMonitor.GUI {
 
         public event EventHandler LocationChanged;
 
-        public ContextMenu ContextMenu {
-            get {
-                return contextMenu;
-            }
-            set {
-                this.contextMenu = value;
-            }
-        }
+        public ContextMenu ContextMenu { get; set; } = null;
 
         public event HitTestEventHandler HitTest;
 

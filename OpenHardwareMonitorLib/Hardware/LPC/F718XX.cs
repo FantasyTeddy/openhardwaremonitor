@@ -16,12 +16,6 @@ namespace OpenHardwareMonitor.Hardware.LPC {
     internal class F718XX : ISuperIO {
 
         private readonly ushort address;
-        private readonly Chip chip;
-
-        private readonly float?[] voltages;
-        private readonly float?[] temperatures;
-        private readonly float?[] fans;
-        private readonly float?[] controls;
 
         // Hardware Monitor
         private const byte ADDRESS_REGISTER_OFFSET = 0x05;
@@ -74,7 +68,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         }
 
         public void SetControl(int index, byte? value) {
-            if (index < 0 || index >= controls.Length)
+            if (index < 0 || index >= Controls.Length)
                 throw new ArgumentOutOfRangeException("index");
 
             if (!Ring0.WaitIsaBusMutex(10))
@@ -93,19 +87,19 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
         public F718XX(Chip chip, ushort address) {
             this.address = address;
-            this.chip = chip;
+            Chip = chip;
 
-            voltages = new float?[chip == Chip.F71858 ? 3 : 9];
-            temperatures = new float?[chip == Chip.F71808E ? 2 : 3];
-            fans = new float?[chip == Chip.F71882 || chip == Chip.F71858 ? 4 : 3];
-            controls = new float?[chip == Chip.F71878AD ? 3 : 0];
+            Voltages = new float?[chip == Chip.F71858 ? 3 : 9];
+            Temperatures = new float?[chip == Chip.F71808E ? 2 : 3];
+            Fans = new float?[chip == Chip.F71882 || chip == Chip.F71858 ? 4 : 3];
+            Controls = new float?[chip == Chip.F71878AD ? 3 : 0];
         }
 
-        public Chip Chip { get { return chip; } }
-        public float?[] Voltages { get { return voltages; } }
-        public float?[] Temperatures { get { return temperatures; } }
-        public float?[] Fans { get { return fans; } }
-        public float?[] Controls { get { return controls; } }
+        public Chip Chip { get; }
+        public float?[] Voltages { get; }
+        public float?[] Temperatures { get; }
+        public float?[] Fans { get; }
+        public float?[] Controls { get; }
 
         public string GetReport() {
             StringBuilder r = new StringBuilder();
@@ -145,18 +139,18 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             if (!Ring0.WaitIsaBusMutex(10))
                 return;
 
-            for (int i = 0; i < voltages.Length; i++) {
-                if (chip == Chip.F71808E && i == 6) {
+            for (int i = 0; i < Voltages.Length; i++) {
+                if (Chip == Chip.F71808E && i == 6) {
                     // 0x26 is reserved on F71808E
-                    voltages[i] = 0;
+                    Voltages[i] = 0;
                 } else {
                     int value = ReadByte((byte)(VOLTAGE_BASE_REG + i));
-                    voltages[i] = 0.008f * value;
+                    Voltages[i] = 0.008f * value;
                 }
             }
 
-            for (int i = 0; i < temperatures.Length; i++) {
-                switch (chip) {
+            for (int i = 0; i < Temperatures.Length; i++) {
+                switch (Chip) {
                     case Chip.F71858: {
                             int tableMode = 0x3 & ReadByte(TEMPERATURE_CONFIG_REG);
                             int high =
@@ -174,9 +168,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                                 bits |= high << 7;
                                 bits |= (low & 0xe0) >> 1;
                                 short value = (short)(bits & 0xfff0);
-                                temperatures[i] = value / 128.0f;
+                                Temperatures[i] = value / 128.0f;
                             } else {
-                                temperatures[i] = null;
+                                Temperatures[i] = null;
                             }
                         }
                         break;
@@ -184,25 +178,25 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                             sbyte value = (sbyte)ReadByte((byte)(
                               TEMPERATURE_BASE_REG + 2 * (i + 1)));
                             if (value < sbyte.MaxValue && value > 0)
-                                temperatures[i] = value;
+                                Temperatures[i] = value;
                             else
-                                temperatures[i] = null;
+                                Temperatures[i] = null;
                         }
                         break;
                 }
             }
 
-            for (int i = 0; i < fans.Length; i++) {
+            for (int i = 0; i < Fans.Length; i++) {
                 int value = ReadByte(FAN_TACHOMETER_REG[i]) << 8;
                 value |= ReadByte((byte)(FAN_TACHOMETER_REG[i] + 1));
 
                 if (value > 0)
-                    fans[i] = (value < 0x0fff) ? 1.5e6f / value : 0;
+                    Fans[i] = (value < 0x0fff) ? 1.5e6f / value : 0;
                 else
-                    fans[i] = null;
+                    Fans[i] = null;
             }
-            for (int i = 0; i < controls.Length; i++) {
-                controls[i] = ReadByte((byte)(PWM_VALUES_OFFSET + i)) * 100.0f / 0xFF;
+            for (int i = 0; i < Controls.Length; i++) {
+                Controls[i] = ReadByte((byte)(PWM_VALUES_OFFSET + i)) * 100.0f / 0xFF;
             }
 
             Ring0.ReleaseIsaBusMutex();

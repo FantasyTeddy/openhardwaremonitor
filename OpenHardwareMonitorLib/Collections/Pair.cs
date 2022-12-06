@@ -11,27 +11,18 @@
 namespace OpenHardwareMonitor.Collections {
 
     public struct Pair<F, S> {
-        private F first;
-        private S second;
-
         public Pair(F first, S second) {
-            this.first = first;
-            this.second = second;
+            First = first;
+            Second = second;
         }
 
-        public F First {
-            get { return first; }
-            set { first = value; }
-        }
+        public F First { get; set; }
 
-        public S Second {
-            get { return second; }
-            set { second = value; }
-        }
+        public S Second { get; set; }
 
         public override int GetHashCode() {
-            return (first != null ? first.GetHashCode() : 0) ^
-              (second != null ? second.GetHashCode() : 0);
+            return (First != null ? First.GetHashCode() : 0) ^
+              (Second != null ? Second.GetHashCode() : 0);
         }
     }
 }

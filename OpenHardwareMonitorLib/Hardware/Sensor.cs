@@ -21,19 +21,12 @@ namespace OpenHardwareMonitor.Hardware {
 
         private readonly string defaultName;
         private string name;
-        private readonly int index;
-        private readonly bool defaultHidden;
-        private readonly SensorType sensorType;
         private readonly Hardware hardware;
         private readonly ReadOnlyArray<IParameter> parameters;
         private float? currentValue;
-        private float? minValue;
-        private float? maxValue;
         private readonly RingCollection<SensorValue>
           values = new RingCollection<SensorValue>();
         private readonly ISettings settings;
-        private IControl control;
-
         private float sum;
         private int count;
 
@@ -50,9 +43,9 @@ namespace OpenHardwareMonitor.Hardware {
         public Sensor(string name, int index, bool defaultHidden,
           SensorType sensorType, Hardware hardware,
           ParameterDescription[] parameterDescriptions, ISettings settings) {
-            this.index = index;
-            this.defaultHidden = defaultHidden;
-            this.sensorType = sensorType;
+            Index = index;
+            IsDefaultHidden = defaultHidden;
+            SensorType = sensorType;
             this.hardware = hardware;
             Parameter[] parameters = new Parameter[parameterDescriptions == null ?
               0 : parameterDescriptions.Length];
@@ -136,15 +129,13 @@ namespace OpenHardwareMonitor.Hardware {
             get { return hardware; }
         }
 
-        public SensorType SensorType {
-            get { return sensorType; }
-        }
+        public SensorType SensorType { get; }
 
         public Identifier Identifier {
             get {
                 return new Identifier(hardware.Identifier,
-                  sensorType.ToString().ToLowerInvariant(),
-                  index.ToString(CultureInfo.InvariantCulture));
+                  SensorType.ToString().ToLowerInvariant(),
+                  Index.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -161,13 +152,9 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public int Index {
-            get { return index; }
-        }
+        public int Index { get; }
 
-        public bool IsDefaultHidden {
-            get { return defaultHidden; }
-        }
+        public bool IsDefaultHidden { get; }
 
         public IReadOnlyArray<IParameter> Parameters {
             get { return parameters; }
@@ -193,22 +180,22 @@ namespace OpenHardwareMonitor.Hardware {
                 }
 
                 this.currentValue = value;
-                if (minValue > value || !minValue.HasValue)
-                    minValue = value;
-                if (maxValue < value || !maxValue.HasValue)
-                    maxValue = value;
+                if (Min > value || !Min.HasValue)
+                    Min = value;
+                if (Max < value || !Max.HasValue)
+                    Max = value;
             }
         }
 
-        public float? Min { get { return minValue; } }
-        public float? Max { get { return maxValue; } }
+        public float? Min { get; private set; }
+        public float? Max { get; private set; }
 
         public void ResetMin() {
-            minValue = null;
+            Min = null;
         }
 
         public void ResetMax() {
-            maxValue = null;
+            Max = null;
         }
 
         public IEnumerable<SensorValue> Values {
@@ -226,13 +213,6 @@ namespace OpenHardwareMonitor.Hardware {
                 parameter.Accept(visitor);
         }
 
-        public IControl Control {
-            get {
-                return control;
-            }
-            internal set {
-                this.control = value;
-            }
-        }
+        public IControl Control { get; internal set; }
     }
 }

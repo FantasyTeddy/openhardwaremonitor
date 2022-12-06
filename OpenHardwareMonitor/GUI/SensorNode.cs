@@ -15,8 +15,6 @@ using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
     public class SensorNode : Node {
-
-        private ISensor sensor;
         private PersistentSettings settings;
         private UnitManager unitManager;
         private string fixedFormat;
@@ -25,7 +23,7 @@ namespace OpenHardwareMonitor.GUI {
 
         public string ValueToString(float? value) {
             if (value.HasValue) {
-                switch (sensor.SensorType) {
+                switch (Sensor.SensorType) {
                     case SensorType.Temperature:
                         if (unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
                             return string.Format("{0:F1} °F", value * 1.8 + 32);
@@ -45,7 +43,7 @@ namespace OpenHardwareMonitor.GUI {
 
         public SensorNode(ISensor sensor, PersistentSettings settings,
           UnitManager unitManager) : base() {
-            this.sensor = sensor;
+            Sensor = sensor;
             this.settings = settings;
             this.unitManager = unitManager;
             switch (sensor.SensorType) {
@@ -76,15 +74,15 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public override string Text {
-            get { return sensor.Name; }
-            set { sensor.Name = value; }
+            get { return Sensor.Name; }
+            set { Sensor.Name = value; }
         }
 
         public override bool IsVisible {
             get { return base.IsVisible; }
             set {
                 base.IsVisible = value;
-                settings.SetValue(new Identifier(sensor.Identifier,
+                settings.SetValue(new Identifier(Sensor.Identifier,
                   "hidden").ToString(), !value);
             }
         }
@@ -94,7 +92,7 @@ namespace OpenHardwareMonitor.GUI {
             set {
                 penColor = value;
 
-                string id = new Identifier(sensor.Identifier, "penColor").ToString();
+                string id = new Identifier(Sensor.Identifier, "penColor").ToString();
                 if (value.HasValue)
                     settings.SetValue(id, value.Value);
                 else
@@ -109,7 +107,7 @@ namespace OpenHardwareMonitor.GUI {
             get { return plot; }
             set {
                 plot = value;
-                settings.SetValue(new Identifier(sensor.Identifier, "plot").ToString(),
+                settings.SetValue(new Identifier(Sensor.Identifier, "plot").ToString(),
                   value);
                 if (PlotSelectionChanged != null)
                     PlotSelectionChanged(this, null);
@@ -118,20 +116,18 @@ namespace OpenHardwareMonitor.GUI {
 
         public event EventHandler PlotSelectionChanged;
 
-        public ISensor Sensor {
-            get { return sensor; }
-        }
+        public ISensor Sensor { get; }
 
         public string Value {
-            get { return ValueToString(sensor.Value); }
+            get { return ValueToString(Sensor.Value); }
         }
 
         public string Min {
-            get { return ValueToString(sensor.Min); }
+            get { return ValueToString(Sensor.Min); }
         }
 
         public string Max {
-            get { return ValueToString(sensor.Max); }
+            get { return ValueToString(Sensor.Max); }
         }
 
         public override bool Equals(object obj) {
@@ -142,11 +138,11 @@ namespace OpenHardwareMonitor.GUI {
             if (s == null)
                 return false;
 
-            return sensor == s.sensor;
+            return Sensor == s.Sensor;
         }
 
         public override int GetHashCode() {
-            return sensor.GetHashCode();
+            return Sensor.GetHashCode();
         }
 
     }

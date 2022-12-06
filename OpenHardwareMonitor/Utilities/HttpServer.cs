@@ -24,13 +24,13 @@ namespace OpenHardwareMonitor.Utilities {
 
     public class HttpServer {
         private HttpListener listener;
-        private int listenerPort, nodeCount;
+        private int nodeCount;
         private Thread listenerThread;
         private Node root;
 
         public HttpServer(Node node, int port) {
             root = node;
-            listenerPort = port;
+            ListenerPort = port;
 
             //JSON node count. 
             nodeCount = 0;
@@ -58,7 +58,7 @@ namespace OpenHardwareMonitor.Utilities {
                 if (listener.IsListening)
                     return true;
 
-                string prefix = "http://+:" + listenerPort + "/";
+                string prefix = "http://+:" + ListenerPort + "/";
                 listener.Prefixes.Clear();
                 listener.Prefixes.Add(prefix);
                 listener.Start();
@@ -364,10 +364,7 @@ namespace OpenHardwareMonitor.Utilities {
 
         }
 
-        public int ListenerPort {
-            get { return listenerPort; }
-            set { listenerPort = value; }
-        }
+        public int ListenerPort { get; set; }
 
         ~HttpServer() {
             if (PlatformNotSupported)

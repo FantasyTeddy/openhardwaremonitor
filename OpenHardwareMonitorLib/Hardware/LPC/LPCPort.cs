@@ -11,37 +11,26 @@
 namespace OpenHardwareMonitor.Hardware.LPC {
 
     internal class LPCPort {
-        private readonly ushort registerPort;
-        private readonly ushort valuePort;
-
         public LPCPort(ushort registerPort, ushort valuePort) {
-            this.registerPort = registerPort;
-            this.valuePort = valuePort;
+            RegisterPort = registerPort;
+            ValuePort = valuePort;
         }
 
-        public ushort RegisterPort {
-            get {
-                return registerPort;
-            }
-        }
+        public ushort RegisterPort { get; }
 
-        public ushort ValuePort {
-            get {
-                return valuePort;
-            }
-        }
+        public ushort ValuePort { get; }
 
         private const byte DEVCIE_SELECT_REGISTER = 0x07;
         private const byte CONFIGURATION_CONTROL_REGISTER = 0x02;
 
         public byte ReadByte(byte register) {
-            Ring0.WriteIoPort(registerPort, register);
-            return Ring0.ReadIoPort(valuePort);
+            Ring0.WriteIoPort(RegisterPort, register);
+            return Ring0.ReadIoPort(ValuePort);
         }
 
         public void WriteByte(byte register, byte value) {
-            Ring0.WriteIoPort(registerPort, register);
-            Ring0.WriteIoPort(valuePort, value);
+            Ring0.WriteIoPort(RegisterPort, register);
+            Ring0.WriteIoPort(ValuePort, value);
         }
 
         public ushort ReadWord(byte register) {
@@ -50,17 +39,17 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         }
 
         public void Select(byte logicalDeviceNumber) {
-            Ring0.WriteIoPort(registerPort, DEVCIE_SELECT_REGISTER);
-            Ring0.WriteIoPort(valuePort, logicalDeviceNumber);
+            Ring0.WriteIoPort(RegisterPort, DEVCIE_SELECT_REGISTER);
+            Ring0.WriteIoPort(ValuePort, logicalDeviceNumber);
         }
 
         public void WinbondNuvotonFintekEnter() {
-            Ring0.WriteIoPort(registerPort, 0x87);
-            Ring0.WriteIoPort(registerPort, 0x87);
+            Ring0.WriteIoPort(RegisterPort, 0x87);
+            Ring0.WriteIoPort(RegisterPort, 0x87);
         }
 
         public void WinbondNuvotonFintekExit() {
-            Ring0.WriteIoPort(registerPort, 0xAA);
+            Ring0.WriteIoPort(RegisterPort, 0xAA);
         }
 
         private const byte NUVOTON_HARDWARE_MONITOR_IO_SPACE_LOCK = 0x28;
@@ -78,31 +67,31 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         }
 
         public void IT87Enter() {
-            Ring0.WriteIoPort(registerPort, 0x87);
-            Ring0.WriteIoPort(registerPort, 0x01);
-            Ring0.WriteIoPort(registerPort, 0x55);
+            Ring0.WriteIoPort(RegisterPort, 0x87);
+            Ring0.WriteIoPort(RegisterPort, 0x01);
+            Ring0.WriteIoPort(RegisterPort, 0x55);
 
-            if (registerPort == 0x4E) {
-                Ring0.WriteIoPort(registerPort, 0xAA);
+            if (RegisterPort == 0x4E) {
+                Ring0.WriteIoPort(RegisterPort, 0xAA);
             } else {
-                Ring0.WriteIoPort(registerPort, 0x55);
+                Ring0.WriteIoPort(RegisterPort, 0x55);
             }
         }
 
         public void IT87Exit() {
             // do not exit config mode for secondary super IO
-            if (registerPort != 0x4E) {
-                Ring0.WriteIoPort(registerPort, CONFIGURATION_CONTROL_REGISTER);
-                Ring0.WriteIoPort(valuePort, 0x02);
+            if (RegisterPort != 0x4E) {
+                Ring0.WriteIoPort(RegisterPort, CONFIGURATION_CONTROL_REGISTER);
+                Ring0.WriteIoPort(ValuePort, 0x02);
             }
         }
 
         public void SMSCEnter() {
-            Ring0.WriteIoPort(registerPort, 0x55);
+            Ring0.WriteIoPort(RegisterPort, 0x55);
         }
 
         public void SMSCExit() {
-            Ring0.WriteIoPort(registerPort, 0xAA);
+            Ring0.WriteIoPort(RegisterPort, 0xAA);
         }
     }
 

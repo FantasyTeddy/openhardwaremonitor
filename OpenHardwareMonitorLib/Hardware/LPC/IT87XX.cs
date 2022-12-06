@@ -16,7 +16,6 @@ namespace OpenHardwareMonitor.Hardware.LPC {
     internal class IT87XX : ISuperIO {
 
         private readonly ushort address;
-        private readonly Chip chip;
         private readonly byte version;
 
         private readonly ushort gpioAddress;
@@ -24,12 +23,6 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
         private readonly ushort addressReg;
         private readonly ushort dataReg;
-
-        private readonly float?[] voltages = new float?[0];
-        private readonly float?[] temperatures = new float?[0];
-        private readonly float?[] fans = new float?[0];
-        private readonly float?[] controls = new float?[0];
-
         private readonly float voltageGain;
         private readonly bool has16bitFanCounter;
 
@@ -63,7 +56,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         private byte ReadByte(byte register, out bool valid) {
             Ring0.WriteIoPort(addressReg, register);
             byte value = Ring0.ReadIoPort(dataReg);
-            if (this.chip == Chip.IT8688E)
+            if (Chip == Chip.IT8688E)
                 valid = true;
             else
                 valid = register == Ring0.ReadIoPort(addressReg);
@@ -99,11 +92,11 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                       (ReadByte(FAN_MAIN_CTRL_REG, out _) & (1 << index)) > 0;
                 }
 
-                if (chip == Chip.IT8721F ||
-                    chip == Chip.IT8665E ||
-                    chip == Chip.IT8686E ||
-                    chip == Chip.IT8688E ||
-                    chip == Chip.IT879XE) {
+                if (Chip == Chip.IT8721F ||
+                    Chip == Chip.IT8665E ||
+                    Chip == Chip.IT8686E ||
+                    Chip == Chip.IT8688E ||
+                    Chip == Chip.IT879XE) {
                     initialFanPwmControlExt[index] =
                       ReadByte(FAN_PWM_CTRL_EXT_REG[index], out _);
                 }
@@ -123,11 +116,11 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                 }
 
-                if (chip == Chip.IT8721F ||
-                    chip == Chip.IT8665E ||
-                    chip == Chip.IT8686E ||
-                    chip == Chip.IT8688E ||
-                    chip == Chip.IT879XE) {
+                if (Chip == Chip.IT8721F ||
+                    Chip == Chip.IT8665E ||
+                    Chip == Chip.IT8686E ||
+                    Chip == Chip.IT8688E ||
+                    Chip == Chip.IT879XE) {
                     WriteByte(FAN_PWM_CTRL_EXT_REG[index], initialFanPwmControlExt[index]);
                 }
                 restoreDefaultFanPwmControlRequired[index] = false;
@@ -135,7 +128,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         }
 
         public void SetControl(int index, byte? value) {
-            if (index < 0 || index >= controls.Length)
+            if (index < 0 || index >= Controls.Length)
                 throw new ArgumentOutOfRangeException("index");
 
             if (!Ring0.WaitIsaBusMutex(10))
@@ -151,11 +144,11 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                 }
 
-                if (chip == Chip.IT8721F ||
-                    chip == Chip.IT8665E ||
-                    chip == Chip.IT8686E ||
-                    chip == Chip.IT8688E ||
-                    chip == Chip.IT879XE) {
+                if (Chip == Chip.IT8721F ||
+                    Chip == Chip.IT8665E ||
+                    Chip == Chip.IT8686E ||
+                    Chip == Chip.IT8688E ||
+                    Chip == Chip.IT879XE) {
                     WriteByte(FAN_PWM_CTRL_REG[index],
                       (byte)(initialFanPwmControl[index] & 0x7F));
                     WriteByte(FAN_PWM_CTRL_EXT_REG[index], value.Value);
@@ -172,7 +165,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         public IT87XX(Chip chip, ushort address, ushort gpioAddress, byte version) {
 
             this.address = address;
-            this.chip = chip;
+            Chip = chip;
             this.version = version;
             this.addressReg = (ushort)(address + ADDRESS_REGISTER_OFFSET);
             this.dataReg = (ushort)(address + DATA_REGISTER_OFFSET);
@@ -202,33 +195,33 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 case Chip.IT8665E:
                 case Chip.IT8686E:
                 case Chip.IT8688E:
-                    voltages = new float?[9];
-                    temperatures = new float?[6];
-                    fans = new float?[5];
-                    controls = new float?[5];
+                    Voltages = new float?[9];
+                    Temperatures = new float?[6];
+                    Fans = new float?[5];
+                    Controls = new float?[5];
                     break;
                 case Chip.IT8655E:
-                    voltages = new float?[9];
-                    temperatures = new float?[6];
-                    fans = new float?[3];
+                    Voltages = new float?[9];
+                    Temperatures = new float?[6];
+                    Fans = new float?[3];
                     break;
                 case Chip.IT879XE:
-                    voltages = new float?[9];
-                    temperatures = new float?[3];
-                    fans = new float?[3];
-                    controls = new float?[3];
+                    Voltages = new float?[9];
+                    Temperatures = new float?[3];
+                    Fans = new float?[3];
+                    Controls = new float?[3];
                     break;
                 case Chip.IT8705F:
-                    voltages = new float?[9];
-                    temperatures = new float?[3];
-                    fans = new float?[3];
-                    controls = new float?[3];
+                    Voltages = new float?[9];
+                    Temperatures = new float?[3];
+                    Fans = new float?[3];
+                    Controls = new float?[3];
                     break;
                 default:
-                    voltages = new float?[9];
-                    temperatures = new float?[3];
-                    fans = new float?[5];
-                    controls = new float?[3];
+                    Voltages = new float?[9];
+                    Temperatures = new float?[3];
+                    Fans = new float?[5];
+                    Controls = new float?[3];
                     break;
             }
 
@@ -280,18 +273,18 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             }
         }
 
-        public Chip Chip { get { return chip; } }
-        public float?[] Voltages { get { return voltages; } }
-        public float?[] Temperatures { get { return temperatures; } }
-        public float?[] Fans { get { return fans; } }
-        public float?[] Controls { get { return controls; } }
+        public Chip Chip { get; }
+        public float?[] Voltages { get; } = new float?[0];
+        public float?[] Temperatures { get; } = new float?[0];
+        public float?[] Fans { get; } = new float?[0];
+        public float?[] Controls { get; } = new float?[0];
 
         public string GetReport() {
             StringBuilder r = new StringBuilder();
 
             r.AppendLine("LPC " + GetType().Name);
             r.AppendLine();
-            r.Append("Chip ID: 0x"); r.AppendLine(chip.ToString("X"));
+            r.Append("Chip ID: 0x"); r.AppendLine(Chip.ToString("X"));
             r.Append("Chip Version: 0x"); r.AppendLine(
               version.ToString("X", CultureInfo.InvariantCulture));
             r.Append("Base Address: 0x"); r.AppendLine(
@@ -341,7 +334,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             if (!Ring0.WaitIsaBusMutex(10))
                 return;
 
-            for (int i = 0; i < voltages.Length; i++) {
+            for (int i = 0; i < Voltages.Length; i++) {
                 bool valid;
 
                 float value =
@@ -350,12 +343,12 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 if (!valid)
                     continue;
                 if (value > 0)
-                    voltages[i] = value;
+                    Voltages[i] = value;
                 else
-                    voltages[i] = null;
+                    Voltages[i] = null;
             }
 
-            for (int i = 0; i < temperatures.Length; i++) {
+            for (int i = 0; i < Temperatures.Length; i++) {
                 bool valid;
                 sbyte value = (sbyte)ReadByte(
                   (byte)(TEMPERATURE_BASE_REG + i), out valid);
@@ -363,13 +356,13 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     continue;
 
                 if (value < sbyte.MaxValue && value > 0)
-                    temperatures[i] = value;
+                    Temperatures[i] = value;
                 else
-                    temperatures[i] = null;
+                    Temperatures[i] = null;
             }
 
             if (has16bitFanCounter) {
-                for (int i = 0; i < fans.Length; i++) {
+                for (int i = 0; i < Fans.Length; i++) {
                     bool valid;
                     int value = ReadByte(FAN_TACHOMETER_REG[i], out valid);
                     if (!valid)
@@ -379,13 +372,13 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                         continue;
 
                     if (value > 0x3f) {
-                        fans[i] = (value < 0xffff) ? 1.35e6f / (value * 2) : 0;
+                        Fans[i] = (value < 0xffff) ? 1.35e6f / (value * 2) : 0;
                     } else {
-                        fans[i] = null;
+                        Fans[i] = null;
                     }
                 }
             } else {
-                for (int i = 0; i < fans.Length; i++) {
+                for (int i = 0; i < Fans.Length; i++) {
                     bool valid;
                     int value = ReadByte(FAN_TACHOMETER_REG[i], out valid);
                     if (!valid)
@@ -400,14 +393,14 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
 
                     if (value > 0) {
-                        fans[i] = (value < 0xff) ? 1.35e6f / (value * divisor) : 0;
+                        Fans[i] = (value < 0xff) ? 1.35e6f / (value * divisor) : 0;
                     } else {
-                        fans[i] = null;
+                        Fans[i] = null;
                     }
                 }
             }
 
-            for (int i = 0; i < controls.Length; i++) {
+            for (int i = 0; i < Controls.Length; i++) {
                 bool valid;
                 byte value = ReadByte(FAN_PWM_CTRL_REG[i], out valid);
                 if (!valid)
@@ -415,19 +408,19 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
                 if ((value & 0x80) > 0) {
                     // automatic operation (value can't be read)
-                    controls[i] = null;
+                    Controls[i] = null;
                 } else {
                     // software operation
-                    if (chip == Chip.IT8721F ||
-                        chip == Chip.IT8665E ||
-                        chip == Chip.IT8686E ||
-                        chip == Chip.IT8688E ||
-                        chip == Chip.IT879XE) {
+                    if (Chip == Chip.IT8721F ||
+                        Chip == Chip.IT8665E ||
+                        Chip == Chip.IT8686E ||
+                        Chip == Chip.IT8688E ||
+                        Chip == Chip.IT879XE) {
                         value = ReadByte(FAN_PWM_CTRL_EXT_REG[i], out valid);
                         if (valid)
-                            controls[i] = (float)Math.Round(value * 100.0f / 0xFF);
+                            Controls[i] = (float)Math.Round(value * 100.0f / 0xFF);
                     } else {
-                        controls[i] = (float)Math.Round((value & 0x7F) * 100.0f / 0x7F);
+                        Controls[i] = (float)Math.Round((value & 0x7F) * 100.0f / 0x7F);
                     }
                 }
             }

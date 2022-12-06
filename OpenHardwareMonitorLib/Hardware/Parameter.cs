@@ -14,26 +14,21 @@ using System.Globalization;
 namespace OpenHardwareMonitor.Hardware {
 
     internal struct ParameterDescription {
-        private readonly string name;
-        private readonly string description;
-        private readonly float defaultValue;
-
         public ParameterDescription(string name, string description,
           float defaultValue) {
-            this.name = name;
-            this.description = description;
-            this.defaultValue = defaultValue;
+            Name = name;
+            Description = description;
+            DefaultValue = defaultValue;
         }
 
-        public string Name { get { return name; } }
+        public string Name { get; }
 
-        public string Description { get { return description; } }
+        public string Description { get; }
 
-        public float DefaultValue { get { return defaultValue; } }
+        public float DefaultValue { get; }
     }
 
     internal class Parameter : IParameter {
-        private readonly ISensor sensor;
         private ParameterDescription description;
         private float value;
         private bool isDefault;
@@ -41,7 +36,7 @@ namespace OpenHardwareMonitor.Hardware {
 
         public Parameter(ParameterDescription description, ISensor sensor,
           ISettings settings) {
-            this.sensor = sensor;
+            Sensor = sensor;
             this.description = description;
             this.settings = settings;
             this.isDefault = !settings.Contains(Identifier.ToString());
@@ -55,15 +50,11 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public ISensor Sensor {
-            get {
-                return sensor;
-            }
-        }
+        public ISensor Sensor { get; }
 
         public Identifier Identifier {
             get {
-                return new Identifier(sensor.Identifier, "parameter",
+                return new Identifier(Sensor.Identifier, "parameter",
                   Name.Replace(" ", "").ToLowerInvariant());
             }
         }

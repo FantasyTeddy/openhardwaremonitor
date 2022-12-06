@@ -64,8 +64,6 @@ namespace OpenHardwareMonitor.GUI {
         private WmiProvider wmiProvider;
 
         private UserOption runWebServer;
-        private HttpServer server;
-
         private UserOption logSensors;
         private UserRadioGroup loggingInterval;
         private Logger logger;
@@ -280,8 +278,8 @@ namespace OpenHardwareMonitor.GUI {
               unitManager.TemperatureUnit == TemperatureUnit.Celsius;
             fahrenheitMenuItem.Checked = !celsiusMenuItem.Checked;
 
-            server = new HttpServer(root, this.settings.GetValue("listenerPort", 8085));
-            if (server.PlatformNotSupported) {
+            Server = new HttpServer(root, this.settings.GetValue("listenerPort", 8085));
+            if (Server.PlatformNotSupported) {
                 webMenuItemSeparator.Visible = false;
                 webMenuItem.Visible = false;
             }
@@ -290,9 +288,9 @@ namespace OpenHardwareMonitor.GUI {
               runWebServerMenuItem, settings);
             runWebServer.Changed += delegate (object sender, EventArgs e) {
                 if (runWebServer.Value)
-                    server.StartHTTPListener();
+                    Server.StartHTTPListener();
                 else
-                    server.StopHTTPListener();
+                    Server.StopHTTPListener();
             };
 
             logSensors = new UserOption("logSensorsMenuItem", false, logSensorsMenuItem,
@@ -343,7 +341,7 @@ namespace OpenHardwareMonitor.GUI {
                 computer.Close();
                 SaveConfiguration();
                 if (runWebServer.Value)
-                    server.Quit();
+                    Server.Quit();
             };
         }
 
@@ -603,8 +601,8 @@ namespace OpenHardwareMonitor.GUI {
                       column.Width);
             }
 
-            if (server != null) {
-                this.settings.SetValue("listenerPort", server.ListenerPort);
+            if (Server != null) {
+                this.settings.SetValue("listenerPort", Server.ListenerPort);
             }
 
             string fileName = Path.ChangeExtension(
@@ -659,7 +657,7 @@ namespace OpenHardwareMonitor.GUI {
             computer.Close();
             SaveConfiguration();
             if (runWebServer.Value)
-                server.Quit();
+                Server.Quit();
             systemTray.Dispose();
         }
 
@@ -932,9 +930,7 @@ namespace OpenHardwareMonitor.GUI {
             new PortForm(this).ShowDialog();
         }
 
-        public HttpServer Server {
-            get { return server; }
-        }
+        public HttpServer Server { get; }
 
     }
 }

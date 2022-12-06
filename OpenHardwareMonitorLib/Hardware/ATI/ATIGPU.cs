@@ -16,8 +16,6 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     internal sealed class ATIGPU : Hardware {
 
         private readonly int adapterIndex;
-        private readonly int busNumber;
-        private readonly int deviceNumber;
         private readonly Sensor temperatureCore;
         private readonly Sensor temperatureMemory;
         private readonly Sensor temperatureVrmCore;
@@ -53,8 +51,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
           : base(name, new Identifier("atigpu",
             adapterIndex.ToString(CultureInfo.InvariantCulture)), settings) {
             this.adapterIndex = adapterIndex;
-            this.busNumber = busNumber;
-            this.deviceNumber = deviceNumber;
+            BusNumber = busNumber;
+            DeviceNumber = deviceNumber;
 
             this.context = context;
 
@@ -152,9 +150,9 @@ namespace OpenHardwareMonitor.Hardware.ATI {
             ADL.ADL_Overdrive5_FanSpeedToDefault_Set(adapterIndex, 0);
         }
 
-        public int BusNumber { get { return busNumber; } }
+        public int BusNumber { get; }
 
-        public int DeviceNumber { get { return deviceNumber; } }
+        public int DeviceNumber { get; }
 
 
         public override HardwareType HardwareType {

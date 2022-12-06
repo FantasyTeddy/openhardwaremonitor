@@ -41,8 +41,6 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         private float totalLoad;
         private readonly float[] coreLoads;
 
-        private readonly bool available;
-
         private static bool GetTimes(out long[] idle, out long[] total) {
             SystemProcessorPerformanceInformation[] informations = new
               SystemProcessorPerformanceInformation[64];
@@ -80,12 +78,10 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 this.totalTimes = null;
             }
             if (idleTimes != null)
-                available = true;
+                IsAvailable = true;
         }
 
-        public bool IsAvailable {
-            get { return available; }
-        }
+        public bool IsAvailable { get; }
 
         public float GetTotalLoad() {
             return totalLoad;

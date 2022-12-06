@@ -288,7 +288,6 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             private DateTime lastEnergyTime;
             private uint lastEnergyConsumed;
-            private float? power = null;
 
             public Core(int index, CPUID[] threads, AMD17CPU cpu, ISettings settings) {
                 this.cpu = cpu;
@@ -320,7 +319,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 }
             }
 
-            public float? Power { get { return power; } }
+            public float? Power { get; private set; } = null;
 
             public void Update() {
                 DateTime energyTime = DateTime.MinValue;
@@ -337,9 +336,9 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 if (cpu.energyUnitMultiplier != 0) {
                     float deltaTime = (float)(energyTime - lastEnergyTime).TotalSeconds;
                     if (deltaTime > 0.01) {
-                        power = cpu.energyUnitMultiplier *
+                        Power = cpu.energyUnitMultiplier *
                           unchecked(energyConsumed - lastEnergyConsumed) / deltaTime;
-                        powerSensor.Value = power;
+                        powerSensor.Value = Power;
                         lastEnergyTime = energyTime;
                         lastEnergyConsumed = energyConsumed;
                     }

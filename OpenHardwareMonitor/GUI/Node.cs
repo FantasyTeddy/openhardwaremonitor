@@ -15,8 +15,6 @@ using System.Drawing;
 
 namespace OpenHardwareMonitor.GUI {
     public class Node {
-
-        private TreeModel treeModel;
         private Node parent;
         private NodeCollection nodes;
 
@@ -44,10 +42,7 @@ namespace OpenHardwareMonitor.GUI {
             this.expanded = true;
         }
 
-        public TreeModel Model {
-            get { return treeModel; }
-            set { treeModel = value; }
-        }
+        public TreeModel Model { get; set; }
 
         public Node Parent {
             get { return parent; }

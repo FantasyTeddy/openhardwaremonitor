@@ -22,8 +22,6 @@ namespace OpenHardwareMonitor.GUI {
     public class SensorNotifyIcon : IDisposable {
 
         private UnitManager unitManager;
-
-        private ISensor sensor;
         private NotifyIconAdv notifyIcon;
         private Bitmap bitmap;
         private Graphics graphics;
@@ -38,7 +36,7 @@ namespace OpenHardwareMonitor.GUI {
         public SensorNotifyIcon(SystemTray sensorSystemTray, ISensor sensor,
           bool balloonTip, PersistentSettings settings, UnitManager unitManager) {
             this.unitManager = unitManager;
-            this.sensor = sensor;
+            Sensor = sensor;
             this.notifyIcon = new NotifyIconAdv();
 
             Color defaultColor = Color.Black;
@@ -61,7 +59,7 @@ namespace OpenHardwareMonitor.GUI {
             contextMenu.MenuItems.Add(new MenuItem("-"));
             MenuItem removeItem = new MenuItem("Remove Sensor");
             removeItem.Click += delegate (object obj, EventArgs args) {
-                sensorSystemTray.Remove(this.sensor);
+                sensorSystemTray.Remove(Sensor);
             };
             contextMenu.MenuItems.Add(removeItem);
             MenuItem colorItem = new MenuItem("Change Color...");
@@ -125,9 +123,7 @@ namespace OpenHardwareMonitor.GUI {
             }
         }
 
-        public ISensor Sensor {
-            get { return sensor; }
-        }
+        public ISensor Sensor { get; }
 
         public Color Color {
             get { return color; }
@@ -162,36 +158,36 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private string GetString() {
-            if (!sensor.Value.HasValue)
+            if (!Sensor.Value.HasValue)
                 return "-";
 
-            switch (sensor.SensorType) {
+            switch (Sensor.SensorType) {
                 case SensorType.Voltage:
-                    return string.Format("{0:F1}", sensor.Value);
+                    return string.Format("{0:F1}", Sensor.Value);
                 case SensorType.Clock:
-                    return string.Format("{0:F1}", 1e-3f * sensor.Value);
+                    return string.Format("{0:F1}", 1e-3f * Sensor.Value);
                 case SensorType.Load:
-                    return string.Format("{0:F0}", sensor.Value);
+                    return string.Format("{0:F0}", Sensor.Value);
                 case SensorType.Temperature:
                     if (unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
                         return string.Format("{0:F0}",
-                          UnitManager.CelsiusToFahrenheit(sensor.Value));
+                          UnitManager.CelsiusToFahrenheit(Sensor.Value));
                     else
-                        return string.Format("{0:F0}", sensor.Value);
+                        return string.Format("{0:F0}", Sensor.Value);
                 case SensorType.Fan:
-                    return string.Format("{0:F1}", 1e-3f * sensor.Value);
+                    return string.Format("{0:F1}", 1e-3f * Sensor.Value);
                 case SensorType.Flow:
-                    return string.Format("{0:F1}", 1e-3f * sensor.Value);
+                    return string.Format("{0:F1}", 1e-3f * Sensor.Value);
                 case SensorType.Control:
-                    return string.Format("{0:F0}", sensor.Value);
+                    return string.Format("{0:F0}", Sensor.Value);
                 case SensorType.Level:
-                    return string.Format("{0:F0}", sensor.Value);
+                    return string.Format("{0:F0}", Sensor.Value);
                 case SensorType.Power:
-                    return string.Format("{0:F0}", sensor.Value);
+                    return string.Format("{0:F0}", Sensor.Value);
                 case SensorType.Data:
-                    return string.Format("{0:F0}", sensor.Value);
+                    return string.Format("{0:F0}", Sensor.Value);
                 case SensorType.Factor:
-                    return string.Format("{0:F1}", sensor.Value);
+                    return string.Format("{0:F1}", Sensor.Value);
             }
             return "-";
         }
@@ -242,7 +238,7 @@ namespace OpenHardwareMonitor.GUI {
                 graphics.Clear(Color.Black);
             }
             graphics.FillRectangle(darkBrush, 0.5f, -0.5f, bitmap.Width - 2, bitmap.Height);
-            float value = sensor.Value.GetValueOrDefault();
+            float value = Sensor.Value.GetValueOrDefault();
             float y = 0.16f * (100 - value);
             graphics.FillRectangle(brush, 0.5f, -0.5f + y, bitmap.Width - 2, bitmap.Height - y);
             graphics.DrawRectangle(pen, 1, 0, bitmap.Width - 3, bitmap.Height - 1);
@@ -261,7 +257,7 @@ namespace OpenHardwareMonitor.GUI {
         public void Update() {
             Icon icon = notifyIcon.Icon;
 
-            switch (sensor.SensorType) {
+            switch (Sensor.SensorType) {
                 case SensorType.Load:
                 case SensorType.Control:
                 case SensorType.Level:
@@ -275,7 +271,7 @@ namespace OpenHardwareMonitor.GUI {
             icon?.Dispose();
 
             string format = "";
-            switch (sensor.SensorType) {
+            switch (Sensor.SensorType) {
                 case SensorType.Voltage: format = "\n{0}: {1:F2} V"; break;
                 case SensorType.Clock: format = "\n{0}: {1:F0} MHz"; break;
                 case SensorType.Load: format = "\n{0}: {1:F1} %"; break;
@@ -288,16 +284,16 @@ namespace OpenHardwareMonitor.GUI {
                 case SensorType.Data: format = "\n{0}: {1:F0} GB"; break;
                 case SensorType.Factor: format = "\n{0}: {1:F3} GB"; break;
             }
-            string formattedValue = string.Format(format, sensor.Name, sensor.Value);
+            string formattedValue = string.Format(format, Sensor.Name, Sensor.Value);
 
-            if (sensor.SensorType == SensorType.Temperature &&
+            if (Sensor.SensorType == SensorType.Temperature &&
               unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit) {
                 format = "\n{0}: {1:F1} °F";
-                formattedValue = string.Format(format, sensor.Name,
-                  UnitManager.CelsiusToFahrenheit(sensor.Value));
+                formattedValue = string.Format(format, Sensor.Name,
+                  UnitManager.CelsiusToFahrenheit(Sensor.Value));
             }
 
-            string hardwareName = sensor.Hardware.Name;
+            string hardwareName = Sensor.Hardware.Name;
             hardwareName = hardwareName.Substring(0,
               Math.Min(63 - formattedValue.Length, hardwareName.Length));
             string text = hardwareName + formattedValue;
