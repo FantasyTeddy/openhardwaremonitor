@@ -8,6 +8,8 @@
 	
 */
 
+using OpenHardwareMonitor.Utilities;
+
 namespace OpenHardwareMonitor.GUI {
 
     public enum TemperatureUnit {

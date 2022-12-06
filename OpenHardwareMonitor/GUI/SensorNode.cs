@@ -11,6 +11,7 @@
 using System;
 using System.Drawing;
 using OpenHardwareMonitor.Hardware;
+using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
     public class SensorNode : Node {

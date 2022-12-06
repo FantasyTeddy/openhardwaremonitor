@@ -15,6 +15,7 @@ using System.Linq;
 using System.Windows.Forms;
 using OpenHardwareMonitor.Collections;
 using OpenHardwareMonitor.Hardware;
+using OpenHardwareMonitor.Utilities;
 using OxyPlot;
 using OxyPlot.WindowsForms;
 

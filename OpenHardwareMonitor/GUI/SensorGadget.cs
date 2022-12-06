@@ -15,6 +15,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using OpenHardwareMonitor.Hardware;
+using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
     public class SensorGadget : Gadget {

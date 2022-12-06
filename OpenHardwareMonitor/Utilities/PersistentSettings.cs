@@ -16,7 +16,7 @@ using System.Text;
 using System.Xml;
 using OpenHardwareMonitor.Hardware;
 
-namespace OpenHardwareMonitor {
+namespace OpenHardwareMonitor.Utilities {
     public class PersistentSettings : ISettings {
 
         private IDictionary<string, string> settings =
@@ -167,9 +167,8 @@ namespace OpenHardwareMonitor {
 
         public bool GetValue(string name, bool value) {
             string str;
-            if (settings.TryGetValue(name, out str)) {
-                return str == "true";
-            } else {
+            if (settings.TryGetValue(name, out str)) return str == "true";
+            else {
                 return value;
             }
         }

@@ -10,6 +10,7 @@
 
 using System;
 using System.Windows.Forms;
+using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
     public class UserRadioGroup {
