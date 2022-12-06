@@ -133,7 +133,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             corePerformanceBoostSupport = (cpuid[0][0].ExtData[7, 3] & (1 << 9)) > 0;
 
             // set affinity to the first thread for all frequency estimations     
-            var previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
+            GroupAffinity previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
 
             // disable core performance boost  
             uint hwcrEax, hwcrEdx;
@@ -331,7 +331,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                     Ring0.ReleasePciBusMutex();
                     return false;
                 }
-                var result = Ring0.ReadPciConfig(0, 0xBC, out value);
+                bool result = Ring0.ReadPciConfig(0, 0xBC, out value);
 
                 Ring0.ReleasePciBusMutex();
                 return result;

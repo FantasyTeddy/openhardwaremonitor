@@ -306,7 +306,7 @@ namespace OpenHardwareMonitor.Hardware {
 
         public static bool RdmsrTx(uint index, out uint eax, out uint edx,
           GroupAffinity affinity) {
-            var previousAffinity = ThreadAffinity.Set(affinity);
+            GroupAffinity previousAffinity = ThreadAffinity.Set(affinity);
 
             bool result = Rdmsr(index, out eax, out edx);
 

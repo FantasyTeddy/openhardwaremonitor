@@ -46,12 +46,12 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
 
         public static NvmlReturn NvmlInit() {
             try {
-                var result = nvmlInit_v2();
+                NvmlReturn result = nvmlInit_v2();
                 IsInitialized = result == NvmlReturn.Success;
                 return result;
             } catch {
                 try {
-                    var result = nvmlInit();
+                    NvmlReturn result = nvmlInit();
                     IsInitialized = result == NvmlReturn.Success;
                     return result;
                 } catch {

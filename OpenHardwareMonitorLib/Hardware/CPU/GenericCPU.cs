@@ -95,7 +95,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             }
 
             if (HasTimeStampCounter) {
-                var previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
+                GroupAffinity previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
 
                 EstimateTimeStampCounterFrequency(
                   out estimatedTimeStampCounterFrequency,
@@ -249,7 +249,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             if (HasTimeStampCounter && isInvariantTimeStampCounter) {
 
                 // make sure always the same thread is used
-                var previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
+                GroupAffinity previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
 
                 // read time before and after getting the TSC to estimate the error
                 long firstTime = Stopwatch.GetTimestamp();

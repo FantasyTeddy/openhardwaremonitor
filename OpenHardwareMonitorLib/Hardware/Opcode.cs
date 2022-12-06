@@ -199,7 +199,7 @@ namespace OpenHardwareMonitor.Hardware {
         public static bool CpuidTx(uint index, uint ecxValue,
           out uint eax, out uint ebx, out uint ecx, out uint edx,
           GroupAffinity affinity) {
-            var previousAffinity = ThreadAffinity.Set(affinity);
+            GroupAffinity previousAffinity = ThreadAffinity.Set(affinity);
 
             if (previousAffinity == GroupAffinity.Undefined) {
                 eax = ebx = ecx = edx = 0;

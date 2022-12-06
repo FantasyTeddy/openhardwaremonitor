@@ -529,11 +529,11 @@ namespace OpenHardwareMonitor.GUI {
             // colors jump around as little as possible as sensors get added/removed 
             // from the plot
             var usedColors = new List<Color>();
-            foreach (var curSelectedSensor in selected) {
+            foreach (ISensor curSelectedSensor in selected) {
                 if (!colors.ContainsKey(curSelectedSensor)) continue;
-                var curColor = colors[curSelectedSensor];
+                Color curColor = colors[curSelectedSensor];
                 if (usedColors.Contains(curColor)) {
-                    foreach (var potentialNewColor in plotColorPalette) {
+                    foreach (Color potentialNewColor in plotColorPalette) {
                         if (!colors.Values.Contains(potentialNewColor)) {
                             colors[curSelectedSensor] = potentialNewColor;
                             usedColors.Add(potentialNewColor);

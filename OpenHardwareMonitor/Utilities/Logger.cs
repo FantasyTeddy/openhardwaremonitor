@@ -147,7 +147,7 @@ namespace OpenHardwareMonitor.Utilities {
         public TimeSpan LoggingInterval { get; set; }
 
         public void Log() {
-            var now = DateTime.Now;
+            DateTime now = DateTime.Now;
 
             if (lastLoggedTime + LoggingInterval - new TimeSpan(5000000) > now)
                 return;

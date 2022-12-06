@@ -109,7 +109,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 WriteByte(FAN_PWM_CTRL_REG[index], initialFanPwmControl[index]);
 
                 if (index < 3) {
-                    var value = ReadByte(FAN_MAIN_CTRL_REG, out _);
+                    byte value = ReadByte(FAN_MAIN_CTRL_REG, out _);
 
                     if (((value & (1 << index)) > 0) != initialFanOutputModeEnabled[index]) {
                         WriteByte(FAN_MAIN_CTRL_REG, (byte)(value ^ (1 << index)));

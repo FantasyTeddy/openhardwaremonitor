@@ -97,7 +97,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                     NVAPI.NvAPI_GPU_GetBusId(handle, out uint busId) == NvStatus.OK) {
                     if (NVML.NvmlDeviceGetHandleByPciBusId != null &&
                       NVML.NvmlDeviceGetHandleByPciBusId(
-                      "0000:" + busId.ToString("X2") + ":00.0", out var result)
+                      "0000:" + busId.ToString("X2") + ":00.0", out NVML.NvmlDevice result)
                       == NVML.NvmlReturn.Success) {
                         device = result;
                         power = new Sensor("GPU Power", 0, SensorType.Power, this, settings);
@@ -234,8 +234,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                 }
             }
 
-            var coolerSettings = GetCoolerSettings();
-            var coolerSettingsOk = false;
+            NvGPUCoolerSettings coolerSettings = GetCoolerSettings();
+            bool coolerSettingsOk = false;
             if (coolerSettings.Count > 0) {
                 control.Value = coolerSettings.Cooler[0].CurrentLevel;
                 ActivateSensor(control);
@@ -243,7 +243,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             }
 
             if (!tachReadingOk || !coolerSettingsOk) {
-                var coolersStatus = GetFanCoolersStatus();
+                NvFanCoolersStatus coolersStatus = GetFanCoolersStatus();
                 if (coolersStatus.Count > 0) {
                     if (!coolerSettingsOk) {
                         control.Value = coolersStatus.Items[0].CurrentLevel;
@@ -426,7 +426,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                     UtilizationDomains =
                   new NvUtilizationDomainEx[NVAPI.NVAPI_MAX_GPU_UTILIZATIONS]
                 };
-                var status = NVAPI.NvAPI_GPU_GetDynamicPstatesInfoEx(handle, ref info);
+                NvStatus status = NVAPI.NvAPI_GPU_GetDynamicPstatesInfoEx(handle, ref info);
 
                 r.AppendLine("Utilization Domains Ex");
                 r.AppendLine();
@@ -448,7 +448,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                     UtilizationDomains =
                   new NvUtilizationDomain[NVAPI.NVAPI_MAX_GPU_UTILIZATIONS]
                 };
-                var status = NVAPI.NvAPI_GPU_GetDynamicPstatesInfo(handle, ref info);
+                NvStatus status = NVAPI.NvAPI_GPU_GetDynamicPstatesInfo(handle, ref info);
 
                 r.AppendLine("Utilization Domains");
                 r.AppendLine();
@@ -537,7 +537,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                   new NvFanCoolersStatusItem[NVAPI.MAX_FAN_COOLERS_STATUS_ITEMS]
                 };
 
-                var status = NVAPI.NvAPI_GPU_ClientFanCoolersGetStatus(handle, ref coolers);
+                NvStatus status = NVAPI.NvAPI_GPU_ClientFanCoolersGetStatus(handle, ref coolers);
 
                 r.AppendLine("Fan Coolers Status");
                 r.AppendLine();

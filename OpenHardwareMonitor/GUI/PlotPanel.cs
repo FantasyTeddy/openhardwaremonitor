@@ -59,7 +59,7 @@ namespace OpenHardwareMonitor.GUI {
             settings.SetValue("plotPanel.MinTimeSpan", (float)timeAxis.ActualMinimum);
             settings.SetValue("plotPanel.MaxTimeSpan", (float)timeAxis.ActualMaximum);
 
-            foreach (var axis in axes.Values) {
+            foreach (LinearAxis axis in axes.Values) {
                 settings.SetValue("plotPanel.Min" + axis.Key, (float)axis.ActualMinimum);
                 settings.SetValue("plotPanel.Max" + axis.Key, (float)axis.ActualMaximum);
             }
@@ -172,7 +172,7 @@ namespace OpenHardwareMonitor.GUI {
 
             var model = new PlotModel();
             model.Axes.Add(timeAxis);
-            foreach (var axis in axes.Values)
+            foreach (LinearAxis axis in axes.Values)
                 model.Axes.Add(axis);
             model.PlotMargins = new OxyThickness(0);
             model.IsLegendVisible = false;
@@ -208,9 +208,9 @@ namespace OpenHardwareMonitor.GUI {
                 types.Add(sensor.SensorType);
             }
 
-            foreach (var pair in axes.Reverse()) {
-                var axis = pair.Value;
-                var type = pair.Key;
+            foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse()) {
+                LinearAxis axis = pair.Value;
+                SensorType type = pair.Key;
                 axis.IsAxisVisible = types.Contains(type);
             }
 
@@ -220,13 +220,13 @@ namespace OpenHardwareMonitor.GUI {
 
         private void UpdateAxesPosition() {
             if (stackedAxes.Value) {
-                var count = axes.Values.Count(axis => axis.IsAxisVisible);
-                var start = 0.0;
-                foreach (var pair in axes.Reverse()) {
-                    var axis = pair.Value;
-                    var type = pair.Key;
+                int count = axes.Values.Count(axis => axis.IsAxisVisible);
+                double start = 0.0;
+                foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse()) {
+                    LinearAxis axis = pair.Value;
+                    SensorType type = pair.Key;
                     axis.StartPosition = start;
-                    var delta = axis.IsAxisVisible ? 1.0 / count : 0;
+                    double delta = axis.IsAxisVisible ? 1.0 / count : 0;
                     start += delta;
                     axis.EndPosition = start;
                     axis.PositionTier = 0;
@@ -234,10 +234,10 @@ namespace OpenHardwareMonitor.GUI {
                     axis.MinorGridlineStyle = LineStyle.Solid;
                 }
             } else {
-                var tier = 0;
-                foreach (var pair in axes.Reverse()) {
-                    var axis = pair.Value;
-                    var type = pair.Key;
+                int tier = 0;
+                foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse()) {
+                    LinearAxis axis = pair.Value;
+                    SensorType type = pair.Key;
                     if (axis.IsAxisVisible) {
                         axis.StartPosition = 0;
                         axis.EndPosition = 1;
@@ -258,9 +258,9 @@ namespace OpenHardwareMonitor.GUI {
         public void InvalidatePlot() {
             this.now = DateTime.UtcNow;
 
-            foreach (var pair in axes) {
-                var axis = pair.Value;
-                var type = pair.Key;
+            foreach (KeyValuePair<SensorType, LinearAxis> pair in axes) {
+                LinearAxis axis = pair.Value;
+                SensorType type = pair.Key;
                 if (type == SensorType.Temperature)
                     axis.Unit = unitManager.TemperatureUnit == TemperatureUnit.Celsius ?
                     "°C" : "°F";

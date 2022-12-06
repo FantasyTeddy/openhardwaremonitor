@@ -64,7 +64,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
           : base(processorIndex, cpuid, settings) {
             string cpuName = cpuid[0][0].BrandString;
             if (!string.IsNullOrEmpty(cpuName)) {
-                foreach (var item in tctlOffsetItems) {
+                foreach (TctlOffsetItem item in tctlOffsetItems) {
                     if (cpuName.StartsWith(item.Name)) {
                         tctlOffset = item.Offset;
                         break;
@@ -164,7 +164,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 r.AppendLine("SMN Registers");
                 r.AppendLine();
                 r.AppendLine(" Register  Value");
-                var registers = GetSmnRegisters();
+                IList<uint> registers = GetSmnRegisters();
 
                 for (int i = 0; i < registers.Count; i++)
                     if (ReadSmnRegister(registers[i], out uint value)) {
@@ -325,7 +325,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 DateTime energyTime = DateTime.MinValue;
                 double? multiplier = null;
 
-                var previousAffinity = ThreadAffinity.Set(affinity);
+                GroupAffinity previousAffinity = ThreadAffinity.Set(affinity);
                 if (Ring0.Rdmsr(MSR_CORE_ENERGY_STAT, out uint energyConsumed, out _)) {
                     energyTime = DateTime.UtcNow;
                 }

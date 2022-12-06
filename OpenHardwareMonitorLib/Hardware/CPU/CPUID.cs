@@ -52,7 +52,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             var affinity = GroupAffinity.Single((ushort)group, thread);
 
-            var previousAffinity = ThreadAffinity.Set(affinity);
+            GroupAffinity previousAffinity = ThreadAffinity.Set(affinity);
             if (previousAffinity == GroupAffinity.Undefined)
                 return null;
 

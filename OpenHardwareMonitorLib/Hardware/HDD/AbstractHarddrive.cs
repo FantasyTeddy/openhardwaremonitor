@@ -142,7 +142,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
                 // check if all required attributes are present
                 bool allRequiredAttributesFound = true;
-                foreach (var requireAttribute in requiredAttributes) {
+                foreach (RequireSmartAttribute requireAttribute in requiredAttributes) {
                     bool adttributeFound = false;
                     foreach (DriveAttributeValue value in values) {
                         if (value.Identifier == requireAttribute.AttributeId) {

@@ -48,7 +48,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                 }
             }
 
-            var result = NVML.NvmlInit();
+            NVML.NvmlReturn result = NVML.NvmlInit();
 
             report.AppendLine();
             report.AppendLine("NVML");

@@ -39,7 +39,7 @@ namespace OpenHardwareMonitor.Hardware {
             }
 
             try {
-                var previous = Set(affinity);
+                GroupAffinity previous = Set(affinity);
                 if (previous == GroupAffinity.Undefined)
                     return false;
                 Set(previous);
@@ -84,11 +84,11 @@ namespace OpenHardwareMonitor.Hardware {
                     Mask = uIntPtrMask
                 };
 
-                var currentThread = NativeMethods.GetCurrentThread();
+                IntPtr currentThread = NativeMethods.GetCurrentThread();
 
                 try {
                     if (NativeMethods.SetThreadGroupAffinity(currentThread,
-                      ref groupAffinity, out var previousGroupAffinity)) {
+                      ref groupAffinity, out NativeMethods.GROUP_AFFINITY previousGroupAffinity)) {
                         return new GroupAffinity(previousGroupAffinity.Group,
                           (ulong)previousGroupAffinity.Mask);
                     } else {
@@ -98,7 +98,7 @@ namespace OpenHardwareMonitor.Hardware {
                     if (affinity.Group > 0)
                         throw new ArgumentOutOfRangeException("affinity.Group");
 
-                    var previous = (ulong)NativeMethods.SetThreadAffinityMask(
+                    ulong previous = (ulong)NativeMethods.SetThreadAffinityMask(
                       currentThread, uIntPtrMask);
 
                     return new GroupAffinity(0, previous);

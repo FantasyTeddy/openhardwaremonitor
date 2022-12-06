@@ -506,7 +506,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         public static ADLStatus ADL2_Main_Control_Create(int enumConnectedAdapters,
           out IntPtr context) {
             try {
-                var result = _ADL2_Main_Control_Create(Main_Memory_Alloc,
+                ADLStatus result = _ADL2_Main_Control_Create(Main_Memory_Alloc,
                   enumConnectedAdapters, out context);
                 if (result != ADLStatus.OK)
                     context = IntPtr.Zero;
@@ -521,7 +521,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
             int elementSize = Marshal.SizeOf(typeof(ADLAdapterInfo));
             int size = info.Length * elementSize;
             IntPtr ptr = Marshal.AllocHGlobal(size);
-            var status = _ADL_Adapter_AdapterInfo_Get(ptr, size);
+            ADLStatus status = _ADL_Adapter_AdapterInfo_Get(ptr, size);
             for (int i = 0; i < info.Length; i++)
                 info[i] = (ADLAdapterInfo)
                   Marshal.PtrToStructure((IntPtr)((long)ptr + i * elementSize),

@@ -93,7 +93,7 @@ namespace OpenHardwareMonitor.Utilities {
         private void HandleRequests() {
 
             while (listener.IsListening) {
-                var context = listener.BeginGetContext(
+                IAsyncResult context = listener.BeginGetContext(
                   new AsyncCallback(ListenerCallback), listener);
                 context.AsyncWaitHandle.WaitOne();
             }
@@ -114,7 +114,7 @@ namespace OpenHardwareMonitor.Utilities {
 
             HttpListenerRequest request = context.Request;
 
-            var requestedFile = request.RawUrl.Substring(1);
+            string requestedFile = request.RawUrl.Substring(1);
             if (requestedFile == "data.json") {
                 SendJSON(context.Response);
                 return;
@@ -216,7 +216,7 @@ namespace OpenHardwareMonitor.Utilities {
             JSON += ", \"ImageURL\": \"\"";
             JSON += "}";
 
-            var responseContent = JSON;
+            string responseContent = JSON;
             byte[] buffer = Encoding.UTF8.GetBytes(responseContent);
 
             response.AddHeader("Cache-Control", "no-cache");
@@ -277,8 +277,8 @@ namespace OpenHardwareMonitor.Utilities {
             context.Response.ContentType =
               GetcontentType(Path.GetExtension(filePath));
             const int bufferSize = 1024 * 512; //512KB
-            var buffer = new byte[bufferSize];
-            using (var fs = File.OpenRead(filePath)) {
+            byte[] buffer = new byte[bufferSize];
+            using (FileStream fs = File.OpenRead(filePath)) {
 
                 context.Response.ContentLength64 = fs.Length;
                 int read;

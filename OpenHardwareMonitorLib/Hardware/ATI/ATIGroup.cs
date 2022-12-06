@@ -23,8 +23,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
         public ATIGroup(ISettings settings) {
             try {
-                var adlStatus = ADL.ADL_Main_Control_Create(1);
-                var adl2Status = ADL.ADL2_Main_Control_Create(1, out context);
+                ADLStatus adlStatus = ADL.ADL_Main_Control_Create(1);
+                ADLStatus adl2Status = ADL.ADL2_Main_Control_Create(1, out context);
 
                 report.AppendLine("AMD Display Library");
                 report.AppendLine();
@@ -37,7 +37,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                 report.AppendLine("Graphics Versions");
                 report.AppendLine();
                 try {
-                    var status = ADL.ADL_Graphics_Versions_Get(out var versionInfo);
+                    ADLStatus status = ADL.ADL_Graphics_Versions_Get(out ADLVersionsInfo versionInfo);
                     report.Append(" Status: ");
                     report.AppendLine(status.ToString());
                     report.Append(" DriverVersion: ");
@@ -112,7 +112,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                                         var nameBuilder = new StringBuilder(adapterInfo[i].AdapterName);
                                         nameBuilder.Replace("(TM)", " ");
                                         for (int j = 0; j < 10; j++) nameBuilder.Replace("  ", " ");
-                                        var name = nameBuilder.ToString().Trim();
+                                        string name = nameBuilder.ToString().Trim();
 
                                         hardware.Add(new ATIGPU(name,
                                           adapterInfo[i].AdapterIndex,

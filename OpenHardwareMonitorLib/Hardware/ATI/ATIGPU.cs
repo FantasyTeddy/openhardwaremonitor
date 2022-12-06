@@ -194,7 +194,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
             r.AppendLine("Overdrive Caps");
             r.AppendLine();
             try {
-                var status = ADL.ADL_Overdrive_Caps(adapterIndex,
+                ADLStatus status = ADL.ADL_Overdrive_Caps(adapterIndex,
                   out int supported, out int enabled, out int version);
                 r.Append(" Status: ");
                 r.AppendLine(status.ToString());
@@ -212,8 +212,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
             r.AppendLine("Overdrive5 Parameters");
             r.AppendLine();
             try {
-                var status = ADL.ADL_Overdrive5_ODParameters_Get(
-                  adapterIndex, out var p);
+                ADLStatus status = ADL.ADL_Overdrive5_ODParameters_Get(
+                  adapterIndex, out ADLODParameters p);
                 r.Append(" Status: ");
                 r.AppendLine(status.ToString());
                 r.AppendFormat(" NumberOfPerformanceLevels: {0}{1}",
@@ -249,7 +249,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
             r.AppendLine();
             try {
                 var adlt = new ADLTemperature();
-                var status = ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0,
+                ADLStatus status = ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0,
                   ref adlt);
                 r.Append(" Status: ");
                 r.AppendLine(status.ToString());
@@ -266,7 +266,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                 var adlf = new ADLFanSpeedValue {
                     SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_RPM
                 };
-                var status = ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf);
+                ADLStatus status = ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf);
                 r.Append(" Status RPM: ");
                 r.AppendLine(status.ToString());
                 r.AppendFormat(" Value RPM: {0}{1}",
@@ -286,7 +286,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
             r.AppendLine();
             try {
                 var adlp = new ADLPMActivity();
-                var status = ADL.ADL_Overdrive5_CurrentActivity_Get(adapterIndex,
+                ADLStatus status = ADL.ADL_Overdrive5_CurrentActivity_Get(adapterIndex,
                   ref adlp);
                 r.Append(" Status: ");
                 r.AppendLine(status.ToString());
@@ -316,8 +316,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                 r.AppendLine();
                 try {
                     for (int i = 0; i < 4; i++) {
-                        var pt = ((ADLODNCurrentPowerType)i).ToString();
-                        var status = ADL.ADL2_Overdrive6_CurrentPower_Get(
+                        string pt = ((ADLODNCurrentPowerType)i).ToString();
+                        ADLStatus status = ADL.ADL2_Overdrive6_CurrentPower_Get(
                           context, adapterIndex, (ADLODNCurrentPowerType)i,
                           out int power);
                         if (status == ADLStatus.OK) {
@@ -341,8 +341,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                 r.AppendLine();
                 try {
                     for (int i = 1; i < 8; i++) {
-                        var tt = ((ADLODNTemperatureType)i).ToString();
-                        var status = ADL.ADL2_OverdriveN_Temperature_Get(
+                        string tt = ((ADLODNTemperatureType)i).ToString();
+                        ADLStatus status = ADL.ADL2_OverdriveN_Temperature_Get(
                           context, adapterIndex, (ADLODNTemperatureType)i,
                           out int temperature);
                         if (status == ADLStatus.OK) {
@@ -365,8 +365,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                 r.AppendLine("OverdriveN Performance Status");
                 r.AppendLine();
                 try {
-                    var status = ADL.ADL2_OverdriveN_PerformanceStatus_Get(context,
-                      adapterIndex, out var ps);
+                    ADLStatus status = ADL.ADL2_OverdriveN_PerformanceStatus_Get(context,
+                      adapterIndex, out ADLODNPerformanceStatus ps);
                     r.Append(" Status: ");
                     r.AppendLine(status.ToString());
                     r.AppendFormat(" CoreClock: {0}{1}",
@@ -417,12 +417,12 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                 r.AppendLine("Performance Metrics");
                 r.AppendLine();
                 try {
-                    var status = ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex,
-                      out var data);
+                    ADLStatus status = ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex,
+                      out ADLPMLogDataOutput data);
                     if (status == ADLStatus.OK) {
                         for (int i = 0; i < data.Sensors.Length; i++) {
                             if (data.Sensors[i].Supported) {
-                                var st = ((ADLSensorType)i).ToString();
+                                string st = ((ADLSensorType)i).ToString();
                                 r.AppendFormat(" Sensor[{0}].Value: {1}{2}", st,
                                   data.Sensors[i].Value, Environment.NewLine);
                             }
@@ -455,7 +455,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         public override void Update() {
             if (context != IntPtr.Zero && overdriveVersion >= 8 &&
               ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex,
-              out var data) == ADLStatus.OK) {
+              out ADLPMLogDataOutput data) == ADLStatus.OK) {
                 GetPMLog(data, ADLSensorType.TEMPERATURE_EDGE, temperatureCore);
                 GetPMLog(data, ADLSensorType.TEMPERATURE_MEM, temperatureMemory);
                 GetPMLog(data, ADLSensorType.TEMPERATURE_VRVDDC, temperatureVrmCore);
