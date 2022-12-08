@@ -171,7 +171,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
             if (bit < 0 || bit > 63)
                 throw new ArgumentException("Bit out of range.");
 
-            ulong mask = ((ulong)1) << bit;
+            ulong mask = 1UL << bit;
             return value > 0 ? target | mask : target & ~mask;
         }
 
