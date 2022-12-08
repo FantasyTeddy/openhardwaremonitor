@@ -230,7 +230,7 @@ namespace OpenHardwareMonitor.Hardware
             return true;
         }
 
-        [Flags()]
+        [Flags]
         public enum AllocationType : uint
         {
             COMMIT = 0x1000,
@@ -242,7 +242,7 @@ namespace OpenHardwareMonitor.Hardware
             WRITE_WATCH = 0x200000
         }
 
-        [Flags()]
+        [Flags]
         public enum MemoryProtection : uint
         {
             EXECUTE = 0x10,
