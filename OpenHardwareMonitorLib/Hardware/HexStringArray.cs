@@ -30,7 +30,7 @@ namespace OpenHardwareMonitor.Hardware
                     return Convert.ToByte(array[(address & 0x0F) + 1], 16);
             }
 
-            throw new ArgumentException();
+            throw new ArgumentOutOfRangeException(nameof(address));
         }
     }
 }

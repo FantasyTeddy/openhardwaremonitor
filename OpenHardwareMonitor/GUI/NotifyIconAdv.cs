@@ -449,7 +449,7 @@ namespace OpenHardwareMonitor.GUI
                         value = "";
 
                     if (value.Length > 63)
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException(nameof(Text));
 
                     if (!value.Equals(text, StringComparison.Ordinal))
                     {
@@ -528,7 +528,7 @@ namespace OpenHardwareMonitor.GUI
                     throw new ArgumentOutOfRangeException(nameof(timeout));
 
                 if (string.IsNullOrEmpty(tipText))
-                    throw new ArgumentException("tipText");
+                    throw new ArgumentNullException(nameof(tipText));
 
                 if (DesignMode)
                     return;

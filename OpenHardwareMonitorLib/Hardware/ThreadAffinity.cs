@@ -74,7 +74,7 @@ namespace OpenHardwareMonitor.Hardware
             if (OperatingSystem.IsUnix)
             {
                 if (affinity.Group > 0)
-                    throw new ArgumentOutOfRangeException("affinity.Group");
+                    throw new ArgumentOutOfRangeException(nameof(affinity));
 
                 ulong result = 0;
                 if (NativeMethods.sched_getaffinity(0, (IntPtr)8, ref result) != 0)
@@ -95,7 +95,7 @@ namespace OpenHardwareMonitor.Hardware
                 }
                 catch (OverflowException)
                 {
-                    throw new ArgumentOutOfRangeException("affinity.Mask");
+                    throw new ArgumentOutOfRangeException(nameof(affinity));
                 }
 
                 var groupAffinity = new NativeMethods.GROUP_AFFINITY
@@ -122,7 +122,7 @@ namespace OpenHardwareMonitor.Hardware
                 catch (EntryPointNotFoundException)
                 {
                     if (affinity.Group > 0)
-                        throw new ArgumentOutOfRangeException("affinity.Group");
+                        throw new ArgumentOutOfRangeException(nameof(affinity));
 
                     ulong previous = (ulong)NativeMethods.SetThreadAffinityMask(
                       currentThread, uIntPtrMask);

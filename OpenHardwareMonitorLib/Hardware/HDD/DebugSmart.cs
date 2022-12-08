@@ -370,7 +370,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
         public bool EnableSmart(IntPtr handle, int driveNumber)
         {
             if (handle != (IntPtr)driveNumber)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(driveNumber));
 
             return true;
         }
@@ -378,7 +378,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
         public DriveAttributeValue[] ReadSmartData(IntPtr handle, int driveNumber)
         {
             if (handle != (IntPtr)driveNumber)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(driveNumber));
 
             return drives[driveNumber].DriveAttributeValues;
         }
@@ -387,7 +387,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
           int driveNumber)
         {
             if (handle != (IntPtr)driveNumber)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(driveNumber));
 
             return drives[driveNumber].DriveThresholdValues;
         }
@@ -396,7 +396,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
           out string name, out string firmwareRevision)
         {
             if (handle != (IntPtr)driveNumber)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(driveNumber));
 
             name = drives[driveNumber].Name;
             firmwareRevision = drives[driveNumber].FirmwareVersion;
