@@ -287,7 +287,7 @@ namespace OpenHardwareMonitor.GUI
             DisposeBuffer();
         }
 
-        public PaintEventHandler Paint;
+        public event PaintEventHandler Paint;
 
         public void Redraw()
         {
