@@ -32,7 +32,7 @@ namespace OpenHardwareMonitor.Hardware
         Throughput, // MB/s = 2^20 Bytes/s
     }
 
-    public struct SensorValue
+    public readonly struct SensorValue
     {
         public SensorValue(float value, DateTime time)
         {

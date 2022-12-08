@@ -120,13 +120,13 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NvDisplayHandle
+    internal readonly struct NvDisplayHandle
     {
         private readonly IntPtr ptr;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NvPhysicalGpuHandle
+    internal readonly struct NvPhysicalGpuHandle
     {
         private readonly IntPtr ptr;
     }

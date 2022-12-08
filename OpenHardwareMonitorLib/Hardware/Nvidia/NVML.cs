@@ -114,7 +114,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
         public static bool IsInitialized { get; private set; }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct NvmlDevice
+        internal readonly struct NvmlDevice
         {
             private readonly IntPtr ptr;
         }

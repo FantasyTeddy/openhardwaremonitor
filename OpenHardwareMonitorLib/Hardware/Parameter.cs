@@ -14,7 +14,7 @@ using System.Globalization;
 namespace OpenHardwareMonitor.Hardware
 {
 
-    internal struct ParameterDescription
+    internal readonly struct ParameterDescription
     {
         public ParameterDescription(string name, string description,
           float defaultValue)
