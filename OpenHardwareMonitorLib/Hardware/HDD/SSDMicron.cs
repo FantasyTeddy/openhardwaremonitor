@@ -13,9 +13,14 @@ using System.Collections.Generic;
 namespace OpenHardwareMonitor.Hardware.HDD
 {
 
-    [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xAC),
-RequireSmart(0xAD), RequireSmart(0xAE), RequireSmart(0xC4),
-RequireSmart(0xCA), RequireSmart(0xCE)]
+    [NamePrefix("")]
+    [RequireSmart(0xAB)]
+    [RequireSmart(0xAC)]
+    [RequireSmart(0xAD)]
+    [RequireSmart(0xAE)]
+    [RequireSmart(0xC4)]
+    [RequireSmart(0xCA)]
+    [RequireSmart(0xCE)]
     internal class SSDMicron : AbstractHarddrive
     {
 

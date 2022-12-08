@@ -14,7 +14,9 @@ using System.Collections.Generic;
 namespace OpenHardwareMonitor.Hardware.HDD
 {
 
-    [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xB1)]
+    [NamePrefix("")]
+    [RequireSmart(0xAB)]
+    [RequireSmart(0xB1)]
     internal class SSDSandforce : AbstractHarddrive
     {
 

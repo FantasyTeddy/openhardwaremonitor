@@ -15,8 +15,10 @@ using System.Collections.Generic;
 namespace OpenHardwareMonitor.Hardware.HDD
 {
 
-    [NamePrefix("INTEL SSD"),
-RequireSmart(0xE1), RequireSmart(0xE8), RequireSmart(0xE9)]
+    [NamePrefix("INTEL SSD")]
+    [RequireSmart(0xE1)]
+    [RequireSmart(0xE8)]
+    [RequireSmart(0xE9)]
     internal class SSDIntel : AbstractHarddrive
     {
 
