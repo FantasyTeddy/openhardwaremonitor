@@ -442,7 +442,7 @@ namespace OpenHardwareMonitor.GUI
                     if (value.Length > 63)
                         throw new ArgumentOutOfRangeException();
 
-                    if (!value.Equals(text))
+                    if (!value.Equals(text, StringComparison.Ordinal))
                     {
                         text = value;
 
