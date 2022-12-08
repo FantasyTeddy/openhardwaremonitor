@@ -730,8 +730,7 @@ namespace OpenHardwareMonitor.GUI
 
             Rectangle intersection = Rectangle.Intersect(fullWorkingArea, newBounds);
             if (intersection.Width < 20 || intersection.Height < 20 ||
-              !settings.Contains("mainForm.Location.X")
-            )
+              !settings.Contains("mainForm.Location.X"))
             {
                 newBounds.X = Screen.PrimaryScreen.WorkingArea.Width / 2 -
                               newBounds.Width / 2;
@@ -766,8 +765,7 @@ namespace OpenHardwareMonitor.GUI
                 return;
 
             NodeControlInfo info = treeView.GetNodeControlInfoAt(
-              new Point(m.X, m.Y)
-            );
+              new Point(m.X, m.Y));
             treeView.SelectedNode = info.Node;
             if (info.Node != null)
             {

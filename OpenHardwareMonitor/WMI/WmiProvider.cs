@@ -125,8 +125,7 @@ namespace OpenHardwareMonitor.WMI
         private void RevokeInstance(string identifier)
         {
             int instanceIndex = activeInstances.FindIndex(
-              item => item.Identifier == identifier.ToString()
-            );
+              item => item.Identifier == identifier.ToString());
 
             if (instanceIndex == -1)
                 return;

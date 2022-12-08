@@ -129,8 +129,7 @@ namespace OpenHardwareMonitor.GUI
                         {
                             Point p = new Point(
                               Macros.GET_X_LPARAM(message.LParam) - location.X,
-                              Macros.GET_Y_LPARAM(message.LParam) - location.Y
-                            );
+                              Macros.GET_Y_LPARAM(message.LParam) - location.Y);
                             HitTestEventArgs e = new HitTestEventArgs(p, HitResult.Caption);
                             HitTest(this, e);
                             message.Result = (IntPtr)e.HitResult;
@@ -156,8 +155,7 @@ namespace OpenHardwareMonitor.GUI
                         {
                             ShowContextMenu(new Point(
                               Macros.GET_X_LPARAM(message.LParam),
-                              Macros.GET_Y_LPARAM(message.LParam)
-                            ));
+                              Macros.GET_Y_LPARAM(message.LParam)));
                         }
 
                         message.Result = IntPtr.Zero;

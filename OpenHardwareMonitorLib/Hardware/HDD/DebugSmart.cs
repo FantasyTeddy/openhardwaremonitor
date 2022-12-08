@@ -357,7 +357,8 @@ namespace OpenHardwareMonitor.Hardware.HDD
             F1 DDA100000000 100 100 0 
             F2 5DF400000000 100 100 0 
             F9 FD0400000000 100 100 0 
-            FC 090000000000 100 100 0")};
+            FC 090000000000 100 100 0")
+        };
 
         public IntPtr OpenDrive(int driveNumber)
         {

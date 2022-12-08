@@ -331,7 +331,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 "Temperature = TjMax - TSlope * Value.", tjMax[i]),
               new ParameterDescription("TSlope [°C]",
                 "Temperature slope of the digital thermal sensor.\n" +
-                "Temperature = TjMax - TSlope * Value.", 1)}, settings);
+                "Temperature = TjMax - TSlope * Value.", 1) }, settings);
                     ActivateSensor(coreTemperatures[i]);
                 }
             }
@@ -352,7 +352,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 "Temperature = TjMax - TSlope * Value.", tjMax[0]),
               new ParameterDescription("TSlope [°C]",
                 "Temperature slope of the digital thermal sensor.\n" +
-                "Temperature = TjMax - TSlope * Value.", 1)}, settings);
+                "Temperature = TjMax - TSlope * Value.", 1) }, settings);
                 ActivateSensor(packageTemperature);
             }
 
