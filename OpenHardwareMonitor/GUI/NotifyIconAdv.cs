@@ -11,6 +11,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -556,7 +557,8 @@ namespace OpenHardwareMonitor.GUI
                     ContextMenu.GetType().InvokeMember("OnPopup",
                       BindingFlags.NonPublic | BindingFlags.InvokeMethod |
                       BindingFlags.Instance, null, ContextMenu,
-                      new object[] { System.EventArgs.Empty });
+                      new object[] { System.EventArgs.Empty },
+                      CultureInfo.InvariantCulture);
 
                     NativeMethods.TrackPopupMenuEx(
                       new HandleRef(ContextMenu, ContextMenu.Handle), 72,
@@ -571,7 +573,8 @@ namespace OpenHardwareMonitor.GUI
                 ContextMenuStrip?.GetType().InvokeMember("ShowInTaskbar",
                       BindingFlags.NonPublic | BindingFlags.InvokeMethod |
                       BindingFlags.Instance, null, ContextMenuStrip,
-                      new object[] { p.x, p.y });
+                      new object[] { p.x, p.y },
+                      CultureInfo.InvariantCulture);
             }
 
             private void UpdateNotifyIcon(bool showNotifyIcon)
@@ -688,7 +691,8 @@ namespace OpenHardwareMonitor.GUI
                   (bool)ContextMenu.GetType().InvokeMember("ProcessInitMenuPopup",
                     BindingFlags.NonPublic | BindingFlags.InvokeMethod |
                     BindingFlags.Instance, null, ContextMenu,
-                    new object[] { message.WParam }))
+                    new object[] { message.WParam },
+                    CultureInfo.InvariantCulture))
                 {
                     return;
                 }
