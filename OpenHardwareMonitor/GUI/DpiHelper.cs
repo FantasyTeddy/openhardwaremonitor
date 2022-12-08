@@ -55,7 +55,7 @@ namespace OpenHardwareMonitor.GUI
 
         public static int LogicalToDeviceUnits(int value)
         {
-            return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * (double)value);
+            return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * value);
         }
 
         public static Size LogicalToDeviceUnits(Size logicalSize)

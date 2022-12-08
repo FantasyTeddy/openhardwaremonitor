@@ -133,7 +133,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                     if (index < newIdleTimes.Length && index < totalTimes.Length)
                     {
                         float idle =
-                          (float)(newIdleTimes[index] - this.idleTimes[index]) /
+                          (newIdleTimes[index] - this.idleTimes[index]) /
                           (float)(newTotalTimes[index] - this.totalTimes[index]);
                         value += idle;
                         total += idle;

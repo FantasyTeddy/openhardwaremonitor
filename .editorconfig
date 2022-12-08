@@ -97,6 +97,7 @@ csharp_prefer_simple_default_expression = true:suggestion
 csharp_style_deconstructed_variable_declaration = true
 csharp_style_inlined_variable_declaration = true:suggestion
 csharp_style_prefer_index_operator = false:none
+csharp_style_prefer_local_over_anonymous_function = false:none
 csharp_style_prefer_range_operator = false:none
 csharp_style_throw_expression = true:suggestion
 
@@ -117,23 +118,8 @@ csharp_indent_block_contents = true
 csharp_indent_braces = false
 csharp_indent_case_contents = true
 csharp_indent_case_contents_when_block = true
-csharp_indent_switch_labels = true
 csharp_indent_labels = one_less_than_current
-
-# Name all constant fields using PascalCase
-dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
-dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols = constant_fields
-dotnet_naming_rule.constant_fields_should_be_pascal_case.style = pascal_case_style
-dotnet_naming_symbols.constant_fields.applicable_kinds = field
-dotnet_naming_symbols.constant_fields.required_modifiers = const
-dotnet_naming_style.pascal_case_style.capitalization = pascal_case
-
-# Code style defaults
-csharp_preserve_single_line_blocks = true:none
-csharp_preserve_single_line_statements = false:none
-
-# Other features
-csharp_style_pattern_local_over_anonymous_function = false:none
+csharp_indent_switch_labels = true
 
 # Space preferences
 csharp_space_after_cast = false
@@ -143,7 +129,7 @@ csharp_space_after_dot = false
 csharp_space_after_keywords_in_control_flow_statements = true
 csharp_space_after_semicolon_in_for_statement = true
 csharp_space_around_binary_operators = before_and_after
-csharp_space_around_declaration_statements = do_not_ignore
+csharp_space_around_declaration_statements = false
 csharp_space_before_colon_in_inheritance_clause = true
 csharp_space_before_comma = false
 csharp_space_before_dot = false
@@ -158,6 +144,18 @@ csharp_space_between_method_declaration_name_and_open_parenthesis = false
 csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
+
+# Wrapping preferences
+csharp_preserve_single_line_blocks = true:none
+csharp_preserve_single_line_statements = false:none
+
+# Name all constant fields using PascalCase
+dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
+dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols = constant_fields
+dotnet_naming_rule.constant_fields_should_be_pascal_case.style = pascal_case_style
+dotnet_naming_symbols.constant_fields.applicable_kinds = field
+dotnet_naming_symbols.constant_fields.required_modifiers = const
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
 
 # Analyzers
 dotnet_code_quality.ca1802.api_surface = private, internal
