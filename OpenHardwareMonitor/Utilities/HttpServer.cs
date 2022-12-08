@@ -162,7 +162,7 @@ namespace OpenHardwareMonitor.Utilities
               "Web." + requestedFile.Replace('/', '.'), ext);
         }
 
-        private void ServeResourceFile(HttpListenerResponse response, string name,
+        private static void ServeResourceFile(HttpListenerResponse response, string name,
           string ext)
         {
             // resource names do not support the hyphen
@@ -208,7 +208,7 @@ namespace OpenHardwareMonitor.Utilities
             response.Close();
         }
 
-        private void ServeResourceImage(HttpListenerResponse response, string name)
+        private static void ServeResourceImage(HttpListenerResponse response, string name)
         {
             name = "OpenHardwareMonitor.Resources." + name;
 

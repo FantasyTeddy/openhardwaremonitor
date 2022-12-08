@@ -146,7 +146,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
               processorIndex.ToString(CultureInfo.InvariantCulture));
         }
 
-        private void EstimateTimeStampCounterFrequency(out double frequency,
+        private static void EstimateTimeStampCounterFrequency(out double frequency,
           out double error)
         {
 
@@ -171,7 +171,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             }
         }
 
-        private void EstimateTimeStampCounterFrequency(double timeWindow,
+        private static void EstimateTimeStampCounterFrequency(double timeWindow,
           out double frequency, out double error)
         {
             long ticks = (long)(timeWindow * Stopwatch.Frequency);

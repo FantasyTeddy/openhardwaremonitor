@@ -32,7 +32,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         private const uint FAMILY_17H_M01H_THM_TCON_TEMP = 0x00059800;
         private const uint FAMILY_17H_M01H_THM_TCON_TEMP_RANGE_SEL = 0x80000;
-        private uint FAMILY_17H_M70H_CCD_TEMP(uint i) { return 0x00059954 + i * 4; }
+        private static uint FAMILY_17H_M70H_CCD_TEMP(uint i) { return 0x00059954 + i * 4; }
         private const uint FAMILY_17H_M70H_CCD_TEMP_VALID = 0x800;
         private readonly uint maxCcdCount;
 
@@ -207,7 +207,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             return r.ToString();
         }
 
-        private double GetTimeStampCounterMultiplier()
+        private static double GetTimeStampCounterMultiplier()
         {
             Ring0.Rdmsr(MSR_P_STATE_0, out uint eax, out _);
             uint cpuDfsId = (eax >> 8) & 0x3f;
@@ -215,7 +215,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             return 2.0 * cpuFid / cpuDfsId;
         }
 
-        private bool ReadSmnRegister(uint address, out uint value)
+        private static bool ReadSmnRegister(uint address, out uint value)
         {
             if (!Ring0.WritePciConfig(0, 0x60, address))
             {
@@ -351,7 +351,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 }
             }
 
-            private double? GetMultiplier()
+            private static double? GetMultiplier()
             {
                 if (Ring0.Rdmsr(MSR_FAMILY_17H_P_STATE, out uint eax, out _))
                 {

@@ -325,7 +325,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             }
         }
 
-        private string ReadFirstLine(Stream stream)
+        private static string ReadFirstLine(Stream stream)
         {
             StringBuilder sb = new StringBuilder();
             try
@@ -342,7 +342,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             return sb.ToString();
         }
 
-        private bool ReadSmuRegister(uint address, out uint value)
+        private static bool ReadSmuRegister(uint address, out uint value)
         {
             if (Ring0.WaitPciBusMutex(10))
             {

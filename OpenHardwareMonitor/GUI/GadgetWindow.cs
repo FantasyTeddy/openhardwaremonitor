@@ -73,13 +73,13 @@ namespace OpenHardwareMonitor.GUI
             }
         }
 
-        private void MoveToBottom(IntPtr handle)
+        private static void MoveToBottom(IntPtr handle)
         {
             NativeMethods.SetWindowPos(handle, HWND_BOTTOM, 0, 0, 0, 0,
               SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOSENDCHANGING);
         }
 
-        private void MoveToTopMost(IntPtr handle)
+        private static void MoveToTopMost(IntPtr handle)
         {
             NativeMethods.SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0,
               SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOSENDCHANGING);

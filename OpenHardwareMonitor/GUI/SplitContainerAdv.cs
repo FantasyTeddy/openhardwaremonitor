@@ -144,7 +144,7 @@ namespace OpenHardwareMonitor.GUI
             }
         }
 
-        public new bool IsSplitterFixed => false;
+        public new static bool IsSplitterFixed => false;
 
     }
 }

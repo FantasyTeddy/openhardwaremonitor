@@ -124,7 +124,7 @@ namespace OpenHardwareMonitor.Utilities
                 bw.Write(ImageOffset);
             }
 
-            public uint Size => 16;
+            public static uint Size => 16;
         }
 
         private struct ICONDIR
@@ -152,7 +152,7 @@ namespace OpenHardwareMonitor.Utilities
             }
 
             public uint Size => (uint)(6 + Entries.Length *
-                    (Entries.Length > 0 ? Entries[0].Size : 0));
+                    (Entries.Length > 0 ? ICONDIRENTRY.Size : 0));
         }
 
         private static readonly BinaryWriter binaryWriter =

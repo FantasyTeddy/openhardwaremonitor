@@ -320,7 +320,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
             return isValid ? result.Thresholds : new DriveThresholdValue[0];
         }
 
-        private string GetString(byte[] bytes)
+        private static string GetString(byte[] bytes)
         {
             char[] chars = new char[bytes.Length];
             for (int i = 0; i < bytes.Length; i += 2)

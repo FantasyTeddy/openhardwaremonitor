@@ -453,7 +453,7 @@ namespace OpenHardwareMonitor.GUI
             HideShowCommand?.Invoke(this, null);
         }
 
-        private Font CreateFont(float size, FontStyle style)
+        private static Font CreateFont(float size, FontStyle style)
         {
             try
             {
@@ -510,7 +510,7 @@ namespace OpenHardwareMonitor.GUI
             Size = new Size(width, y);
         }
 
-        private void DrawImageWidthBorder(Graphics g, int width, int height,
+        private static void DrawImageWidthBorder(Graphics g, int width, int height,
           Image back, int t, int b, int l, int r)
         {
             GraphicsUnit u = GraphicsUnit.Pixel;

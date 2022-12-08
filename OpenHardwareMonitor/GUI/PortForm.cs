@@ -33,7 +33,7 @@ namespace OpenHardwareMonitor.GUI
 
         }
 
-        private string getLocalIP()
+        private static string getLocalIP()
         {
             IPHostEntry host;
             string localIP = "?";

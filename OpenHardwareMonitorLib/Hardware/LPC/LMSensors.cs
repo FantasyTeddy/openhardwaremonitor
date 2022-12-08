@@ -184,7 +184,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             public void SetControl(int index, byte? value) { }
 
-            private string ReadFirstLine(Stream stream)
+            private static string ReadFirstLine(Stream stream)
             {
                 StringBuilder sb = new StringBuilder();
                 try

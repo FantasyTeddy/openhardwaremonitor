@@ -66,7 +66,7 @@ namespace OpenHardwareMonitor.GUI
         }
 
         // the desktop worker window (if available) can hide the reference window
-        private IntPtr GetDesktopWorkerWindow()
+        private static IntPtr GetDesktopWorkerWindow()
         {
             IntPtr shellWindow = NativeMethods.GetShellWindow();
             if (shellWindow == IntPtr.Zero)

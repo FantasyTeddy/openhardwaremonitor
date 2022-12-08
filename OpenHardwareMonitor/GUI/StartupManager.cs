@@ -27,7 +27,7 @@ namespace OpenHardwareMonitor.GUI
         private const string REGISTRY_RUN =
           @"Software\Microsoft\Windows\CurrentVersion\Run";
 
-        private bool IsAdministrator()
+        private static bool IsAdministrator()
         {
             try
             {
@@ -189,13 +189,13 @@ namespace OpenHardwareMonitor.GUI
             catch (IOException) { }
         }
 
-        private void CreateRegistryRun()
+        private static void CreateRegistryRun()
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(REGISTRY_RUN);
             key.SetValue("OpenHardwareMonitor", Application.ExecutablePath);
         }
 
-        private void DeleteRegistryRun()
+        private static void DeleteRegistryRun()
         {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(REGISTRY_RUN);
             key.DeleteValue("OpenHardwareMonitor");

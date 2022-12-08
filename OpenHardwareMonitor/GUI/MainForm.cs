@@ -506,7 +506,7 @@ namespace OpenHardwareMonitor.GUI
             };
         }
 
-        private void InsertSorted(Collection<Node> nodes, HardwareNode node)
+        private static void InsertSorted(Collection<Node> nodes, HardwareNode node)
         {
             int i = 0;
             while (i < nodes.Count && nodes[i] is HardwareNode &&
@@ -984,7 +984,7 @@ namespace OpenHardwareMonitor.GUI
             SysTrayHideShow();
         }
 
-        private void ShowParameterForm(ISensor sensor)
+        private static void ShowParameterForm(ISensor sensor)
         {
             ParameterForm form = new ParameterForm
             {
