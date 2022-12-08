@@ -50,9 +50,9 @@ namespace OpenHardwareMonitor.GUI
                 if (this.value != value)
                 {
                     this.value = value;
-                    if (this.name != null)
+                    if (name != null)
                         settings.SetValue(name, value);
-                    this.menuItem.Checked = value;
+                    menuItem.Checked = value;
                     changed?.Invoke(this, null);
                 }
             }

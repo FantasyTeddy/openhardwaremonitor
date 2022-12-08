@@ -42,9 +42,9 @@ namespace OpenHardwareMonitor.GUI
         public Node(string text)
         {
             this.text = text;
-            this.nodes = new NodeCollection(this);
-            this.visible = true;
-            this.expanded = true;
+            nodes = new NodeCollection(this);
+            visible = true;
+            expanded = true;
         }
 
         public TreeModel Model { get; set; }

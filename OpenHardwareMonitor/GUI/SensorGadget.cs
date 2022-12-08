@@ -69,20 +69,20 @@ namespace OpenHardwareMonitor.GUI
             computer.HardwareAdded += (_, e) => HardwareAdded(e.Hardware);
             computer.HardwareRemoved += (_, e) => HardwareRemoved(e.Hardware);
 
-            this.darkWhite = new SolidBrush(Color.FromArgb(0xF0, 0xF0, 0xF0));
+            darkWhite = new SolidBrush(Color.FromArgb(0xF0, 0xF0, 0xF0));
 
-            this.stringFormat = new StringFormat
+            stringFormat = new StringFormat
             {
                 FormatFlags = StringFormatFlags.NoWrap
             };
 
-            this.trimStringFormat = new StringFormat
+            trimStringFormat = new StringFormat
             {
                 Trimming = StringTrimming.EllipsisCharacter,
                 FormatFlags = StringFormatFlags.NoWrap
             };
 
-            this.alignRightStringFormat = new StringFormat
+            alignRightStringFormat = new StringFormat
             {
                 Alignment = StringAlignment.Far,
                 FormatFlags = StringFormatFlags.NoWrap

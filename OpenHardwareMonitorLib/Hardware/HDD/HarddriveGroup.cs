@@ -35,7 +35,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
                   AbstractHarddrive.CreateInstance(smart, drive, settings);
                 if (instance != null)
                 {
-                    this.hardware.Add(instance);
+                    hardware.Add(instance);
                 }
             }
         }

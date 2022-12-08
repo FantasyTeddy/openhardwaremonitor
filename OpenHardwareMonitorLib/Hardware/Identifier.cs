@@ -39,7 +39,7 @@ namespace OpenHardwareMonitor.Hardware
                 s.Append(Separator);
                 s.Append(identifiers[i]);
             }
-            this.identifier = s.ToString();
+            identifier = s.ToString();
         }
 
         public Identifier(Identifier identifier, params string[] extensions)
@@ -86,7 +86,7 @@ namespace OpenHardwareMonitor.Hardware
             }
             else
             {
-                return string.Compare(this.identifier, other.identifier,
+                return string.Compare(identifier, other.identifier,
                   StringComparison.Ordinal);
             }
         }

@@ -86,11 +86,11 @@ namespace OpenHardwareMonitor.GUI
                 Environment.Exit(0);
             }
 
-            this.settings = new PersistentSettings();
-            this.settings.Load(Path.ChangeExtension(
+            settings = new PersistentSettings();
+            settings.Load(Path.ChangeExtension(
               Application.ExecutablePath, ".config"));
 
-            this.unitManager = new UnitManager(settings);
+            unitManager = new UnitManager(settings);
 
             // make sure the buffers used for double buffering are not disposed
             // after each draw call
@@ -98,7 +98,7 @@ namespace OpenHardwareMonitor.GUI
               Screen.PrimaryScreen.Bounds.Size;
 
             // set the DockStyle here, to avoid conflicts with the MainMenu
-            this.splitContainer.Dock = DockStyle.Fill;
+            splitContainer.Dock = DockStyle.Fill;
 
             Font = SystemFonts.MessageBoxFont;
             treeView.Font = SystemFonts.MessageBoxFont;
@@ -116,10 +116,10 @@ namespace OpenHardwareMonitor.GUI
             nodeTextBoxMax.DrawText += nodeTextBoxText_DrawText;
             nodeTextBoxText.EditorShowing += nodeTextBoxText_EditorShowing;
 
-            this.sensor.Width = DpiHelper.LogicalToDeviceUnits(250);
-            this.value.Width = DpiHelper.LogicalToDeviceUnits(100);
-            this.min.Width = DpiHelper.LogicalToDeviceUnits(100);
-            this.max.Width = DpiHelper.LogicalToDeviceUnits(100);
+            sensor.Width = DpiHelper.LogicalToDeviceUnits(250);
+            value.Width = DpiHelper.LogicalToDeviceUnits(100);
+            min.Width = DpiHelper.LogicalToDeviceUnits(100);
+            max.Width = DpiHelper.LogicalToDeviceUnits(100);
 
             foreach (TreeColumn column in treeView.Columns)
             {
@@ -138,7 +138,7 @@ namespace OpenHardwareMonitor.GUI
             treeModel.Nodes.Add(root);
             treeView.Model = treeModel;
 
-            this.computer = new Computer(settings);
+            computer = new Computer(settings);
 
             systemTray = new SystemTray(computer, settings, unitManager);
             systemTray.HideShowCommand += hideShowClick;
@@ -305,7 +305,7 @@ namespace OpenHardwareMonitor.GUI
               unitManager.TemperatureUnit == TemperatureUnit.Celsius;
             fahrenheitMenuItem.Checked = !celsiusMenuItem.Checked;
 
-            Server = new HttpServer(root, this.settings.GetValue("listenerPort", 8085));
+            Server = new HttpServer(root, settings.GetValue("listenerPort", 8085));
             if (Server.PlatformNotSupported)
             {
                 webMenuItemSeparator.Visible = false;
@@ -688,7 +688,7 @@ namespace OpenHardwareMonitor.GUI
 
             if (Server != null)
             {
-                this.settings.SetValue("listenerPort", Server.ListenerPort);
+                settings.SetValue("listenerPort", Server.ListenerPort);
             }
 
             string fileName = Path.ChangeExtension(

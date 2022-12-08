@@ -58,7 +58,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
           int index, ISettings settings)
           : base(smart, name, firmwareRevision, index, smartAttributes, settings)
         {
-            this.writeAmplification = new Sensor("Write Amplification", 1,
+            writeAmplification = new Sensor("Write Amplification", 1,
               SensorType.Factor, this, settings);
         }
 

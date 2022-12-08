@@ -222,7 +222,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 vBatMonitorControlRegister = 0x005D;
             }
 
-            this.isNuvotonVendor = IsNuvotonVendor();
+            isNuvotonVendor = IsNuvotonVendor();
 
             if (!isNuvotonVendor)
                 return;

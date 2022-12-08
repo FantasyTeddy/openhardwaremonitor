@@ -36,7 +36,7 @@ namespace OpenHardwareMonitor.Hardware
 
         public Computer()
         {
-            this.settings = new Settings();
+            settings = new Settings();
         }
 
         public Computer(ISettings settings)
@@ -93,7 +93,7 @@ namespace OpenHardwareMonitor.Hardware
             if (open)
                 return;
 
-            this.smbios = new SMBIOS();
+            smbios = new SMBIOS();
 
             Ring0.Open();
             Opcode.Open();
@@ -432,7 +432,7 @@ namespace OpenHardwareMonitor.Hardware
             Opcode.Close();
             Ring0.Close();
 
-            this.smbios = null;
+            smbios = null;
 
             open = false;
         }

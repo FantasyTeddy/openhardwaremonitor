@@ -270,8 +270,8 @@ namespace OpenHardwareMonitor.GUI
 
             if (Environment.OSVersion.Version.Major > 5)
             {
-                this.graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
-                this.graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
             }
         }
 

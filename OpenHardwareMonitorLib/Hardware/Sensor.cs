@@ -60,7 +60,7 @@ namespace OpenHardwareMonitor.Hardware
             this.parameters = new ReadOnlyCollection<IParameter>(parameters);
 
             this.settings = settings;
-            this.defaultName = name;
+            defaultName = name;
             this.name = settings.GetValue(
               new Identifier(Identifier, "name").ToString(), name);
 
@@ -193,7 +193,7 @@ namespace OpenHardwareMonitor.Hardware
                     }
                 }
 
-                this.currentValue = value;
+                currentValue = value;
                 if (Min > value || !Min.HasValue)
                     Min = value;
                 if (Max < value || !Max.HasValue)

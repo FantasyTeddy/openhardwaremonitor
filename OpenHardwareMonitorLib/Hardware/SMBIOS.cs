@@ -49,8 +49,8 @@ namespace OpenHardwareMonitor.Hardware
         {
             if (OperatingSystem.IsUnix)
             {
-                this.raw = null;
-                this.table = null;
+                raw = null;
+                table = null;
 
                 string boardVendor = ReadSysFS("/sys/class/dmi/id/board_vendor");
                 string boardName = ReadSysFS("/sys/class/dmi/id/board_name");

@@ -20,7 +20,7 @@ namespace OpenHardwareMonitor.GUI
         {
             InitializeComponent();
             Font = SystemFonts.MessageBoxFont;
-            this.label3.Text = "Version " +
+            label3.Text = "Version " +
               System.Windows.Forms.Application.ProductVersion;
 
             projectLinkLabel.Links.Remove(projectLinkLabel.Links[0]);

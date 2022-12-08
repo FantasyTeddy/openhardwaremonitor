@@ -21,8 +21,8 @@ namespace OpenHardwareMonitor.GUI
 
         public Gadget()
         {
-            this.window = new GadgetWindow();
-            this.window.Paint += delegate (object sender, PaintEventArgs e)
+            window = new GadgetWindow();
+            window.Paint += delegate (object sender, PaintEventArgs e)
             {
                 OnPaint(e);
             };
@@ -57,7 +57,7 @@ namespace OpenHardwareMonitor.GUI
         public virtual Size Size
         {
             get => window.Size;
-            set => this.window.Size = value;
+            set => window.Size = value;
         }
 
         public event EventHandler SizeChanged

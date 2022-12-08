@@ -70,12 +70,12 @@ RequireSmart(0xCA), RequireSmart(0xCE)]
           int index, ISettings settings)
           : base(smart, name, firmwareRevision, index, smartAttributes, settings)
         {
-            this.temperature = new Sensor("Temperature", 0, false,
+            temperature = new Sensor("Temperature", 0, false,
               SensorType.Temperature, this,
               new[] { new ParameterDescription("Offset [°C]",
           "Temperature offset of the thermal sensor.\n" +
           "Temperature = Value + Offset.", 0) }, settings);
-            this.writeAmplification = new Sensor("Write Amplification", 0,
+            writeAmplification = new Sensor("Write Amplification", 0,
               SensorType.Factor, this, settings);
         }
 

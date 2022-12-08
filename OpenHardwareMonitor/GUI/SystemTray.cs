@@ -34,7 +34,7 @@ namespace OpenHardwareMonitor.GUI
             computer.HardwareAdded += (_, e) => HardwareAdded(e.Hardware);
             computer.HardwareRemoved += (_, e) => HardwareRemoved(e.Hardware);
 
-            this.mainIcon = new NotifyIconAdv();
+            mainIcon = new NotifyIconAdv();
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem hideShowItem = new MenuItem("Hide/Show");
@@ -50,13 +50,13 @@ namespace OpenHardwareMonitor.GUI
                 SendExitCommand();
             };
             contextMenu.MenuItems.Add(exitItem);
-            this.mainIcon.ContextMenu = contextMenu;
-            this.mainIcon.DoubleClick += delegate (object obj, EventArgs args)
+            mainIcon.ContextMenu = contextMenu;
+            mainIcon.DoubleClick += delegate (object obj, EventArgs args)
             {
                 SendHideShowCommand();
             };
-            this.mainIcon.Icon = EmbeddedResources.GetIcon("smallicon.ico");
-            this.mainIcon.Text = "Open Hardware Monitor";
+            mainIcon.Icon = EmbeddedResources.GetIcon("smallicon.ico");
+            mainIcon.Text = "Open Hardware Monitor";
         }
 
         private void HardwareRemoved(IHardware hardware)

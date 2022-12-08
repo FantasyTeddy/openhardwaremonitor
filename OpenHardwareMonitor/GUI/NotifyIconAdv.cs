@@ -797,7 +797,7 @@ namespace OpenHardwareMonitor.GUI
 
                 internal NotifyIconNativeWindow(NotifyIconWindowsImplementation component)
                 {
-                    this.reference = component;
+                    reference = component;
                 }
 
                 ~NotifyIconNativeWindow()

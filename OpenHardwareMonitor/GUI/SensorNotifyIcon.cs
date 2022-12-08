@@ -40,7 +40,7 @@ namespace OpenHardwareMonitor.GUI
         {
             this.unitManager = unitManager;
             Sensor = sensor;
-            this.notifyIcon = new NotifyIconAdv();
+            notifyIcon = new NotifyIconAdv();
 
             Color defaultColor = Color.Black;
             if (sensor.SensorType == SensorType.Load ||
@@ -52,7 +52,7 @@ namespace OpenHardwareMonitor.GUI
             Color = settings.GetValue(new Identifier(sensor.Identifier,
               "traycolor").ToString(), defaultColor);
 
-            this.pen = new Pen(Color.FromArgb(96, Color.Black));
+            pen = new Pen(Color.FromArgb(96, Color.Black));
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem hideShowItem = new MenuItem("Hide/Show");
@@ -90,8 +90,8 @@ namespace OpenHardwareMonitor.GUI
                 sensorSystemTray.SendExitCommand();
             };
             contextMenu.MenuItems.Add(exitItem);
-            this.notifyIcon.ContextMenu = contextMenu;
-            this.notifyIcon.DoubleClick += delegate (object obj, EventArgs args)
+            notifyIcon.ContextMenu = contextMenu;
+            notifyIcon.DoubleClick += delegate (object obj, EventArgs args)
             {
                 sensorSystemTray.SendHideShowCommand();
             };
@@ -122,18 +122,18 @@ namespace OpenHardwareMonitor.GUI
                 default: baseSize = 12; break;
             }
 
-            this.font = new Font(family,
+            font = new Font(family,
               baseSize * width / 16.0f, GraphicsUnit.Pixel);
-            this.smallFont = new Font(family,
+            smallFont = new Font(family,
               0.75f * baseSize * width / 16.0f, GraphicsUnit.Pixel);
 
-            this.bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            this.graphics = Graphics.FromImage(this.bitmap);
+            bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            graphics = Graphics.FromImage(bitmap);
 
             if (Environment.OSVersion.Version.Major > 5)
             {
-                this.graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-                this.graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
             }
         }
 
@@ -144,16 +144,16 @@ namespace OpenHardwareMonitor.GUI
             get => color;
             set
             {
-                this.color = value;
-                this.darkColor = Color.FromArgb(255,
-                  this.color.R / 3,
-                  this.color.G / 3,
-                  this.color.B / 3);
+                color = value;
+                darkColor = Color.FromArgb(255,
+                  color.R / 3,
+                  color.G / 3,
+                  color.B / 3);
                 Brush brush = this.brush;
-                this.brush = new SolidBrush(this.color);
+                this.brush = new SolidBrush(color);
                 brush?.Dispose();
                 Brush darkBrush = this.darkBrush;
-                this.darkBrush = new SolidBrush(this.darkColor);
+                this.darkBrush = new SolidBrush(darkColor);
                 darkBrush?.Dispose();
             }
         }

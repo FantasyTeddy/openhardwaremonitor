@@ -26,7 +26,7 @@ namespace OpenHardwareMonitor.Hardware
             this.settings = settings;
             Identifier = identifier;
             this.name = name;
-            this.customName = settings.GetValue(
+            customName = settings.GetValue(
               new Identifier(Identifier, "name").ToString(), name);
         }
 

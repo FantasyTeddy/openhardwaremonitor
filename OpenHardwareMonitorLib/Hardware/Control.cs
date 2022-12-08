@@ -32,9 +32,9 @@ namespace OpenHardwareMonitor.Hardware
             if (!float.TryParse(settings.GetValue(
                 new Identifier(Identifier, "value").ToString(), "0"),
               NumberStyles.Float, CultureInfo.InvariantCulture,
-              out this.softwareValue))
+              out softwareValue))
             {
-                this.softwareValue = 0;
+                softwareValue = 0;
             }
             if (!int.TryParse(settings.GetValue(
                 new Identifier(Identifier, "mode").ToString(),
@@ -61,7 +61,7 @@ namespace OpenHardwareMonitor.Hardware
                 {
                     mode = value;
                     ControlModeChanged?.Invoke(this);
-                    this.settings.SetValue(new Identifier(Identifier, "mode").ToString(),
+                    settings.SetValue(new Identifier(Identifier, "mode").ToString(),
                       ((int)mode).ToString(CultureInfo.InvariantCulture));
                 }
             }
@@ -76,7 +76,7 @@ namespace OpenHardwareMonitor.Hardware
                 {
                     softwareValue = value;
                     SoftwareControlValueChanged?.Invoke(this);
-                    this.settings.SetValue(new Identifier(Identifier,
+                    settings.SetValue(new Identifier(Identifier,
                       "value").ToString(),
                       value.ToString(CultureInfo.InvariantCulture));
                 }

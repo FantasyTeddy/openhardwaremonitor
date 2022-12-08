@@ -145,10 +145,10 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 ActivateSensor(busClock);
             }
 
-            this.cores = new Core[coreCount];
-            for (int i = 0; i < this.cores.Length; i++)
+            cores = new Core[coreCount];
+            for (int i = 0; i < cores.Length; i++)
             {
-                this.cores[i] = new Core(i, cpuid[i], this, settings);
+                cores[i] = new Core(i, cpuid[i], this, settings);
             }
         }
 
@@ -331,12 +331,12 @@ namespace OpenHardwareMonitor.Hardware.CPU
             public Core(int index, CPUID[] threads, AMD17CPU cpu, ISettings settings)
             {
                 this.cpu = cpu;
-                this.affinity = threads[0].Affinity;
+                affinity = threads[0].Affinity;
 
                 string coreString = cpu.CoreString(index);
-                this.powerSensor =
+                powerSensor =
                   new Sensor(coreString, index + 2, SensorType.Power, cpu, settings);
-                this.clockSensor =
+                clockSensor =
                   new Sensor(coreString, index + 1, SensorType.Clock, cpu, settings);
 
                 if (cpu.energyUnitMultiplier != 0)

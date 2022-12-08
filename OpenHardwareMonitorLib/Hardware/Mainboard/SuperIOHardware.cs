@@ -1630,12 +1630,12 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
             public Voltage(string name, int index,
               float ri, float rf, float vf, bool hidden)
             {
-                this.Name = name;
-                this.Index = index;
-                this.Ri = ri;
-                this.Rf = rf;
-                this.Vf = vf;
-                this.Hidden = hidden;
+                Name = name;
+                Index = index;
+                Ri = ri;
+                Rf = rf;
+                Vf = vf;
+                Hidden = hidden;
             }
         }
 
@@ -1646,8 +1646,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
             public Temperature(string name, int index)
             {
-                this.Name = name;
-                this.Index = index;
+                Name = name;
+                Index = index;
             }
         }
 
@@ -1658,8 +1658,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
             public Fan(string name, int index)
             {
-                this.Name = name;
-                this.Index = index;
+                Name = name;
+                Index = index;
             }
         }
 
@@ -1670,8 +1670,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
             public Ctrl(string name, int index)
             {
-                this.Name = name;
-                this.Index = index;
+                Name = name;
+                Index = index;
             }
         }
     }

@@ -52,14 +52,14 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
             this.cpuid = cpuid;
 
-            this.vendor = cpuid[0][0].Vendor;
+            vendor = cpuid[0][0].Vendor;
 
-            this.family = cpuid[0][0].Family;
-            this.model = cpuid[0][0].Model;
-            this.stepping = cpuid[0][0].Stepping;
+            family = cpuid[0][0].Family;
+            model = cpuid[0][0].Model;
+            stepping = cpuid[0][0].Stepping;
 
             this.processorIndex = processorIndex;
-            this.coreCount = cpuid.Length;
+            coreCount = cpuid.Length;
 
             // check if processor has MSRs
             if (cpuid[0][0].Data.GetLength(0) > 1

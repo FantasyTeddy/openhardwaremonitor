@@ -62,7 +62,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
                 smart.EnableSmart(handle, index);
 
             this.index = index;
-            this.count = 0;
+            count = 0;
 
             this.smartAttributes = new List<SmartAttribute>(smartAttributes);
 

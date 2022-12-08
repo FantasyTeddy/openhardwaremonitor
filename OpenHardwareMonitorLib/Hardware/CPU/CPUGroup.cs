@@ -97,7 +97,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
 
             CPUID[][] processorThreads = GetProcessorThreads();
-            this.threads = new CPUID[processorThreads.Length][][];
+            threads = new CPUID[processorThreads.Length][][];
 
             int index = 0;
             foreach (CPUID[] threads in processorThreads)

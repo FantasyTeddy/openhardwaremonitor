@@ -171,8 +171,8 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
                 if (newBusClock > 0)
                 {
-                    this.busClock.Value = (float)newBusClock;
-                    ActivateSensor(this.busClock);
+                    busClock.Value = (float)newBusClock;
+                    ActivateSensor(busClock);
                 }
             }
         }

@@ -53,10 +53,10 @@ namespace OpenHardwareMonitor.GUI
                 if (this.value != value)
                 {
                     this.value = value;
-                    if (this.name != null)
+                    if (name != null)
                         settings.SetValue(name, value);
-                    for (int i = 0; i < this.menuItems.Length; i++)
-                        this.menuItems[i].Checked = i == value;
+                    for (int i = 0; i < menuItems.Length; i++)
+                        menuItems[i].Checked = i == value;
                     changed?.Invoke(this, null);
                 }
             }

@@ -41,36 +41,36 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                 {
                     if (manufacturer == Manufacturer.Unknown)
                     {
-                        this.name = smbios.Board.ProductName;
+                        name = smbios.Board.ProductName;
                     }
                     else
                     {
-                        this.name = manufacturer + " " +
+                        name = manufacturer + " " +
                           smbios.Board.ProductName;
                     }
                 }
                 else
                 {
-                    this.name = manufacturer.ToString();
+                    name = manufacturer.ToString();
                 }
             }
             else
             {
-                this.name = Manufacturer.Unknown.ToString();
+                name = Manufacturer.Unknown.ToString();
             }
 
-            this.customName = settings.GetValue(
+            customName = settings.GetValue(
               new Identifier(Identifier, "name").ToString(), name);
 
             ISuperIO[] superIO;
             if (OperatingSystem.IsUnix)
             {
-                this.lmSensors = new LMSensors();
+                lmSensors = new LMSensors();
                 superIO = lmSensors.SuperIO;
             }
             else
             {
-                this.lpcio = new LPCIO();
+                lpcio = new LPCIO();
                 superIO = lpcio.SuperIO;
             }
 

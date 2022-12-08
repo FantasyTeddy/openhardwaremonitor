@@ -34,17 +34,17 @@ namespace OpenHardwareMonitor.Utilities
 
             public BITMAPINFOHEADER(int width, int height, int bitCount)
             {
-                this.Size = 40;
-                this.Width = width;
-                this.Height = height;
-                this.Planes = 1;
-                this.BitCount = (ushort)bitCount;
-                this.Compression = 0;
-                this.SizeImage = 0;
-                this.XPelsPerMeter = 0;
-                this.YPelsPerMeter = 0;
-                this.ClrUsed = 0;
-                this.ClrImportant = 0;
+                Size = 40;
+                Width = width;
+                Height = height;
+                Planes = 1;
+                BitCount = (ushort)bitCount;
+                Compression = 0;
+                SizeImage = 0;
+                XPelsPerMeter = 0;
+                YPelsPerMeter = 0;
+                ClrUsed = 0;
+                ClrImportant = 0;
             }
 
             public void Write(BinaryWriter bw)
@@ -71,9 +71,9 @@ namespace OpenHardwareMonitor.Utilities
 
             public ICONIMAGE(int width, int height, byte[] colors)
             {
-                this.Header = new BITMAPINFOHEADER(width, height << 1,
+                Header = new BITMAPINFOHEADER(width, height << 1,
                   8 * colors.Length / (width * height));
-                this.Colors = colors;
+                Colors = colors;
                 MaskSize = (width * height) >> 3;
             }
 
@@ -101,15 +101,15 @@ namespace OpenHardwareMonitor.Utilities
 
             public ICONDIRENTRY(ICONIMAGE image, int imageOffset)
             {
-                this.Width = (byte)image.Header.Width;
-                this.Height = (byte)(image.Header.Height >> 1);
-                this.ColorCount = 0;
-                this.Reserved = 0;
-                this.Planes = image.Header.Planes;
-                this.BitCount = image.Header.BitCount;
-                this.BytesInRes = (uint)(image.Header.Size +
+                Width = (byte)image.Header.Width;
+                Height = (byte)(image.Header.Height >> 1);
+                ColorCount = 0;
+                Reserved = 0;
+                Planes = image.Header.Planes;
+                BitCount = image.Header.BitCount;
+                BytesInRes = (uint)(image.Header.Size +
                   image.Colors.Length + image.MaskSize + image.MaskSize);
-                this.ImageOffset = (uint)imageOffset;
+                ImageOffset = (uint)imageOffset;
             }
 
             public void Write(BinaryWriter bw)
@@ -136,10 +136,10 @@ namespace OpenHardwareMonitor.Utilities
 
             public ICONDIR(ICONDIRENTRY[] entries)
             {
-                this.Reserved = 0;
-                this.Type = 1;
-                this.Count = (ushort)entries.Length;
-                this.Entries = entries;
+                Reserved = 0;
+                Type = 1;
+                Count = (ushort)entries.Length;
+                Entries = entries;
             }
 
             public void Write(BinaryWriter bw)

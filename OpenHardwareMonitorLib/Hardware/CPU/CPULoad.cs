@@ -77,16 +77,16 @@ namespace OpenHardwareMonitor.Hardware.CPU
         public CPULoad(CPUID[][] cpuid)
         {
             this.cpuid = cpuid;
-            this.coreLoads = new float[cpuid.Length];
-            this.totalLoad = 0;
+            coreLoads = new float[cpuid.Length];
+            totalLoad = 0;
             try
             {
                 GetTimes(out idleTimes, out totalTimes);
             }
             catch (Exception)
             {
-                this.idleTimes = null;
-                this.totalTimes = null;
+                idleTimes = null;
+                totalTimes = null;
             }
             if (idleTimes != null)
                 IsAvailable = true;
@@ -106,7 +106,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         public void Update()
         {
-            if (this.idleTimes == null)
+            if (idleTimes == null)
                 return;
 
 
@@ -115,7 +115,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
             for (int i = 0; i < Math.Min(newTotalTimes.Length, totalTimes.Length); i++)
             {
-                if (newTotalTimes[i] - this.totalTimes[i] < 100000)
+                if (newTotalTimes[i] - totalTimes[i] < 100000)
                     return;
             }
 
@@ -133,8 +133,8 @@ namespace OpenHardwareMonitor.Hardware.CPU
                     if (index < newIdleTimes.Length && index < totalTimes.Length)
                     {
                         float idle =
-                          (newIdleTimes[index] - this.idleTimes[index]) /
-                          (float)(newTotalTimes[index] - this.totalTimes[index]);
+                          (newIdleTimes[index] - idleTimes[index]) /
+                          (float)(newTotalTimes[index] - totalTimes[index]);
                         value += idle;
                         total += idle;
                         count++;
@@ -153,10 +153,10 @@ namespace OpenHardwareMonitor.Hardware.CPU
             {
                 total = 0;
             }
-            this.totalLoad = total * 100;
+            totalLoad = total * 100;
 
-            this.totalTimes = newTotalTimes;
-            this.idleTimes = newIdleTimes;
+            totalTimes = newTotalTimes;
+            idleTimes = newIdleTimes;
         }
 
         protected static class NativeMethods

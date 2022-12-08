@@ -41,7 +41,7 @@ namespace OpenHardwareMonitor.GUI
             hardware.SensorAdded += (_, e) => SensorAdded(e.Sensor);
             hardware.SensorRemoved += (_, e) => SensorRemoved(e.Sensor);
 
-            this.expandedIdentifier = new Identifier(hardware.Identifier, "expanded");
+            expandedIdentifier = new Identifier(hardware.Identifier, "expanded");
             base.IsExpanded =
               settings.GetValue(expandedIdentifier.ToString(), base.IsExpanded);
         }

@@ -65,47 +65,47 @@ namespace OpenHardwareMonitor.Hardware.ATI
                 overdriveVersion = -1;
             }
 
-            this.temperatureCore =
+            temperatureCore =
               new Sensor("GPU Core", 0, SensorType.Temperature, this, settings);
-            this.temperatureMemory =
+            temperatureMemory =
               new Sensor("GPU Memory", 1, SensorType.Temperature, this, settings);
-            this.temperatureVrmCore =
+            temperatureVrmCore =
               new Sensor("GPU VRM Core", 2, SensorType.Temperature, this, settings);
-            this.temperatureVrmMemory =
+            temperatureVrmMemory =
               new Sensor("GPU VRM Memory", 3, SensorType.Temperature, this, settings);
-            this.temperatureVrmMemory0 =
+            temperatureVrmMemory0 =
               new Sensor("GPU VRM Memory #1", 4, SensorType.Temperature, this, settings);
-            this.temperatureVrmMemory1 =
+            temperatureVrmMemory1 =
               new Sensor("GPU VRM Memory #2", 5, SensorType.Temperature, this, settings);
-            this.temperatureVrmSoc =
+            temperatureVrmSoc =
               new Sensor("GPU VRM SOC", 6, SensorType.Temperature, this, settings);
-            this.temperatureLiquid =
+            temperatureLiquid =
               new Sensor("GPU Liquid", 7, SensorType.Temperature, this, settings);
-            this.temperaturePlx =
+            temperaturePlx =
               new Sensor("GPU PLX", 8, SensorType.Temperature, this, settings);
-            this.temperatureHotSpot =
+            temperatureHotSpot =
               new Sensor("GPU Hot Spot", 9, SensorType.Temperature, this, settings);
 
-            this.powerTotal = new Sensor("GPU Total", 0, SensorType.Power, this, settings);
-            this.powerCore = new Sensor("GPU Core", 1, SensorType.Power, this, settings);
-            this.powerPpt = new Sensor("GPU PPT", 2, SensorType.Power, this, settings);
-            this.powerSocket = new Sensor("GPU Socket", 3, SensorType.Power, this, settings);
-            this.powerSoc = new Sensor("GPU SOC", 4, SensorType.Power, this, settings);
+            powerTotal = new Sensor("GPU Total", 0, SensorType.Power, this, settings);
+            powerCore = new Sensor("GPU Core", 1, SensorType.Power, this, settings);
+            powerPpt = new Sensor("GPU PPT", 2, SensorType.Power, this, settings);
+            powerSocket = new Sensor("GPU Socket", 3, SensorType.Power, this, settings);
+            powerSoc = new Sensor("GPU SOC", 4, SensorType.Power, this, settings);
 
-            this.fan = new Sensor("GPU Fan", 0, SensorType.Fan, this, settings);
+            fan = new Sensor("GPU Fan", 0, SensorType.Fan, this, settings);
 
-            this.coreClock = new Sensor("GPU Core", 0, SensorType.Clock, this, settings);
-            this.memoryClock = new Sensor("GPU Memory", 1, SensorType.Clock, this, settings);
-            this.socClock = new Sensor("GPU SOC", 2, SensorType.Clock, this, settings);
+            coreClock = new Sensor("GPU Core", 0, SensorType.Clock, this, settings);
+            memoryClock = new Sensor("GPU Memory", 1, SensorType.Clock, this, settings);
+            socClock = new Sensor("GPU SOC", 2, SensorType.Clock, this, settings);
 
-            this.coreVoltage = new Sensor("GPU Core", 0, SensorType.Voltage, this, settings);
-            this.memoryVoltage = new Sensor("GPU Memory", 1, SensorType.Voltage, this, settings);
-            this.socVoltage = new Sensor("GPU SOC", 2, SensorType.Voltage, this, settings);
+            coreVoltage = new Sensor("GPU Core", 0, SensorType.Voltage, this, settings);
+            memoryVoltage = new Sensor("GPU Memory", 1, SensorType.Voltage, this, settings);
+            socVoltage = new Sensor("GPU SOC", 2, SensorType.Voltage, this, settings);
 
-            this.coreLoad = new Sensor("GPU Core", 0, SensorType.Load, this, settings);
-            this.memoryLoad = new Sensor("GPU Memory", 1, SensorType.Load, this, settings);
+            coreLoad = new Sensor("GPU Core", 0, SensorType.Load, this, settings);
+            memoryLoad = new Sensor("GPU Memory", 1, SensorType.Load, this, settings);
 
-            this.controlSensor = new Sensor("GPU Fan", 0, SensorType.Control, this, settings);
+            controlSensor = new Sensor("GPU Fan", 0, SensorType.Control, this, settings);
 
             ADLFanSpeedInfo afsi = new ADLFanSpeedInfo();
             if (ADL.ADL_Overdrive5_FanSpeedInfo_Get(adapterIndex, 0, ref afsi)
@@ -115,13 +115,13 @@ namespace OpenHardwareMonitor.Hardware.ATI
                 afsi.MinPercent = 0;
             }
 
-            this.fanControl = new Control(controlSensor, settings, afsi.MinPercent,
+            fanControl = new Control(controlSensor, settings, afsi.MinPercent,
               afsi.MaxPercent);
-            this.fanControl.ControlModeChanged += ControlModeChanged;
-            this.fanControl.SoftwareControlValueChanged +=
+            fanControl.ControlModeChanged += ControlModeChanged;
+            fanControl.SoftwareControlValueChanged +=
               SoftwareControlValueChanged;
             ControlModeChanged(fanControl);
-            this.controlSensor.Control = fanControl;
+            controlSensor.Control = fanControl;
             Update();
         }
 
@@ -676,11 +676,11 @@ namespace OpenHardwareMonitor.Hardware.ATI
 
         public override void Close()
         {
-            this.fanControl.ControlModeChanged -= ControlModeChanged;
-            this.fanControl.SoftwareControlValueChanged -=
+            fanControl.ControlModeChanged -= ControlModeChanged;
+            fanControl.SoftwareControlValueChanged -=
               SoftwareControlValueChanged;
 
-            if (this.fanControl.ControlMode != ControlMode.Undefined)
+            if (fanControl.ControlMode != ControlMode.Undefined)
                 SetDefaultFanSpeed();
             base.Close();
         }

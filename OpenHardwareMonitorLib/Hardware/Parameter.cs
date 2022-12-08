@@ -44,16 +44,16 @@ namespace OpenHardwareMonitor.Hardware
             Sensor = sensor;
             this.description = description;
             this.settings = settings;
-            this.isDefault = !settings.Contains(Identifier.ToString());
-            this.value = description.DefaultValue;
-            if (!this.isDefault)
+            isDefault = !settings.Contains(Identifier.ToString());
+            value = description.DefaultValue;
+            if (!isDefault)
             {
                 if (!float.TryParse(settings.GetValue(Identifier.ToString(), "0"),
                   NumberStyles.Float,
                   CultureInfo.InvariantCulture,
-                  out this.value))
+                  out value))
                 {
-                    this.value = description.DefaultValue;
+                    value = description.DefaultValue;
                 }
             }
         }
@@ -72,9 +72,9 @@ namespace OpenHardwareMonitor.Hardware
             get => value;
             set
             {
-                this.isDefault = false;
+                isDefault = false;
                 this.value = value;
-                this.settings.SetValue(Identifier.ToString(), value.ToString(
+                settings.SetValue(Identifier.ToString(), value.ToString(
                   CultureInfo.InvariantCulture));
             }
         }
@@ -86,11 +86,11 @@ namespace OpenHardwareMonitor.Hardware
             get => isDefault;
             set
             {
-                this.isDefault = value;
+                isDefault = value;
                 if (value)
                 {
                     this.value = description.DefaultValue;
-                    this.settings.Remove(Identifier.ToString());
+                    settings.Remove(Identifier.ToString());
                 }
             }
         }

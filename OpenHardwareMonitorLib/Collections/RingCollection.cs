@@ -31,9 +31,9 @@ namespace OpenHardwareMonitor.Collections
         {
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
-            this.array = new T[capacity];
-            this.head = 0;
-            this.tail = 0;
+            array = new T[capacity];
+            head = 0;
+            tail = 0;
             Count = 0;
         }
 
@@ -55,9 +55,9 @@ namespace OpenHardwareMonitor.Collections
                         Array.Copy(array, 0, newArray, array.Length - head, tail);
                     }
                 }
-                this.array = newArray;
-                this.head = 0;
-                this.tail = Count == value ? 0 : Count;
+                array = newArray;
+                head = 0;
+                tail = Count == value ? 0 : Count;
             }
         }
 
@@ -75,8 +75,8 @@ namespace OpenHardwareMonitor.Collections
                 Array.Clear(array, head, array.Length - head);
             }
 
-            this.head = 0;
-            this.tail = 0;
+            head = 0;
+            tail = 0;
             Count = 0;
         }
 
@@ -183,17 +183,17 @@ namespace OpenHardwareMonitor.Collections
             public Enumerator(RingCollection<T> collection)
             {
                 this.collection = collection;
-                this.index = -1;
+                index = -1;
             }
 
             public void Dispose()
             {
-                this.index = -2;
+                index = -2;
             }
 
             public void Reset()
             {
-                this.index = -1;
+                index = -1;
             }
 
             public T Current

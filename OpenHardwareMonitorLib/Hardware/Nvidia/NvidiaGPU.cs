@@ -716,13 +716,13 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
 
         public override void Close()
         {
-            if (this.fanControl != null)
+            if (fanControl != null)
             {
-                this.fanControl.ControlModeChanged -= ControlModeChanged;
-                this.fanControl.SoftwareControlValueChanged -=
+                fanControl.ControlModeChanged -= ControlModeChanged;
+                fanControl.SoftwareControlValueChanged -=
                   SoftwareControlValueChanged;
 
-                if (this.fanControl.ControlMode != ControlMode.Undefined)
+                if (fanControl.ControlMode != ControlMode.Undefined)
                     SetDefaultFanSpeed();
             }
             base.Close();

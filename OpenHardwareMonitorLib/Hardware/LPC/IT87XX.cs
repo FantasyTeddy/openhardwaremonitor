@@ -192,8 +192,8 @@ namespace OpenHardwareMonitor.Hardware.LPC
             this.address = address;
             Chip = chip;
             this.version = version;
-            this.addressReg = (ushort)(address + ADDRESS_REGISTER_OFFSET);
-            this.dataReg = (ushort)(address + DATA_REGISTER_OFFSET);
+            addressReg = (ushort)(address + ADDRESS_REGISTER_OFFSET);
+            dataReg = (ushort)(address + DATA_REGISTER_OFFSET);
             this.gpioAddress = gpioAddress;
 
             // Check vendor id

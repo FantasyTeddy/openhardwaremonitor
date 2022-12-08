@@ -41,9 +41,9 @@ namespace OpenHardwareMonitor.GUI
             this.settings = settings;
             this.unitManager = unitManager;
 
-            this.model = CreatePlotModel();
+            model = CreatePlotModel();
 
-            this.plot = new Plot
+            plot = new Plot
             {
                 Dock = DockStyle.Fill,
                 Model = model,
@@ -193,7 +193,7 @@ namespace OpenHardwareMonitor.GUI
         public void SetSensors(List<ISensor> sensors,
           IDictionary<ISensor, Color> colors)
         {
-            this.model.Series.Clear();
+            model.Series.Clear();
 
             HashSet<SensorType> types = new HashSet<SensorType>();
 
@@ -221,7 +221,7 @@ namespace OpenHardwareMonitor.GUI
                 series.StrokeThickness = 1;
                 series.YAxisKey = axes[sensor.SensorType].Key;
                 series.Title = sensor.Hardware.Name + " " + sensor.Name;
-                this.model.Series.Add(series);
+                model.Series.Add(series);
 
                 types.Add(sensor.SensorType);
             }
@@ -285,7 +285,7 @@ namespace OpenHardwareMonitor.GUI
 
         public void InvalidatePlot()
         {
-            this.now = DateTime.UtcNow;
+            now = DateTime.UtcNow;
 
             foreach (KeyValuePair<SensorType, LinearAxis> pair in axes)
             {
@@ -298,7 +298,7 @@ namespace OpenHardwareMonitor.GUI
                 }
             }
 
-            this.plot?.InvalidatePlot(true);
+            plot?.InvalidatePlot(true);
         }
 
     }

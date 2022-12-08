@@ -86,7 +86,7 @@ namespace OpenHardwareMonitor.GUI
             NodeAdded += (_, e) => TypeNode_NodeAdded(e.Node);
             NodeRemoved += (_, e) => TypeNode_NodeRemoved(e.Node);
 
-            this.expandedIdentifier = new Identifier(new Identifier(hardware.Identifier,
+            expandedIdentifier = new Identifier(new Identifier(hardware.Identifier,
               sensorType.ToString().ToLowerInvariant()), "expanded");
             base.IsExpanded =
               settings.GetValue(expandedIdentifier.ToString(), base.IsExpanded);
