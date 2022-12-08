@@ -16,11 +16,11 @@ using OpenHardwareMonitor.Hardware;
 
 [assembly: Instrumented("root/OpenHardwareMonitor")]
 
-[System.ComponentModel.RunInstaller(true)]
-public class InstanceInstaller : DefaultManagementProjectInstaller { }
-
 namespace OpenHardwareMonitor.WMI
 {
+    [System.ComponentModel.RunInstaller(true)]
+    public class InstanceInstaller : DefaultManagementProjectInstaller { }
+
     /// <summary>
     /// The WMI Provider.
     /// This class is not exposed to WMI itself.
