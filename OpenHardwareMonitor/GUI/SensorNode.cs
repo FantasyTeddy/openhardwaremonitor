@@ -98,8 +98,7 @@ namespace OpenHardwareMonitor.GUI {
                 else
                     settings.Remove(id);
 
-                if (PlotSelectionChanged != null)
-                    PlotSelectionChanged(this, null);
+                PlotSelectionChanged?.Invoke(this, null);
             }
         }
 
@@ -109,8 +108,7 @@ namespace OpenHardwareMonitor.GUI {
                 plot = value;
                 settings.SetValue(new Identifier(Sensor.Identifier, "plot").ToString(),
                   value);
-                if (PlotSelectionChanged != null)
-                    PlotSelectionChanged(this, null);
+                PlotSelectionChanged?.Invoke(this, null);
             }
         }
 

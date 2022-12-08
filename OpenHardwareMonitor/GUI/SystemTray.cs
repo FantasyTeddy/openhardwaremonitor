@@ -135,15 +135,13 @@ namespace OpenHardwareMonitor.GUI {
         public event EventHandler HideShowCommand;
 
         public void SendHideShowCommand() {
-            if (HideShowCommand != null)
-                HideShowCommand(this, null);
+            HideShowCommand?.Invoke(this, null);
         }
 
         public event EventHandler ExitCommand;
 
         public void SendExitCommand() {
-            if (ExitCommand != null)
-                ExitCommand(this, null);
+            ExitCommand?.Invoke(this, null);
         }
 
         private void UpdateMainIconVisibilty() {

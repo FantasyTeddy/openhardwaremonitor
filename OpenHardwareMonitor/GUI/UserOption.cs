@@ -46,8 +46,7 @@ namespace OpenHardwareMonitor.GUI {
                     if (this.name != null)
                         settings.SetValue(name, value);
                     this.menuItem.Checked = value;
-                    if (changed != null)
-                        changed(this, null);
+                    changed?.Invoke(this, null);
                 }
             }
         }
@@ -55,8 +54,7 @@ namespace OpenHardwareMonitor.GUI {
         public event EventHandler Changed {
             add {
                 changed += value;
-                if (changed != null)
-                    changed(this, null);
+                changed?.Invoke(this, null);
             }
             remove => changed -= value;
         }

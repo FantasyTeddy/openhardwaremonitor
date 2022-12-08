@@ -553,30 +553,24 @@ namespace OpenHardwareMonitor.GUI {
             private void ProcessMouseDown(ref Message message, MouseButtons button,
               bool doubleClick) {
                 if (doubleClick) {
-                    if (DoubleClick != null)
-                        DoubleClick(this, new MouseEventArgs(button, 2, 0, 0, 0));
+                    DoubleClick?.Invoke(this, new MouseEventArgs(button, 2, 0, 0, 0));
 
-                    if (MouseDoubleClick != null)
-                        MouseDoubleClick(this, new MouseEventArgs(button, 2, 0, 0, 0));
+                    MouseDoubleClick?.Invoke(this, new MouseEventArgs(button, 2, 0, 0, 0));
 
                     doubleClickDown = true;
                 }
 
-                if (MouseDown != null)
-                    MouseDown(this,
-                      new MouseEventArgs(button, doubleClick ? 2 : 1, 0, 0, 0));
+                MouseDown?.Invoke(this,
+  new MouseEventArgs(button, doubleClick ? 2 : 1, 0, 0, 0));
             }
 
             private void ProcessMouseUp(ref Message message, MouseButtons button) {
-                if (MouseUp != null)
-                    MouseUp(this, new MouseEventArgs(button, 0, 0, 0, 0));
+                MouseUp?.Invoke(this, new MouseEventArgs(button, 0, 0, 0, 0));
 
                 if (!doubleClickDown) {
-                    if (Click != null)
-                        Click(this, new MouseEventArgs(button, 0, 0, 0, 0));
+                    Click?.Invoke(this, new MouseEventArgs(button, 0, 0, 0, 0));
 
-                    if (MouseClick != null)
-                        MouseClick(this, new MouseEventArgs(button, 0, 0, 0, 0));
+                    MouseClick?.Invoke(this, new MouseEventArgs(button, 0, 0, 0, 0));
                 }
                 doubleClickDown = false;
             }
@@ -611,9 +605,8 @@ namespace OpenHardwareMonitor.GUI {
                     case WM_TRAYMOUSEMESSAGE:
                         switch ((int)message.LParam) {
                             case WM_MOUSEMOVE:
-                                if (MouseMove != null)
-                                    MouseMove(this,
-                                      new MouseEventArgs(Control.MouseButtons, 0, 0, 0, 0));
+                                MouseMove?.Invoke(this,
+  new MouseEventArgs(Control.MouseButtons, 0, 0, 0, 0));
                                 return;
                             case WM_LBUTTONDOWN:
                                 ProcessMouseDown(ref message, MouseButtons.Left, false);
@@ -645,17 +638,14 @@ namespace OpenHardwareMonitor.GUI {
                                 ProcessMouseDown(ref message, MouseButtons.Middle, true);
                                 return;
                             case NIN_BALLOONSHOW:
-                                if (BalloonTipShown != null)
-                                    BalloonTipShown(this, EventArgs.Empty);
+                                BalloonTipShown?.Invoke(this, EventArgs.Empty);
                                 return;
                             case NIN_BALLOONHIDE:
                             case NIN_BALLOONTIMEOUT:
-                                if (BalloonTipClosed != null)
-                                    BalloonTipClosed(this, EventArgs.Empty);
+                                BalloonTipClosed?.Invoke(this, EventArgs.Empty);
                                 return;
                             case NIN_BALLOONUSERCLICK:
-                                if (BalloonTipClicked != null)
-                                    BalloonTipClicked(this, EventArgs.Empty);
+                                BalloonTipClicked?.Invoke(this, EventArgs.Empty);
                                 return;
                             default:
                                 return;

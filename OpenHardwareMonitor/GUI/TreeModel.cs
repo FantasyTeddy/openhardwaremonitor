@@ -93,9 +93,8 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public void OnStructureChanged(Node node) {
-            if (StructureChanged != null)
-                StructureChanged(this,
-                  new TreeModelEventArgs(GetPath(node), new object[0]));
+            StructureChanged?.Invoke(this,
+  new TreeModelEventArgs(GetPath(node), new object[0]));
         }
 
         public void OnNodeInserted(Node parent, int index, Node node) {

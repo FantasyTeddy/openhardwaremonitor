@@ -114,11 +114,9 @@ namespace OpenHardwareMonitor.GUI {
                     }
                     break;
                 case WM_NCLBUTTONDBLCLK: {
-                        if (MouseDoubleClick != null) {
-                            MouseDoubleClick(this, new MouseEventArgs(MouseButtons.Left, 2,
-                              Macros.GET_X_LPARAM(message.LParam) - location.X,
-                              Macros.GET_Y_LPARAM(message.LParam) - location.Y, 0));
-                        }
+                        MouseDoubleClick?.Invoke(this, new MouseEventArgs(MouseButtons.Left, 2,
+  Macros.GET_X_LPARAM(message.LParam) - location.X,
+  Macros.GET_Y_LPARAM(message.LParam) - location.Y, 0));
                         message.Result = IntPtr.Zero;
                     }
                     break;
@@ -155,8 +153,7 @@ namespace OpenHardwareMonitor.GUI {
                             if ((wp.flags & SWP_NOMOVE) == 0) {
                                 if (location.X != wp.x || location.Y != wp.y) {
                                     location = new Point(wp.x, wp.y);
-                                    if (LocationChanged != null)
-                                        LocationChanged(this, EventArgs.Empty);
+                                    LocationChanged?.Invoke(this, EventArgs.Empty);
                                 }
                             }
 
@@ -164,8 +161,7 @@ namespace OpenHardwareMonitor.GUI {
                             if ((wp.flags & SWP_NOSIZE) == 0) {
                                 if (size.Width != wp.cx || size.Height != wp.cy) {
                                     size = new Size(wp.cx, wp.cy);
-                                    if (SizeChanged != null)
-                                        SizeChanged(this, EventArgs.Empty);
+                                    SizeChanged?.Invoke(this, EventArgs.Empty);
                                 }
                             }
 
@@ -332,8 +328,7 @@ namespace OpenHardwareMonitor.GUI {
                     size = value;
                     NativeMethods.UpdateLayeredWindow(Handle, IntPtr.Zero, IntPtr.Zero,
                       ref size, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero, 0);
-                    if (SizeChanged != null)
-                        SizeChanged(this, EventArgs.Empty);
+                    SizeChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -348,8 +343,7 @@ namespace OpenHardwareMonitor.GUI {
                     NativeMethods.SetWindowPos(Handle, IntPtr.Zero,
                       location.X, location.Y, 0, 0,
                       SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSENDCHANGING);
-                    if (LocationChanged != null)
-                        LocationChanged(this, EventArgs.Empty);
+                    LocationChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }

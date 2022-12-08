@@ -370,8 +370,7 @@ namespace OpenHardwareMonitor.GUI {
         public event EventHandler HideShowCommand;
 
         public void SendHideShowCommand() {
-            if (HideShowCommand != null)
-                HideShowCommand(this, null);
+            HideShowCommand?.Invoke(this, null);
         }
 
         private Font CreateFont(float size, FontStyle style) {

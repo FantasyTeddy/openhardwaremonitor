@@ -34,14 +34,12 @@ namespace OpenHardwareMonitor.Hardware {
 
         protected virtual void ActivateSensor(ISensor sensor) {
             if (active.Add(sensor))
-                if (SensorAdded != null)
-                    SensorAdded(sensor);
+                SensorAdded?.Invoke(sensor);
         }
 
         protected virtual void DeactivateSensor(ISensor sensor) {
             if (active.Remove(sensor))
-                if (SensorRemoved != null)
-                    SensorRemoved(sensor);
+                SensorRemoved?.Invoke(sensor);
         }
 
         public string Name {
@@ -75,8 +73,7 @@ namespace OpenHardwareMonitor.Hardware {
         public event HardwareEventHandler Closing;
 
         public virtual void Close() {
-            if (Closing != null)
-                Closing(this);
+            Closing?.Invoke(this);
         }
 
         public void Accept(IVisitor visitor) {

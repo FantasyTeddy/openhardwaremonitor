@@ -96,9 +96,7 @@ namespace OpenHardwareMonitor.GUI {
 
             if (showDesktop != showDesktopDetected) {
                 showDesktop = showDesktopDetected;
-                if (ShowDesktopChangedEvent != null) {
-                    ShowDesktopChangedEvent(showDesktop);
-                }
+                ShowDesktopChangedEvent?.Invoke(showDesktop);
             }
         }
 

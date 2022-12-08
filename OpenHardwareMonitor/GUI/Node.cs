@@ -107,8 +107,7 @@ namespace OpenHardwareMonitor.GUI {
                                 model.OnNodeRemoved(parent, index, this);
                         }
                     }
-                    if (IsVisibleChanged != null)
-                        IsVisibleChanged(this);
+                    IsVisibleChanged?.Invoke(this);
                 }
             }
         }
@@ -142,8 +141,7 @@ namespace OpenHardwareMonitor.GUI {
 
                     TreeModel model = owner.RootTreeModel();
                     model?.OnStructureChanged(owner);
-                    if (owner.NodeAdded != null)
-                        owner.NodeAdded(item);
+                    owner.NodeAdded?.Invoke(item);
                 }
             }
 
@@ -154,8 +152,7 @@ namespace OpenHardwareMonitor.GUI {
 
                 TreeModel model = owner.RootTreeModel();
                 model?.OnStructureChanged(owner);
-                if (owner.NodeRemoved != null)
-                    owner.NodeRemoved(item);
+                owner.NodeRemoved?.Invoke(item);
             }
 
             protected override void SetItem(int index, Node item) {

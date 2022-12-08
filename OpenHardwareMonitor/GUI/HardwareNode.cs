@@ -89,8 +89,7 @@ namespace OpenHardwareMonitor.GUI {
                         UpdateNode(typeNode);
                     }
                 }
-            if (PlotSelectionChanged != null)
-                PlotSelectionChanged(this, null);
+            PlotSelectionChanged?.Invoke(this, null);
         }
 
         private void InsertSorted(Node node, ISensor sensor) {
@@ -104,8 +103,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void SensorPlotSelectionChanged(object sender, EventArgs e) {
-            if (PlotSelectionChanged != null)
-                PlotSelectionChanged(this, null);
+            PlotSelectionChanged?.Invoke(this, null);
         }
 
         private void SensorAdded(ISensor sensor) {
@@ -114,8 +112,7 @@ namespace OpenHardwareMonitor.GUI {
                     InsertSorted(typeNode, sensor);
                     UpdateNode(typeNode);
                 }
-            if (PlotSelectionChanged != null)
-                PlotSelectionChanged(this, null);
+            PlotSelectionChanged?.Invoke(this, null);
         }
 
         public event EventHandler PlotSelectionChanged;
