@@ -27,15 +27,15 @@ namespace OpenHardwareMonitor.Hardware
             AssemblyBuilderAccess.Run).DefineDynamicModule(
             "PInvokeDelegateFactoryInternalModule");
 
-        private static readonly IDictionary<Pair<DllImportAttribute, Type>, Type> wrapperTypes =
-          new Dictionary<Pair<DllImportAttribute, Type>, Type>();
+        private static readonly IDictionary<Tuple<DllImportAttribute, Type>, Type> wrapperTypes =
+          new Dictionary<Tuple<DllImportAttribute, Type>, Type>();
 
         public static void CreateDelegate<T>(DllImportAttribute dllImportAttribute,
           out T newDelegate, DllImportSearchPath dllImportSearchPath =
           DllImportSearchPath.System32) where T : class
         {
-            Pair<DllImportAttribute, Type> key =
-              new Pair<DllImportAttribute, Type>(dllImportAttribute, typeof(T));
+            Tuple<DllImportAttribute, Type> key =
+              new Tuple<DllImportAttribute, Type>(dllImportAttribute, typeof(T));
             wrapperTypes.TryGetValue(key, out Type wrapperType);
 
             if (wrapperType == null)

@@ -211,8 +211,8 @@ namespace OpenHardwareMonitor.Hardware.HDD
 
             if (handle != smart.InvalidHandle)
             {
-                IList<Pair<SensorType, int>> sensorTypeAndChannels =
-                  new List<Pair<SensorType, int>>();
+                IList<Tuple<SensorType, int>> sensorTypeAndChannels =
+                  new List<Tuple<SensorType, int>>();
 
                 DriveAttributeValue[] values = smart.ReadSmartData(handle, index);
 
@@ -233,7 +233,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
                     if (!found)
                         continue;
 
-                    Pair<SensorType, int> pair = new Pair<SensorType, int>(
+                    Tuple<SensorType, int> pair = new Tuple<SensorType, int>(
                       attribute.SensorType.Value, attribute.SensorChannel);
 
                     if (!sensorTypeAndChannels.Contains(pair))
