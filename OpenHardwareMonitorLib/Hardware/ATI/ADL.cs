@@ -616,7 +616,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
 
         private static void Main_Memory_Free(IntPtr buffer)
         {
-            if (IntPtr.Zero != buffer)
+            if (buffer != IntPtr.Zero)
                 Marshal.FreeHGlobal(buffer);
         }
     }
