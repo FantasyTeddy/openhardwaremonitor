@@ -329,7 +329,8 @@ namespace OpenHardwareMonitor.GUI
               new[] { log1sMenuItem, log2sMenuItem, log5sMenuItem, log10sMenuItem,
         log30sMenuItem, log1minMenuItem, log2minMenuItem, log5minMenuItem,
         log10minMenuItem, log30minMenuItem, log1hMenuItem, log2hMenuItem,
-        log6hMenuItem},
+        log6hMenuItem
+              },
               settings);
             loggingInterval.Changed += (sender, e) =>
             {
