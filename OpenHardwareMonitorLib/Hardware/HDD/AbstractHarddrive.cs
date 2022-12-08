@@ -218,9 +218,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             }
         }
 
-        public override HardwareType HardwareType {
-            get { return HardwareType.HDD; }
-        }
+        public override HardwareType HardwareType => HardwareType.HDD;
 
         public virtual void UpdateAdditionalSensors(DriveAttributeValue[] values) { }
 

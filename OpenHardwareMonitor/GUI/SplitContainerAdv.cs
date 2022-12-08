@@ -97,7 +97,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public Border3DStyle Border3DStyle {
-            get { return border3DStyle; }
+            get => border3DStyle;
             set {
                 border3DStyle = value;
                 Invalidate(false);
@@ -105,18 +105,14 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public Color Color {
-            get { return color; }
+            get => color;
             set {
                 color = value;
                 Invalidate(false);
             }
         }
 
-        public new bool IsSplitterFixed {
-            get {
-                return false;
-            }
-        }
+        public new bool IsSplitterFixed => false;
 
     }
 }

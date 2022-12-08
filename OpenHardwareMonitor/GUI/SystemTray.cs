@@ -155,7 +155,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public bool IsMainIconEnabled {
-            get { return mainIconEnabled; }
+            get => mainIconEnabled;
             set {
                 if (mainIconEnabled != value) {
                     mainIconEnabled = value;

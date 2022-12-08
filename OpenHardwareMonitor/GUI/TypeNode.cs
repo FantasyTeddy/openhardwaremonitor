@@ -110,9 +110,7 @@ namespace OpenHardwareMonitor.GUI {
         public SensorType SensorType { get; }
 
         public override bool IsExpanded {
-            get {
-                return base.IsExpanded;
-            }
+            get => base.IsExpanded;
             set {
                 if (base.IsExpanded != value) {
                     base.IsExpanded = value;

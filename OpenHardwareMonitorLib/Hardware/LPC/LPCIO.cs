@@ -554,11 +554,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             Ring0.ReleaseIsaBusMutex();
         }
 
-        public ISuperIO[] SuperIO {
-            get {
-                return superIOs.ToArray();
-            }
-        }
+        public ISuperIO[] SuperIO => superIOs.ToArray();
 
         public string GetReport() {
             if (report.Length > 0) {

@@ -21,11 +21,9 @@ namespace OpenHardwareMonitor.Collections {
             this.array = array;
         }
 
-        public T this[int index] {
-            get { return array[index]; }
-        }
+        public T this[int index] => array[index];
 
-        public int Length { get { return array.Length; } }
+        public int Length => array.Length;
 
         public IEnumerator<T> GetEnumerator() {
             return ((IEnumerable<T>)array).GetEnumerator();

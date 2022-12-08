@@ -39,9 +39,7 @@ namespace OpenHardwareMonitor.GUI {
             }
         }
 
-        public Collection<Node> Nodes {
-            get { return root.Nodes; }
-        }
+        public Collection<Node> Nodes => root.Nodes;
 
         private Node GetNode(TreePath treePath) {
             Node parent = root;
@@ -70,9 +68,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public bool ForceVisible {
-            get {
-                return forceVisible;
-            }
+            get => forceVisible;
             set {
                 if (value != forceVisible) {
                     forceVisible = value;

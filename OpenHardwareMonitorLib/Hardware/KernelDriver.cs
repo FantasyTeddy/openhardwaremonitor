@@ -93,9 +93,7 @@ namespace OpenHardwareMonitor.Hardware {
             return device != null;
         }
 
-        public bool IsOpen {
-            get { return device != null; }
-        }
+        public bool IsOpen => device != null;
 
         public bool DeviceIOControl(IOControlCode ioControlCode, object inBuffer) {
             if (device == null)

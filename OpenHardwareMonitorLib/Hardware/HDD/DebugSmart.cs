@@ -454,7 +454,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             public string FirmwareVersion { get; private set; }
         }
 
-        public IntPtr InvalidHandle { get { return (IntPtr)(-1); } }
+        public IntPtr InvalidHandle => (IntPtr)(-1);
 
         public string[] GetLogicalDrives(int driveIndex) {
             return new string[0];

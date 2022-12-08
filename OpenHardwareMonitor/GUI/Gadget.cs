@@ -29,99 +29,57 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public Point Location {
-            get {
-                return window.Location;
-            }
-            set {
-                window.Location = value;
-            }
+            get => window.Location;
+            set => window.Location = value;
         }
 
         public event EventHandler LocationChanged {
-            add {
-                window.LocationChanged += value;
-            }
-            remove {
-                window.LocationChanged -= value;
-            }
+            add => window.LocationChanged += value;
+            remove => window.LocationChanged -= value;
         }
 
         public virtual Size Size {
-            get {
-                return window.Size;
-            }
-            set {
-                this.window.Size = value;
-            }
+            get => window.Size;
+            set => this.window.Size = value;
         }
 
         public event EventHandler SizeChanged {
-            add {
-                window.SizeChanged += value;
-            }
-            remove {
-                window.SizeChanged -= value;
-            }
+            add => window.SizeChanged += value;
+            remove => window.SizeChanged -= value;
         }
 
         public byte Opacity {
-            get {
-                return window.Opacity;
-            }
-            set {
-                window.Opacity = value;
-            }
+            get => window.Opacity;
+            set => window.Opacity = value;
         }
 
         public bool LockPositionAndSize {
-            get {
-                return window.LockPositionAndSize;
-            }
-            set {
-                window.LockPositionAndSize = value;
-            }
+            get => window.LockPositionAndSize;
+            set => window.LockPositionAndSize = value;
         }
 
         public bool AlwaysOnTop {
-            get {
-                return window.AlwaysOnTop;
-            }
-            set {
-                window.AlwaysOnTop = value;
-            }
+            get => window.AlwaysOnTop;
+            set => window.AlwaysOnTop = value;
         }
 
         public ContextMenu ContextMenu {
-            get {
-                return window.ContextMenu;
-            }
-            set {
-                window.ContextMenu = value;
-            }
+            get => window.ContextMenu;
+            set => window.ContextMenu = value;
         }
 
         public event HitTestEventHandler HitTest {
-            add {
-                window.HitTest += value;
-            }
-            remove {
-                window.HitTest -= value;
-            }
+            add => window.HitTest += value;
+            remove => window.HitTest -= value;
         }
 
         public event MouseEventHandler MouseDoubleClick {
-            add {
-                window.MouseDoubleClick += value;
-            }
-            remove {
-                window.MouseDoubleClick -= value;
-            }
+            add => window.MouseDoubleClick += value;
+            remove => window.MouseDoubleClick -= value;
         }
 
         public bool Visible {
-            get {
-                return window.Visible;
-            }
+            get => window.Visible;
             set {
                 if (value != window.Visible) {
                     window.Visible = value;

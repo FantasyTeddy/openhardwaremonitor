@@ -354,9 +354,7 @@ namespace OpenHardwareMonitor.GUI {
             public object Tag { get; set; }
 
             public Icon Icon {
-                get {
-                    return icon;
-                }
+                get => icon;
                 set {
                     if (icon != value) {
                         icon = value;
@@ -366,9 +364,7 @@ namespace OpenHardwareMonitor.GUI {
             }
 
             public string Text {
-                get {
-                    return text;
-                }
+                get => text;
                 set {
                     if (value == null)
                         value = "";
@@ -386,9 +382,7 @@ namespace OpenHardwareMonitor.GUI {
             }
 
             public bool Visible {
-                get {
-                    return visible;
-                }
+                get => visible;
                 set {
                     if (visible != value) {
                         visible = value;

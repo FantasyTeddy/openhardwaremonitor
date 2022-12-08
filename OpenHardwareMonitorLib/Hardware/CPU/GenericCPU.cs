@@ -235,9 +235,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             return r.ToString();
         }
 
-        public override HardwareType HardwareType {
-            get { return HardwareType.CPU; }
-        }
+        public override HardwareType HardwareType => HardwareType.CPU;
 
         public bool HasModelSpecificRegisters { get; }
 

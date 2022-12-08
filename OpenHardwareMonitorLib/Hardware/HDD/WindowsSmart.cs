@@ -232,7 +232,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             public Identify Identify;
         }
 
-        public IntPtr InvalidHandle { get { return (IntPtr)(-1); } }
+        public IntPtr InvalidHandle => (IntPtr)(-1);
 
         private const byte SMART_LBA_MID = 0x4F;
         private const byte SMART_LBA_HI = 0xC2;

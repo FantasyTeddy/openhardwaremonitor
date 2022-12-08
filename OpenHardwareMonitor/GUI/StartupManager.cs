@@ -159,9 +159,7 @@ namespace OpenHardwareMonitor.GUI {
         public bool IsAvailable { get; }
 
         public bool Startup {
-            get {
-                return startup;
-            }
+            get => startup;
             set {
                 if (startup != value) {
                     if (IsAvailable) {

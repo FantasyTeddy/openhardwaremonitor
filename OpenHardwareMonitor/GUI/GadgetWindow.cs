@@ -274,9 +274,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public byte Opacity {
-            get {
-                return opacity;
-            }
+            get => opacity;
             set {
                 if (opacity != value) {
                     opacity = value;
@@ -288,9 +286,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public bool Visible {
-            get {
-                return visible;
-            }
+            get => visible;
             set {
                 if (visible != value) {
                     visible = value;
@@ -312,9 +308,7 @@ namespace OpenHardwareMonitor.GUI {
         public bool LockPositionAndSize { get; set; } = false;
 
         public bool AlwaysOnTop {
-            get {
-                return alwaysOnTop;
-            }
+            get => alwaysOnTop;
             set {
                 if (value != alwaysOnTop) {
                     alwaysOnTop = value;
@@ -332,9 +326,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public Size Size {
-            get {
-                return size;
-            }
+            get => size;
             set {
                 if (size != value) {
                     size = value;
@@ -349,9 +341,7 @@ namespace OpenHardwareMonitor.GUI {
         public event EventHandler SizeChanged;
 
         public Point Location {
-            get {
-                return location;
-            }
+            get => location;
             set {
                 if (location != value) {
                     location = value;

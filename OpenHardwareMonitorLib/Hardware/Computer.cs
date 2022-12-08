@@ -121,7 +121,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public bool MainboardEnabled {
-            get { return mainboardEnabled; }
+            get => mainboardEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
             set {
@@ -136,7 +136,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public bool CPUEnabled {
-            get { return cpuEnabled; }
+            get => cpuEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
             set {
@@ -151,7 +151,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public bool RAMEnabled {
-            get { return ramEnabled; }
+            get => ramEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
             set {
@@ -166,7 +166,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public bool GPUEnabled {
-            get { return gpuEnabled; }
+            get => gpuEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
             set {
@@ -184,7 +184,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public bool FanControllerEnabled {
-            get { return fanControllerEnabled; }
+            get => fanControllerEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
             set {
@@ -202,7 +202,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public bool HDDEnabled {
-            get { return hddEnabled; }
+            get => hddEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
             set {

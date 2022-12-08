@@ -44,11 +44,7 @@ namespace OpenHardwareMonitor.Utilities {
             }
         }
 
-        public bool PlatformNotSupported {
-            get {
-                return listener == null;
-            }
-        }
+        public bool PlatformNotSupported => listener == null;
 
         public bool StartHTTPListener() {
             if (PlatformNotSupported)

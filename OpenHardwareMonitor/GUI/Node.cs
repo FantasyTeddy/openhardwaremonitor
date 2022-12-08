@@ -45,7 +45,7 @@ namespace OpenHardwareMonitor.GUI {
         public TreeModel Model { get; set; }
 
         public Node Parent {
-            get { return parent; }
+            get => parent;
             set {
                 if (value != parent) {
                     parent?.nodes.Remove(this);
@@ -54,12 +54,10 @@ namespace OpenHardwareMonitor.GUI {
             }
         }
 
-        public Collection<Node> Nodes {
-            get { return nodes; }
-        }
+        public Collection<Node> Nodes => nodes;
 
         public virtual string Text {
-            get { return text; }
+            get => text;
             set {
                 if (text != value) {
                     text = value;
@@ -68,7 +66,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public Image Image {
-            get { return image; }
+            get => image;
             set {
                 if (image != value) {
                     image = value;
@@ -77,9 +75,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public virtual bool IsExpanded {
-            get {
-                return expanded;
-            }
+            get => expanded;
             set {
                 if (value != expanded) {
                     expanded = value;
@@ -88,7 +84,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public virtual bool IsVisible {
-            get { return visible; }
+            get => visible;
             set {
                 if (value != visible) {
                     visible = value;

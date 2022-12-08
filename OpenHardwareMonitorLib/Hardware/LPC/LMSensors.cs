@@ -110,11 +110,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 lmChip.Close();
         }
 
-        public ISuperIO[] SuperIO {
-            get {
-                return lmChips.ToArray();
-            }
-        }
+        public ISuperIO[] SuperIO => lmChips.ToArray();
 
         private class LMChip : ISuperIO {
 

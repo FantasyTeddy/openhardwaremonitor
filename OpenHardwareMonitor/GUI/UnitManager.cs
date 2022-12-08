@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public TemperatureUnit TemperatureUnit {
-            get { return temperatureUnit; }
+            get => temperatureUnit;
             set {
                 this.temperatureUnit = value;
                 this.settings.SetValue("TemperatureUnit", (int)temperatureUnit);

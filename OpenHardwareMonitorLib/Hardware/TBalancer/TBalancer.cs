@@ -233,9 +233,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
             }
         }
 
-        public override HardwareType HardwareType {
-            get { return HardwareType.TBalancer; }
-        }
+        public override HardwareType HardwareType => HardwareType.TBalancer;
 
         public override string GetReport() {
             StringBuilder r = new StringBuilder();

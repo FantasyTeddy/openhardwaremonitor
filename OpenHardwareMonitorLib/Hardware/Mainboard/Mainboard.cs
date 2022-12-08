@@ -65,9 +65,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         }
 
         public string Name {
-            get {
-                return customName;
-            }
+            get => customName;
             set {
                 if (!string.IsNullOrEmpty(value))
                     customName = value;
@@ -78,17 +76,11 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             }
         }
 
-        public Identifier Identifier {
-            get { return new Identifier("mainboard"); }
-        }
+        public Identifier Identifier => new Identifier("mainboard");
 
-        public HardwareType HardwareType {
-            get { return HardwareType.Mainboard; }
-        }
+        public HardwareType HardwareType => HardwareType.Mainboard;
 
-        public virtual IHardware Parent {
-            get { return null; }
-        }
+        public virtual IHardware Parent => null;
 
         public string GetReport() {
             StringBuilder r = new StringBuilder();
@@ -118,13 +110,9 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                 hardware.Close();
         }
 
-        public IHardware[] SubHardware {
-            get { return superIOHardware; }
-        }
+        public IHardware[] SubHardware => superIOHardware;
 
-        public ISensor[] Sensors {
-            get { return new ISensor[0]; }
-        }
+        public ISensor[] Sensors => new ISensor[0];
 
 #pragma warning disable 67
         public event SensorEventHandler SensorAdded;

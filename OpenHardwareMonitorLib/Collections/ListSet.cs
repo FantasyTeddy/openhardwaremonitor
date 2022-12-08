@@ -49,10 +49,6 @@ namespace OpenHardwareMonitor.Collections {
             return list.GetEnumerator();
         }
 
-        public int Count {
-            get {
-                return list.Count;
-            }
-        }
+        public int Count => list.Count;
     }
 }

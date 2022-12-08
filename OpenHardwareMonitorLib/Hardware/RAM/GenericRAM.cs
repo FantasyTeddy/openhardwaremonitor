@@ -31,11 +31,7 @@ namespace OpenHardwareMonitor.Hardware.RAM {
             ActivateSensor(availableMemory);
         }
 
-        public override HardwareType HardwareType {
-            get {
-                return HardwareType.RAM;
-            }
-        }
+        public override HardwareType HardwareType => HardwareType.RAM;
 
         public override void Update() {
             NativeMethods.MemoryStatusEx status = new NativeMethods.MemoryStatusEx {

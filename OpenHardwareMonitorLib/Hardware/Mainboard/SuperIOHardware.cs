@@ -1479,13 +1479,9 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             }
         }
 
-        public override HardwareType HardwareType {
-            get { return HardwareType.SuperIO; }
-        }
+        public override HardwareType HardwareType => HardwareType.SuperIO;
 
-        public override IHardware Parent {
-            get { return mainboard; }
-        }
+        public override IHardware Parent => mainboard;
 
 
         public override string GetReport() {

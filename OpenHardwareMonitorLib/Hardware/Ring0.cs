@@ -211,9 +211,7 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public static bool IsOpen {
-            get { return driver != null; }
-        }
+        public static bool IsOpen => driver != null;
 
         public static void Close() {
             if (driver == null)

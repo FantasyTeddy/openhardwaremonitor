@@ -125,24 +125,16 @@ namespace OpenHardwareMonitor.Hardware {
             values.Append(new SensorValue(value, time));
         }
 
-        public IHardware Hardware {
-            get { return hardware; }
-        }
+        public IHardware Hardware => hardware;
 
         public SensorType SensorType { get; }
 
-        public Identifier Identifier {
-            get {
-                return new Identifier(hardware.Identifier,
+        public Identifier Identifier => new Identifier(hardware.Identifier,
                   SensorType.ToString().ToLowerInvariant(),
                   Index.ToString(CultureInfo.InvariantCulture));
-            }
-        }
 
         public string Name {
-            get {
-                return name;
-            }
+            get => name;
             set {
                 if (!string.IsNullOrEmpty(value))
                     name = value;
@@ -156,14 +148,10 @@ namespace OpenHardwareMonitor.Hardware {
 
         public bool IsDefaultHidden { get; }
 
-        public IReadOnlyArray<IParameter> Parameters {
-            get { return parameters; }
-        }
+        public IReadOnlyArray<IParameter> Parameters => parameters;
 
         public float? Value {
-            get {
-                return currentValue;
-            }
+            get => currentValue;
             set {
                 DateTime now = DateTime.UtcNow;
                 while (values.Count > 0 && (now - values.First.Time).TotalDays > 1)
@@ -198,9 +186,7 @@ namespace OpenHardwareMonitor.Hardware {
             Max = null;
         }
 
-        public IEnumerable<SensorValue> Values {
-            get { return values; }
-        }
+        public IEnumerable<SensorValue> Values => values;
 
         public void Accept(IVisitor visitor) {
             if (visitor == null)

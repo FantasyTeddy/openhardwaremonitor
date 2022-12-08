@@ -26,17 +26,11 @@ namespace OpenHardwareMonitor.Hardware {
               new Identifier(Identifier, "name").ToString(), name);
         }
 
-        public IHardware[] SubHardware {
-            get { return new IHardware[0]; }
-        }
+        public IHardware[] SubHardware => new IHardware[0];
 
-        public virtual IHardware Parent {
-            get { return null; }
-        }
+        public virtual IHardware Parent => null;
 
-        public virtual ISensor[] Sensors {
-            get { return active.ToArray(); }
-        }
+        public virtual ISensor[] Sensors => active.ToArray();
 
         protected virtual void ActivateSensor(ISensor sensor) {
             if (active.Add(sensor))
@@ -51,9 +45,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public string Name {
-            get {
-                return customName;
-            }
+            get => customName;
             set {
                 if (!string.IsNullOrEmpty(value))
                     customName = value;

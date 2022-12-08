@@ -95,11 +95,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             report.AppendLine();
         }
 
-        public IHardware[] Hardware {
-            get {
-                return hardware.ToArray();
-            }
-        }
+        public IHardware[] Hardware => hardware.ToArray();
 
         public string GetReport() {
             return report.ToString();

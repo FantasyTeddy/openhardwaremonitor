@@ -47,9 +47,7 @@ namespace OpenHardwareMonitor.Hardware {
         public Identifier Identifier { get; }
 
         public ControlMode ControlMode {
-            get {
-                return mode;
-            }
+            get => mode;
             private set {
                 if (mode != value) {
                     mode = value;
@@ -62,9 +60,7 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public float SoftwareValue {
-            get {
-                return softwareValue;
-            }
+            get => softwareValue;
             private set {
                 if (softwareValue != value) {
                     softwareValue = value;

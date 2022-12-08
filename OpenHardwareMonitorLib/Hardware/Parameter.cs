@@ -52,21 +52,15 @@ namespace OpenHardwareMonitor.Hardware {
 
         public ISensor Sensor { get; }
 
-        public Identifier Identifier {
-            get {
-                return new Identifier(Sensor.Identifier, "parameter",
+        public Identifier Identifier => new Identifier(Sensor.Identifier, "parameter",
                   Name.Replace(" ", "").ToLowerInvariant());
-            }
-        }
 
-        public string Name { get { return description.Name; } }
+        public string Name => description.Name;
 
-        public string Description { get { return description.Description; } }
+        public string Description => description.Description;
 
         public float Value {
-            get {
-                return value;
-            }
+            get => value;
             set {
                 this.isDefault = false;
                 this.value = value;
@@ -75,12 +69,10 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public float DefaultValue {
-            get { return description.DefaultValue; }
-        }
+        public float DefaultValue => description.DefaultValue;
 
         public bool IsDefault {
-            get { return isDefault; }
+            get => isDefault;
             set {
                 this.isDefault = value;
                 if (value) {

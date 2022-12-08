@@ -126,7 +126,7 @@ namespace OpenHardwareMonitor.GUI {
         public ISensor Sensor { get; }
 
         public Color Color {
-            get { return color; }
+            get => color;
             set {
                 this.color = value;
                 this.darkColor = Color.FromArgb(255,

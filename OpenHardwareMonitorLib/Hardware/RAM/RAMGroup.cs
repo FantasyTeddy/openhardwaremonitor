@@ -28,11 +28,7 @@ namespace OpenHardwareMonitor.Hardware.RAM {
             return null;
         }
 
-        public IHardware[] Hardware {
-            get {
-                return hardware;
-            }
-        }
+        public IHardware[] Hardware => hardware;
 
         public void Close() {
             foreach (Hardware ram in hardware)

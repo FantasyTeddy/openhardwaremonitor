@@ -31,7 +31,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public string Report {
-            get { return report; }
+            get => report;
             set {
                 report = value;
                 reportTextBox.Text = report;

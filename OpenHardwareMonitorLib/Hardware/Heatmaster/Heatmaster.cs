@@ -183,9 +183,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
             } catch (IOException) { } catch (TimeoutException) { }
         }
 
-        public override HardwareType HardwareType {
-            get { return HardwareType.Heatmaster; }
-        }
+        public override HardwareType HardwareType => HardwareType.Heatmaster;
 
         private void ProcessUpdateLine(string line) {
             Match match = Regex.Match(line, @">\[0:(\d+)\]([0-9:\|-]+)");

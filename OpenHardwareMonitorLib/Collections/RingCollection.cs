@@ -35,9 +35,7 @@ namespace OpenHardwareMonitor.Collections {
         }
 
         public int Capacity {
-            get {
-                return array.Length;
-            }
+            get => array.Length;
             set {
                 T[] newArray = new T[value];
                 if (Count > 0) {

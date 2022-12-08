@@ -41,7 +41,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public int Value {
-            get { return value; }
+            get => value;
             set {
                 if (this.value != value) {
                     this.value = value;
@@ -61,9 +61,7 @@ namespace OpenHardwareMonitor.GUI {
                 if (changed != null)
                     changed(this, null);
             }
-            remove {
-                changed -= value;
-            }
+            remove => changed -= value;
         }
     }
 }

@@ -44,16 +44,14 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public override string Text {
-            get { return Hardware.Name; }
-            set { Hardware.Name = value; }
+            get => Hardware.Name;
+            set => Hardware.Name = value;
         }
 
         public IHardware Hardware { get; }
 
         public override bool IsExpanded {
-            get {
-                return base.IsExpanded;
-            }
+            get => base.IsExpanded;
             set {
                 if (base.IsExpanded != value) {
                     base.IsExpanded = value;

@@ -83,11 +83,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
         public ParameterDescription[] ParameterDescriptions { get; private set; }
 
-        public bool HasRawValueConversion {
-            get {
-                return rawValueConversion != null;
-            }
-        }
+        public bool HasRawValueConversion => rawValueConversion != null;
 
         public float ConvertValue(DriveAttributeValue value,
           IReadOnlyArray<IParameter> parameters) {

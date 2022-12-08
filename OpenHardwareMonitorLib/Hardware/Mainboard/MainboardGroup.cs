@@ -27,9 +27,6 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             return null;
         }
 
-        public IHardware[] Hardware {
-            get { return mainboards; }
-
-        }
+        public IHardware[] Hardware => mainboards;
     }
 }

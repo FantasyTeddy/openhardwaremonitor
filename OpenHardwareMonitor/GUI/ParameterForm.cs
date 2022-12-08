@@ -26,9 +26,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public IReadOnlyArray<IParameter> Parameters {
-            get {
-                return parameters;
-            }
+            get => parameters;
             set {
                 parameters = value;
                 parameterRows = new BindingList<ParameterRow>();
@@ -57,12 +55,10 @@ namespace OpenHardwareMonitor.GUI {
                 this.isDefault = parameter.IsDefault;
             }
 
-            public string Name {
-                get { return parameter.Name; }
-            }
+            public string Name => parameter.Name;
 
             public float Value {
-                get { return value; }
+                get => value;
                 set {
                     this.isDefault = false;
                     this.value = value;
@@ -72,7 +68,7 @@ namespace OpenHardwareMonitor.GUI {
             }
 
             public bool Default {
-                get { return isDefault; }
+                get => isDefault;
                 set {
                     isDefault = value;
                     if (value)

@@ -35,11 +35,7 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             }
         }
 
-        public IHardware[] Hardware {
-            get {
-                return hardware.ToArray();
-            }
-        }
+        public IHardware[] Hardware => hardware.ToArray();
 
         public string GetReport() {
             return null;

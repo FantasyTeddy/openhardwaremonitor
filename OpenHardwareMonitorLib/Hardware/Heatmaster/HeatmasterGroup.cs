@@ -146,11 +146,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
             }
         }
 
-        public IHardware[] Hardware {
-            get {
-                return hardware.ToArray();
-            }
-        }
+        public IHardware[] Hardware => hardware.ToArray();
 
         public string GetReport() {
             if (report.Length > 0) {

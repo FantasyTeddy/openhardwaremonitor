@@ -25,7 +25,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public Exception Exception {
-            get { return exception; }
+            get => exception;
             set {
                 exception = value;
                 StringBuilder s = new StringBuilder();

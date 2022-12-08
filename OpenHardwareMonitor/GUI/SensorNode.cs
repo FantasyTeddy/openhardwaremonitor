@@ -74,12 +74,12 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public override string Text {
-            get { return Sensor.Name; }
-            set { Sensor.Name = value; }
+            get => Sensor.Name;
+            set => Sensor.Name = value;
         }
 
         public override bool IsVisible {
-            get { return base.IsVisible; }
+            get => base.IsVisible;
             set {
                 base.IsVisible = value;
                 settings.SetValue(new Identifier(Sensor.Identifier,
@@ -88,7 +88,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public Color? PenColor {
-            get { return penColor; }
+            get => penColor;
             set {
                 penColor = value;
 
@@ -104,7 +104,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public bool Plot {
-            get { return plot; }
+            get => plot;
             set {
                 plot = value;
                 settings.SetValue(new Identifier(Sensor.Identifier, "plot").ToString(),
@@ -118,17 +118,11 @@ namespace OpenHardwareMonitor.GUI {
 
         public ISensor Sensor { get; }
 
-        public string Value {
-            get { return ValueToString(Sensor.Value); }
-        }
+        public string Value => ValueToString(Sensor.Value);
 
-        public string Min {
-            get { return ValueToString(Sensor.Min); }
-        }
+        public string Min => ValueToString(Sensor.Min);
 
-        public string Max {
-            get { return ValueToString(Sensor.Max); }
-        }
+        public string Max => ValueToString(Sensor.Max);
 
         public override bool Equals(object obj) {
             if (obj == null)
