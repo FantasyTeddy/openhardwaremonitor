@@ -73,7 +73,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 int i = 0;
                 while (status == NvStatus.OK)
                 {
-                    NvDisplayHandle displayHandle = new NvDisplayHandle();
+                    NvDisplayHandle displayHandle = default(NvDisplayHandle);
                     status = NVAPI.NvAPI_EnumNvidiaDisplayHandle(i, ref displayHandle);
                     i++;
 

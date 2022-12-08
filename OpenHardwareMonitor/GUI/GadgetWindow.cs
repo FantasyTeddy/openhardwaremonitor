@@ -254,7 +254,7 @@ namespace OpenHardwareMonitor.GUI
             NativeMethods.ReleaseDC(IntPtr.Zero, handleScreenDC);
             bufferSize = size;
 
-            BitmapInfo info = new BitmapInfo();
+            BitmapInfo info = default(BitmapInfo);
             info.Size = Marshal.SizeOf(info);
             info.Width = size.Width;
             info.Height = -size.Height;

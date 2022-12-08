@@ -160,7 +160,7 @@ namespace OpenHardwareMonitor.Hardware
             if (service == IntPtr.Zero)
                 return true;
 
-            ServiceStatus status = new ServiceStatus();
+            ServiceStatus status = default(ServiceStatus);
             NativeMethods.ControlService(service, ServiceControl.SERVICE_CONTROL_STOP,
               ref status);
 

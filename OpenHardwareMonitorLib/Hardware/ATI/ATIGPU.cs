@@ -107,7 +107,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
 
             controlSensor = new Sensor("GPU Fan", 0, SensorType.Control, this, settings);
 
-            ADLFanSpeedInfo afsi = new ADLFanSpeedInfo();
+            ADLFanSpeedInfo afsi = default(ADLFanSpeedInfo);
             if (ADL.ADL_Overdrive5_FanSpeedInfo_Get(adapterIndex, 0, ref afsi)
               != ADLStatus.OK)
             {
@@ -273,7 +273,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
             r.AppendLine();
             try
             {
-                var adlt = new ADLTemperature();
+                var adlt = default(ADLTemperature);
                 ADLStatus status = ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0,
                   ref adlt);
                 r.Append(" Status: ");
@@ -317,7 +317,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
             r.AppendLine();
             try
             {
-                var adlp = new ADLPMActivity();
+                var adlp = default(ADLPMActivity);
                 ADLStatus status = ADL.ADL_Overdrive5_CurrentActivity_Get(adapterIndex,
                   ref adlp);
                 r.Append(" Status: ");
@@ -569,7 +569,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
                 }
                 else
                 {
-                    ADLTemperature adlt = new ADLTemperature();
+                    ADLTemperature adlt = default(ADLTemperature);
                     if (ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0, ref adlt)
                       == ADLStatus.OK)
                     {
@@ -620,7 +620,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
                     controlSensor.Value = null;
                 }
 
-                ADLPMActivity adlp = new ADLPMActivity();
+                ADLPMActivity adlp = default(ADLPMActivity);
                 if (ADL.ADL_Overdrive5_CurrentActivity_Get(adapterIndex, ref adlp)
                   == ADLStatus.OK)
                 {

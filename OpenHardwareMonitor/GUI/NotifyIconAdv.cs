@@ -556,7 +556,7 @@ namespace OpenHardwareMonitor.GUI
                 if (ContextMenu == null && ContextMenuStrip == null)
                     return;
 
-                NativeMethods.Point p = new NativeMethods.Point();
+                NativeMethods.Point p = default(NativeMethods.Point);
                 NativeMethods.GetCursorPos(ref p);
                 NativeMethods.SetForegroundWindow(
                   new HandleRef(window, window.Handle));
