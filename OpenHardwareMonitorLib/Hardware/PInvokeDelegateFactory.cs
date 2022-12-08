@@ -74,9 +74,10 @@ namespace OpenHardwareMonitor.Hardware {
                 new Type[] { typeof(DllImportSearchPath) }),
               new object[] { dllImportSearchPath }));
 
-            foreach (ParameterInfo parameterInfo in parameterInfos)
+            foreach (ParameterInfo parameterInfo in parameterInfos) {
                 methodBuilder.DefineParameter(parameterInfo.Position + 1,
                   parameterInfo.Attributes, parameterInfo.Name);
+            }
 
             if (dllImportAttribute.PreserveSig)
                 methodBuilder.SetImplementationFlags(MethodImplAttributes.PreserveSig);

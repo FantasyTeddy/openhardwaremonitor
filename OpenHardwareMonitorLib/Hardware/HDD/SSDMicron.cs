@@ -95,12 +95,14 @@ RequireSmart(0xCA), RequireSmart(0xCE)]
                 }
             }
             if (hostProgramPagesCount.HasValue && ftlProgramPagesCount.HasValue) {
-                if (hostProgramPagesCount.Value > 0)
+                if (hostProgramPagesCount.Value > 0) {
                     writeAmplification.Value =
                       (hostProgramPagesCount.Value + ftlProgramPagesCount) /
                       hostProgramPagesCount.Value;
-                else
+                } else {
                     writeAmplification.Value = 0;
+                }
+
                 ActivateSensor(writeAmplification);
             }
         }

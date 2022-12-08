@@ -106,16 +106,18 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             maxCpuidExt = Math.Min(maxCpuidExt, 1024);
 
             Data = new uint[maxCpuid + 1, 4];
-            for (uint i = 0; i < (maxCpuid + 1); i++)
+            for (uint i = 0; i < (maxCpuid + 1); i++) {
                 Opcode.Cpuid(CPUID_0 + i, 0,
                   out Data[i, 0], out Data[i, 1],
                   out Data[i, 2], out Data[i, 3]);
+            }
 
             ExtData = new uint[maxCpuidExt + 1, 4];
-            for (uint i = 0; i < (maxCpuidExt + 1); i++)
+            for (uint i = 0; i < (maxCpuidExt + 1); i++) {
                 Opcode.Cpuid(CPUID_EXT + i, 0,
                   out ExtData[i, 0], out ExtData[i, 1],
                   out ExtData[i, 2], out ExtData[i, 3]);
+            }
 
             StringBuilder nameBuilder = new StringBuilder();
             for (uint i = 2; i <= 4; i++) {

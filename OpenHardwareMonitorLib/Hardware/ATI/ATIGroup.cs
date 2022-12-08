@@ -63,7 +63,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
                     if (numberOfAdapters > 0) {
                         ADLAdapterInfo[] adapterInfo = new ADLAdapterInfo[numberOfAdapters];
-                        if (ADL.ADL_Adapter_AdapterInfo_Get(adapterInfo) == ADLStatus.OK)
+                        if (ADL.ADL_Adapter_AdapterInfo_Get(adapterInfo) == ADLStatus.OK) {
                             for (int i = 0; i < numberOfAdapters; i++) {
                                 int isActive;
                                 ADL.ADL_Adapter_Active_Get(adapterInfo[i].AdapterIndex,
@@ -102,12 +102,14 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                                 if (!string.IsNullOrEmpty(adapterInfo[i].UDID) &&
                                   adapterInfo[i].VendorID == ADL.ATI_VENDOR_ID) {
                                     bool found = false;
-                                    foreach (ATIGPU gpu in hardware)
+                                    foreach (ATIGPU gpu in hardware) {
                                         if (gpu.BusNumber == adapterInfo[i].BusNumber &&
                                           gpu.DeviceNumber == adapterInfo[i].DeviceNumber) {
                                             found = true;
                                             break;
                                         }
+                                    }
+
                                     if (!found) {
                                         var nameBuilder = new StringBuilder(adapterInfo[i].AdapterName);
                                         nameBuilder.Replace("(TM)", " ");
@@ -123,6 +125,7 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
                                 report.AppendLine();
                             }
+                        }
                     }
                 }
             } catch (DllNotFoundException) { } catch (EntryPointNotFoundException e) {

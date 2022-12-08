@@ -65,8 +65,10 @@ namespace OpenHardwareMonitor.GUI {
                 if (!Nodes.Contains(node)) {
                     int i = 0;
                     while (i < Nodes.Count &&
-                      ((TypeNode)Nodes[i]).SensorType < node.SensorType)
+                      ((TypeNode)Nodes[i]).SensorType < node.SensorType) {
                         i++;
+                    }
+
                     Nodes.Insert(i, node);
                 }
             } else {
@@ -76,7 +78,7 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void SensorRemoved(ISensor sensor) {
-            foreach (TypeNode typeNode in typeNodes)
+            foreach (TypeNode typeNode in typeNodes) {
                 if (typeNode.SensorType == sensor.SensorType) {
                     SensorNode sensorNode = null;
                     foreach (Node node in typeNode.Nodes) {
@@ -89,14 +91,18 @@ namespace OpenHardwareMonitor.GUI {
                         UpdateNode(typeNode);
                     }
                 }
+            }
+
             PlotSelectionChanged?.Invoke(this, null);
         }
 
         private void InsertSorted(Node node, ISensor sensor) {
             int i = 0;
             while (i < node.Nodes.Count &&
-              ((SensorNode)node.Nodes[i]).Sensor.Index < sensor.Index)
+              ((SensorNode)node.Nodes[i]).Sensor.Index < sensor.Index) {
                 i++;
+            }
+
             SensorNode sensorNode = new SensorNode(sensor, settings, unitManager);
             sensorNode.PlotSelectionChanged += SensorPlotSelectionChanged;
             node.Nodes.Insert(i, sensorNode);
@@ -107,11 +113,13 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void SensorAdded(ISensor sensor) {
-            foreach (TypeNode typeNode in typeNodes)
+            foreach (TypeNode typeNode in typeNodes) {
                 if (typeNode.SensorType == sensor.SensorType) {
                     InsertSorted(typeNode, sensor);
                     UpdateNode(typeNode);
                 }
+            }
+
             PlotSelectionChanged?.Invoke(this, null);
         }
 

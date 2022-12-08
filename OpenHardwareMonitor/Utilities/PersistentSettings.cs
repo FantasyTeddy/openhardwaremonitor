@@ -152,10 +152,11 @@ namespace OpenHardwareMonitor.Utilities {
             if (settings.TryGetValue(name, out str)) {
                 float parsedValue;
                 if (float.TryParse(str, NumberStyles.Float,
-                  CultureInfo.InvariantCulture, out parsedValue))
+                  CultureInfo.InvariantCulture, out parsedValue)) {
                     return parsedValue;
-                else
+                } else {
                     return value;
+                }
             } else {
                 return value;
             }
@@ -167,8 +168,9 @@ namespace OpenHardwareMonitor.Utilities {
 
         public bool GetValue(string name, bool value) {
             string str;
-            if (settings.TryGetValue(name, out str)) return str == "true";
-            else {
+            if (settings.TryGetValue(name, out str)) {
+                return str == "true";
+            } else {
                 return value;
             }
         }
@@ -182,10 +184,11 @@ namespace OpenHardwareMonitor.Utilities {
             if (settings.TryGetValue(name, out str)) {
                 int parsedValue;
                 if (int.TryParse(str, NumberStyles.HexNumber,
-                  CultureInfo.InvariantCulture, out parsedValue))
+                  CultureInfo.InvariantCulture, out parsedValue)) {
                     return Color.FromArgb(parsedValue);
-                else
+                } else {
                     return value;
+                }
             } else {
                 return value;
             }

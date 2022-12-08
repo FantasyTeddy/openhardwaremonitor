@@ -37,8 +37,9 @@ namespace OpenHardwareMonitor.GUI {
                     default:
                         return string.Format(fixedFormat, value);
                 }
-            } else
+            } else {
                 return "-";
+            }
         }
 
         public SensorNode(ISensor sensor, PersistentSettings settings,

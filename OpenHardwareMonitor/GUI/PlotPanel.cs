@@ -261,9 +261,10 @@ namespace OpenHardwareMonitor.GUI {
             foreach (KeyValuePair<SensorType, LinearAxis> pair in axes) {
                 LinearAxis axis = pair.Value;
                 SensorType type = pair.Key;
-                if (type == SensorType.Temperature)
+                if (type == SensorType.Temperature) {
                     axis.Unit = unitManager.TemperatureUnit == TemperatureUnit.Celsius ?
                     "°C" : "°F";
+                }
             }
 
             this.plot.InvalidatePlot(true);

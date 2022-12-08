@@ -174,7 +174,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
                 r.AppendLine("CPUID Return Values");
                 r.AppendLine();
-                for (int j = 0; j < threads[i].Length; j++)
+                for (int j = 0; j < threads[i].Length; j++) {
                     for (int k = 0; k < threads[i][j].Length; k++) {
                         r.AppendLine(" CPU Group: " + threads[i][j][k].Group);
                         r.AppendLine(" CPU Thread: " + threads[i][j][k].Thread);
@@ -188,6 +188,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                         AppendCpuidData(r, threads[i][j][k].ExtData, CPUID.CPUID_EXT);
                         r.AppendLine();
                     }
+                }
             }
             return r.ToString();
         }

@@ -135,8 +135,9 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                 r.Append(report);
                 r.AppendLine();
                 return r.ToString();
-            } else
+            } else {
                 return null;
+            }
         }
 
         public void Close() {

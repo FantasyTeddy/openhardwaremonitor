@@ -45,8 +45,9 @@ namespace OpenHardwareMonitor.Hardware {
                 if (!float.TryParse(settings.GetValue(Identifier.ToString(), "0"),
                   NumberStyles.Float,
                   CultureInfo.InvariantCulture,
-                  out this.value))
+                  out this.value)) {
                     this.value = description.DefaultValue;
+                }
             }
         }
 

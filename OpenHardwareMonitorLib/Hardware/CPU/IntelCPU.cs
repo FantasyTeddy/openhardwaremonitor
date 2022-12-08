@@ -360,7 +360,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 lastEnergyConsumed = new uint[energyStatusMSRs.Length];
 
                 uint eax, edx;
-                if (Ring0.Rdmsr(MSR_RAPL_POWER_UNIT, out eax, out edx))
+                if (Ring0.Rdmsr(MSR_RAPL_POWER_UNIT, out eax, out edx)) {
                     switch (microarchitecture) {
                         case Microarchitecture.Silvermont:
                         case Microarchitecture.Airmont:
@@ -370,6 +370,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                             energyUnitMultiplier = 1.0f / (1 << (int)((eax >> 8) & 0x1F));
                             break;
                     }
+                }
+
                 if (energyUnitMultiplier != 0) {
                     for (int i = 0; i < energyStatusMSRs.Length; i++) {
                         if (!Ring0.Rdmsr(energyStatusMSRs[i], out eax, out edx))

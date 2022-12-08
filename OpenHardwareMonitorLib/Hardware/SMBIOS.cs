@@ -264,10 +264,11 @@ namespace OpenHardwareMonitor.Hardware {
 
             protected string GetString(int offset) {
                 if (offset < data.Length && data[offset] > 0 &&
-                 data[offset] <= strings.Length)
+                 data[offset] <= strings.Length) {
                     return strings[data[offset] - 1];
-                else
+                } else {
                     return "";
+                }
             }
 
             public Structure(byte type, ushort handle, byte[] data, string[] strings) {

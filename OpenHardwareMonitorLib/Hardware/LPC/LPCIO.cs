@@ -559,8 +559,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         public string GetReport() {
             if (report.Length > 0) {
                 return "LPCIO" + Environment.NewLine + Environment.NewLine + report;
-            } else
+            } else {
                 return null;
+            }
         }
     }
 }

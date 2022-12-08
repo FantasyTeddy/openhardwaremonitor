@@ -77,11 +77,12 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
                 }, this.settings);
 
-            if (tctlOffset != 0.0f)
+            if (tctlOffset != 0.0f) {
                 tctlTemperature = new Sensor(
                 "CPU Tctl", 1, true, SensorType.Temperature, this, new[] {
             new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
                   }, this.settings);
+            }
 
             ccdMaxTemperature = new Sensor(
               "CPU CCD Max", 2, SensorType.Temperature, this, this.settings);
@@ -166,7 +167,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 r.AppendLine(" Register  Value");
                 IList<uint> registers = GetSmnRegisters();
 
-                for (int i = 0; i < registers.Count; i++)
+                for (int i = 0; i < registers.Count; i++) {
                     if (ReadSmnRegister(registers[i], out uint value)) {
                         r.Append(" ");
                         r.Append(registers[i].ToString("X8", CultureInfo.InvariantCulture));
@@ -174,6 +175,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                         r.Append(value.ToString("X8", CultureInfo.InvariantCulture));
                         r.AppendLine();
                     }
+                }
+
                 r.AppendLine();
 
                 Ring0.ReleasePciBusMutex();

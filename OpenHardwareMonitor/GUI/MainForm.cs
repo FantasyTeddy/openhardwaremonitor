@@ -116,11 +116,12 @@ namespace OpenHardwareMonitor.GUI {
             this.min.Width = DpiHelper.LogicalToDeviceUnits(100);
             this.max.Width = DpiHelper.LogicalToDeviceUnits(100);
 
-            foreach (TreeColumn column in treeView.Columns)
+            foreach (TreeColumn column in treeView.Columns) {
                 column.Width = Math.Max(DpiHelper.LogicalToDeviceUnits(20), Math.Min(
                   DpiHelper.LogicalToDeviceUnits(400),
                   settings.GetValue("treeView.Columns." + column.Header + ".Width",
                   column.Width)));
+            }
 
             treeModel = new TreeModel();
             root = new Node(System.Environment.MachineName) {
@@ -455,8 +456,10 @@ namespace OpenHardwareMonitor.GUI {
             int i = 0;
             while (i < nodes.Count && nodes[i] is HardwareNode &&
               ((HardwareNode)nodes[i]).Hardware.HardwareType <=
-                node.Hardware.HardwareType)
+                node.Hardware.HardwareType) {
                 i++;
+            }
+
             nodes.Insert(i, node);
         }
 
@@ -494,8 +497,9 @@ namespace OpenHardwareMonitor.GUI {
                 Color color;
                 if (node.IsVisible) {
                     if (plotMenuItem.Checked && node is SensorNode sensorNode &&
-                      sensorPlotColors.TryGetValue(sensorNode.Sensor, out color))
+                      sensorPlotColors.TryGetValue(sensorNode.Sensor, out color)) {
                         e.TextColor = color;
+                    }
                 } else {
                     e.TextColor = Color.DarkGray;
                 }
@@ -590,9 +594,10 @@ namespace OpenHardwareMonitor.GUI {
 
             if (plotPanel != null) {
                 plotPanel.SetCurrentSettings();
-                foreach (TreeColumn column in treeView.Columns)
+                foreach (TreeColumn column in treeView.Columns) {
                     settings.SetValue("treeView.Columns." + column.Header + ".Width",
                       column.Width);
+                }
             }
 
             if (Server != null) {

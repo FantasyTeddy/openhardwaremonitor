@@ -121,7 +121,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
         private void CreateTemperatureSensors(ISuperIO superIO, ISettings settings,
           IList<Temperature> t) {
-            foreach (Temperature temperature in t)
+            foreach (Temperature temperature in t) {
                 if (temperature.Index < superIO.Temperatures.Length) {
                     Sensor sensor = new Sensor(temperature.Name, temperature.Index,
                       SensorType.Temperature, this, new[] {
@@ -129,12 +129,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                   }, settings);
                     temperatures.Add(sensor);
                 }
+            }
         }
 
         private void CreateVoltageSensors(ISuperIO superIO, ISettings settings,
           IList<Voltage> v) {
             const string formula = "Voltage = value + (value - Vf) * Ri / Rf.";
-            foreach (Voltage voltage in v)
+            foreach (Voltage voltage in v) {
                 if (voltage.Index < superIO.Voltages.Length) {
                     Sensor sensor = new Sensor(voltage.Name, voltage.Index,
                       voltage.Hidden, SensorType.Voltage, this, new[] {
@@ -147,6 +148,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                       }, settings);
                     voltages.Add(sensor);
                 }
+            }
         }
 
         private static void GetBoardSpecificConfiguration(ISuperIO superIO,

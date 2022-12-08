@@ -302,8 +302,9 @@ namespace OpenHardwareMonitor.GUI {
 
         private void SensorAdded(ISensor sensor) {
             if (settings.GetValue(new Identifier(sensor.Identifier,
-              "gadget").ToString(), false))
+              "gadget").ToString(), false)) {
                 Add(sensor);
+            }
         }
 
         private void SensorRemoved(ISensor sensor) {
@@ -312,9 +313,11 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public bool Contains(ISensor sensor) {
-            foreach (IList<ISensor> list in sensors.Values)
+            foreach (IList<ISensor> list in sensors.Values) {
                 if (list.Contains(sensor))
                     return true;
+            }
+
             return false;
         }
 
@@ -338,7 +341,10 @@ namespace OpenHardwareMonitor.GUI {
                 int i = 0;
                 while (i < list.Count && (list[i].SensorType < sensor.SensorType ||
                   (list[i].SensorType == sensor.SensorType &&
-                   list[i].Index < sensor.Index))) i++;
+                   list[i].Index < sensor.Index))) {
+                    i++;
+                }
+
                 list.Insert(i, sensor);
 
                 settings.SetValue(
@@ -356,7 +362,7 @@ namespace OpenHardwareMonitor.GUI {
             if (deleteConfig)
                 settings.Remove(new Identifier(sensor.Identifier, "gadget").ToString());
 
-            foreach (KeyValuePair<IHardware, IList<ISensor>> keyValue in sensors)
+            foreach (KeyValuePair<IHardware, IList<ISensor>> keyValue in sensors) {
                 if (keyValue.Value.Contains(sensor)) {
                     keyValue.Value.Remove(sensor);
                     if (keyValue.Value.Count == 0) {
@@ -364,6 +370,8 @@ namespace OpenHardwareMonitor.GUI {
                         break;
                     }
                 }
+            }
+
             Resize();
         }
 
@@ -460,9 +468,10 @@ namespace OpenHardwareMonitor.GUI {
                     DrawImageWidthBorder(graphics, w, h, back, topBorder, bottomBorder,
                       leftBorder, rightBorder);
 
-                    if (fore != null)
+                    if (fore != null) {
                         DrawImageWidthBorder(graphics, w, h, fore, topBorder, bottomBorder,
                         leftBorder, rightBorder);
+                    }
 
                     if (image != null) {
                         int width = w - leftBorder - rightBorder;

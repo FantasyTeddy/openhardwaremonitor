@@ -59,33 +59,38 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             // check if processor has MSRs
             if (cpuid[0][0].Data.GetLength(0) > 1
-              && (cpuid[0][0].Data[1, 3] & 0x20) != 0)
+              && (cpuid[0][0].Data[1, 3] & 0x20) != 0) {
                 HasModelSpecificRegisters = true;
-            else
+            } else {
                 HasModelSpecificRegisters = false;
+            }
 
             // check if processor has a TSC
             if (cpuid[0][0].Data.GetLength(0) > 1
-              && (cpuid[0][0].Data[1, 3] & 0x10) != 0)
+              && (cpuid[0][0].Data[1, 3] & 0x10) != 0) {
                 HasTimeStampCounter = true;
-            else
+            } else {
                 HasTimeStampCounter = false;
+            }
 
             // check if processor supports an invariant TSC 
             if (cpuid[0][0].ExtData.GetLength(0) > 7
-              && (cpuid[0][0].ExtData[7, 3] & 0x100) != 0)
+              && (cpuid[0][0].ExtData[7, 3] & 0x100) != 0) {
                 isInvariantTimeStampCounter = true;
-            else
+            } else {
                 isInvariantTimeStampCounter = false;
+            }
 
             if (coreCount > 1)
                 totalLoad = new Sensor("CPU Total", 0, SensorType.Load, this, settings);
             else
                 totalLoad = null;
             coreLoads = new Sensor[coreCount];
-            for (int i = 0; i < coreLoads.Length; i++)
+            for (int i = 0; i < coreLoads.Length; i++) {
                 coreLoads[i] = new Sensor(CoreString(i), i + 1,
                   SensorType.Load, this, settings);
+            }
+
             cpuLoad = new CPULoad(cpuid);
             if (cpuLoad.IsAvailable) {
                 foreach (Sensor sensor in coreLoads)

@@ -46,9 +46,10 @@ namespace OpenHardwareMonitor.Hardware {
 
             groups.Add(group);
 
-            if (HardwareAdded != null)
+            if (HardwareAdded != null) {
                 foreach (IHardware hardware in group.Hardware)
                     HardwareAdded(hardware);
+            }
         }
 
         private void Remove(IGroup group) {
@@ -57,18 +58,21 @@ namespace OpenHardwareMonitor.Hardware {
 
             groups.Remove(group);
 
-            if (HardwareRemoved != null)
+            if (HardwareRemoved != null) {
                 foreach (IHardware hardware in group.Hardware)
                     HardwareRemoved(hardware);
+            }
 
             group.Close();
         }
 
         private void RemoveType<T>() where T : IGroup {
             List<IGroup> list = new List<IGroup>();
-            foreach (IGroup group in groups)
+            foreach (IGroup group in groups) {
                 if (group is T)
                     list.Add(group);
+            }
+
             foreach (IGroup group in list)
                 Remove(group);
         }
@@ -219,9 +223,11 @@ namespace OpenHardwareMonitor.Hardware {
         public IHardware[] Hardware {
             get {
                 List<IHardware> list = new List<IHardware>();
-                foreach (IGroup group in groups)
+                foreach (IGroup group in groups) {
                     foreach (IHardware hardware in group.Hardware)
                         list.Add(hardware);
+                }
+
                 return list.ToArray();
             }
         }
@@ -388,9 +394,10 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public void Traverse(IVisitor visitor) {
-            foreach (IGroup group in groups)
+            foreach (IGroup group in groups) {
                 foreach (IHardware hardware in group.Hardware)
                     hardware.Accept(visitor);
+            }
         }
 
         private class Settings : ISettings {

@@ -194,11 +194,13 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                         string[] strings = s.Split(':');
                         int[] ints = new int[strings.Length];
                         bool valid = true;
-                        for (int i = 0; i < ints.Length; i++)
+                        for (int i = 0; i < ints.Length; i++) {
                             if (!int.TryParse(strings[i], out ints[i])) {
                                 valid = false;
                                 break;
                             }
+                        }
+
                         if (!valid)
                             continue;
                         switch (device) {

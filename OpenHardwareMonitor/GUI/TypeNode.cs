@@ -99,11 +99,13 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void node_IsVisibleChanged(Node node) {
-            foreach (Node n in Nodes)
+            foreach (Node n in Nodes) {
                 if (n.IsVisible) {
                     IsVisible = true;
                     return;
                 }
+            }
+
             IsVisible = false;
         }
 

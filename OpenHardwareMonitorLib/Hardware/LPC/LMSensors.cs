@@ -132,23 +132,26 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 string[] voltagePaths = Directory.GetFiles(path, "in*_input");
                 Voltages = new float?[voltagePaths.Length];
                 this.voltageStreams = new FileStream[voltagePaths.Length];
-                for (int i = 0; i < voltagePaths.Length; i++)
+                for (int i = 0; i < voltagePaths.Length; i++) {
                     voltageStreams[i] = new FileStream(voltagePaths[i],
                       FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                }
 
                 string[] temperaturePaths = Directory.GetFiles(path, "temp*_input");
                 Temperatures = new float?[temperaturePaths.Length];
                 this.temperatureStreams = new FileStream[temperaturePaths.Length];
-                for (int i = 0; i < temperaturePaths.Length; i++)
+                for (int i = 0; i < temperaturePaths.Length; i++) {
                     temperatureStreams[i] = new FileStream(temperaturePaths[i],
                       FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                }
 
                 string[] fanPaths = Directory.GetFiles(path, "fan*_input");
                 Fans = new float?[fanPaths.Length];
                 this.fanStreams = new FileStream[fanPaths.Length];
-                for (int i = 0; i < fanPaths.Length; i++)
+                for (int i = 0; i < fanPaths.Length; i++) {
                     fanStreams[i] = new FileStream(fanPaths[i],
                       FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                }
 
                 Controls = new float?[0];
             }

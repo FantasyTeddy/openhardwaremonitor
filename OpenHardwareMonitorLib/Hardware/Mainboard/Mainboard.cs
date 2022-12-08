@@ -34,11 +34,12 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
             if (smbios.Board != null) {
                 if (!string.IsNullOrEmpty(smbios.Board.ProductName)) {
-                    if (manufacturer == Manufacturer.Unknown)
+                    if (manufacturer == Manufacturer.Unknown) {
                         this.name = smbios.Board.ProductName;
-                    else
+                    } else {
                         this.name = manufacturer + " " +
                           smbios.Board.ProductName;
+                    }
                 } else {
                     this.name = manufacturer.ToString();
                 }
@@ -59,9 +60,10 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             }
 
             superIOHardware = new Hardware[superIO.Length];
-            for (int i = 0; i < superIO.Length; i++)
+            for (int i = 0; i < superIO.Length; i++) {
                 superIOHardware[i] = new SuperIOHardware(this, superIO[i],
                   manufacturer, model, settings);
+            }
         }
 
         public string Name {

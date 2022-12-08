@@ -162,9 +162,10 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
                 // check if there is a matching name prefix for this type
                 foreach (NamePrefixAttribute prefix in namePrefixes) {
-                    if (name.StartsWith(prefix.Prefix, StringComparison.InvariantCulture))
+                    if (name.StartsWith(prefix.Prefix, StringComparison.InvariantCulture)) {
                         return Activator.CreateInstance(type, smart, name, firmwareRevision,
                           driveIndex, settings) as AbstractHarddrive;
+                    }
                 }
             }
 

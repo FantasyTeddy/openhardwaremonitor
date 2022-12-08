@@ -445,8 +445,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 Chip != Chip.NCT6796D &&
                 Chip != Chip.NCT6796DR &&
                 Chip != Chip.NCT6797D &&
-                Chip != Chip.NCT6798D)
+                Chip != Chip.NCT6798D) {
                 return;
+            }
 
             // the lock is disabled already if the vendor ID can be read
             if (IsNuvotonVendor())
@@ -492,9 +493,10 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 if (temperature > 125 || temperature < -55)
                     temperature = null;
 
-                for (int j = 0; j < Temperatures.Length; j++)
+                for (int j = 0; j < Temperatures.Length; j++) {
                     if (temperaturesSource[j] == source)
                         Temperatures[j] = temperature;
+                }
             }
             for (int i = 0; i < alternateTemperatureRegister.Length; i++) {
                 if (!alternateTemperatureRegister[i].HasValue)

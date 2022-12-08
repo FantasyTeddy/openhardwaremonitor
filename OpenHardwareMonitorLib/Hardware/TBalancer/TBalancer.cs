@@ -50,33 +50,42 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
       };
             int offset = 0;
-            for (int i = 0; i < digitalTemperatures.Length; i++)
+            for (int i = 0; i < digitalTemperatures.Length; i++) {
                 digitalTemperatures[i] = new Sensor("Digital Sensor " + i,
                   offset + i, SensorType.Temperature, this, parameter, settings);
+            }
+
             offset += digitalTemperatures.Length;
 
-            for (int i = 0; i < analogTemperatures.Length; i++)
+            for (int i = 0; i < analogTemperatures.Length; i++) {
                 analogTemperatures[i] = new Sensor("Analog Sensor " + (i + 1),
                   offset + i, SensorType.Temperature, this, parameter, settings);
+            }
+
             offset += analogTemperatures.Length;
 
-            for (int i = 0; i < sensorhubTemperatures.Length; i++)
+            for (int i = 0; i < sensorhubTemperatures.Length; i++) {
                 sensorhubTemperatures[i] = new Sensor("Sensorhub Sensor " + i,
                   offset + i, SensorType.Temperature, this, parameter, settings);
+            }
+
             offset += sensorhubTemperatures.Length;
 
-            for (int i = 0; i < miniNGTemperatures.Length; i++)
+            for (int i = 0; i < miniNGTemperatures.Length; i++) {
                 miniNGTemperatures[i] = new Sensor("miniNG #" + (i / 2 + 1) +
                   " Sensor " + (i % 2 + 1), offset + i, SensorType.Temperature,
                   this, parameter, settings);
+            }
+
             offset += miniNGTemperatures.Length;
 
-            for (int i = 0; i < sensorhubFlows.Length; i++)
+            for (int i = 0; i < sensorhubFlows.Length; i++) {
                 sensorhubFlows[i] = new Sensor("Flowmeter " + (i + 1),
                   i, SensorType.Flow, this, new[] {
             new ParameterDescription("Impulse Rate",
               "The impulse rate of the flowmeter in pulses/L", 509)
                   }, settings);
+            }
 
             for (int i = 0; i < controls.Length; i++) {
                 controls[i] = new Sensor("Fan Channel " + i, i, SensorType.Control,
@@ -127,10 +136,11 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
             }
 
             for (int i = 0; i < 2; i++) {
-                if (miniNGFans[number * 2 + i] == null)
+                if (miniNGFans[number * 2 + i] == null) {
                     miniNGFans[number * 2 + i] =
                       new Sensor("miniNG #" + (number + 1) + " Fan Channel " + (i + 1),
                       4 + number * 2 + i, SensorType.Fan, this, settings);
+                }
 
                 Sensor sensor = miniNGFans[number * 2 + i];
 
@@ -162,7 +172,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                     primaryData = new byte[data.Length];
                 data.CopyTo(primaryData, 0);
 
-                for (int i = 0; i < digitalTemperatures.Length; i++)
+                for (int i = 0; i < digitalTemperatures.Length; i++) {
                     if (data[238 + i] > 0) {
                         digitalTemperatures[i].Value = 0.5f * data[238 + i] +
                           digitalTemperatures[i].Parameters[0].Value;
@@ -170,8 +180,9 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                     } else {
                         DeactivateSensor(digitalTemperatures[i]);
                     }
+                }
 
-                for (int i = 0; i < analogTemperatures.Length; i++)
+                for (int i = 0; i < analogTemperatures.Length; i++) {
                     if (data[260 + i] > 0) {
                         analogTemperatures[i].Value = 0.5f * data[260 + i] +
                           analogTemperatures[i].Parameters[0].Value;
@@ -179,8 +190,9 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                     } else {
                         DeactivateSensor(analogTemperatures[i]);
                     }
+                }
 
-                for (int i = 0; i < sensorhubTemperatures.Length; i++)
+                for (int i = 0; i < sensorhubTemperatures.Length; i++) {
                     if (data[246 + i] > 0) {
                         sensorhubTemperatures[i].Value = 0.5f * data[246 + i] +
                           sensorhubTemperatures[i].Parameters[0].Value;
@@ -188,8 +200,9 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                     } else {
                         DeactivateSensor(sensorhubTemperatures[i]);
                     }
+                }
 
-                for (int i = 0; i < sensorhubFlows.Length; i++)
+                for (int i = 0; i < sensorhubFlows.Length; i++) {
                     if (data[231 + i] > 0 && data[234] > 0) {
                         float pulsesPerSecond = data[231 + i] * 4.0f / data[234];
                         float pulsesPerLiter = sensorhubFlows[i].Parameters[0].Value;
@@ -198,15 +211,17 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                     } else {
                         DeactivateSensor(sensorhubFlows[i]);
                     }
+                }
 
                 for (int i = 0; i < fans.Length; i++) {
                     float maxRPM = 11.5f * ((data[149 + 2 * i] << 8) | data[148 + 2 * i]);
 
-                    if (fans[i] == null)
+                    if (fans[i] == null) {
                         fans[i] = new Sensor("Fan Channel " + i, i, SensorType.Fan,
                           this, new[] { new ParameterDescription("MaxRPM",
                   "Maximum revolutions per minute (RPM) of the fan.", maxRPM)
                           }, settings);
+                    }
 
                     float value;
                     if ((data[136] & (1 << i)) == 0)  // pwm mode

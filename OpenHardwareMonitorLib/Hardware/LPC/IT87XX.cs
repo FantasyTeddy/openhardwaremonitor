@@ -180,8 +180,10 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             // Bit 0x10 of the configuration register should always be 1
             byte configuration = ReadByte(CONFIGURATION_REGISTER, out valid);
             if ((configuration & 0x10) == 0 &&
-              chip != Chip.IT8655E && chip != Chip.IT8665E)
+              chip != Chip.IT8655E && chip != Chip.IT8665E) {
                 return;
+            }
+
             if (!valid)
                 return;
 

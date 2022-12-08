@@ -104,9 +104,10 @@ namespace OpenHardwareMonitor.Utilities {
 
             sensors = new ISensor[identifiers.Length];
             SensorVisitor visitor = new SensorVisitor(sensor => {
-                for (int i = 0; i < identifiers.Length; i++)
+                for (int i = 0; i < identifiers.Length; i++) {
                     if (sensor.Identifier.ToString() == identifiers[i])
                         sensors[i] = sensor;
+                }
             });
             visitor.VisitComputer(computer);
             return true;
@@ -168,9 +169,10 @@ namespace OpenHardwareMonitor.Utilities {
                     for (int i = 0; i < sensors.Length; i++) {
                         if (sensors[i] != null) {
                             float? value = sensors[i].Value;
-                            if (value.HasValue)
+                            if (value.HasValue) {
                                 writer.Write(
                                   value.Value.ToString("R", CultureInfo.InvariantCulture));
+                            }
                         }
                         if (i < sensors.Length - 1)
                             writer.Write(",");

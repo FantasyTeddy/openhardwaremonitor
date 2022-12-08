@@ -95,9 +95,10 @@ namespace OpenHardwareMonitor.GUI {
             switch (message.Msg) {
                 case WM_COMMAND: {
                         // need to dispatch the message for the context menu
-                        if (message.LParam == IntPtr.Zero)
+                        if (message.LParam == IntPtr.Zero) {
                             commandDispatch.Invoke(null, new object[] {
               message.WParam.ToInt32() & 0xFFFF });
+                        }
                     }
                     break;
                 case WM_NCHITTEST: {
@@ -125,11 +126,13 @@ namespace OpenHardwareMonitor.GUI {
                     }
                     break;
                 case WM_NCRBUTTONUP: {
-                        if (ContextMenu != null)
+                        if (ContextMenu != null) {
                             ShowContextMenu(new Point(
                               Macros.GET_X_LPARAM(message.LParam),
                               Macros.GET_Y_LPARAM(message.LParam)
                             ));
+                        }
+
                         message.Result = IntPtr.Zero;
                     }
                     break;

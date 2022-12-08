@@ -169,11 +169,13 @@ namespace OpenHardwareMonitor.GUI {
                 case SensorType.Load:
                     return string.Format("{0:F0}", Sensor.Value);
                 case SensorType.Temperature:
-                    if (unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
+                    if (unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit) {
                         return string.Format("{0:F0}",
                           UnitManager.CelsiusToFahrenheit(Sensor.Value));
-                    else
+                    } else {
                         return string.Format("{0:F0}", Sensor.Value);
+                    }
+
                 case SensorType.Fan:
                     return string.Format("{0:F1}", 1e-3f * Sensor.Value);
                 case SensorType.Flow:
@@ -195,9 +197,11 @@ namespace OpenHardwareMonitor.GUI {
         private Icon CreateTransparentIcon() {
             string text = GetString();
             int count = 0;
-            for (int i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Length; i++) {
                 if ((text[i] >= '0' && text[i] <= '9') || text[i] == '-')
                     count++;
+            }
+
             bool small = count > 2;
 
             graphics.Clear(Color.Black);

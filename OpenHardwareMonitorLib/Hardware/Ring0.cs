@@ -254,8 +254,9 @@ namespace OpenHardwareMonitor.Hardware {
                 r.Append(report);
                 r.AppendLine();
                 return r.ToString();
-            } else
+            } else {
                 return null;
+            }
         }
 
         public static bool WaitIsaBusMutex(int millisecondsTimeout) {

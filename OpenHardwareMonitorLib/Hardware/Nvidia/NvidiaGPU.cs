@@ -391,11 +391,12 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                 r.AppendLine("Clocks");
                 r.AppendLine();
                 if (status == NvStatus.OK) {
-                    for (int i = 0; i < allClocks.Clock.Length; i++)
+                    for (int i = 0; i < allClocks.Clock.Length; i++) {
                         if (allClocks.Clock[i] > 0) {
                             r.AppendFormat(" Clock[{0}]: {1}{2}", i, allClocks.Clock[i],
                               Environment.NewLine);
                         }
+                    }
                 } else {
                     r.Append(" Status: ");
                     r.AppendLine(status.ToString());
@@ -429,10 +430,12 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                 r.AppendLine("Utilization Domains Ex");
                 r.AppendLine();
                 if (status == NvStatus.OK) {
-                    for (int i = 0; i < info.UtilizationDomains.Length; i++)
-                        if (info.UtilizationDomains[i].Present)
+                    for (int i = 0; i < info.UtilizationDomains.Length; i++) {
+                        if (info.UtilizationDomains[i].Present) {
                             r.AppendFormat(" Percentage[{0}]: {1}{2}", i,
                               info.UtilizationDomains[i].Percentage, Environment.NewLine);
+                        }
+                    }
                 } else {
                     r.Append(" Status: ");
                     r.AppendLine(status.ToString());
@@ -451,10 +454,12 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                 r.AppendLine("Utilization Domains");
                 r.AppendLine();
                 if (status == NvStatus.OK) {
-                    for (int i = 0; i < info.UtilizationDomains.Length; i++)
-                        if (info.UtilizationDomains[i].Present)
+                    for (int i = 0; i < info.UtilizationDomains.Length; i++) {
+                        if (info.UtilizationDomains[i].Present) {
                             r.AppendFormat(" Percentage[{0}]: {1}{2}", i,
                               info.UtilizationDomains[i].Percentage, Environment.NewLine);
+                        }
+                    }
                 } else {
                     r.Append(" Status: ");
                     r.AppendLine(status.ToString());
@@ -518,9 +523,10 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                 r.AppendLine("Memory Info");
                 r.AppendLine();
                 if (status == NvStatus.OK) {
-                    for (int i = 0; i < memoryInfo.Values.Length; i++)
+                    for (int i = 0; i < memoryInfo.Values.Length; i++) {
                         r.AppendFormat(" Value[{0}]: {1}{2}", i,
                             memoryInfo.Values[i], Environment.NewLine);
+                    }
                 } else {
                     r.Append(" Status: ");
                     r.AppendLine(status.ToString());

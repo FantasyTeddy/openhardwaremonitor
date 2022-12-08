@@ -19,9 +19,10 @@ namespace OpenHardwareMonitor.Hardware {
         private const char Separator = '/';
 
         private static void CheckIdentifiers(IEnumerable<string> identifiers) {
-            foreach (string s in identifiers)
+            foreach (string s in identifiers) {
                 if (s.Contains(" ") || s.Contains(Separator.ToString()))
                     throw new ArgumentException("Invalid identifier");
+            }
         }
 
         public Identifier(params string[] identifiers) {
@@ -67,11 +68,12 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public int CompareTo(Identifier other) {
-            if (other == null)
+            if (other == null) {
                 return 1;
-            else
+            } else {
                 return string.Compare(this.identifier, other.identifier,
                   StringComparison.Ordinal);
+            }
         }
 
         public static bool operator ==(Identifier id1, Identifier id2) {

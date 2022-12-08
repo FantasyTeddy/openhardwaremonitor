@@ -27,9 +27,9 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public TreePath GetPath(Node node) {
-            if (node == root)
+            if (node == root) {
                 return TreePath.Empty;
-            else {
+            } else {
                 Stack<object> stack = new Stack<object>();
                 while (node != root) {
                     stack.Push(node);
@@ -54,9 +54,10 @@ namespace OpenHardwareMonitor.GUI {
         public IEnumerable GetChildren(TreePath treePath) {
             Node node = GetNode(treePath);
             if (node != null) {
-                foreach (Node n in node.Nodes)
+                foreach (Node n in node.Nodes) {
                     if (forceVisible || n.IsVisible)
                         yield return n;
+                }
             } else {
                 yield break;
             }
@@ -86,9 +87,10 @@ namespace OpenHardwareMonitor.GUI {
         public void OnNodeChanged(Node parent, int index, Node node) {
             if (NodesChanged != null && parent != null) {
                 TreePath path = GetPath(parent);
-                if (path != null)
+                if (path != null) {
                     NodesChanged(this, new TreeModelEventArgs(
                       path, new int[] { index }, new object[] { node }));
+                }
             }
         }
 

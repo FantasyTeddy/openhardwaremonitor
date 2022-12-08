@@ -73,8 +73,9 @@ namespace OpenHardwareMonitor.GUI {
 
         private void SensorAdded(ISensor sensor) {
             if (settings.GetValue(new Identifier(sensor.Identifier,
-              "tray").ToString(), false))
+              "tray").ToString(), false)) {
                 Add(sensor, false);
+            }
         }
 
         private void SensorRemoved(ISensor sensor) {
@@ -94,9 +95,11 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public bool Contains(ISensor sensor) {
-            foreach (SensorNotifyIcon icon in list)
+            foreach (SensorNotifyIcon icon in list) {
                 if (icon.Sensor == sensor)
                     return true;
+            }
+
             return false;
         }
 
@@ -122,9 +125,11 @@ namespace OpenHardwareMonitor.GUI {
                   new Identifier(sensor.Identifier, "traycolor").ToString());
             }
             SensorNotifyIcon instance = null;
-            foreach (SensorNotifyIcon icon in list)
+            foreach (SensorNotifyIcon icon in list) {
                 if (icon.Sensor == sensor)
                     instance = icon;
+            }
+
             if (instance != null) {
                 list.Remove(instance);
                 UpdateMainIconVisibilty();
