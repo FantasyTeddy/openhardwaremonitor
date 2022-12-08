@@ -802,10 +802,10 @@ namespace OpenHardwareMonitor.GUI
 
                 ~NotifyIconNativeWindow()
                 {
-                    if (base.Handle != IntPtr.Zero)
+                    if (Handle != IntPtr.Zero)
                     {
                         NativeMethods.PostMessage(
-                          new HandleRef(this, base.Handle), WM_CLOSE, 0, 0);
+                          new HandleRef(this, Handle), WM_CLOSE, 0, 0);
                     }
                 }
 
