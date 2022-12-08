@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -140,7 +141,7 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, TypeLibType(0x10c0), Guid("02820E19-7B98-4ED2-B2E8-FDCCCEFF619B")]
-    public interface IActionCollection : IEnumerable
+    public interface IActionCollection : IEnumerable<IAction>
     {
         [DispId(1)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
@@ -469,7 +470,7 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, TypeLibType(0x10c0), Guid("86627EB4-42A7-41E4-A4D9-AC33A72F2D52")]
-    public interface IRegisteredTaskCollection : IEnumerable
+    public interface IRegisteredTaskCollection : IEnumerable<IRegisteredTask>
     {
         [DispId(0x60020000)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x60020000)] get; }
@@ -557,7 +558,7 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, Guid("6A67614B-6828-4FEC-AA54-6D52E8F1F2DB"), TypeLibType(0x10c0)]
-    public interface IRunningTaskCollection : IEnumerable
+    public interface IRunningTaskCollection : IEnumerable<IRunningTask>
     {
         [DispId(1)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
@@ -665,7 +666,7 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, TypeLibType(0x10c0), Guid("79184A66-8664-423F-97F1-637356A5D812")]
-    public interface ITaskFolderCollection : IEnumerable
+    public interface ITaskFolderCollection : IEnumerable<ITaskFolder>
     {
         [DispId(0x60020000)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x60020000)] get; }
@@ -699,7 +700,7 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, Guid("B4EF826B-63C3-46E4-A504-EF69E4F7EA4D"), TypeLibType(0x10c0)]
-    public interface ITaskNamedValueCollection : IEnumerable
+    public interface ITaskNamedValueCollection : IEnumerable<ITaskNamedValuePair>
     {
         [DispId(1)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
@@ -860,7 +861,7 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, TypeLibType(0x10c0), Guid("85DF5081-1B24-4F32-878A-D9D14DF4CB77")]
-    public interface ITriggerCollection : IEnumerable
+    public interface ITriggerCollection : IEnumerable<ITrigger>
     {
         [DispId(1)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
