@@ -255,9 +255,8 @@ namespace OpenHardwareMonitor.Hardware
             FILE_ATTRIBUTE_NORMAL = 0x80
         }
 
-        private const int
-          ERROR_SERVICE_EXISTS = unchecked((int)0x80070431),
-          ERROR_SERVICE_ALREADY_RUNNING = unchecked((int)0x80070420);
+        private const int ERROR_SERVICE_EXISTS = unchecked((int)0x80070431);
+        private const int ERROR_SERVICE_ALREADY_RUNNING = unchecked((int)0x80070420);
 
         private static class NativeMethods
         {

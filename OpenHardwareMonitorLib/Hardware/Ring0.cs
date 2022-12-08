@@ -28,25 +28,24 @@ namespace OpenHardwareMonitor.Hardware
         private static readonly StringBuilder report = new StringBuilder();
 
         private const uint OLS_TYPE = 40000;
-        private static readonly IOControlCode
-          IOCTL_OLS_GET_REFCOUNT = new IOControlCode(OLS_TYPE, 0x801,
-            IOControlCode.Access.Any),
-          IOCTL_OLS_GET_DRIVER_VERSION = new IOControlCode(OLS_TYPE, 0x800,
-            IOControlCode.Access.Any),
-          IOCTL_OLS_READ_MSR = new IOControlCode(OLS_TYPE, 0x821,
-            IOControlCode.Access.Any),
-          IOCTL_OLS_WRITE_MSR = new IOControlCode(OLS_TYPE, 0x822,
-            IOControlCode.Access.Any),
-          IOCTL_OLS_READ_IO_PORT_BYTE = new IOControlCode(OLS_TYPE, 0x833,
-            IOControlCode.Access.Read),
-          IOCTL_OLS_WRITE_IO_PORT_BYTE = new IOControlCode(OLS_TYPE, 0x836,
-            IOControlCode.Access.Write),
-          IOCTL_OLS_READ_PCI_CONFIG = new IOControlCode(OLS_TYPE, 0x851,
-            IOControlCode.Access.Read),
-          IOCTL_OLS_WRITE_PCI_CONFIG = new IOControlCode(OLS_TYPE, 0x852,
-            IOControlCode.Access.Write),
-          IOCTL_OLS_READ_MEMORY = new IOControlCode(OLS_TYPE, 0x841,
-            IOControlCode.Access.Read);
+        private static readonly IOControlCode IOCTL_OLS_GET_REFCOUNT =
+            new IOControlCode(OLS_TYPE, 0x801, IOControlCode.Access.Any);
+        private static readonly IOControlCode IOCTL_OLS_GET_DRIVER_VERSION =
+            new IOControlCode(OLS_TYPE, 0x800, IOControlCode.Access.Any);
+        private static readonly IOControlCode IOCTL_OLS_READ_MSR =
+            new IOControlCode(OLS_TYPE, 0x821, IOControlCode.Access.Any);
+        private static readonly IOControlCode IOCTL_OLS_WRITE_MSR =
+            new IOControlCode(OLS_TYPE, 0x822, IOControlCode.Access.Any);
+        private static readonly IOControlCode IOCTL_OLS_READ_IO_PORT_BYTE =
+            new IOControlCode(OLS_TYPE, 0x833, IOControlCode.Access.Read);
+        private static readonly IOControlCode IOCTL_OLS_WRITE_IO_PORT_BYTE =
+            new IOControlCode(OLS_TYPE, 0x836, IOControlCode.Access.Write);
+        private static readonly IOControlCode IOCTL_OLS_READ_PCI_CONFIG =
+            new IOControlCode(OLS_TYPE, 0x851, IOControlCode.Access.Read);
+        private static readonly IOControlCode IOCTL_OLS_WRITE_PCI_CONFIG =
+            new IOControlCode(OLS_TYPE, 0x852, IOControlCode.Access.Write);
+        private static readonly IOControlCode IOCTL_OLS_READ_MEMORY =
+            new IOControlCode(OLS_TYPE, 0x841, IOControlCode.Access.Read);
 
         private static Assembly GetAssembly()
         {
