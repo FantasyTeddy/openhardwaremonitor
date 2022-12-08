@@ -74,7 +74,8 @@ namespace OpenHardwareMonitor.Hardware
             group.Close();
         }
 
-        private void RemoveType<T>() where T : IGroup
+        private void RemoveType<T>()
+            where T : IGroup
         {
             List<IGroup> list = new List<IGroup>();
             foreach (IGroup group in groups)

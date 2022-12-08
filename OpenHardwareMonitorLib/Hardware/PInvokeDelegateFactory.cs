@@ -32,7 +32,8 @@ namespace OpenHardwareMonitor.Hardware
 
         public static void CreateDelegate<T>(DllImportAttribute dllImportAttribute,
           out T newDelegate, DllImportSearchPath dllImportSearchPath =
-          DllImportSearchPath.System32) where T : class
+          DllImportSearchPath.System32)
+            where T : class
         {
             Tuple<DllImportAttribute, Type> key =
               new Tuple<DllImportAttribute, Type>(dllImportAttribute, typeof(T));

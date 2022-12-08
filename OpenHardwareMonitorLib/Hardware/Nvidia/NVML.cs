@@ -77,7 +77,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 return "nvml.dll";
         }
 
-        private static T CreateDelegate<T>(string entryPoint) where T : Delegate
+        private static T CreateDelegate<T>(string entryPoint)
+            where T : Delegate
         {
             var attribute = new DllImportAttribute(GetDllName())
             {
