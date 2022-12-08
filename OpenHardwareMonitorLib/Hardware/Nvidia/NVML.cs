@@ -249,7 +249,6 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             /// An internal driver error occurred
             /// </summary>
             ErrorUnknown = 999
-        };
-
+        }
     }
 }

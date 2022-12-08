@@ -398,7 +398,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                             for (int i = 0; i < superIO.Fans.Length; i++)
                                 f.Add(new Fan("Fan #" + (i + 1), i));
                             break;
-                    };
+                    }
+
                     break;
 
                 case Manufacturer.DFI:

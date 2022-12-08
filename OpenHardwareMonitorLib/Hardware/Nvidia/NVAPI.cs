@@ -97,7 +97,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
         BOARD = 8,
         ALL = 15,
         UNKNOWN = -1
-    };
+    }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
     internal struct NvSensor
