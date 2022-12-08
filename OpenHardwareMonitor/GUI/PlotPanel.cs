@@ -86,32 +86,73 @@ namespace OpenHardwareMonitor.GUI
 
             MenuItem timeWindow = new MenuItem("Time Window");
             MenuItem[] timeWindowMenuItems =
-              { new MenuItem("Auto",
-            (s, e) => { timeAxis.Zoom(0, double.NaN); InvalidatePlot(); }),
-          new MenuItem("5 min",
-            (s, e) => { timeAxis.Zoom(0, 5 * 60); InvalidatePlot(); }),
-          new MenuItem("10 min",
-            (s, e) => { timeAxis.Zoom(0, 10 * 60); InvalidatePlot(); }),
-          new MenuItem("20 min",
-            (s, e) => { timeAxis.Zoom(0, 20 * 60); InvalidatePlot(); }),
-          new MenuItem("30 min",
-            (s, e) => { timeAxis.Zoom(0, 30 * 60); InvalidatePlot(); }),
-          new MenuItem("45 min",
-            (s, e) => { timeAxis.Zoom(0, 45 * 60); InvalidatePlot(); }),
-          new MenuItem("1 h",
-            (s, e) => { timeAxis.Zoom(0, 60 * 60); InvalidatePlot(); }),
-          new MenuItem("1.5 h",
-            (s, e) => { timeAxis.Zoom(0, 1.5 * 60 * 60); InvalidatePlot(); }),
-          new MenuItem("2 h",
-            (s, e) => { timeAxis.Zoom(0, 2 * 60 * 60); InvalidatePlot(); }),
-          new MenuItem("3 h",
-            (s, e) => { timeAxis.Zoom(0, 3 * 60 * 60); InvalidatePlot(); }),
-          new MenuItem("6 h",
-            (s, e) => { timeAxis.Zoom(0, 6 * 60 * 60); InvalidatePlot(); }),
-          new MenuItem("12 h",
-            (s, e) => { timeAxis.Zoom(0, 12 * 60 * 60); InvalidatePlot(); }),
-          new MenuItem("24 h",
-            (s, e) => { timeAxis.Zoom(0, 24 * 60 * 60); InvalidatePlot(); }) };
+            {
+                new MenuItem("Auto", (s, e) =>
+                {
+                    timeAxis.Zoom(0, double.NaN);
+                    InvalidatePlot();
+                }),
+                new MenuItem("5 min", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 5 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("10 min", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 10 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("20 min", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 20 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("30 min", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 30 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("45 min", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 45 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("1 h", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 60 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("1.5 h", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 1.5 * 60 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("2 h", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 2 * 60 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("3 h", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 3 * 60 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("6 h", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 6 * 60 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("12 h", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 12 * 60 * 60);
+                    InvalidatePlot();
+                }),
+                new MenuItem("24 h", (s, e) =>
+                {
+                    timeAxis.Zoom(0, 24 * 60 * 60);
+                    InvalidatePlot();
+                })
+            };
             foreach (MenuItem mi in timeWindowMenuItems)
                 timeWindow.MenuItems.Add(mi);
             menu.MenuItems.Add(timeWindow);

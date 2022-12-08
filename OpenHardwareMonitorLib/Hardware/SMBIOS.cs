@@ -127,7 +127,8 @@ namespace OpenHardwareMonitor.Hardware
                             StringBuilder sb = new StringBuilder();
                             while (offset < raw.Length && raw[offset] != 0)
                             {
-                                sb.Append((char)raw[offset]); offset++;
+                                sb.Append((char)raw[offset]);
+                                offset++;
                             }
                             offset++;
                             stringsList.Add(sb.ToString());
@@ -174,14 +175,17 @@ namespace OpenHardwareMonitor.Hardware
 
             if (version != null)
             {
-                r.Append("SMBIOS Version: "); r.AppendLine(version.ToString(2));
+                r.Append("SMBIOS Version: ");
+                r.AppendLine(version.ToString(2));
                 r.AppendLine();
             }
 
             if (BIOS != null)
             {
-                r.Append("BIOS Vendor: "); r.AppendLine(BIOS.Vendor);
-                r.Append("BIOS Version: "); r.AppendLine(BIOS.Version);
+                r.Append("BIOS Vendor: ");
+                r.AppendLine(BIOS.Vendor);
+                r.Append("BIOS Version: ");
+                r.AppendLine(BIOS.Version);
                 r.AppendLine();
             }
 

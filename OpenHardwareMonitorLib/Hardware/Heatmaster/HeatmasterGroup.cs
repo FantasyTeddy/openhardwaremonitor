@@ -93,7 +93,8 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster
                       new SerialPort(portNames[i], 38400, Parity.None, 8, StopBits.One))
                     {
                         serialPort.NewLine = ((char)0x0D).ToString();
-                        report.Append("Port Name: "); report.AppendLine(portNames[i]);
+                        report.Append("Port Name: ");
+                        report.AppendLine(portNames[i]);
 
                         try
                         {

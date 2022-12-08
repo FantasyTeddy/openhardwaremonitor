@@ -364,7 +364,8 @@ namespace OpenHardwareMonitor.Hardware
                 Version version = typeof(Computer).Assembly.GetName().Version;
 
                 NewSection(w);
-                w.Write("Version: "); w.WriteLine(version.ToString());
+                w.Write("Version: ");
+                w.WriteLine(version.ToString());
                 w.WriteLine();
 
                 NewSection(w);

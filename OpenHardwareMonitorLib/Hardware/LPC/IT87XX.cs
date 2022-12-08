@@ -321,13 +321,14 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             r.AppendLine("LPC " + GetType().Name);
             r.AppendLine();
-            r.Append("Chip ID: 0x"); r.AppendLine(Chip.ToString("X"));
-            r.Append("Chip Version: 0x"); r.AppendLine(
-              version.ToString("X", CultureInfo.InvariantCulture));
-            r.Append("Base Address: 0x"); r.AppendLine(
-              address.ToString("X4", CultureInfo.InvariantCulture));
-            r.Append("GPIO Address: 0x"); r.AppendLine(
-              gpioAddress.ToString("X4", CultureInfo.InvariantCulture));
+            r.Append("Chip ID: 0x");
+            r.AppendLine(Chip.ToString("X"));
+            r.Append("Chip Version: 0x");
+            r.AppendLine(version.ToString("X", CultureInfo.InvariantCulture));
+            r.Append("Base Address: 0x");
+            r.AppendLine(address.ToString("X4", CultureInfo.InvariantCulture));
+            r.Append("GPIO Address: 0x");
+            r.AppendLine(gpioAddress.ToString("X4", CultureInfo.InvariantCulture));
             r.AppendLine();
 
             if (!Ring0.WaitIsaBusMutex(100))

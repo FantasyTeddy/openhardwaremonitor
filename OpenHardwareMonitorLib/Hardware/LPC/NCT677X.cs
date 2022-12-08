@@ -596,7 +596,8 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             r.AppendLine("LPC " + GetType().Name);
             r.AppendLine();
-            r.Append("Chip ID: 0x"); r.AppendLine(Chip.ToString("X"));
+            r.Append("Chip ID: 0x");
+            r.AppendLine(Chip.ToString("X"));
             r.Append("Chip revision: 0x");
             r.AppendLine(revision.ToString("X", CultureInfo.InvariantCulture));
             r.Append("Base Adress: 0x");

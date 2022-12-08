@@ -35,7 +35,8 @@ namespace OpenHardwareMonitor.GUI
                 exception = value;
                 StringBuilder s = new StringBuilder();
                 Version version = typeof(CrashForm).Assembly.GetName().Version;
-                s.Append("Version: "); s.AppendLine(version.ToString());
+                s.Append("Version: ");
+                s.AppendLine(version.ToString());
                 s.AppendLine();
                 s.AppendLine(exception.ToString());
                 s.AppendLine();
