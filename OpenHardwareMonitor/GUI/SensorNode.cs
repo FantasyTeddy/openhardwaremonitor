@@ -50,7 +50,8 @@ namespace OpenHardwareMonitor.GUI
         }
 
         public SensorNode(ISensor sensor, PersistentSettings settings,
-          UnitManager unitManager) : base()
+          UnitManager unitManager)
+            : base()
         {
             Sensor = sensor;
             this.settings = settings;

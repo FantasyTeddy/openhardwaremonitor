@@ -37,7 +37,8 @@ namespace OpenHardwareMonitor.GUI
             return null;
         }
 
-        public Node() : this(string.Empty) { }
+        public Node()
+            : this(string.Empty) { }
 
         public Node(string text)
         {

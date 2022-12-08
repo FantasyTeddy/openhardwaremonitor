@@ -21,7 +21,8 @@ namespace OpenHardwareMonitor.GUI
         private readonly Identifier expandedIdentifier;
 
         public TypeNode(SensorType sensorType, IHardware hardware,
-          PersistentSettings settings) : base()
+          PersistentSettings settings)
+            : base()
         {
             this.settings = settings;
             SensorType = sensorType;

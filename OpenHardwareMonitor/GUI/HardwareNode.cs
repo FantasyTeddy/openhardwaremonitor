@@ -25,7 +25,8 @@ namespace OpenHardwareMonitor.GUI
         private readonly List<TypeNode> typeNodes = new List<TypeNode>();
 
         public HardwareNode(IHardware hardware, PersistentSettings settings,
-          UnitManager unitManager) : base()
+          UnitManager unitManager)
+            : base()
         {
             this.settings = settings;
             this.unitManager = unitManager;

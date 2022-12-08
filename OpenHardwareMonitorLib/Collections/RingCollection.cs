@@ -25,7 +25,8 @@ namespace OpenHardwareMonitor.Collections
         // index after the last item of the collection
         private int tail;
 
-        public RingCollection() : this(0) { }
+        public RingCollection()
+            : this(0) { }
 
         public RingCollection(int capacity)
         {
