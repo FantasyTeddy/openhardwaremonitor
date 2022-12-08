@@ -8,11 +8,15 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.Mainboard {
-    internal class Identification {
+namespace OpenHardwareMonitor.Hardware.Mainboard
+{
+    internal class Identification
+    {
 
-        public static Manufacturer GetManufacturer(string name) {
-            switch (name) {
+        public static Manufacturer GetManufacturer(string name)
+        {
+            switch (name)
+            {
                 case "acer":
                 case "Acer":
                 case "ACER":
@@ -164,8 +168,10 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             }
         }
 
-        public static Model GetModel(string name) {
-            switch (name) {
+        public static Model GetModel(string name)
+        {
+            switch (name)
+            {
                 case "880GMH/USB3":
                     return Model._880GMH_USB3;
                 case "ASRock AOD790GX/128M":

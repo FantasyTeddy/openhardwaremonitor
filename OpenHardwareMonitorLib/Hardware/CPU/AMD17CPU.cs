@@ -13,9 +13,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace OpenHardwareMonitor.Hardware.CPU {
+namespace OpenHardwareMonitor.Hardware.CPU
+{
 
-    internal sealed class AMD17CPU : AMDCPU {
+    internal sealed class AMD17CPU : AMDCPU
+    {
 
         private readonly Core[] cores;
 
@@ -46,7 +48,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
         private readonly double timeStampCounterMultiplier;
 
-        private struct TctlOffsetItem {
+        private struct TctlOffsetItem
+        {
             public string Name { get; set; }
             public float Offset { get; set; }
         }
@@ -61,11 +64,15 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         private readonly float tctlOffset = 0.0f;
 
         public AMD17CPU(int processorIndex, CPUID[][] cpuid, ISettings settings)
-          : base(processorIndex, cpuid, settings) {
+          : base(processorIndex, cpuid, settings)
+        {
             string cpuName = cpuid[0][0].BrandString;
-            if (!string.IsNullOrEmpty(cpuName)) {
-                foreach (TctlOffsetItem item in tctlOffsetItems) {
-                    if (cpuName.StartsWith(item.Name)) {
+            if (!string.IsNullOrEmpty(cpuName))
+            {
+                foreach (TctlOffsetItem item in tctlOffsetItems)
+                {
+                    if (cpuName.StartsWith(item.Name))
+                    {
                         tctlOffset = item.Offset;
                         break;
                     }
@@ -77,7 +84,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
                 }, this.settings);
 
-            if (tctlOffset != 0.0f) {
+            if (tctlOffset != 0.0f)
+            {
                 tctlTemperature = new Sensor(
                 "CPU Tctl", 1, true, SensorType.Temperature, this, new[] {
             new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
@@ -90,7 +98,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             ccdAvgTemperature = new Sensor(
               "CPU CCD Average", 3, SensorType.Temperature, this, this.settings);
 
-            switch (model & 0xf0) {
+            switch (model & 0xf0)
+            {
                 case 0x30:
                 case 0x70:
                     maxCcdCount = 8; break;
@@ -99,7 +108,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             }
 
             ccdTemperatures = new Sensor[maxCcdCount];
-            for (int i = 0; i < ccdTemperatures.Length; i++) {
+            for (int i = 0; i < ccdTemperatures.Length; i++)
+            {
                 ccdTemperatures[i] = new Sensor(
                 "CPU CCD #" + (i + 1), i + 4, SensorType.Temperature, this,
                   new[] {
@@ -107,12 +117,15 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                   }, this.settings);
             }
 
-            if (Ring0.Rdmsr(MSR_RAPL_PWR_UNIT, out uint eax, out _)) {
+            if (Ring0.Rdmsr(MSR_RAPL_PWR_UNIT, out uint eax, out _))
+            {
                 energyUnitMultiplier = 1.0f / (1 << (int)((eax >> 8) & 0x1F));
             }
 
-            if (energyUnitMultiplier != 0) {
-                if (Ring0.Rdmsr(MSR_PKG_ENERGY_STAT, out uint energyConsumed, out _)) {
+            if (energyUnitMultiplier != 0)
+            {
+                if (Ring0.Rdmsr(MSR_PKG_ENERGY_STAT, out uint energyConsumed, out _))
+                {
                     lastEnergyTime = DateTime.UtcNow;
                     lastEnergyConsumed = energyConsumed;
                     packagePowerSensor = new Sensor(
@@ -125,34 +138,40 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             busClock = new Sensor("Bus Speed", 0, SensorType.Clock, this, settings);
             timeStampCounterMultiplier = GetTimeStampCounterMultiplier();
-            if (timeStampCounterMultiplier > 0) {
+            if (timeStampCounterMultiplier > 0)
+            {
                 busClock.Value = (float)(TimeStampCounterFrequency /
                   timeStampCounterMultiplier);
                 ActivateSensor(busClock);
             }
 
             this.cores = new Core[coreCount];
-            for (int i = 0; i < this.cores.Length; i++) {
+            for (int i = 0; i < this.cores.Length; i++)
+            {
                 this.cores[i] = new Core(i, cpuid[i], this, settings);
             }
         }
 
-        protected override uint[] GetMSRs() {
+        protected override uint[] GetMSRs()
+        {
             return new uint[] { MSR_P_STATE_0, MSR_FAMILY_17H_P_STATE,
         MSR_RAPL_PWR_UNIT, MSR_CORE_ENERGY_STAT, MSR_PKG_ENERGY_STAT };
         }
 
-        private IList<uint> GetSmnRegisters() {
+        private IList<uint> GetSmnRegisters()
+        {
             var registers = new List<uint> {
                 FAMILY_17H_M01H_THM_TCON_TEMP
             };
-            for (uint i = 0; i < maxCcdCount; i++) {
+            for (uint i = 0; i < maxCcdCount; i++)
+            {
                 registers.Add(FAMILY_17H_M70H_CCD_TEMP(i));
             }
             return registers;
         }
 
-        public override string GetReport() {
+        public override string GetReport()
+        {
             StringBuilder r = new StringBuilder();
             r.Append(base.GetReport());
 
@@ -161,14 +180,17 @@ namespace OpenHardwareMonitor.Hardware.CPU {
               CultureInfo.InvariantCulture));
             r.AppendLine();
 
-            if (Ring0.WaitPciBusMutex(100)) {
+            if (Ring0.WaitPciBusMutex(100))
+            {
                 r.AppendLine("SMN Registers");
                 r.AppendLine();
                 r.AppendLine(" Register  Value");
                 IList<uint> registers = GetSmnRegisters();
 
-                for (int i = 0; i < registers.Count; i++) {
-                    if (ReadSmnRegister(registers[i], out uint value)) {
+                for (int i = 0; i < registers.Count; i++)
+                {
+                    if (ReadSmnRegister(registers[i], out uint value))
+                    {
                         r.Append(" ");
                         r.Append(registers[i].ToString("X8", CultureInfo.InvariantCulture));
                         r.Append("  ");
@@ -185,32 +207,39 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             return r.ToString();
         }
 
-        private double GetTimeStampCounterMultiplier() {
+        private double GetTimeStampCounterMultiplier()
+        {
             Ring0.Rdmsr(MSR_P_STATE_0, out uint eax, out _);
             uint cpuDfsId = (eax >> 8) & 0x3f;
             uint cpuFid = eax & 0xff;
             return 2.0 * cpuFid / cpuDfsId;
         }
 
-        private bool ReadSmnRegister(uint address, out uint value) {
-            if (!Ring0.WritePciConfig(0, 0x60, address)) {
+        private bool ReadSmnRegister(uint address, out uint value)
+        {
+            if (!Ring0.WritePciConfig(0, 0x60, address))
+            {
                 value = 0;
                 return false;
             }
             return Ring0.ReadPciConfig(0, 0x64, out value);
         }
 
-        public override void Update() {
+        public override void Update()
+        {
             base.Update();
 
-            if (Ring0.WaitPciBusMutex(10)) {
+            if (Ring0.WaitPciBusMutex(10))
+            {
 
-                if (ReadSmnRegister(FAMILY_17H_M01H_THM_TCON_TEMP, out uint value)) {
+                if (ReadSmnRegister(FAMILY_17H_M01H_THM_TCON_TEMP, out uint value))
+                {
                     float temperature = ((value >> 21) & 0x7FF) / 8.0f;
                     if ((value & FAMILY_17H_M01H_THM_TCON_TEMP_RANGE_SEL) != 0)
                         temperature -= 49;
 
-                    if (tctlTemperature != null) {
+                    if (tctlTemperature != null)
+                    {
                         tctlTemperature.Value = temperature +
                           tctlTemperature.Parameters[0].Value;
                         ActivateSensor(tctlTemperature);
@@ -226,8 +255,10 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 float maxTemperature = float.MinValue;
                 int ccdCount = 0;
                 float ccdTemperatureSum = 0;
-                for (uint i = 0; i < ccdTemperatures.Length; i++) {
-                    if (ReadSmnRegister(FAMILY_17H_M70H_CCD_TEMP(i), out value)) {
+                for (uint i = 0; i < ccdTemperatures.Length; i++)
+                {
+                    if (ReadSmnRegister(FAMILY_17H_M70H_CCD_TEMP(i), out value))
+                    {
                         if ((value & FAMILY_17H_M70H_CCD_TEMP_VALID) == 0)
                             continue;
 
@@ -244,7 +275,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                     }
                 }
 
-                if (ccdCount > 1) {
+                if (ccdCount > 1)
+                {
                     ccdMaxTemperature.Value = maxTemperature;
                     ActivateSensor(ccdMaxTemperature);
 
@@ -256,10 +288,12 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             }
 
             if (energyUnitMultiplier != 0 &&
-              Ring0.Rdmsr(MSR_PKG_ENERGY_STAT, out uint energyConsumed, out _)) {
+              Ring0.Rdmsr(MSR_PKG_ENERGY_STAT, out uint energyConsumed, out _))
+            {
                 DateTime time = DateTime.UtcNow;
                 float deltaTime = (float)(time - lastEnergyTime).TotalSeconds;
-                if (deltaTime > 0.01) {
+                if (deltaTime > 0.01)
+                {
 
                     packagePowerSensor.Value = energyUnitMultiplier * unchecked(
                       energyConsumed - lastEnergyConsumed) / deltaTime;
@@ -269,18 +303,21 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             }
 
             float? coresPower = 0f;
-            for (int i = 0; i < cores.Length; i++) {
+            for (int i = 0; i < cores.Length; i++)
+            {
                 cores[i].Update();
                 coresPower += cores[i].Power;
             }
             coresPowerSensor.Value = coresPower;
 
-            if (coresPower.HasValue) {
+            if (coresPower.HasValue)
+            {
                 ActivateSensor(coresPowerSensor);
             }
         }
 
-        private class Core {
+        private class Core
+        {
 
             private readonly AMD17CPU cpu;
             private readonly GroupAffinity affinity;
@@ -291,7 +328,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             private DateTime lastEnergyTime;
             private uint lastEnergyConsumed;
 
-            public Core(int index, CPUID[] threads, AMD17CPU cpu, ISettings settings) {
+            public Core(int index, CPUID[] threads, AMD17CPU cpu, ISettings settings)
+            {
                 this.cpu = cpu;
                 this.affinity = threads[0].Affinity;
 
@@ -301,9 +339,11 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 this.clockSensor =
                   new Sensor(coreString, index + 1, SensorType.Clock, cpu, settings);
 
-                if (cpu.energyUnitMultiplier != 0) {
+                if (cpu.energyUnitMultiplier != 0)
+                {
                     if (Ring0.RdmsrTx(MSR_CORE_ENERGY_STAT, out uint energyConsumed,
-                      out _, affinity)) {
+                      out _, affinity))
+                    {
                         lastEnergyTime = DateTime.UtcNow;
                         lastEnergyConsumed = energyConsumed;
                         cpu.ActivateSensor(powerSensor);
@@ -311,33 +351,41 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 }
             }
 
-            private double? GetMultiplier() {
-                if (Ring0.Rdmsr(MSR_FAMILY_17H_P_STATE, out uint eax, out _)) {
+            private double? GetMultiplier()
+            {
+                if (Ring0.Rdmsr(MSR_FAMILY_17H_P_STATE, out uint eax, out _))
+                {
                     uint cpuDfsId = (eax >> 8) & 0x3f;
                     uint cpuFid = eax & 0xff;
                     return 2.0 * cpuFid / cpuDfsId;
-                } else {
+                }
+                else
+                {
                     return null;
                 }
             }
 
             public float? Power { get; private set; } = null;
 
-            public void Update() {
+            public void Update()
+            {
                 DateTime energyTime = DateTime.MinValue;
                 double? multiplier = null;
 
                 GroupAffinity previousAffinity = ThreadAffinity.Set(affinity);
-                if (Ring0.Rdmsr(MSR_CORE_ENERGY_STAT, out uint energyConsumed, out _)) {
+                if (Ring0.Rdmsr(MSR_CORE_ENERGY_STAT, out uint energyConsumed, out _))
+                {
                     energyTime = DateTime.UtcNow;
                 }
 
                 multiplier = GetMultiplier();
                 ThreadAffinity.Set(previousAffinity);
 
-                if (cpu.energyUnitMultiplier != 0) {
+                if (cpu.energyUnitMultiplier != 0)
+                {
                     float deltaTime = (float)(energyTime - lastEnergyTime).TotalSeconds;
-                    if (deltaTime > 0.01) {
+                    if (deltaTime > 0.01)
+                    {
                         Power = cpu.energyUnitMultiplier *
                           unchecked(energyConsumed - lastEnergyConsumed) / deltaTime;
                         powerSensor.Value = Power;
@@ -346,7 +394,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                     }
                 }
 
-                if (multiplier.HasValue) {
+                if (multiplier.HasValue)
+                {
                     float? clock = (float?)(multiplier * cpu.busClock.Value);
                     clockSensor.Value = clock;
                     if (clock.HasValue)

@@ -14,24 +14,33 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Aga.Controls.Tree;
 
-namespace OpenHardwareMonitor.GUI {
-    public class TreeModel : ITreeModel {
+namespace OpenHardwareMonitor.GUI
+{
+    public class TreeModel : ITreeModel
+    {
 
         private readonly Node root;
         private bool forceVisible = false;
 
-        public TreeModel() {
-            root = new Node {
+        public TreeModel()
+        {
+            root = new Node
+            {
                 Model = this
             };
         }
 
-        public TreePath GetPath(Node node) {
-            if (node == root) {
+        public TreePath GetPath(Node node)
+        {
+            if (node == root)
+            {
                 return TreePath.Empty;
-            } else {
+            }
+            else
+            {
                 Stack<object> stack = new Stack<object>();
-                while (node != root) {
+                while (node != root)
+                {
                     stack.Push(node);
                     node = node.Parent;
                 }
@@ -41,9 +50,11 @@ namespace OpenHardwareMonitor.GUI {
 
         public Collection<Node> Nodes => root.Nodes;
 
-        private Node GetNode(TreePath treePath) {
+        private Node GetNode(TreePath treePath)
+        {
             Node parent = root;
-            foreach (object obj in treePath.FullPath) {
+            foreach (object obj in treePath.FullPath)
+            {
                 if (!(obj is Node node) || node.Parent != parent)
                     return null;
                 parent = node;
@@ -51,26 +62,35 @@ namespace OpenHardwareMonitor.GUI {
             return parent;
         }
 
-        public IEnumerable GetChildren(TreePath treePath) {
+        public IEnumerable GetChildren(TreePath treePath)
+        {
             Node node = GetNode(treePath);
-            if (node != null) {
-                foreach (Node n in node.Nodes) {
+            if (node != null)
+            {
+                foreach (Node n in node.Nodes)
+                {
                     if (forceVisible || n.IsVisible)
                         yield return n;
                 }
-            } else {
+            }
+            else
+            {
                 yield break;
             }
         }
 
-        public bool IsLeaf(TreePath treePath) {
+        public bool IsLeaf(TreePath treePath)
+        {
             return false;
         }
 
-        public bool ForceVisible {
+        public bool ForceVisible
+        {
             get => forceVisible;
-            set {
-                if (value != forceVisible) {
+            set
+            {
+                if (value != forceVisible)
+                {
                     forceVisible = value;
                     OnStructureChanged(root);
                 }
@@ -84,23 +104,29 @@ namespace OpenHardwareMonitor.GUI {
         public event EventHandler<TreeModelEventArgs> NodesRemoved;
 #pragma warning restore 67
 
-        public void OnNodeChanged(Node parent, int index, Node node) {
-            if (NodesChanged != null && parent != null) {
+        public void OnNodeChanged(Node parent, int index, Node node)
+        {
+            if (NodesChanged != null && parent != null)
+            {
                 TreePath path = GetPath(parent);
-                if (path != null) {
+                if (path != null)
+                {
                     NodesChanged(this, new TreeModelEventArgs(
                       path, new int[] { index }, new object[] { node }));
                 }
             }
         }
 
-        public void OnStructureChanged(Node node) {
+        public void OnStructureChanged(Node node)
+        {
             StructureChanged?.Invoke(this,
   new TreeModelEventArgs(GetPath(node), new object[0]));
         }
 
-        public void OnNodeInserted(Node parent, int index, Node node) {
-            if (NodesInserted != null) {
+        public void OnNodeInserted(Node parent, int index, Node node)
+        {
+            if (NodesInserted != null)
+            {
                 TreeModelEventArgs args = new TreeModelEventArgs(GetPath(parent),
                   new int[] { index }, new object[] { node });
                 NodesInserted(this, args);
@@ -108,8 +134,10 @@ namespace OpenHardwareMonitor.GUI {
 
         }
 
-        public void OnNodeRemoved(Node parent, int index, Node node) {
-            if (NodesRemoved != null) {
+        public void OnNodeRemoved(Node parent, int index, Node node)
+        {
+            if (NodesRemoved != null)
+            {
                 TreeModelEventArgs args = new TreeModelEventArgs(GetPath(parent),
                   new int[] { index }, new object[] { node });
                 NodesRemoved(this, args);

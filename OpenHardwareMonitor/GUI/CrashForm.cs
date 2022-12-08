@@ -15,18 +15,23 @@ using System.Text;
 using System.Windows.Forms;
 using OpenHardwareMonitor.Utilities;
 
-namespace OpenHardwareMonitor.GUI {
-    public partial class CrashForm : Form {
+namespace OpenHardwareMonitor.GUI
+{
+    public partial class CrashForm : Form
+    {
 
         private Exception exception;
 
-        public CrashForm() {
+        public CrashForm()
+        {
             InitializeComponent();
         }
 
-        public Exception Exception {
+        public Exception Exception
+        {
             get => exception;
-            set {
+            set
+            {
                 exception = value;
                 StringBuilder s = new StringBuilder();
                 Version version = typeof(CrashForm).Assembly.GetName().Version;
@@ -34,7 +39,8 @@ namespace OpenHardwareMonitor.GUI {
                 s.AppendLine();
                 s.AppendLine(exception.ToString());
                 s.AppendLine();
-                if (exception.InnerException != null) {
+                if (exception.InnerException != null)
+                {
                     s.AppendLine(exception.InnerException.ToString());
                     s.AppendLine();
                 }
@@ -48,8 +54,10 @@ namespace OpenHardwareMonitor.GUI {
             }
         }
 
-        private void sendButton_Click(object sender, EventArgs e) {
-            try {
+        private void sendButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
                 Version version = typeof(CrashForm).Assembly.GetName().Version;
                 WebRequest request = WebRequest.Create(
                   "http://openhardwaremonitor.org/report.php");
@@ -66,7 +74,8 @@ namespace OpenHardwareMonitor.GUI {
                 byte[] byteArray = Encoding.UTF8.GetBytes(report);
                 request.ContentLength = byteArray.Length;
 
-                try {
+                try
+                {
                     Stream dataStream = request.GetRequestStream();
                     dataStream.Write(byteArray, 0, byteArray.Length);
                     dataStream.Close();
@@ -80,11 +89,15 @@ namespace OpenHardwareMonitor.GUI {
                     response.Close();
 
                     Close();
-                } catch (WebException) {
+                }
+                catch (WebException)
+                {
                     MessageBox.Show("Sending the crash report failed.", "Error",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            } catch {
+            }
+            catch
+            {
             }
         }
     }

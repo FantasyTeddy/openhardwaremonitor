@@ -8,22 +8,27 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.Mainboard {
-    internal class MainboardGroup : IGroup {
+namespace OpenHardwareMonitor.Hardware.Mainboard
+{
+    internal class MainboardGroup : IGroup
+    {
 
         private readonly Mainboard[] mainboards;
 
-        public MainboardGroup(SMBIOS smbios, ISettings settings) {
+        public MainboardGroup(SMBIOS smbios, ISettings settings)
+        {
             mainboards = new Mainboard[1];
             mainboards[0] = new Mainboard(smbios, settings);
         }
 
-        public void Close() {
+        public void Close()
+        {
             foreach (Mainboard mainboard in mainboards)
                 mainboard.Close();
         }
 
-        public string GetReport() {
+        public string GetReport()
+        {
             return null;
         }
 

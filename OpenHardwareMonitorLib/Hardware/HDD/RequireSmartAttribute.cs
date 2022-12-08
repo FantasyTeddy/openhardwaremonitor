@@ -10,12 +10,15 @@
 
 using System;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    internal class RequireSmartAttribute : Attribute {
+    internal class RequireSmartAttribute : Attribute
+    {
 
-        public RequireSmartAttribute(byte attributeId) {
+        public RequireSmartAttribute(byte attributeId)
+        {
             AttributeId = attributeId;
         }
 

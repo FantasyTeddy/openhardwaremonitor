@@ -17,45 +17,61 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using OpenHardwareMonitor.TaskScheduler;
 
-namespace OpenHardwareMonitor.GUI {
-    public class StartupManager {
+namespace OpenHardwareMonitor.GUI
+{
+    public class StartupManager
+    {
 
         private readonly TaskSchedulerClass scheduler;
         private bool startup;
         private const string REGISTRY_RUN =
           @"Software\Microsoft\Windows\CurrentVersion\Run";
 
-        private bool IsAdministrator() {
-            try {
+        private bool IsAdministrator()
+        {
+            try
+            {
                 WindowsIdentity identity = WindowsIdentity.GetCurrent();
                 WindowsPrincipal principal = new WindowsPrincipal(identity);
                 return principal.IsInRole(WindowsBuiltInRole.Administrator);
-            } catch {
+            }
+            catch
+            {
                 return false;
             }
         }
 
-        public StartupManager() {
-            if (Hardware.OperatingSystem.IsUnix) {
+        public StartupManager()
+        {
+            if (Hardware.OperatingSystem.IsUnix)
+            {
                 scheduler = null;
                 IsAvailable = false;
                 return;
             }
 
-            if (IsAdministrator()) {
-                try {
+            if (IsAdministrator())
+            {
+                try
+                {
                     scheduler = new TaskSchedulerClass();
                     scheduler.Connect(null, null, null, null);
-                } catch {
+                }
+                catch
+                {
                     scheduler = null;
                 }
 
-                if (scheduler != null) {
-                    try {
-                        try {
+                if (scheduler != null)
+                {
+                    try
+                    {
+                        try
+                        {
                             // check if the taskscheduler is running
                             IRunningTaskCollection collection = scheduler.GetRunningTasks(0);
-                        } catch (ArgumentException) { }
+                        }
+                        catch (ArgumentException) { }
 
                         ITaskFolder folder = scheduler.GetFolder("\\Open Hardware Monitor");
                         IRegisteredTask task = folder.GetTask("Startup");
@@ -70,41 +86,60 @@ namespace OpenHardwareMonitor.GUI {
                           ((task.Definition.Actions[1] as IExecAction).Path ==
                             Application.ExecutablePath);
 
-                    } catch (IOException) {
+                    }
+                    catch (IOException)
+                    {
                         startup = false;
-                    } catch (UnauthorizedAccessException) {
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
                         scheduler = null;
-                    } catch (COMException) {
+                    }
+                    catch (COMException)
+                    {
                         scheduler = null;
-                    } catch (NotImplementedException) {
+                    }
+                    catch (NotImplementedException)
+                    {
                         scheduler = null;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 scheduler = null;
             }
 
-            if (scheduler == null) {
-                try {
+            if (scheduler == null)
+            {
+                try
+                {
                     using (RegistryKey key =
-                      Registry.CurrentUser.OpenSubKey(REGISTRY_RUN)) {
+                      Registry.CurrentUser.OpenSubKey(REGISTRY_RUN))
+                    {
                         startup = false;
-                        if (key != null) {
+                        if (key != null)
+                        {
                             string value = (string)key.GetValue("OpenHardwareMonitor");
                             if (value != null)
                                 startup = value == Application.ExecutablePath;
                         }
                     }
                     IsAvailable = true;
-                } catch (SecurityException) {
+                }
+                catch (SecurityException)
+                {
                     IsAvailable = false;
                 }
-            } else {
+            }
+            else
+            {
                 IsAvailable = true;
             }
         }
 
-        private void CreateSchedulerTask() {
+        private void CreateSchedulerTask()
+        {
             ITaskDefinition definition = scheduler.NewTask(0);
             definition.RegistrationInfo.Description =
               "This task starts the Open Hardware Monitor on Windows startup.";
@@ -125,9 +160,12 @@ namespace OpenHardwareMonitor.GUI {
 
             ITaskFolder root = scheduler.GetFolder("\\");
             ITaskFolder folder;
-            try {
+            try
+            {
                 folder = root.GetFolder("Open Hardware Monitor");
-            } catch (IOException) {
+            }
+            catch (IOException)
+            {
                 folder = root.CreateFolder("Open Hardware Monitor", "");
             }
             folder.RegisterTaskDefinition("Startup", definition,
@@ -135,52 +173,71 @@ namespace OpenHardwareMonitor.GUI {
               TASK_LOGON_TYPE.TASK_LOGON_INTERACTIVE_TOKEN, "");
         }
 
-        private void DeleteSchedulerTask() {
+        private void DeleteSchedulerTask()
+        {
             ITaskFolder root = scheduler.GetFolder("\\");
-            try {
+            try
+            {
                 ITaskFolder folder = root.GetFolder("Open Hardware Monitor");
                 folder.DeleteTask("Startup", 0);
-            } catch (IOException) { }
-            try {
+            }
+            catch (IOException) { }
+            try
+            {
                 root.DeleteFolder("Open Hardware Monitor", 0);
-            } catch (IOException) { }
+            }
+            catch (IOException) { }
         }
 
-        private void CreateRegistryRun() {
+        private void CreateRegistryRun()
+        {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(REGISTRY_RUN);
             key.SetValue("OpenHardwareMonitor", Application.ExecutablePath);
         }
 
-        private void DeleteRegistryRun() {
+        private void DeleteRegistryRun()
+        {
             RegistryKey key = Registry.CurrentUser.CreateSubKey(REGISTRY_RUN);
             key.DeleteValue("OpenHardwareMonitor");
         }
 
         public bool IsAvailable { get; }
 
-        public bool Startup {
+        public bool Startup
+        {
             get => startup;
-            set {
-                if (startup != value) {
-                    if (IsAvailable) {
-                        if (scheduler != null) {
+            set
+            {
+                if (startup != value)
+                {
+                    if (IsAvailable)
+                    {
+                        if (scheduler != null)
+                        {
                             if (value)
                                 CreateSchedulerTask();
                             else
                                 DeleteSchedulerTask();
                             startup = value;
-                        } else {
-                            try {
+                        }
+                        else
+                        {
+                            try
+                            {
                                 if (value)
                                     CreateRegistryRun();
                                 else
                                     DeleteRegistryRun();
                                 startup = value;
-                            } catch (UnauthorizedAccessException) {
+                            }
+                            catch (UnauthorizedAccessException)
+                            {
                                 throw new InvalidOperationException();
                             }
                         }
-                    } else {
+                    }
+                    else
+                    {
                         throw new InvalidOperationException();
                     }
                 }

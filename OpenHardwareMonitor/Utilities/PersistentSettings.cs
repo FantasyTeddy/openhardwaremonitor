@@ -16,45 +16,63 @@ using System.Text;
 using System.Xml;
 using OpenHardwareMonitor.Hardware;
 
-namespace OpenHardwareMonitor.Utilities {
-    public class PersistentSettings : ISettings {
+namespace OpenHardwareMonitor.Utilities
+{
+    public class PersistentSettings : ISettings
+    {
 
         private readonly IDictionary<string, string> settings =
           new Dictionary<string, string>();
 
-        public void Load(string fileName) {
+        public void Load(string fileName)
+        {
             XmlDocument doc = new XmlDocument();
-            try {
+            try
+            {
                 doc.Load(fileName);
-            } catch {
-                try {
+            }
+            catch
+            {
+                try
+                {
                     File.Delete(fileName);
-                } catch { }
+                }
+                catch { }
 
                 string backupFileName = fileName + ".backup";
-                try {
+                try
+                {
                     doc.Load(backupFileName);
-                } catch {
-                    try {
+                }
+                catch
+                {
+                    try
+                    {
                         File.Delete(backupFileName);
-                    } catch { }
+                    }
+                    catch { }
 
                     return;
                 }
             }
 
             XmlNodeList list = doc.GetElementsByTagName("appSettings");
-            foreach (XmlNode node in list) {
+            foreach (XmlNode node in list)
+            {
                 XmlNode parent = node.ParentNode;
                 if (parent != null && parent.Name == "configuration" &&
-                  parent.ParentNode is XmlDocument) {
-                    foreach (XmlNode child in node.ChildNodes) {
-                        if (child.Name == "add") {
+                  parent.ParentNode is XmlDocument)
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        if (child.Name == "add")
+                        {
                             XmlAttributeCollection attributes = child.Attributes;
                             XmlAttribute keyAttribute = attributes["key"];
                             XmlAttribute valueAttribute = attributes["value"];
                             if (keyAttribute != null && valueAttribute != null &&
-                              keyAttribute.Value != null) {
+                              keyAttribute.Value != null)
+                            {
                                 settings.Add(keyAttribute.Value, valueAttribute.Value);
                             }
                         }
@@ -63,7 +81,8 @@ namespace OpenHardwareMonitor.Utilities {
             }
         }
 
-        public void Save(string fileName) {
+        public void Save(string fileName)
+        {
 
             XmlDocument doc = new XmlDocument();
             doc.AppendChild(doc.CreateXmlDeclaration("1.0", "utf-8", null));
@@ -71,7 +90,8 @@ namespace OpenHardwareMonitor.Utilities {
             doc.AppendChild(configuration);
             XmlElement appSettings = doc.CreateElement("appSettings");
             configuration.AppendChild(appSettings);
-            foreach (KeyValuePair<string, string> keyValuePair in settings) {
+            foreach (KeyValuePair<string, string> keyValuePair in settings)
+            {
                 XmlElement add = doc.CreateElement("add");
                 add.SetAttribute("key", keyValuePair.Key);
                 add.SetAttribute("value", keyValuePair.Value);
@@ -79,109 +99,149 @@ namespace OpenHardwareMonitor.Utilities {
             }
 
             byte[] file;
-            using (var memory = new MemoryStream()) {
-                using (var writer = new StreamWriter(memory, Encoding.UTF8)) {
+            using (var memory = new MemoryStream())
+            {
+                using (var writer = new StreamWriter(memory, Encoding.UTF8))
+                {
                     doc.Save(writer);
                 }
                 file = memory.ToArray();
             }
 
             string backupFileName = fileName + ".backup";
-            if (File.Exists(fileName)) {
-                try {
+            if (File.Exists(fileName))
+            {
+                try
+                {
                     File.Delete(backupFileName);
-                } catch { }
-                try {
+                }
+                catch { }
+                try
+                {
                     File.Move(fileName, backupFileName);
-                } catch { }
+                }
+                catch { }
             }
 
             using (var stream = new FileStream(fileName,
-              FileMode.Create, FileAccess.Write)) {
+              FileMode.Create, FileAccess.Write))
+            {
                 stream.Write(file, 0, file.Length);
             }
 
-            try {
+            try
+            {
                 File.Delete(backupFileName);
-            } catch { }
+            }
+            catch { }
         }
 
-        public bool Contains(string name) {
+        public bool Contains(string name)
+        {
             return settings.ContainsKey(name);
         }
 
-        public void SetValue(string name, string value) {
+        public void SetValue(string name, string value)
+        {
             settings[name] = value;
         }
 
-        public string GetValue(string name, string value) {
+        public string GetValue(string name, string value)
+        {
             if (settings.TryGetValue(name, out string result))
                 return result;
             else
                 return value;
         }
 
-        public void Remove(string name) {
+        public void Remove(string name)
+        {
             settings.Remove(name);
         }
 
-        public void SetValue(string name, int value) {
+        public void SetValue(string name, int value)
+        {
             settings[name] = value.ToString();
         }
 
-        public int GetValue(string name, int value) {
-            if (settings.TryGetValue(name, out string str)) {
+        public int GetValue(string name, int value)
+        {
+            if (settings.TryGetValue(name, out string str))
+            {
                 if (int.TryParse(str, out int parsedValue))
                     return parsedValue;
                 else
                     return value;
-            } else {
+            }
+            else
+            {
                 return value;
             }
         }
 
-        public void SetValue(string name, float value) {
+        public void SetValue(string name, float value)
+        {
             settings[name] = value.ToString(CultureInfo.InvariantCulture);
         }
 
-        public float GetValue(string name, float value) {
-            if (settings.TryGetValue(name, out string str)) {
+        public float GetValue(string name, float value)
+        {
+            if (settings.TryGetValue(name, out string str))
+            {
                 if (float.TryParse(str, NumberStyles.Float,
-                  CultureInfo.InvariantCulture, out float parsedValue)) {
+                  CultureInfo.InvariantCulture, out float parsedValue))
+                {
                     return parsedValue;
-                } else {
+                }
+                else
+                {
                     return value;
                 }
-            } else {
+            }
+            else
+            {
                 return value;
             }
         }
 
-        public void SetValue(string name, bool value) {
+        public void SetValue(string name, bool value)
+        {
             settings[name] = value ? "true" : "false";
         }
 
-        public bool GetValue(string name, bool value) {
-            if (settings.TryGetValue(name, out string str)) {
+        public bool GetValue(string name, bool value)
+        {
+            if (settings.TryGetValue(name, out string str))
+            {
                 return str == "true";
-            } else {
+            }
+            else
+            {
                 return value;
             }
         }
 
-        public void SetValue(string name, Color color) {
+        public void SetValue(string name, Color color)
+        {
             settings[name] = color.ToArgb().ToString("X8");
         }
 
-        public Color GetValue(string name, Color value) {
-            if (settings.TryGetValue(name, out string str)) {
+        public Color GetValue(string name, Color value)
+        {
+            if (settings.TryGetValue(name, out string str))
+            {
                 if (int.TryParse(str, NumberStyles.HexNumber,
-                  CultureInfo.InvariantCulture, out int parsedValue)) {
+                  CultureInfo.InvariantCulture, out int parsedValue))
+                {
                     return Color.FromArgb(parsedValue);
-                } else {
+                }
+                else
+                {
                     return value;
                 }
-            } else {
+            }
+            else
+            {
                 return value;
             }
         }

@@ -12,9 +12,11 @@ using System;
 using System.Collections.Generic;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    public enum SensorType {
+    public enum SensorType
+    {
         Voltage, // V
         Clock, // MHz
         Temperature, // °C
@@ -30,8 +32,10 @@ namespace OpenHardwareMonitor.Hardware {
         Throughput, // MB/s = 2^20 Bytes/s
     }
 
-    public struct SensorValue {
-        public SensorValue(float value, DateTime time) {
+    public struct SensorValue
+    {
+        public SensorValue(float value, DateTime time)
+        {
             Value = value;
             Time = time;
         }
@@ -40,7 +44,8 @@ namespace OpenHardwareMonitor.Hardware {
         public DateTime Time { get; }
     }
 
-    public interface ISensor : IElement {
+    public interface ISensor : IElement
+    {
 
         IHardware Hardware { get; }
 

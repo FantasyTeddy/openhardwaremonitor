@@ -14,22 +14,27 @@ using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using Microsoft.Win32.SafeHandles;
 
-namespace OpenHardwareMonitor.Hardware {
-    internal class KernelDriver {
+namespace OpenHardwareMonitor.Hardware
+{
+    internal class KernelDriver
+    {
 
         private readonly string id;
 
         private SafeFileHandle device;
 
-        public KernelDriver(string id) {
+        public KernelDriver(string id)
+        {
             this.id = id;
         }
 
-        public bool Install(string path, out string errorMessage) {
+        public bool Install(string path, out string errorMessage)
+        {
             IntPtr manager = NativeMethods.OpenSCManager(null, null,
               ServiceControlManagerAccessRights.SC_MANAGER_ALL_ACCESS);
 
-            if (manager == IntPtr.Zero) {
+            if (manager == IntPtr.Zero)
+            {
                 errorMessage = "OpenSCManager returned zero.";
                 return false;
             }
@@ -40,11 +45,15 @@ namespace OpenHardwareMonitor.Hardware {
               ErrorControl.SERVICE_ERROR_NORMAL, path, null, null, null, null,
               null);
 
-            if (service == IntPtr.Zero) {
-                if (Marshal.GetHRForLastWin32Error() == ERROR_SERVICE_EXISTS) {
+            if (service == IntPtr.Zero)
+            {
+                if (Marshal.GetHRForLastWin32Error() == ERROR_SERVICE_EXISTS)
+                {
                     errorMessage = "Service already exists";
                     return false;
-                } else {
+                }
+                else
+                {
                     errorMessage = "CreateService returned the error: " +
                       Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error()).Message;
                     NativeMethods.CloseServiceHandle(manager);
@@ -52,8 +61,10 @@ namespace OpenHardwareMonitor.Hardware {
                 }
             }
 
-            if (!NativeMethods.StartService(service, 0, null)) {
-                if (Marshal.GetHRForLastWin32Error() != ERROR_SERVICE_ALREADY_RUNNING) {
+            if (!NativeMethods.StartService(service, 0, null))
+            {
+                if (Marshal.GetHRForLastWin32Error() != ERROR_SERVICE_ALREADY_RUNNING)
+                {
                     errorMessage = "StartService returned the error: " +
                       Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error()).Message;
                     NativeMethods.CloseServiceHandle(service);
@@ -65,26 +76,30 @@ namespace OpenHardwareMonitor.Hardware {
             NativeMethods.CloseServiceHandle(service);
             NativeMethods.CloseServiceHandle(manager);
 
-            try {
+            try
+            {
                 // restrict the driver access to system (SY) and builtin admins (BA)
                 // TODO: replace with a call to IoCreateDeviceSecure in the driver
                 FileSecurity fileSecurity = File.GetAccessControl(@"\\.\" + id);
                 fileSecurity.SetSecurityDescriptorSddlForm(
                   "O:BAG:SYD:(A;;FA;;;SY)(A;;FA;;;BA)");
                 File.SetAccessControl(@"\\.\" + id, fileSecurity);
-            } catch { }
+            }
+            catch { }
 
             errorMessage = null;
             return true;
         }
 
-        public bool Open() {
+        public bool Open()
+        {
             device = new SafeFileHandle(NativeMethods.CreateFile(@"\\.\" + id,
               FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE, 0, IntPtr.Zero,
               CreationDisposition.OPEN_EXISTING, FileAttributes.FILE_ATTRIBUTE_NORMAL,
               IntPtr.Zero), true);
 
-            if (device.IsInvalid) {
+            if (device.IsInvalid)
+            {
                 device.Close();
                 device.Dispose();
                 device = null;
@@ -95,7 +110,8 @@ namespace OpenHardwareMonitor.Hardware {
 
         public bool IsOpen => device != null;
 
-        public bool DeviceIOControl(IOControlCode ioControlCode, object inBuffer) {
+        public bool DeviceIOControl(IOControlCode ioControlCode, object inBuffer)
+        {
             if (device == null)
                 return false;
 
@@ -106,7 +122,8 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         public bool DeviceIOControl<T>(IOControlCode ioControlCode, object inBuffer,
-          ref T outBuffer) {
+          ref T outBuffer)
+        {
             if (device == null)
                 return false;
 
@@ -119,15 +136,18 @@ namespace OpenHardwareMonitor.Hardware {
             return b;
         }
 
-        public void Close() {
-            if (device != null) {
+        public void Close()
+        {
+            if (device != null)
+            {
                 device.Close();
                 device.Dispose();
                 device = null;
             }
         }
 
-        public bool Delete() {
+        public bool Delete()
+        {
             IntPtr manager = NativeMethods.OpenSCManager(null, null,
             ServiceControlManagerAccessRights.SC_MANAGER_ALL_ACCESS);
 
@@ -152,20 +172,24 @@ namespace OpenHardwareMonitor.Hardware {
             return true;
         }
 
-        private enum ServiceAccessRights : uint {
+        private enum ServiceAccessRights : uint
+        {
             SERVICE_ALL_ACCESS = 0xF01FF
         }
 
-        private enum ServiceControlManagerAccessRights : uint {
+        private enum ServiceControlManagerAccessRights : uint
+        {
             SC_MANAGER_ALL_ACCESS = 0xF003F
         }
 
-        private enum ServiceType : uint {
+        private enum ServiceType : uint
+        {
             SERVICE_KERNEL_DRIVER = 1,
             SERVICE_FILE_SYSTEM_DRIVER = 2
         }
 
-        private enum StartType : uint {
+        private enum StartType : uint
+        {
             SERVICE_BOOT_START = 0,
             SERVICE_SYSTEM_START = 1,
             SERVICE_AUTO_START = 2,
@@ -173,14 +197,16 @@ namespace OpenHardwareMonitor.Hardware {
             SERVICE_DISABLED = 4
         }
 
-        private enum ErrorControl : uint {
+        private enum ErrorControl : uint
+        {
             SERVICE_ERROR_IGNORE = 0,
             SERVICE_ERROR_NORMAL = 1,
             SERVICE_ERROR_SEVERE = 2,
             SERVICE_ERROR_CRITICAL = 3
         }
 
-        private enum ServiceControl : uint {
+        private enum ServiceControl : uint
+        {
             SERVICE_CONTROL_STOP = 1,
             SERVICE_CONTROL_PAUSE = 2,
             SERVICE_CONTROL_CONTINUE = 3,
@@ -198,7 +224,8 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct ServiceStatus {
+        private struct ServiceStatus
+        {
             public uint dwServiceType;
             public uint dwCurrentState;
             public uint dwControlsAccepted;
@@ -208,12 +235,14 @@ namespace OpenHardwareMonitor.Hardware {
             public uint dwWaitHint;
         }
 
-        private enum FileAccess : uint {
+        private enum FileAccess : uint
+        {
             GENERIC_READ = 0x80000000,
             GENERIC_WRITE = 0x40000000
         }
 
-        private enum CreationDisposition : uint {
+        private enum CreationDisposition : uint
+        {
             CREATE_NEW = 1,
             CREATE_ALWAYS = 2,
             OPEN_EXISTING = 3,
@@ -221,7 +250,8 @@ namespace OpenHardwareMonitor.Hardware {
             TRUNCATE_EXISTING = 5
         }
 
-        private enum FileAttributes : uint {
+        private enum FileAttributes : uint
+        {
             FILE_ATTRIBUTE_NORMAL = 0x80
         }
 
@@ -229,7 +259,8 @@ namespace OpenHardwareMonitor.Hardware {
           ERROR_SERVICE_EXISTS = unchecked((int)0x80070431),
           ERROR_SERVICE_ALREADY_RUNNING = unchecked((int)0x80070420);
 
-        private static class NativeMethods {
+        private static class NativeMethods
+        {
             private const string ADVAPI = "advapi32.dll";
             private const string KERNEL = "kernel32.dll";
 

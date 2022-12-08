@@ -12,21 +12,25 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace OpenHardwareMonitor.Hardware.Nvidia {
+namespace OpenHardwareMonitor.Hardware.Nvidia
+{
 
-    internal class NvidiaGroup : IGroup {
+    internal class NvidiaGroup : IGroup
+    {
 
         private readonly List<Hardware> hardware = new List<Hardware>();
         private readonly StringBuilder report = new StringBuilder();
 
-        public NvidiaGroup(ISettings settings) {
+        public NvidiaGroup(ISettings settings)
+        {
             if (!NVAPI.IsAvailable)
                 return;
 
             report.AppendLine("NVAPI");
             report.AppendLine();
 
-            if (NVAPI.NvAPI_GetInterfaceVersionString(out string version) == NvStatus.OK) {
+            if (NVAPI.NvAPI_GetInterfaceVersionString(out string version) == NvStatus.OK)
+            {
                 report.Append(" Version: ");
                 report.AppendLine(version);
             }
@@ -34,13 +38,17 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             NvPhysicalGpuHandle[] handles =
               new NvPhysicalGpuHandle[NVAPI.MAX_PHYSICAL_GPUS];
             int count;
-            if (NVAPI.NvAPI_EnumPhysicalGPUs == null) {
+            if (NVAPI.NvAPI_EnumPhysicalGPUs == null)
+            {
                 report.AppendLine(" Error: NvAPI_EnumPhysicalGPUs not available");
                 report.AppendLine();
                 return;
-            } else {
+            }
+            else
+            {
                 NvStatus status = NVAPI.NvAPI_EnumPhysicalGPUs(handles, out count);
-                if (status != NvStatus.OK) {
+                if (status != NvStatus.OK)
+                {
                     report.AppendLine(" Status: " + status);
                     report.AppendLine();
                     return;
@@ -59,20 +67,25 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
               new Dictionary<NvPhysicalGpuHandle, NvDisplayHandle>();
 
             if (NVAPI.NvAPI_EnumNvidiaDisplayHandle != null &&
-              NVAPI.NvAPI_GetPhysicalGPUsFromDisplay != null) {
+              NVAPI.NvAPI_GetPhysicalGPUsFromDisplay != null)
+            {
                 NvStatus status = NvStatus.OK;
                 int i = 0;
-                while (status == NvStatus.OK) {
+                while (status == NvStatus.OK)
+                {
                     NvDisplayHandle displayHandle = new NvDisplayHandle();
                     status = NVAPI.NvAPI_EnumNvidiaDisplayHandle(i, ref displayHandle);
                     i++;
 
-                    if (status == NvStatus.OK) {
+                    if (status == NvStatus.OK)
+                    {
                         NvPhysicalGpuHandle[] handlesFromDisplay =
                           new NvPhysicalGpuHandle[NVAPI.MAX_PHYSICAL_GPUS];
                         if (NVAPI.NvAPI_GetPhysicalGPUsFromDisplay(displayHandle,
-                          handlesFromDisplay, out uint countFromDisplay) == NvStatus.OK) {
-                            for (int j = 0; j < countFromDisplay; j++) {
+                          handlesFromDisplay, out uint countFromDisplay) == NvStatus.OK)
+                        {
+                            for (int j = 0; j < countFromDisplay; j++)
+                            {
                                 if (!displayHandles.ContainsKey(handlesFromDisplay[j]))
                                     displayHandles.Add(handlesFromDisplay[j], displayHandle);
                             }
@@ -84,7 +97,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             report.Append("Number of GPUs: ");
             report.AppendLine(count.ToString(CultureInfo.InvariantCulture));
 
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 displayHandles.TryGetValue(handles[i], out NvDisplayHandle displayHandle);
                 hardware.Add(new NvidiaGPU(i, handles[i], displayHandle, settings));
             }
@@ -94,15 +108,18 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
 
         public IHardware[] Hardware => hardware.ToArray();
 
-        public string GetReport() {
+        public string GetReport()
+        {
             return report.ToString();
         }
 
-        public void Close() {
+        public void Close()
+        {
             foreach (Hardware gpu in hardware)
                 gpu.Close();
 
-            if (NVML.IsInitialized) {
+            if (NVML.IsInitialized)
+            {
                 NVML.NvmlShutdown();
             }
         }

@@ -8,15 +8,19 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.RAM {
-    internal class RAMGroup : IGroup {
+namespace OpenHardwareMonitor.Hardware.RAM
+{
+    internal class RAMGroup : IGroup
+    {
 
         private readonly Hardware[] hardware;
 
-        public RAMGroup(SMBIOS smbios, ISettings settings) {
+        public RAMGroup(SMBIOS smbios, ISettings settings)
+        {
 
             // No implementation for RAM on Unix systems
-            if (OperatingSystem.IsUnix) {
+            if (OperatingSystem.IsUnix)
+            {
                 hardware = new Hardware[0];
                 return;
             }
@@ -24,13 +28,15 @@ namespace OpenHardwareMonitor.Hardware.RAM {
             hardware = new Hardware[] { new GenericRAM("Generic Memory", settings) };
         }
 
-        public string GetReport() {
+        public string GetReport()
+        {
             return null;
         }
 
         public IHardware[] Hardware => hardware;
 
-        public void Close() {
+        public void Close()
+        {
             foreach (Hardware ram in hardware)
                 ram.Close();
         }

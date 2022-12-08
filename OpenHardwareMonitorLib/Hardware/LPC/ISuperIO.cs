@@ -8,8 +8,10 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.LPC {
-    internal interface ISuperIO {
+namespace OpenHardwareMonitor.Hardware.LPC
+{
+    internal interface ISuperIO
+    {
 
         Chip Chip { get; }
 

@@ -12,9 +12,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace OpenHardwareMonitor.GUI {
-    public partial class AboutBox : Form {
-        public AboutBox() {
+namespace OpenHardwareMonitor.GUI
+{
+    public partial class AboutBox : Form
+    {
+        public AboutBox()
+        {
             InitializeComponent();
             Font = SystemFonts.MessageBoxFont;
             this.label3.Text = "Version " +
@@ -30,10 +33,13 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void linkLabel_LinkClicked(object sender,
-          LinkLabelLinkClickedEventArgs e) {
-            try {
+          LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
                 Process.Start(new ProcessStartInfo(e.Link.LinkData.ToString()));
-            } catch { }
+            }
+            catch { }
         }
 
     }

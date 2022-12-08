@@ -10,33 +10,40 @@
 
 using OpenHardwareMonitor.Utilities;
 
-namespace OpenHardwareMonitor.GUI {
+namespace OpenHardwareMonitor.GUI
+{
 
-    public enum TemperatureUnit {
+    public enum TemperatureUnit
+    {
         Celsius = 0,
         Fahrenheit = 1
     }
 
-    public class UnitManager {
+    public class UnitManager
+    {
 
         private readonly PersistentSettings settings;
         private TemperatureUnit temperatureUnit;
 
-        public UnitManager(PersistentSettings settings) {
+        public UnitManager(PersistentSettings settings)
+        {
             this.settings = settings;
             this.temperatureUnit = (TemperatureUnit)settings.GetValue("TemperatureUnit",
               (int)TemperatureUnit.Celsius);
         }
 
-        public TemperatureUnit TemperatureUnit {
+        public TemperatureUnit TemperatureUnit
+        {
             get => temperatureUnit;
-            set {
+            set
+            {
                 this.temperatureUnit = value;
                 this.settings.SetValue("TemperatureUnit", (int)temperatureUnit);
             }
         }
 
-        public static float? CelsiusToFahrenheit(float? valueInCelsius) {
+        public static float? CelsiusToFahrenheit(float? valueInCelsius)
+        {
             return valueInCelsius * 1.8f + 32;
         }
     }

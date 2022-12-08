@@ -11,9 +11,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace OpenHardwareMonitor.Hardware.TBalancer {
+namespace OpenHardwareMonitor.Hardware.TBalancer
+{
 
-    internal enum FT_DEVICE : uint {
+    internal enum FT_DEVICE : uint
+    {
         FT_DEVICE_232BM,
         FT_DEVICE_232AM,
         FT_DEVICE_100AX,
@@ -24,7 +26,8 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         FT_DEVICE_4232H
     }
 
-    internal enum FT_STATUS {
+    internal enum FT_STATUS
+    {
         FT_OK,
         FT_INVALID_HANDLE,
         FT_DEVICE_NOT_FOUND,
@@ -45,26 +48,30 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         FT_OTHER_ERROR
     }
 
-    internal enum FT_FLOW_CONTROL : ushort {
+    internal enum FT_FLOW_CONTROL : ushort
+    {
         FT_FLOW_DTR_DSR = 512,
         FT_FLOW_NONE = 0,
         FT_FLOW_RTS_CTS = 256,
         FT_FLOW_XON_XOFF = 1024,
     }
 
-    internal enum FT_PURGE : uint {
+    internal enum FT_PURGE : uint
+    {
         FT_PURGE_RX = 1,
         FT_PURGE_TX = 2,
         FT_PURGE_ALL = 3,
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct FT_HANDLE {
+    internal struct FT_HANDLE
+    {
         private readonly uint handle;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct FT_DEVICE_INFO_NODE {
+    internal struct FT_DEVICE_INFO_NODE
+    {
         public uint Flags;
         public FT_DEVICE Type;
         public uint ID;
@@ -76,7 +83,8 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         public FT_HANDLE Handle;
     }
 
-    internal class FTD2XX {
+    internal class FTD2XX
+    {
 
         public delegate FT_STATUS FT_CreateDeviceInfoListDelegate(
           out uint numDevices);
@@ -144,7 +152,8 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
 
         private FTD2XX() { }
 
-        public static FT_STATUS Write(FT_HANDLE handle, byte[] buffer) {
+        public static FT_STATUS Write(FT_HANDLE handle, byte[] buffer)
+        {
             FT_STATUS status = FT_Write(handle, buffer, (uint)buffer.Length,
               out uint bytesWritten);
             if (bytesWritten != buffer.Length)
@@ -153,30 +162,37 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                 return status;
         }
 
-        public static int BytesToRead(FT_HANDLE handle) {
+        public static int BytesToRead(FT_HANDLE handle)
+        {
             if (FT_GetStatus(handle, out uint amountInRxQueue, out uint amountInTxQueue,
-              out uint eventStatus) == FT_STATUS.FT_OK) {
+              out uint eventStatus) == FT_STATUS.FT_OK)
+            {
                 return (int)amountInRxQueue;
-            } else {
+            }
+            else
+            {
                 return 0;
             }
         }
 
-        public static byte ReadByte(FT_HANDLE handle) {
+        public static byte ReadByte(FT_HANDLE handle)
+        {
             FT_STATUS status = FT_ReadByte(handle, out byte buffer, 1, out uint bytesReturned);
             if (status != FT_STATUS.FT_OK || bytesReturned != 1)
                 throw new InvalidOperationException();
             return buffer;
         }
 
-        public static void Read(FT_HANDLE handle, byte[] buffer) {
+        public static void Read(FT_HANDLE handle, byte[] buffer)
+        {
             FT_STATUS status =
               FT_Read(handle, buffer, (uint)buffer.Length, out uint bytesReturned);
             if (status != FT_STATUS.FT_OK || bytesReturned != buffer.Length)
                 throw new InvalidOperationException();
         }
 
-        private static string GetDllName() {
+        private static string GetDllName()
+        {
             if (OperatingSystem.IsUnix)
                 return "libftd2xx.so";
             else
@@ -184,8 +200,10 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         }
 
         private static T CreateDelegate<T>(string entryPoint)
-          where T : class {
-            DllImportAttribute attribute = new DllImportAttribute(GetDllName()) {
+          where T : class
+        {
+            DllImportAttribute attribute = new DllImportAttribute(GetDllName())
+            {
                 CallingConvention = CallingConvention.StdCall,
                 PreserveSig = true,
                 EntryPoint = entryPoint

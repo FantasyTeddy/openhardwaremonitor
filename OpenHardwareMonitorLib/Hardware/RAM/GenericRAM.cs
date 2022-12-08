@@ -10,15 +10,18 @@
 
 using System.Runtime.InteropServices;
 
-namespace OpenHardwareMonitor.Hardware.RAM {
-    internal class GenericRAM : Hardware {
+namespace OpenHardwareMonitor.Hardware.RAM
+{
+    internal class GenericRAM : Hardware
+    {
 
         private readonly Sensor loadSensor;
         private readonly Sensor usedMemory;
         private readonly Sensor availableMemory;
 
         public GenericRAM(string name, ISettings settings)
-          : base(name, new Identifier("ram"), settings) {
+          : base(name, new Identifier("ram"), settings)
+        {
             loadSensor = new Sensor("Memory", 0, SensorType.Load, this, settings);
             ActivateSensor(loadSensor);
 
@@ -33,8 +36,10 @@ namespace OpenHardwareMonitor.Hardware.RAM {
 
         public override HardwareType HardwareType => HardwareType.RAM;
 
-        public override void Update() {
-            NativeMethods.MemoryStatusEx status = new NativeMethods.MemoryStatusEx {
+        public override void Update()
+        {
+            NativeMethods.MemoryStatusEx status = new NativeMethods.MemoryStatusEx
+            {
                 Length = checked((uint)Marshal.SizeOf(
                 typeof(NativeMethods.MemoryStatusEx)))
             };
@@ -53,9 +58,11 @@ namespace OpenHardwareMonitor.Hardware.RAM {
               (1024 * 1024 * 1024);
         }
 
-        private class NativeMethods {
+        private class NativeMethods
+        {
             [StructLayout(LayoutKind.Sequential)]
-            public struct MemoryStatusEx {
+            public struct MemoryStatusEx
+            {
                 public uint Length;
                 public uint MemoryLoad;
                 public ulong TotalPhysicalMemory;

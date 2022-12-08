@@ -8,11 +8,13 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
     public delegate void SensorEventHandler(ISensor sensor);
 
-    public enum HardwareType {
+    public enum HardwareType
+    {
         Mainboard,
         SuperIO,
         CPU,
@@ -24,7 +26,8 @@ namespace OpenHardwareMonitor.Hardware {
         HDD
     }
 
-    public interface IHardware : IElement {
+    public interface IHardware : IElement
+    {
 
         string Name { get; set; }
         Identifier Identifier { get; }

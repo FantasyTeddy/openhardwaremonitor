@@ -8,9 +8,11 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.Mainboard {
+namespace OpenHardwareMonitor.Hardware.Mainboard
+{
 
-    internal enum Manufacturer {
+    internal enum Manufacturer
+    {
         Abit,
         Acer,
         Alienware,

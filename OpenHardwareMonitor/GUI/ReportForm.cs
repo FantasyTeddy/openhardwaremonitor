@@ -16,29 +16,37 @@ using System.Text;
 using System.Windows.Forms;
 using OpenHardwareMonitor.Utilities;
 
-namespace OpenHardwareMonitor.GUI {
-    public partial class ReportForm : Form {
+namespace OpenHardwareMonitor.GUI
+{
+    public partial class ReportForm : Form
+    {
 
         private string report;
 
-        public ReportForm() {
+        public ReportForm()
+        {
             InitializeComponent();
-            try {
+            try
+            {
                 titleLabel.Font = new Font(SystemFonts.DefaultFont, FontStyle.Bold);
                 reportTextBox.Font = new Font(FontFamily.GenericMonospace,
                   SystemFonts.DefaultFont.Size);
-            } catch { }
+            }
+            catch { }
         }
 
-        public string Report {
+        public string Report
+        {
             get => report;
-            set {
+            set
+            {
                 report = value;
                 reportTextBox.Text = report;
             }
         }
 
-        private void sendButton_Click(object sender, EventArgs e) {
+        private void sendButton_Click(object sender, EventArgs e)
+        {
             Version version = typeof(CrashForm).Assembly.GetName().Version;
             WebRequest request = WebRequest.Create(
               "http://openhardwaremonitor.org/report.php");
@@ -55,7 +63,8 @@ namespace OpenHardwareMonitor.GUI {
             byte[] byteArray = Encoding.UTF8.GetBytes(report);
             request.ContentLength = byteArray.Length;
 
-            try {
+            try
+            {
                 Stream dataStream = request.GetRequestStream();
                 dataStream.Write(byteArray, 0, byteArray.Length);
                 dataStream.Close();
@@ -69,7 +78,9 @@ namespace OpenHardwareMonitor.GUI {
                 response.Close();
 
                 Close();
-            } catch (WebException) {
+            }
+            catch (WebException)
+            {
                 MessageBox.Show("Sending the hardware report failed.", "Error",
                   MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

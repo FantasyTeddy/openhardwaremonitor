@@ -12,8 +12,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using OpenHardwareMonitor.Hardware;
 
-namespace OpenHardwareMonitor.GUI {
-    public class HardwareTypeImage {
+namespace OpenHardwareMonitor.GUI
+{
+    public class HardwareTypeImage
+    {
         private readonly IDictionary<HardwareType, Image> images =
           new Dictionary<HardwareType, Image>();
 
@@ -21,11 +23,16 @@ namespace OpenHardwareMonitor.GUI {
 
         public static HardwareTypeImage Instance { get; } = new HardwareTypeImage();
 
-        public Image GetImage(HardwareType hardwareType) {
-            if (images.TryGetValue(hardwareType, out Image image)) {
+        public Image GetImage(HardwareType hardwareType)
+        {
+            if (images.TryGetValue(hardwareType, out Image image))
+            {
                 return image;
-            } else {
-                switch (hardwareType) {
+            }
+            else
+            {
+                switch (hardwareType)
+                {
                     case HardwareType.CPU:
                         image = Utilities.EmbeddedResources.GetImage("cpu.png");
                         break;

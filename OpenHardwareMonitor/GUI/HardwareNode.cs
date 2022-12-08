@@ -13,8 +13,10 @@ using System.Collections.Generic;
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Utilities;
 
-namespace OpenHardwareMonitor.GUI {
-    public class HardwareNode : Node {
+namespace OpenHardwareMonitor.GUI
+{
+    public class HardwareNode : Node
+    {
 
         private readonly PersistentSettings settings;
         private readonly UnitManager unitManager;
@@ -23,7 +25,8 @@ namespace OpenHardwareMonitor.GUI {
         private readonly List<TypeNode> typeNodes = new List<TypeNode>();
 
         public HardwareNode(IHardware hardware, PersistentSettings settings,
-          UnitManager unitManager) : base() {
+          UnitManager unitManager) : base()
+        {
             this.settings = settings;
             this.unitManager = unitManager;
             Hardware = hardware;
@@ -43,49 +46,64 @@ namespace OpenHardwareMonitor.GUI {
               settings.GetValue(expandedIdentifier.ToString(), base.IsExpanded);
         }
 
-        public override string Text {
+        public override string Text
+        {
             get => Hardware.Name;
             set => Hardware.Name = value;
         }
 
         public IHardware Hardware { get; }
 
-        public override bool IsExpanded {
+        public override bool IsExpanded
+        {
             get => base.IsExpanded;
-            set {
-                if (base.IsExpanded != value) {
+            set
+            {
+                if (base.IsExpanded != value)
+                {
                     base.IsExpanded = value;
                     settings.SetValue(expandedIdentifier.ToString(), value);
                 }
             }
         }
 
-        private void UpdateNode(TypeNode node) {
-            if (node.Nodes.Count > 0) {
-                if (!Nodes.Contains(node)) {
+        private void UpdateNode(TypeNode node)
+        {
+            if (node.Nodes.Count > 0)
+            {
+                if (!Nodes.Contains(node))
+                {
                     int i = 0;
                     while (i < Nodes.Count &&
-                      ((TypeNode)Nodes[i]).SensorType < node.SensorType) {
+                      ((TypeNode)Nodes[i]).SensorType < node.SensorType)
+                    {
                         i++;
                     }
 
                     Nodes.Insert(i, node);
                 }
-            } else {
+            }
+            else
+            {
                 if (Nodes.Contains(node))
                     Nodes.Remove(node);
             }
         }
 
-        private void SensorRemoved(ISensor sensor) {
-            foreach (TypeNode typeNode in typeNodes) {
-                if (typeNode.SensorType == sensor.SensorType) {
+        private void SensorRemoved(ISensor sensor)
+        {
+            foreach (TypeNode typeNode in typeNodes)
+            {
+                if (typeNode.SensorType == sensor.SensorType)
+                {
                     SensorNode sensorNode = null;
-                    foreach (Node node in typeNode.Nodes) {
+                    foreach (Node node in typeNode.Nodes)
+                    {
                         if (node is SensorNode n && n.Sensor == sensor)
                             sensorNode = n;
                     }
-                    if (sensorNode != null) {
+                    if (sensorNode != null)
+                    {
                         sensorNode.PlotSelectionChanged -= SensorPlotSelectionChanged;
                         typeNode.Nodes.Remove(sensorNode);
                         UpdateNode(typeNode);
@@ -96,10 +114,12 @@ namespace OpenHardwareMonitor.GUI {
             PlotSelectionChanged?.Invoke(this, null);
         }
 
-        private void InsertSorted(Node node, ISensor sensor) {
+        private void InsertSorted(Node node, ISensor sensor)
+        {
             int i = 0;
             while (i < node.Nodes.Count &&
-              ((SensorNode)node.Nodes[i]).Sensor.Index < sensor.Index) {
+              ((SensorNode)node.Nodes[i]).Sensor.Index < sensor.Index)
+            {
                 i++;
             }
 
@@ -108,13 +128,17 @@ namespace OpenHardwareMonitor.GUI {
             node.Nodes.Insert(i, sensorNode);
         }
 
-        private void SensorPlotSelectionChanged(object sender, EventArgs e) {
+        private void SensorPlotSelectionChanged(object sender, EventArgs e)
+        {
             PlotSelectionChanged?.Invoke(this, null);
         }
 
-        private void SensorAdded(ISensor sensor) {
-            foreach (TypeNode typeNode in typeNodes) {
-                if (typeNode.SensorType == sensor.SensorType) {
+        private void SensorAdded(ISensor sensor)
+        {
+            foreach (TypeNode typeNode in typeNodes)
+            {
+                if (typeNode.SensorType == sensor.SensorType)
+                {
                     InsertSorted(typeNode, sensor);
                     UpdateNode(typeNode);
                 }

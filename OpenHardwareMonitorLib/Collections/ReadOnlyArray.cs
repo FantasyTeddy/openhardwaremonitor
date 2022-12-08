@@ -11,13 +11,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace OpenHardwareMonitor.Collections {
+namespace OpenHardwareMonitor.Collections
+{
 
-    public class ReadOnlyArray<T> : IReadOnlyArray<T> {
+    public class ReadOnlyArray<T> : IReadOnlyArray<T>
+    {
 
         private readonly T[] array;
 
-        public ReadOnlyArray(T[] array) {
+        public ReadOnlyArray(T[] array)
+        {
             this.array = array;
         }
 
@@ -25,19 +28,23 @@ namespace OpenHardwareMonitor.Collections {
 
         public int Length => array.Length;
 
-        public IEnumerator<T> GetEnumerator() {
+        public IEnumerator<T> GetEnumerator()
+        {
             return ((IEnumerable<T>)array).GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator() {
+        IEnumerator IEnumerable.GetEnumerator()
+        {
             return array.GetEnumerator();
         }
 
-        public static implicit operator ReadOnlyArray<T>(T[] array) {
+        public static implicit operator ReadOnlyArray<T>(T[] array)
+        {
             return new ReadOnlyArray<T>(array);
         }
 
-        public T[] ToArray() {
+        public T[] ToArray()
+        {
             return (T[])array.Clone();
         }
     }

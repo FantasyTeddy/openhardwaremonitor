@@ -11,20 +11,24 @@
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Utilities;
 
-namespace OpenHardwareMonitor.GUI {
-    public class TypeNode : Node {
+namespace OpenHardwareMonitor.GUI
+{
+    public class TypeNode : Node
+    {
 
         private readonly PersistentSettings settings;
         private readonly IHardware hardware;
         private readonly Identifier expandedIdentifier;
 
         public TypeNode(SensorType sensorType, IHardware hardware,
-          PersistentSettings settings) : base() {
+          PersistentSettings settings) : base()
+        {
             this.settings = settings;
             SensorType = sensorType;
             this.hardware = hardware;
 
-            switch (sensorType) {
+            switch (sensorType)
+            {
                 case SensorType.Voltage:
                     Image = Utilities.EmbeddedResources.GetImage("voltage.png");
                     Text = "Voltages";
@@ -88,19 +92,24 @@ namespace OpenHardwareMonitor.GUI {
               settings.GetValue(expandedIdentifier.ToString(), base.IsExpanded);
         }
 
-        private void TypeNode_NodeRemoved(Node node) {
+        private void TypeNode_NodeRemoved(Node node)
+        {
             node.IsVisibleChanged -= new NodeEventHandler(node_IsVisibleChanged);
             node_IsVisibleChanged(null);
         }
 
-        private void TypeNode_NodeAdded(Node node) {
+        private void TypeNode_NodeAdded(Node node)
+        {
             node.IsVisibleChanged += new NodeEventHandler(node_IsVisibleChanged);
             node_IsVisibleChanged(null);
         }
 
-        private void node_IsVisibleChanged(Node node) {
-            foreach (Node n in Nodes) {
-                if (n.IsVisible) {
+        private void node_IsVisibleChanged(Node node)
+        {
+            foreach (Node n in Nodes)
+            {
+                if (n.IsVisible)
+                {
                     IsVisible = true;
                     return;
                 }
@@ -111,10 +120,13 @@ namespace OpenHardwareMonitor.GUI {
 
         public SensorType SensorType { get; }
 
-        public override bool IsExpanded {
+        public override bool IsExpanded
+        {
             get => base.IsExpanded;
-            set {
-                if (base.IsExpanded != value) {
+            set
+            {
+                if (base.IsExpanded != value)
+                {
                     base.IsExpanded = value;
                     settings.SetValue(expandedIdentifier.ToString(), value);
                 }

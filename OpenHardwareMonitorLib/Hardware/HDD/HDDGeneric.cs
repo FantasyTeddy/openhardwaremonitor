@@ -13,10 +13,12 @@
 using System.Collections.Generic;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
     [NamePrefix("")]
-    internal class GenericHarddisk : AbstractHarddrive {
+    internal class GenericHarddisk : AbstractHarddrive
+    {
 
         private static readonly List<SmartAttribute> smartAttributes =
           new List<SmartAttribute> {

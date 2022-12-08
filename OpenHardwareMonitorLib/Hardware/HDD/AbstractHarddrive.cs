@@ -17,8 +17,10 @@ using System.IO;
 using System.Text;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
-    internal abstract class AbstractHarddrive : Hardware {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
+    internal abstract class AbstractHarddrive : Hardware
+    {
 
         private const int UPDATE_DIVIDER = 30; // update only every 30s
 
@@ -50,7 +52,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
           string firmwareRevision, int index,
           IEnumerable<SmartAttribute> smartAttributes, ISettings settings)
           : base(name, new Identifier("hdd",
-            index.ToString(CultureInfo.InvariantCulture)), settings) {
+            index.ToString(CultureInfo.InvariantCulture)), settings)
+        {
             this.firmwareRevision = firmwareRevision;
             this.smart = smart;
             handle = smart.OpenDrive(index);
@@ -65,14 +68,22 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
             string[] logicalDrives = smart.GetLogicalDrives(index);
             List<DriveInfo> driveInfoList = new List<DriveInfo>(logicalDrives.Length);
-            foreach (string logicalDrive in logicalDrives) {
-                try {
+            foreach (string logicalDrive in logicalDrives)
+            {
+                try
+                {
                     DriveInfo di = new DriveInfo(logicalDrive);
                     if (di.TotalSize > 0)
                         driveInfoList.Add(new DriveInfo(logicalDrive));
-                } catch (ArgumentException) {
-                } catch (IOException) {
-                } catch (UnauthorizedAccessException) {
+                }
+                catch (ArgumentException)
+                {
+                }
+                catch (IOException)
+                {
+                }
+                catch (UnauthorizedAccessException)
+                {
                 }
             }
             driveInfos = driveInfoList.ToArray();
@@ -81,14 +92,16 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         public static AbstractHarddrive CreateInstance(ISmart smart,
-          int driveIndex, ISettings settings) {
+          int driveIndex, ISettings settings)
+        {
             IntPtr deviceHandle = smart.OpenDrive(driveIndex);
 
             string name = null;
             string firmwareRevision = null;
             DriveAttributeValue[] values = { };
 
-            if (deviceHandle != smart.InvalidHandle) {
+            if (deviceHandle != smart.InvalidHandle)
+            {
                 bool nameValid = smart.ReadNameAndFirmwareRevision(deviceHandle,
                 driveIndex, out name, out firmwareRevision);
                 bool smartEnabled = smart.EnableSmart(deviceHandle, driveIndex);
@@ -98,26 +111,38 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
                 smart.CloseHandle(deviceHandle);
 
-                if (!nameValid) {
+                if (!nameValid)
+                {
                     name = null;
                     firmwareRevision = null;
                 }
-            } else {
+            }
+            else
+            {
                 string[] logicalDrives = smart.GetLogicalDrives(driveIndex);
                 if (logicalDrives == null || logicalDrives.Length == 0)
                     return null;
 
                 bool hasNonZeroSizeDrive = false;
-                foreach (string logicalDrive in logicalDrives) {
-                    try {
+                foreach (string logicalDrive in logicalDrives)
+                {
+                    try
+                    {
                         DriveInfo di = new DriveInfo(logicalDrive);
-                        if (di.TotalSize > 0) {
+                        if (di.TotalSize > 0)
+                        {
                             hasNonZeroSizeDrive = true;
                             break;
                         }
-                    } catch (ArgumentException) {
-                    } catch (IOException) {
-                    } catch (UnauthorizedAccessException) {
+                    }
+                    catch (ArgumentException)
+                    {
+                    }
+                    catch (IOException)
+                    {
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
                     }
                 }
 
@@ -131,7 +156,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             if (string.IsNullOrEmpty(firmwareRevision))
                 firmwareRevision = "Unknown";
 
-            foreach (Type type in hddTypes) {
+            foreach (Type type in hddTypes)
+            {
                 // get the array of name prefixes for the current type
                 NamePrefixAttribute[] namePrefixes = type.GetCustomAttributes(
                   typeof(NamePrefixAttribute), true) as NamePrefixAttribute[];
@@ -142,15 +168,19 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
                 // check if all required attributes are present
                 bool allRequiredAttributesFound = true;
-                foreach (RequireSmartAttribute requireAttribute in requiredAttributes) {
+                foreach (RequireSmartAttribute requireAttribute in requiredAttributes)
+                {
                     bool adttributeFound = false;
-                    foreach (DriveAttributeValue value in values) {
-                        if (value.Identifier == requireAttribute.AttributeId) {
+                    foreach (DriveAttributeValue value in values)
+                    {
+                        if (value.Identifier == requireAttribute.AttributeId)
+                        {
                             adttributeFound = true;
                             break;
                         }
                     }
-                    if (!adttributeFound) {
+                    if (!adttributeFound)
+                    {
                         allRequiredAttributesFound = false;
                         break;
                     }
@@ -161,8 +191,10 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                     continue;
 
                 // check if there is a matching name prefix for this type
-                foreach (NamePrefixAttribute prefix in namePrefixes) {
-                    if (name.StartsWith(prefix.Prefix, StringComparison.InvariantCulture)) {
+                foreach (NamePrefixAttribute prefix in namePrefixes)
+                {
+                    if (name.StartsWith(prefix.Prefix, StringComparison.InvariantCulture))
+                    {
                         return Activator.CreateInstance(type, smart, name, firmwareRevision,
                           driveIndex, settings) as AbstractHarddrive;
                     }
@@ -173,22 +205,27 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             return null;
         }
 
-        private void CreateSensors() {
+        private void CreateSensors()
+        {
             sensors = new Dictionary<SmartAttribute, Sensor>();
 
-            if (handle != smart.InvalidHandle) {
+            if (handle != smart.InvalidHandle)
+            {
                 IList<Pair<SensorType, int>> sensorTypeAndChannels =
                   new List<Pair<SensorType, int>>();
 
                 DriveAttributeValue[] values = smart.ReadSmartData(handle, index);
 
-                foreach (SmartAttribute attribute in smartAttributes) {
+                foreach (SmartAttribute attribute in smartAttributes)
+                {
                     if (!attribute.SensorType.HasValue)
                         continue;
 
                     bool found = false;
-                    foreach (DriveAttributeValue value in values) {
-                        if (value.Identifier == attribute.Identifier) {
+                    foreach (DriveAttributeValue value in values)
+                    {
+                        if (value.Identifier == attribute.Identifier)
+                        {
                             found = true;
                             break;
                         }
@@ -199,7 +236,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                     Pair<SensorType, int> pair = new Pair<SensorType, int>(
                       attribute.SensorType.Value, attribute.SensorChannel);
 
-                    if (!sensorTypeAndChannels.Contains(pair)) {
+                    if (!sensorTypeAndChannels.Contains(pair))
+                    {
                         Sensor sensor = new Sensor(attribute.SensorName,
                           attribute.SensorChannel, attribute.DefaultHiddenSensor,
                           attribute.SensorType.Value, this, attribute.ParameterDescriptions,
@@ -212,7 +250,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                 }
             }
 
-            if (driveInfos.Length > 0) {
+            if (driveInfos.Length > 0)
+            {
                 usageSensor =
                   new Sensor("Used Space", 0, SensorType.Load, this, settings);
                 ActivateSensor(usageSensor);
@@ -223,15 +262,21 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
         public virtual void UpdateAdditionalSensors(DriveAttributeValue[] values) { }
 
-        public override void Update() {
-            if (count == 0) {
-                if (handle != smart.InvalidHandle) {
+        public override void Update()
+        {
+            if (count == 0)
+            {
+                if (handle != smart.InvalidHandle)
+                {
                     DriveAttributeValue[] values = smart.ReadSmartData(handle, index);
 
-                    foreach (KeyValuePair<SmartAttribute, Sensor> keyValuePair in sensors) {
+                    foreach (KeyValuePair<SmartAttribute, Sensor> keyValuePair in sensors)
+                    {
                         SmartAttribute attribute = keyValuePair.Key;
-                        foreach (DriveAttributeValue value in values) {
-                            if (value.Identifier == attribute.Identifier) {
+                        foreach (DriveAttributeValue value in values)
+                        {
+                            if (value.Identifier == attribute.Identifier)
+                            {
                                 Sensor sensor = keyValuePair.Value;
                                 sensor.Value = attribute.ConvertValue(value, sensor.Parameters);
                             }
@@ -241,21 +286,29 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                     UpdateAdditionalSensors(values);
                 }
 
-                if (usageSensor != null) {
+                if (usageSensor != null)
+                {
                     long totalSize = 0;
                     long totalFreeSpace = 0;
 
-                    for (int i = 0; i < driveInfos.Length; i++) {
+                    for (int i = 0; i < driveInfos.Length; i++)
+                    {
                         if (!driveInfos[i].IsReady)
                             continue;
-                        try {
+                        try
+                        {
                             totalSize += driveInfos[i].TotalSize;
                             totalFreeSpace += driveInfos[i].TotalFreeSpace;
-                        } catch (IOException) { } catch (UnauthorizedAccessException) { }
+                        }
+                        catch (IOException) { }
+                        catch (UnauthorizedAccessException) { }
                     }
-                    if (totalSize > 0) {
+                    if (totalSize > 0)
+                    {
                         usageSensor.Value = 100.0f - 100.0f * totalFreeSpace / totalSize;
-                    } else {
+                    }
+                    else
+                    {
                         usageSensor.Value = null;
                     }
                 }
@@ -265,7 +318,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             count %= UPDATE_DIVIDER;
         }
 
-        public override string GetReport() {
+        public override string GetReport()
+        {
             StringBuilder r = new StringBuilder();
 
             r.AppendLine(GetType().Name);
@@ -274,12 +328,14 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             r.AppendLine("Firmware version: " + firmwareRevision);
             r.AppendLine();
 
-            if (handle != smart.InvalidHandle) {
+            if (handle != smart.InvalidHandle)
+            {
                 DriveAttributeValue[] values = smart.ReadSmartData(handle, index);
                 DriveThresholdValue[] thresholds =
                   smart.ReadSmartThresholds(handle, index);
 
-                if (values.Length > 0) {
+                if (values.Length > 0)
+                {
                     r.AppendFormat(CultureInfo.InvariantCulture,
                       " {0}{1}{2}{3}{4}{5}{6}{7}",
                       "ID".PadRight(3),
@@ -291,21 +347,26 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                       "Physical".PadRight(8),
                       Environment.NewLine);
 
-                    foreach (DriveAttributeValue value in values) {
+                    foreach (DriveAttributeValue value in values)
+                    {
                         if (value.Identifier == 0x00)
                             break;
 
                         byte? threshold = null;
-                        foreach (DriveThresholdValue t in thresholds) {
-                            if (t.Identifier == value.Identifier) {
+                        foreach (DriveThresholdValue t in thresholds)
+                        {
+                            if (t.Identifier == value.Identifier)
+                            {
                                 threshold = t.Threshold;
                             }
                         }
 
                         string description = "Unknown";
                         float? physical = null;
-                        foreach (SmartAttribute a in smartAttributes) {
-                            if (a.Identifier == value.Identifier) {
+                        foreach (SmartAttribute a in smartAttributes)
+                        {
+                            if (a.Identifier == value.Identifier)
+                            {
                                 description = a.Name;
                                 if (a.HasRawValueConversion | a.SensorType.HasValue)
                                     physical = a.ConvertValue(value, null);
@@ -332,34 +393,41 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                 }
             }
 
-            foreach (DriveInfo di in driveInfos) {
+            foreach (DriveInfo di in driveInfos)
+            {
                 if (!di.IsReady)
                     continue;
-                try {
+                try
+                {
                     r.AppendLine("Logical drive name: " + di.Name);
                     r.AppendLine("Format: " + di.DriveFormat);
                     r.AppendLine("Total size: " + di.TotalSize);
                     r.AppendLine("Total free space: " + di.TotalFreeSpace);
                     r.AppendLine();
-                } catch (IOException) { } catch (UnauthorizedAccessException) { }
+                }
+                catch (IOException) { }
+                catch (UnauthorizedAccessException) { }
             }
 
             return r.ToString();
         }
 
         protected static float RawToInt(byte[] raw, byte value,
-          IReadOnlyArray<IParameter> parameters) {
+          IReadOnlyArray<IParameter> parameters)
+        {
             return (raw[3] << 24) | (raw[2] << 16) | (raw[1] << 8) | raw[0];
         }
 
-        public override void Close() {
+        public override void Close()
+        {
             if (handle != smart.InvalidHandle)
                 smart.CloseHandle(handle);
 
             base.Close();
         }
 
-        public override void Traverse(IVisitor visitor) {
+        public override void Traverse(IVisitor visitor)
+        {
             foreach (ISensor sensor in Sensors)
                 sensor.Accept(visitor);
         }

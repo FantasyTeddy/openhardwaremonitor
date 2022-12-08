@@ -19,8 +19,10 @@ using OpenHardwareMonitor.Utilities;
 using OxyPlot;
 using OxyPlot.WindowsForms;
 
-namespace OpenHardwareMonitor.GUI {
-    public class PlotPanel : UserControl {
+namespace OpenHardwareMonitor.GUI
+{
+    public class PlotPanel : UserControl
+    {
 
         private readonly PersistentSettings settings;
         private readonly UnitManager unitManager;
@@ -35,13 +37,15 @@ namespace OpenHardwareMonitor.GUI {
 
         private DateTime now;
 
-        public PlotPanel(PersistentSettings settings, UnitManager unitManager) {
+        public PlotPanel(PersistentSettings settings, UnitManager unitManager)
+        {
             this.settings = settings;
             this.unitManager = unitManager;
 
             this.model = CreatePlotModel();
 
-            this.plot = new Plot {
+            this.plot = new Plot
+            {
                 Dock = DockStyle.Fill,
                 Model = model,
                 BackColor = Color.White,
@@ -55,23 +59,27 @@ namespace OpenHardwareMonitor.GUI {
             ResumeLayout(true);
         }
 
-        public void SetCurrentSettings() {
+        public void SetCurrentSettings()
+        {
             settings.SetValue("plotPanel.MinTimeSpan", (float)timeAxis.ActualMinimum);
             settings.SetValue("plotPanel.MaxTimeSpan", (float)timeAxis.ActualMaximum);
 
-            foreach (LinearAxis axis in axes.Values) {
+            foreach (LinearAxis axis in axes.Values)
+            {
                 settings.SetValue("plotPanel.Min" + axis.Key, (float)axis.ActualMinimum);
                 settings.SetValue("plotPanel.Max" + axis.Key, (float)axis.ActualMaximum);
             }
         }
 
-        private ContextMenu CreateMenu() {
+        private ContextMenu CreateMenu()
+        {
             ContextMenu menu = new ContextMenu();
 
             MenuItem stackedAxesMenuItem = new MenuItem("Stacked Axes");
             stackedAxes = new UserOption("stackedAxes", true,
               stackedAxesMenuItem, settings);
-            stackedAxes.Changed += (sender, e) => {
+            stackedAxes.Changed += (sender, e) =>
+            {
                 UpdateAxesPosition();
                 InvalidatePlot();
             };
@@ -112,7 +120,8 @@ namespace OpenHardwareMonitor.GUI {
             return menu;
         }
 
-        private PlotModel CreatePlotModel() {
+        private PlotModel CreatePlotModel()
+        {
 
             timeAxis.Position = AxisPosition.Bottom;
             timeAxis.MajorGridlineStyle = LineStyle.Solid;
@@ -147,8 +156,10 @@ namespace OpenHardwareMonitor.GUI {
                 { SensorType.Data, "GB" }
             };
 
-            foreach (SensorType type in Enum.GetValues(typeof(SensorType))) {
-                var axis = new LinearAxis {
+            foreach (SensorType type in Enum.GetValues(typeof(SensorType)))
+            {
+                var axis = new LinearAxis
+                {
                     Position = AxisPosition.Left,
                     MajorGridlineStyle = LineStyle.Solid,
                     MajorGridlineThickness = 1,
@@ -181,22 +192,30 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         public void SetSensors(List<ISensor> sensors,
-          IDictionary<ISensor, Color> colors) {
+          IDictionary<ISensor, Color> colors)
+        {
             this.model.Series.Clear();
 
             ListSet<SensorType> types = new ListSet<SensorType>();
 
-            foreach (ISensor sensor in sensors) {
+            foreach (ISensor sensor in sensors)
+            {
                 var series = new LineSeries();
-                if (sensor.SensorType == SensorType.Temperature) {
-                    series.ItemsSource = sensor.Values.Select(value => new DataPoint {
+                if (sensor.SensorType == SensorType.Temperature)
+                {
+                    series.ItemsSource = sensor.Values.Select(value => new DataPoint
+                    {
                         X = (now - value.Time).TotalSeconds,
                         Y = unitManager.TemperatureUnit == TemperatureUnit.Celsius ?
                         value.Value : UnitManager.CelsiusToFahrenheit(value.Value).Value
                     });
-                } else {
-                    series.ItemsSource = sensor.Values.Select(value => new DataPoint {
-                        X = (now - value.Time).TotalSeconds, Y = value.Value
+                }
+                else
+                {
+                    series.ItemsSource = sensor.Values.Select(value => new DataPoint
+                    {
+                        X = (now - value.Time).TotalSeconds,
+                        Y = value.Value
                     });
                 }
                 series.Color = colors[sensor].ToOxyColor();
@@ -208,7 +227,8 @@ namespace OpenHardwareMonitor.GUI {
                 types.Add(sensor.SensorType);
             }
 
-            foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse()) {
+            foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse())
+            {
                 LinearAxis axis = pair.Value;
                 SensorType type = pair.Key;
                 axis.IsAxisVisible = types.Contains(type);
@@ -218,11 +238,14 @@ namespace OpenHardwareMonitor.GUI {
             InvalidatePlot();
         }
 
-        private void UpdateAxesPosition() {
-            if (stackedAxes.Value) {
+        private void UpdateAxesPosition()
+        {
+            if (stackedAxes.Value)
+            {
                 int count = axes.Values.Count(axis => axis.IsAxisVisible);
                 double start = 0.0;
-                foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse()) {
+                foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse())
+                {
                     LinearAxis axis = pair.Value;
                     SensorType type = pair.Key;
                     axis.StartPosition = start;
@@ -233,17 +256,23 @@ namespace OpenHardwareMonitor.GUI {
                     axis.MajorGridlineStyle = LineStyle.Solid;
                     axis.MinorGridlineStyle = LineStyle.Solid;
                 }
-            } else {
+            }
+            else
+            {
                 int tier = 0;
-                foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse()) {
+                foreach (KeyValuePair<SensorType, LinearAxis> pair in axes.Reverse())
+                {
                     LinearAxis axis = pair.Value;
                     SensorType type = pair.Key;
-                    if (axis.IsAxisVisible) {
+                    if (axis.IsAxisVisible)
+                    {
                         axis.StartPosition = 0;
                         axis.EndPosition = 1;
                         axis.PositionTier = tier;
                         tier++;
-                    } else {
+                    }
+                    else
+                    {
                         axis.StartPosition = 0;
                         axis.EndPosition = 0;
                         axis.PositionTier = 0;
@@ -255,13 +284,16 @@ namespace OpenHardwareMonitor.GUI {
 
         }
 
-        public void InvalidatePlot() {
+        public void InvalidatePlot()
+        {
             this.now = DateTime.UtcNow;
 
-            foreach (KeyValuePair<SensorType, LinearAxis> pair in axes) {
+            foreach (KeyValuePair<SensorType, LinearAxis> pair in axes)
+            {
                 LinearAxis axis = pair.Value;
                 SensorType type = pair.Key;
-                if (type == SensorType.Temperature) {
+                if (type == SensorType.Temperature)
+                {
                     axis.Unit = unitManager.TemperatureUnit == TemperatureUnit.Celsius ?
                     "°C" : "°F";
                 }

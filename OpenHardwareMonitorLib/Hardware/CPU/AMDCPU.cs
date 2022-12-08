@@ -8,9 +8,11 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.CPU {
+namespace OpenHardwareMonitor.Hardware.CPU
+{
 
-    internal abstract class AMDCPU : GenericCPU {
+    internal abstract class AMDCPU : GenericCPU
+    {
 
         private const byte PCI_BUS = 0;
         private const byte PCI_BASE_DEVICE = 0x18;
@@ -20,7 +22,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         public AMDCPU(int processorIndex, CPUID[][] cpuid, ISettings settings)
           : base(processorIndex, cpuid, settings) { }
 
-        protected uint GetPciAddress(byte function, ushort deviceId) {
+        protected uint GetPciAddress(byte function, ushort deviceId)
+        {
 
             // assemble the pci address
             uint address = Ring0.GetPciAddress(PCI_BUS,
@@ -28,7 +31,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             // verify that we have the correct bus, device and function
             if (!Ring0.ReadPciConfig(
-              address, DEVICE_VENDOR_ID_REGISTER, out uint deviceVendor)) {
+              address, DEVICE_VENDOR_ID_REGISTER, out uint deviceVendor))
+            {
                 return Ring0.InvalidPciAddress;
             }
 

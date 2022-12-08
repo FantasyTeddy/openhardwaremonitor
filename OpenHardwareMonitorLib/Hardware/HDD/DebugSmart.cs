@@ -11,11 +11,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
 #if DEBUG
 
-    internal class DebugSmart : ISmart {
+    internal class DebugSmart : ISmart
+    {
 
         private readonly Drive[] drives = {
       new Drive("KINGSTON SNV425S264GB", null, 16,
@@ -357,21 +359,24 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             F9 FD0400000000 100 100 0 
             FC 090000000000 100 100 0")};
 
-        public IntPtr OpenDrive(int driveNumber) {
+        public IntPtr OpenDrive(int driveNumber)
+        {
             if (driveNumber < drives.Length)
                 return (IntPtr)driveNumber;
             else
                 return InvalidHandle;
         }
 
-        public bool EnableSmart(IntPtr handle, int driveNumber) {
+        public bool EnableSmart(IntPtr handle, int driveNumber)
+        {
             if (handle != (IntPtr)driveNumber)
                 throw new ArgumentOutOfRangeException();
 
             return true;
         }
 
-        public DriveAttributeValue[] ReadSmartData(IntPtr handle, int driveNumber) {
+        public DriveAttributeValue[] ReadSmartData(IntPtr handle, int driveNumber)
+        {
             if (handle != (IntPtr)driveNumber)
                 throw new ArgumentOutOfRangeException();
 
@@ -379,7 +384,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         public DriveThresholdValue[] ReadSmartThresholds(IntPtr handle,
-          int driveNumber) {
+          int driveNumber)
+        {
             if (handle != (IntPtr)driveNumber)
                 throw new ArgumentOutOfRangeException();
 
@@ -387,7 +393,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         public bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber,
-          out string name, out string firmwareRevision) {
+          out string name, out string firmwareRevision)
+        {
             if (handle != (IntPtr)driveNumber)
                 throw new ArgumentOutOfRangeException();
 
@@ -399,9 +406,11 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         public void CloseHandle(IntPtr handle) { }
 
 
-        private class Drive {
+        private class Drive
+        {
 
-            public Drive(string name, string firmware, int idBase, string value) {
+            public Drive(string name, string firmware, int idBase, string value)
+            {
                 Name = name;
                 FirmwareVersion = firmware;
 
@@ -411,7 +420,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                 DriveAttributeValues = new DriveAttributeValue[lines.Length];
                 List<DriveThresholdValue> thresholds = new List<DriveThresholdValue>();
 
-                for (int i = 0; i < lines.Length; i++) {
+                for (int i = 0; i < lines.Length; i++)
+                {
 
                     string[] array = lines[i].Split(new[] { ' ' },
                       StringSplitOptions.RemoveEmptyEntries);
@@ -419,12 +429,14 @@ namespace OpenHardwareMonitor.Hardware.HDD {
                     if (array.Length != 4 && array.Length != 5)
                         throw new Exception();
 
-                    DriveAttributeValue v = new DriveAttributeValue {
+                    DriveAttributeValue v = new DriveAttributeValue
+                    {
                         Identifier = Convert.ToByte(array[0], idBase),
 
                         RawValue = new byte[6]
                     };
-                    for (int j = 0; j < 6; j++) {
+                    for (int j = 0; j < 6; j++)
+                    {
                         v.RawValue[j] = Convert.ToByte(array[1].Substring(2 * j, 2), 16);
                     }
 
@@ -433,8 +445,10 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
                     DriveAttributeValues[i] = v;
 
-                    if (array.Length == 5) {
-                        DriveThresholdValue t = new DriveThresholdValue {
+                    if (array.Length == 5)
+                    {
+                        DriveThresholdValue t = new DriveThresholdValue
+                        {
                             Identifier = v.Identifier,
                             Threshold = Convert.ToByte(array[4], 10)
                         };
@@ -456,7 +470,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
         public IntPtr InvalidHandle => (IntPtr)(-1);
 
-        public string[] GetLogicalDrives(int driveIndex) {
+        public string[] GetLogicalDrives(int driveIndex)
+        {
             return new string[0];
         }
     }

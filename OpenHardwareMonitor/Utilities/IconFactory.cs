@@ -13,10 +13,13 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace OpenHardwareMonitor.Utilities {
-    public class IconFactory {
+namespace OpenHardwareMonitor.Utilities
+{
+    public class IconFactory
+    {
 
-        private struct BITMAPINFOHEADER {
+        private struct BITMAPINFOHEADER
+        {
             public uint Size;
             public int Width;
             public int Height;
@@ -29,7 +32,8 @@ namespace OpenHardwareMonitor.Utilities {
             public uint ClrUsed;
             public uint ClrImportant;
 
-            public BITMAPINFOHEADER(int width, int height, int bitCount) {
+            public BITMAPINFOHEADER(int width, int height, int bitCount)
+            {
                 this.Size = 40;
                 this.Width = width;
                 this.Height = height;
@@ -43,7 +47,8 @@ namespace OpenHardwareMonitor.Utilities {
                 this.ClrImportant = 0;
             }
 
-            public void Write(BinaryWriter bw) {
+            public void Write(BinaryWriter bw)
+            {
                 bw.Write(Size);
                 bw.Write(Width);
                 bw.Write(Height);
@@ -58,19 +63,22 @@ namespace OpenHardwareMonitor.Utilities {
             }
         }
 
-        private struct ICONIMAGE {
+        private struct ICONIMAGE
+        {
             public BITMAPINFOHEADER Header;
             public byte[] Colors;
             public int MaskSize;
 
-            public ICONIMAGE(int width, int height, byte[] colors) {
+            public ICONIMAGE(int width, int height, byte[] colors)
+            {
                 this.Header = new BITMAPINFOHEADER(width, height << 1,
                   8 * colors.Length / (width * height));
                 this.Colors = colors;
                 MaskSize = (width * height) >> 3;
             }
 
-            public void Write(BinaryWriter bw) {
+            public void Write(BinaryWriter bw)
+            {
                 Header.Write(bw);
                 int stride = Header.Width << 2;
                 for (int i = (Header.Height >> 1) - 1; i >= 0; i--)
@@ -80,7 +88,8 @@ namespace OpenHardwareMonitor.Utilities {
             }
         }
 
-        private struct ICONDIRENTRY {
+        private struct ICONDIRENTRY
+        {
             public byte Width;
             public byte Height;
             public byte ColorCount;
@@ -90,7 +99,8 @@ namespace OpenHardwareMonitor.Utilities {
             public uint BytesInRes;
             public uint ImageOffset;
 
-            public ICONDIRENTRY(ICONIMAGE image, int imageOffset) {
+            public ICONDIRENTRY(ICONIMAGE image, int imageOffset)
+            {
                 this.Width = (byte)image.Header.Width;
                 this.Height = (byte)(image.Header.Height >> 1);
                 this.ColorCount = 0;
@@ -102,7 +112,8 @@ namespace OpenHardwareMonitor.Utilities {
                 this.ImageOffset = (uint)imageOffset;
             }
 
-            public void Write(BinaryWriter bw) {
+            public void Write(BinaryWriter bw)
+            {
                 bw.Write(Width);
                 bw.Write(Height);
                 bw.Write(ColorCount);
@@ -116,20 +127,23 @@ namespace OpenHardwareMonitor.Utilities {
             public uint Size => 16;
         }
 
-        private struct ICONDIR {
+        private struct ICONDIR
+        {
             public ushort Reserved;
             public ushort Type;
             public ushort Count;
             public ICONDIRENTRY[] Entries;
 
-            public ICONDIR(ICONDIRENTRY[] entries) {
+            public ICONDIR(ICONDIRENTRY[] entries)
+            {
                 this.Reserved = 0;
                 this.Type = 1;
                 this.Count = (ushort)entries.Length;
                 this.Entries = entries;
             }
 
-            public void Write(BinaryWriter bw) {
+            public void Write(BinaryWriter bw)
+            {
                 bw.Write(Reserved);
                 bw.Write(Type);
                 bw.Write(Count);
@@ -145,7 +159,8 @@ namespace OpenHardwareMonitor.Utilities {
           new BinaryWriter(new MemoryStream());
 
         public static Icon Create(byte[] colors, int width, int height,
-          PixelFormat format) {
+          PixelFormat format)
+        {
             if (format != PixelFormat.Format32bppArgb)
                 throw new NotImplementedException();
 

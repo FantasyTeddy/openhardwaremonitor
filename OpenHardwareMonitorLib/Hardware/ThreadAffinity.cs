@@ -11,40 +11,52 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    internal static class ThreadAffinity {
+    internal static class ThreadAffinity
+    {
 
-        static ThreadAffinity() {
+        static ThreadAffinity()
+        {
             ProcessorGroupCount = GetProcessorGroupCount();
         }
 
-        private static int GetProcessorGroupCount() {
+        private static int GetProcessorGroupCount()
+        {
             if (OperatingSystem.IsUnix)
                 return 1;
 
-            try {
+            try
+            {
                 return NativeMethods.GetActiveProcessorGroupCount();
-            } catch {
+            }
+            catch
+            {
                 return 1;
             }
         }
 
         public static int ProcessorGroupCount { get; }
 
-        public static bool IsValid(GroupAffinity affinity) {
-            if (OperatingSystem.IsUnix) {
+        public static bool IsValid(GroupAffinity affinity)
+        {
+            if (OperatingSystem.IsUnix)
+            {
                 if (affinity.Group > 0)
                     return false;
             }
 
-            try {
+            try
+            {
                 GroupAffinity previous = Set(affinity);
                 if (previous == GroupAffinity.Undefined)
                     return false;
                 Set(previous);
                 return true;
-            } catch {
+            }
+            catch
+            {
                 return false;
             }
         }
@@ -54,11 +66,13 @@ namespace OpenHardwareMonitor.Hardware {
         /// </summary>
         /// <param name="affinity">The processor group affinity.</param>
         /// <returns>The previous processor group affinity.</returns>
-        public static GroupAffinity Set(GroupAffinity affinity) {
+        public static GroupAffinity Set(GroupAffinity affinity)
+        {
             if (affinity == GroupAffinity.Undefined)
                 return GroupAffinity.Undefined;
 
-            if (OperatingSystem.IsUnix) {
+            if (OperatingSystem.IsUnix)
+            {
                 if (affinity.Group > 0)
                     throw new ArgumentOutOfRangeException("affinity.Group");
 
@@ -71,30 +85,42 @@ namespace OpenHardwareMonitor.Hardware {
                     return GroupAffinity.Undefined;
 
                 return new GroupAffinity(0, result);
-            } else {
+            }
+            else
+            {
                 UIntPtr uIntPtrMask;
-                try {
+                try
+                {
                     uIntPtrMask = (UIntPtr)affinity.Mask;
-                } catch (OverflowException) {
+                }
+                catch (OverflowException)
+                {
                     throw new ArgumentOutOfRangeException("affinity.Mask");
                 }
 
-                var groupAffinity = new NativeMethods.GROUP_AFFINITY {
+                var groupAffinity = new NativeMethods.GROUP_AFFINITY
+                {
                     Group = affinity.Group,
                     Mask = uIntPtrMask
                 };
 
                 IntPtr currentThread = NativeMethods.GetCurrentThread();
 
-                try {
+                try
+                {
                     if (NativeMethods.SetThreadGroupAffinity(currentThread,
-                      ref groupAffinity, out NativeMethods.GROUP_AFFINITY previousGroupAffinity)) {
+                      ref groupAffinity, out NativeMethods.GROUP_AFFINITY previousGroupAffinity))
+                    {
                         return new GroupAffinity(previousGroupAffinity.Group,
                           (ulong)previousGroupAffinity.Mask);
-                    } else {
+                    }
+                    else
+                    {
                         return GroupAffinity.Undefined;
                     }
-                } catch (EntryPointNotFoundException) {
+                }
+                catch (EntryPointNotFoundException)
+                {
                     if (affinity.Group > 0)
                         throw new ArgumentOutOfRangeException("affinity.Group");
 
@@ -106,7 +132,8 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        private static class NativeMethods {
+        private static class NativeMethods
+        {
             private const string KERNEL = "kernel32.dll";
 
             [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi)]
@@ -120,7 +147,8 @@ namespace OpenHardwareMonitor.Hardware {
             public static extern ushort GetActiveProcessorGroupCount();
 
             [StructLayout(LayoutKind.Sequential, Pack = 4)]
-            public struct GROUP_AFFINITY {
+            public struct GROUP_AFFINITY
+            {
                 public UIntPtr Mask;
                 [MarshalAs(UnmanagedType.U2)]
                 public ushort Group;

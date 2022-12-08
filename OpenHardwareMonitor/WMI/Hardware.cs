@@ -12,9 +12,11 @@
 using System.Management.Instrumentation;
 using OpenHardwareMonitor.Hardware;
 
-namespace OpenHardwareMonitor.WMI {
+namespace OpenHardwareMonitor.WMI
+{
     [InstrumentationClass(InstrumentationType.Instance)]
-    public class Hardware : IWmiObject {
+    public class Hardware : IWmiObject
+    {
         #region WMI Exposed
 
         public string HardwareType { get; private set; }
@@ -24,7 +26,8 @@ namespace OpenHardwareMonitor.WMI {
 
         #endregion
 
-        public Hardware(IHardware hardware) {
+        public Hardware(IHardware hardware)
+        {
             Name = hardware.Name;
             Identifier = hardware.Identifier.ToString();
             HardwareType = hardware.HardwareType.ToString();

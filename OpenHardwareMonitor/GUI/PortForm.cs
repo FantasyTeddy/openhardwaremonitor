@@ -14,58 +14,72 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 
-namespace OpenHardwareMonitor.GUI {
-    public partial class PortForm : Form {
+namespace OpenHardwareMonitor.GUI
+{
+    public partial class PortForm : Form
+    {
         private readonly MainForm parent;
         private readonly string localIP;
-        public PortForm(MainForm m) {
+        public PortForm(MainForm m)
+        {
             InitializeComponent();
             parent = m;
 
             localIP = getLocalIP();
         }
 
-        private void portTextBox_TextChanged(object sender, EventArgs e) {
+        private void portTextBox_TextChanged(object sender, EventArgs e)
+        {
 
         }
 
-        private string getLocalIP() {
+        private string getLocalIP()
+        {
             IPHostEntry host;
             string localIP = "?";
             host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList) {
-                if (ip.AddressFamily == AddressFamily.InterNetwork) {
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
                     localIP = ip.ToString();
                 }
             }
             return localIP;
         }
 
-        private void portNumericUpDn_ValueChanged(object sender, EventArgs e) {
+        private void portNumericUpDn_ValueChanged(object sender, EventArgs e)
+        {
             string url = "http://" + localIP + ":" + portNumericUpDn.Value + "/";
             webServerLinkLabel.Text = url;
             webServerLinkLabel.Links.Remove(webServerLinkLabel.Links[0]);
             webServerLinkLabel.Links.Add(0, webServerLinkLabel.Text.Length, url);
         }
 
-        private void portOKButton_Click(object sender, EventArgs e) {
+        private void portOKButton_Click(object sender, EventArgs e)
+        {
             parent.Server.ListenerPort = (int)portNumericUpDn.Value;
             Close();
         }
 
-        private void portCancelButton_Click(object sender, EventArgs e) {
+        private void portCancelButton_Click(object sender, EventArgs e)
+        {
             Close();
         }
 
-        private void PortForm_Load(object sender, EventArgs e) {
+        private void PortForm_Load(object sender, EventArgs e)
+        {
             portNumericUpDn.Value = parent.Server.ListenerPort;
             portNumericUpDn_ValueChanged(null, null);
         }
 
-        private void webServerLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            try {
+        private void webServerLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
                 Process.Start(new ProcessStartInfo(e.Link.LinkData.ToString()));
-            } catch { }
+            }
+            catch { }
         }
 
     }

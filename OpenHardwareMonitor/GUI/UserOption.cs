@@ -12,8 +12,10 @@ using System;
 using System.Windows.Forms;
 using OpenHardwareMonitor.Utilities;
 
-namespace OpenHardwareMonitor.GUI {
-    public class UserOption {
+namespace OpenHardwareMonitor.GUI
+{
+    public class UserOption
+    {
         private readonly string name;
         private bool value;
         private readonly MenuItem menuItem;
@@ -21,7 +23,8 @@ namespace OpenHardwareMonitor.GUI {
         private readonly PersistentSettings settings;
 
         public UserOption(string name, bool value,
-          MenuItem menuItem, PersistentSettings settings) {
+          MenuItem menuItem, PersistentSettings settings)
+        {
 
             this.settings = settings;
             this.name = name;
@@ -34,14 +37,18 @@ namespace OpenHardwareMonitor.GUI {
             this.menuItem.Click += new EventHandler(menuItem_Click);
         }
 
-        private void menuItem_Click(object sender, EventArgs e) {
+        private void menuItem_Click(object sender, EventArgs e)
+        {
             Value = !Value;
         }
 
-        public bool Value {
+        public bool Value
+        {
             get => value;
-            set {
-                if (this.value != value) {
+            set
+            {
+                if (this.value != value)
+                {
                     this.value = value;
                     if (this.name != null)
                         settings.SetValue(name, value);
@@ -51,8 +58,10 @@ namespace OpenHardwareMonitor.GUI {
             }
         }
 
-        public event EventHandler Changed {
-            add {
+        public event EventHandler Changed
+        {
+            add
+            {
                 changed += value;
                 changed?.Invoke(this, null);
             }

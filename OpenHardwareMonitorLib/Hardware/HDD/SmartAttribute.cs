@@ -11,8 +11,10 @@
 
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
-    internal class SmartAttribute {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
+    internal class SmartAttribute
+    {
 
         private readonly RawValueConversion rawValueConversion;
 
@@ -22,7 +24,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         /// <param name="identifier">The SMART identifier of the attribute.</param>
         /// <param name="name">The name of the attribute.</param>
         public SmartAttribute(byte identifier, string name) :
-          this(identifier, name, null, null, 0, null) { }
+          this(identifier, name, null, null, 0, null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartAttribute"/> class.
@@ -33,7 +36,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         /// array into a value (or null to use the attribute value).</param>
         public SmartAttribute(byte identifier, string name,
           RawValueConversion rawValueConversion) :
-          this(identifier, name, rawValueConversion, null, 0, null) { }
+          this(identifier, name, rawValueConversion, null, 0, null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartAttribute"/> class.
@@ -55,7 +59,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         public SmartAttribute(byte identifier, string name,
           RawValueConversion rawValueConversion, SensorType? sensorType,
           int sensorChannel, string sensorName, bool defaultHiddenSensor = false,
-          ParameterDescription[] parameterDescriptions = null) {
+          ParameterDescription[] parameterDescriptions = null)
+        {
             Identifier = identifier;
             Name = name;
             this.rawValueConversion = rawValueConversion;
@@ -86,10 +91,14 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         public bool HasRawValueConversion => rawValueConversion != null;
 
         public float ConvertValue(DriveAttributeValue value,
-          IReadOnlyArray<IParameter> parameters) {
-            if (rawValueConversion == null) {
+          IReadOnlyArray<IParameter> parameters)
+        {
+            if (rawValueConversion == null)
+            {
                 return value.AttrValue;
-            } else {
+            }
+            else
+            {
                 return rawValueConversion(value.RawValue, value.AttrValue, parameters);
             }
         }

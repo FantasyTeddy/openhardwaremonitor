@@ -11,20 +11,28 @@
 using System;
 using System.Drawing;
 
-namespace OpenHardwareMonitor.GUI {
+namespace OpenHardwareMonitor.GUI
+{
 
-    public static class DpiHelper {
+    public static class DpiHelper
+    {
         public const double LogicalDpi = 96.0;
 
         private static double deviceDpi;
-        public static double DeviceDpi {
-            get {
-                if (deviceDpi == 0.0) {
-                    try {
-                        using (Graphics g = Graphics.FromHwnd(IntPtr.Zero)) {
+        public static double DeviceDpi
+        {
+            get
+            {
+                if (deviceDpi == 0.0)
+                {
+                    try
+                    {
+                        using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
+                        {
                             deviceDpi = g.DpiX;
                         }
-                    } catch { }
+                    }
+                    catch { }
                     if (deviceDpi == 0.0)
                         deviceDpi = LogicalDpi;
                 }
@@ -33,20 +41,25 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private static double logicalToDeviceUnitsScalingFactor;
-        public static double LogicalToDeviceUnitsScalingFactor {
-            get {
-                if (logicalToDeviceUnitsScalingFactor == 0.0) {
+        public static double LogicalToDeviceUnitsScalingFactor
+        {
+            get
+            {
+                if (logicalToDeviceUnitsScalingFactor == 0.0)
+                {
                     logicalToDeviceUnitsScalingFactor = DeviceDpi / LogicalDpi;
                 }
                 return logicalToDeviceUnitsScalingFactor;
             }
         }
 
-        public static int LogicalToDeviceUnits(int value) {
+        public static int LogicalToDeviceUnits(int value)
+        {
             return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * (double)value);
         }
 
-        public static Size LogicalToDeviceUnits(Size logicalSize) {
+        public static Size LogicalToDeviceUnits(Size logicalSize)
+        {
             return new Size(LogicalToDeviceUnits(logicalSize.Width),
               LogicalToDeviceUnits(logicalSize.Height));
         }

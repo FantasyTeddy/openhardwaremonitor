@@ -8,9 +8,11 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    public interface IParameter : IElement {
+    public interface IParameter : IElement
+    {
 
         ISensor Sensor { get; }
         Identifier Identifier { get; }

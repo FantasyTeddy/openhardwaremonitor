@@ -15,9 +15,11 @@ using System.IO;
 using System.IO.Compression;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    internal class Sensor : ISensor {
+    internal class Sensor : ISensor
+    {
 
         private readonly string defaultName;
         private string name;
@@ -32,17 +34,20 @@ namespace OpenHardwareMonitor.Hardware {
 
         public Sensor(string name, int index, SensorType sensorType,
           Hardware hardware, ISettings settings) :
-          this(name, index, sensorType, hardware, null, settings) { }
+          this(name, index, sensorType, hardware, null, settings)
+        { }
 
         public Sensor(string name, int index, SensorType sensorType,
           Hardware hardware, ParameterDescription[] parameterDescriptions,
           ISettings settings) :
           this(name, index, false, sensorType, hardware,
-            parameterDescriptions, settings) { }
+            parameterDescriptions, settings)
+        { }
 
         public Sensor(string name, int index, bool defaultHidden,
           SensorType sensorType, Hardware hardware,
-          ParameterDescription[] parameterDescriptions, ISettings settings) {
+          ParameterDescription[] parameterDescriptions, ISettings settings)
+        {
             Index = index;
             IsDefaultHidden = defaultHidden;
             SensorType = sensorType;
@@ -60,18 +65,23 @@ namespace OpenHardwareMonitor.Hardware {
 
             GetSensorValuesFromSettings();
 
-            hardware.Closing += delegate (IHardware h) {
+            hardware.Closing += delegate (IHardware h)
+            {
                 SetSensorValuesToSettings();
             };
         }
 
-        private void SetSensorValuesToSettings() {
-            using (MemoryStream m = new MemoryStream()) {
+        private void SetSensorValuesToSettings()
+        {
+            using (MemoryStream m = new MemoryStream())
+            {
                 using (GZipStream c = new GZipStream(m, CompressionMode.Compress))
                 using (BufferedStream b = new BufferedStream(c, 65536))
-                using (BinaryWriter writer = new BinaryWriter(b)) {
+                using (BinaryWriter writer = new BinaryWriter(b))
+                {
                     long t = 0;
-                    foreach (SensorValue sensorValue in values) {
+                    foreach (SensorValue sensorValue in values)
+                    {
                         long v = sensorValue.Time.ToBinary();
                         writer.Write(v - t);
                         t = v;
@@ -84,20 +94,25 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        private void GetSensorValuesFromSettings() {
+        private void GetSensorValuesFromSettings()
+        {
             string name = new Identifier(Identifier, "values").ToString();
             string s = settings.GetValue(name, null);
 
-            try {
+            try
+            {
                 byte[] array = Convert.FromBase64String(s);
                 s = null;
                 DateTime now = DateTime.UtcNow;
                 using (MemoryStream m = new MemoryStream(array))
                 using (GZipStream c = new GZipStream(m, CompressionMode.Decompress))
-                using (BinaryReader reader = new BinaryReader(c)) {
-                    try {
+                using (BinaryReader reader = new BinaryReader(c))
+                {
+                    try
+                    {
                         long t = 0;
-                        while (true) {
+                        while (true)
+                        {
                             t += reader.ReadInt64();
                             DateTime time = DateTime.FromBinary(t);
                             if (time > now)
@@ -105,9 +120,11 @@ namespace OpenHardwareMonitor.Hardware {
                             float value = reader.ReadSingle();
                             AppendValue(value, time);
                         }
-                    } catch (EndOfStreamException) { }
+                    }
+                    catch (EndOfStreamException) { }
                 }
-            } catch { }
+            }
+            catch { }
             if (values.Count > 0)
                 AppendValue(float.NaN, DateTime.UtcNow);
 
@@ -115,9 +132,11 @@ namespace OpenHardwareMonitor.Hardware {
             settings.Remove(name);
         }
 
-        private void AppendValue(float value, DateTime time) {
+        private void AppendValue(float value, DateTime time)
+        {
             if (values.Count >= 2 && values.Last.Value == value &&
-              values[values.Count - 2].Value == value) {
+              values[values.Count - 2].Value == value)
+            {
                 values.Last = new SensorValue(value, time);
                 return;
             }
@@ -133,9 +152,11 @@ namespace OpenHardwareMonitor.Hardware {
                   SensorType.ToString().ToLowerInvariant(),
                   Index.ToString(CultureInfo.InvariantCulture));
 
-        public string Name {
+        public string Name
+        {
             get => name;
-            set {
+            set
+            {
                 if (!string.IsNullOrEmpty(value))
                     name = value;
                 else
@@ -150,17 +171,21 @@ namespace OpenHardwareMonitor.Hardware {
 
         public IReadOnlyArray<IParameter> Parameters => parameters;
 
-        public float? Value {
+        public float? Value
+        {
             get => currentValue;
-            set {
+            set
+            {
                 DateTime now = DateTime.UtcNow;
                 while (values.Count > 0 && (now - values.First.Time).TotalDays > 1)
                     values.Remove();
 
-                if (value.HasValue) {
+                if (value.HasValue)
+                {
                     sum += value.Value;
                     count++;
-                    if (count == 4) {
+                    if (count == 4)
+                    {
                         AppendValue(sum / count, now);
                         sum = 0;
                         count = 0;
@@ -178,23 +203,27 @@ namespace OpenHardwareMonitor.Hardware {
         public float? Min { get; private set; }
         public float? Max { get; private set; }
 
-        public void ResetMin() {
+        public void ResetMin()
+        {
             Min = null;
         }
 
-        public void ResetMax() {
+        public void ResetMax()
+        {
             Max = null;
         }
 
         public IEnumerable<SensorValue> Values => values;
 
-        public void Accept(IVisitor visitor) {
+        public void Accept(IVisitor visitor)
+        {
             if (visitor == null)
                 throw new ArgumentNullException("visitor");
             visitor.VisitSensor(this);
         }
 
-        public void Traverse(IVisitor visitor) {
+        public void Traverse(IVisitor visitor)
+        {
             foreach (IParameter parameter in parameters)
                 parameter.Accept(visitor);
         }

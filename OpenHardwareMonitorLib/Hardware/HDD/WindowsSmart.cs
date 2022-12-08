@@ -15,11 +15,14 @@ using System.Collections.Generic;
 using System.Management;
 using System.Runtime.InteropServices;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
-    internal class WindowsSmart : ISmart {
+    internal class WindowsSmart : ISmart
+    {
         [Flags]
-        protected enum AccessMode : uint {
+        protected enum AccessMode : uint
+        {
             Read = 0x80000000,
             Write = 0x40000000,
             Execute = 0x20000000,
@@ -27,14 +30,16 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [Flags]
-        protected enum ShareMode : uint {
+        protected enum ShareMode : uint
+        {
             None = 0,
             Read = 1,
             Write = 2,
             Delete = 4
         }
 
-        protected enum CreationMode : uint {
+        protected enum CreationMode : uint
+        {
             New = 1,
             CreateAlways = 2,
             OpenExisting = 3,
@@ -43,7 +48,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [Flags]
-        protected enum FileAttribute : uint {
+        protected enum FileAttribute : uint
+        {
             Readonly = 0x00000001,
             Hidden = 0x00000002,
             System = 0x00000004,
@@ -60,13 +66,15 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             Encrypted = 0x00004000,
         }
 
-        protected enum DriveCommand : uint {
+        protected enum DriveCommand : uint
+        {
             GetVersion = 0x00074080,
             SendDriveCommand = 0x0007c084,
             ReceiveDriveData = 0x0007c088
         }
 
-        protected enum RegisterCommand : byte {
+        protected enum RegisterCommand : byte
+        {
             /// <summary>
             /// SMART data requested.
             /// </summary>
@@ -78,7 +86,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             IdCmd = 0xEC,
         }
 
-        protected enum RegisterFeature : byte {
+        protected enum RegisterFeature : byte
+        {
             /// <summary>
             /// Read SMART data.
             /// </summary>
@@ -141,7 +150,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct CommandBlockRegisters {
+        protected struct CommandBlockRegisters
+        {
             public RegisterFeature Features;
             public byte SectorCount;
             public byte LBALow;
@@ -153,7 +163,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct DriveCommandParameter {
+        protected struct DriveCommandParameter
+        {
             public uint BufferSize;
             public CommandBlockRegisters Registers;
             public byte DriveNumber;
@@ -162,7 +173,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct DriverStatus {
+        protected struct DriverStatus
+        {
             public byte DriverError;
             public byte IDEError;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
@@ -170,13 +182,15 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct DriveCommandResult {
+        protected struct DriveCommandResult
+        {
             public uint BufferSize;
             public DriverStatus DriverStatus;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct DriveSmartReadDataResult {
+        protected struct DriveSmartReadDataResult
+        {
             public uint BufferSize;
             public DriverStatus DriverStatus;
             public byte Version;
@@ -186,7 +200,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct DriveSmartReadThresholdsResult {
+        protected struct DriveSmartReadThresholdsResult
+        {
             public uint BufferSize;
             public DriverStatus DriverStatus;
             public byte Version;
@@ -196,7 +211,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct Identify {
+        protected struct Identify
+        {
             public ushort GeneralConfiguration;
             public ushort NumberOfCylinders;
             public ushort Reserved;
@@ -226,7 +242,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct DriveIdentifyResult {
+        protected struct DriveIdentifyResult
+        {
             public uint BufferSize;
             public DriverStatus DriverStatus;
             public Identify Identify;
@@ -239,15 +256,18 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
         private const int MAX_DRIVE_ATTRIBUTES = 512;
 
-        public IntPtr OpenDrive(int driveNumber) {
+        public IntPtr OpenDrive(int driveNumber)
+        {
             return NativeMethods.CreateFile(@"\\.\PhysicalDrive" + driveNumber,
               AccessMode.Read | AccessMode.Write, ShareMode.Read | ShareMode.Write,
               IntPtr.Zero, CreationMode.OpenExisting, FileAttribute.Device,
               IntPtr.Zero);
         }
 
-        public bool EnableSmart(IntPtr handle, int driveNumber) {
-            DriveCommandParameter parameter = new DriveCommandParameter {
+        public bool EnableSmart(IntPtr handle, int driveNumber)
+        {
+            DriveCommandParameter parameter = new DriveCommandParameter
+            {
                 DriveNumber = (byte)driveNumber
             };
             parameter.Registers.Features = RegisterFeature.SmartEnableOperations;
@@ -261,8 +281,10 @@ namespace OpenHardwareMonitor.Hardware.HDD {
               IntPtr.Zero);
         }
 
-        public DriveAttributeValue[] ReadSmartData(IntPtr handle, int driveNumber) {
-            DriveCommandParameter parameter = new DriveCommandParameter {
+        public DriveAttributeValue[] ReadSmartData(IntPtr handle, int driveNumber)
+        {
+            DriveCommandParameter parameter = new DriveCommandParameter
+            {
                 DriveNumber = (byte)driveNumber
             };
             parameter.Registers.Features = RegisterFeature.SmartReadData;
@@ -279,8 +301,10 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         public DriveThresholdValue[] ReadSmartThresholds(IntPtr handle,
-          int driveNumber) {
-            DriveCommandParameter parameter = new DriveCommandParameter {
+          int driveNumber)
+        {
+            DriveCommandParameter parameter = new DriveCommandParameter
+            {
                 DriveNumber = (byte)driveNumber
             };
             parameter.Registers.Features = RegisterFeature.SmartReadThresholds;
@@ -296,9 +320,11 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             return isValid ? result.Thresholds : new DriveThresholdValue[0];
         }
 
-        private string GetString(byte[] bytes) {
+        private string GetString(byte[] bytes)
+        {
             char[] chars = new char[bytes.Length];
-            for (int i = 0; i < bytes.Length; i += 2) {
+            for (int i = 0; i < bytes.Length; i += 2)
+            {
                 chars[i] = (char)bytes[i + 1];
                 chars[i + 1] = (char)bytes[i];
             }
@@ -306,8 +332,10 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         public bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber,
-          out string name, out string firmwareRevision) {
-            DriveCommandParameter parameter = new DriveCommandParameter {
+          out string name, out string firmwareRevision)
+        {
+            DriveCommandParameter parameter = new DriveCommandParameter
+            {
                 DriveNumber = (byte)driveNumber
             };
             parameter.Registers.Command = RegisterCommand.IdCmd;
@@ -317,7 +345,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
               out DriveIdentifyResult result, Marshal.SizeOf(typeof(DriveIdentifyResult)),
               out uint bytesReturned, IntPtr.Zero);
 
-            if (!valid) {
+            if (!valid)
+            {
                 name = null;
                 firmwareRevision = null;
                 return false;
@@ -328,31 +357,39 @@ namespace OpenHardwareMonitor.Hardware.HDD {
             return true;
         }
 
-        public void CloseHandle(IntPtr handle) {
+        public void CloseHandle(IntPtr handle)
+        {
             NativeMethods.CloseHandle(handle);
         }
 
-        public string[] GetLogicalDrives(int driveIndex) {
+        public string[] GetLogicalDrives(int driveIndex)
+        {
             List<string> list = new List<string>();
-            try {
+            try
+            {
                 using (ManagementObjectSearcher s = new ManagementObjectSearcher(
                     "root\\CIMV2",
                     "SELECT * FROM Win32_DiskPartition " +
                     "WHERE DiskIndex = " + driveIndex))
-                using (ManagementObjectCollection dpc = s.Get()) {
-                    foreach (ManagementObject dp in dpc) {
+                using (ManagementObjectCollection dpc = s.Get())
+                {
+                    foreach (ManagementObject dp in dpc)
+                    {
                         using (ManagementObjectCollection ldc =
-                          dp.GetRelated("Win32_LogicalDisk")) {
+                          dp.GetRelated("Win32_LogicalDisk"))
+                        {
                             foreach (ManagementBaseObject ld in ldc)
                                 list.Add(((string)ld["Name"]).TrimEnd(':'));
                         }
                     }
                 }
-            } catch { }
+            }
+            catch { }
             return list.ToArray();
         }
 
-        protected static class NativeMethods {
+        protected static class NativeMethods
+        {
             private const string KERNEL = "kernel32.dll";
 
             [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi,

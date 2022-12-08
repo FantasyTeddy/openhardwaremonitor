@@ -13,16 +13,20 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace OpenHardwareMonitor.Hardware.ATI {
-    internal class ATIGroup : IGroup {
+namespace OpenHardwareMonitor.Hardware.ATI
+{
+    internal class ATIGroup : IGroup
+    {
 
         private readonly List<ATIGPU> hardware = new List<ATIGPU>();
         private readonly StringBuilder report = new StringBuilder();
 
         private IntPtr context = IntPtr.Zero;
 
-        public ATIGroup(ISettings settings) {
-            try {
+        public ATIGroup(ISettings settings)
+        {
+            try
+            {
                 ADLStatus adlStatus = ADL.ADL_Main_Control_Create(1);
                 ADLStatus adl2Status = ADL.ADL2_Main_Control_Create(1, out context);
 
@@ -36,7 +40,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
                 report.AppendLine("Graphics Versions");
                 report.AppendLine();
-                try {
+                try
+                {
                     ADLStatus status = ADL.ADL_Graphics_Versions_Get(out ADLVersionsInfo versionInfo);
                     report.Append(" Status: ");
                     report.AppendLine(status.ToString());
@@ -46,14 +51,19 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                     report.AppendLine(versionInfo.CatalystVersion);
                     report.Append(" CatalystWebLink: ");
                     report.AppendLine(versionInfo.CatalystWebLink);
-                } catch (DllNotFoundException) {
+                }
+                catch (DllNotFoundException)
+                {
                     report.AppendLine(" Status: DLL not found");
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     report.AppendLine(" Status: " + e.Message);
                 }
                 report.AppendLine();
 
-                if (adlStatus == ADLStatus.OK) {
+                if (adlStatus == ADLStatus.OK)
+                {
                     int numberOfAdapters = 0;
                     ADL.ADL_Adapter_NumberOfAdapters_Get(ref numberOfAdapters);
 
@@ -61,10 +71,13 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                     report.AppendLine(numberOfAdapters.ToString(CultureInfo.InvariantCulture));
                     report.AppendLine();
 
-                    if (numberOfAdapters > 0) {
+                    if (numberOfAdapters > 0)
+                    {
                         ADLAdapterInfo[] adapterInfo = new ADLAdapterInfo[numberOfAdapters];
-                        if (ADL.ADL_Adapter_AdapterInfo_Get(adapterInfo) == ADLStatus.OK) {
-                            for (int i = 0; i < numberOfAdapters; i++) {
+                        if (ADL.ADL_Adapter_AdapterInfo_Get(adapterInfo) == ADLStatus.OK)
+                        {
+                            for (int i = 0; i < numberOfAdapters; i++)
+                            {
                                 ADL.ADL_Adapter_Active_Get(adapterInfo[i].AdapterIndex,
                                   out int isActive);
                                 ADL.ADL_Adapter_ID_Get(adapterInfo[i].AdapterIndex,
@@ -98,17 +111,21 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                                   CultureInfo.InvariantCulture));
 
                                 if (!string.IsNullOrEmpty(adapterInfo[i].UDID) &&
-                                  adapterInfo[i].VendorID == ADL.ATI_VENDOR_ID) {
+                                  adapterInfo[i].VendorID == ADL.ATI_VENDOR_ID)
+                                {
                                     bool found = false;
-                                    foreach (ATIGPU gpu in hardware) {
+                                    foreach (ATIGPU gpu in hardware)
+                                    {
                                         if (gpu.BusNumber == adapterInfo[i].BusNumber &&
-                                          gpu.DeviceNumber == adapterInfo[i].DeviceNumber) {
+                                          gpu.DeviceNumber == adapterInfo[i].DeviceNumber)
+                                        {
                                             found = true;
                                             break;
                                         }
                                     }
 
-                                    if (!found) {
+                                    if (!found)
+                                    {
                                         var nameBuilder = new StringBuilder(adapterInfo[i].AdapterName);
                                         nameBuilder.Replace("(TM)", " ");
                                         for (int j = 0; j < 10; j++) nameBuilder.Replace("  ", " ");
@@ -126,7 +143,10 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                         }
                     }
                 }
-            } catch (DllNotFoundException) { } catch (EntryPointNotFoundException e) {
+            }
+            catch (DllNotFoundException) { }
+            catch (EntryPointNotFoundException e)
+            {
                 report.AppendLine();
                 report.AppendLine(e.ToString());
                 report.AppendLine();
@@ -135,22 +155,27 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
         public IHardware[] Hardware => hardware.ToArray();
 
-        public string GetReport() {
+        public string GetReport()
+        {
             return report.ToString();
         }
 
-        public void Close() {
-            try {
+        public void Close()
+        {
+            try
+            {
                 foreach (ATIGPU gpu in hardware)
                     gpu.Close();
 
-                if (context != IntPtr.Zero) {
+                if (context != IntPtr.Zero)
+                {
                     ADL.ADL2_Main_Control_Destroy(context);
                     context = IntPtr.Zero;
                 }
 
                 ADL.ADL_Main_Control_Destroy();
-            } catch (Exception) { }
+            }
+            catch (Exception) { }
         }
     }
 }

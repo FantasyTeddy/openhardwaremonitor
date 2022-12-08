@@ -11,14 +11,17 @@
 using System;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware {
-    internal abstract class Hardware : IHardware {
+namespace OpenHardwareMonitor.Hardware
+{
+    internal abstract class Hardware : IHardware
+    {
         protected readonly string name;
         private string customName;
         protected readonly ISettings settings;
         protected readonly ListSet<ISensor> active = new ListSet<ISensor>();
 
-        public Hardware(string name, Identifier identifier, ISettings settings) {
+        public Hardware(string name, Identifier identifier, ISettings settings)
+        {
             this.settings = settings;
             Identifier = identifier;
             this.name = name;
@@ -32,19 +35,23 @@ namespace OpenHardwareMonitor.Hardware {
 
         public virtual ISensor[] Sensors => active.ToArray();
 
-        protected virtual void ActivateSensor(ISensor sensor) {
+        protected virtual void ActivateSensor(ISensor sensor)
+        {
             if (active.Add(sensor))
                 SensorAdded?.Invoke(sensor);
         }
 
-        protected virtual void DeactivateSensor(ISensor sensor) {
+        protected virtual void DeactivateSensor(ISensor sensor)
+        {
             if (active.Remove(sensor))
                 SensorRemoved?.Invoke(sensor);
         }
 
-        public string Name {
+        public string Name
+        {
             get => customName;
-            set {
+            set
+            {
                 if (!string.IsNullOrEmpty(value))
                     customName = value;
                 else
@@ -64,7 +71,8 @@ namespace OpenHardwareMonitor.Hardware {
 
         public abstract HardwareType HardwareType { get; }
 
-        public virtual string GetReport() {
+        public virtual string GetReport()
+        {
             return null;
         }
 
@@ -72,17 +80,20 @@ namespace OpenHardwareMonitor.Hardware {
 
         public event HardwareEventHandler Closing;
 
-        public virtual void Close() {
+        public virtual void Close()
+        {
             Closing?.Invoke(this);
         }
 
-        public void Accept(IVisitor visitor) {
+        public void Accept(IVisitor visitor)
+        {
             if (visitor == null)
                 throw new ArgumentNullException("visitor");
             visitor.VisitHardware(this);
         }
 
-        public virtual void Traverse(IVisitor visitor) {
+        public virtual void Traverse(IVisitor visitor)
+        {
             foreach (ISensor sensor in active)
                 sensor.Accept(visitor);
         }

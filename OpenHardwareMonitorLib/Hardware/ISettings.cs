@@ -8,8 +8,10 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware {
-    public interface ISettings {
+namespace OpenHardwareMonitor.Hardware
+{
+    public interface ISettings
+    {
 
         bool Contains(string name);
 

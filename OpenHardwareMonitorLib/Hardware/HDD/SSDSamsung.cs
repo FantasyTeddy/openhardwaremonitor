@@ -11,11 +11,13 @@
 using System.Collections.Generic;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
     [NamePrefix(""), RequireSmart(0xB1), RequireSmart(0xB3), RequireSmart(0xB5),
 RequireSmart(0xB6), RequireSmart(0xB7), RequireSmart(0xBB),
 RequireSmart(0xC3), RequireSmart(0xC7)]
-    internal class SSDSamsung : AbstractHarddrive {
+    internal class SSDSamsung : AbstractHarddrive
+    {
 
         private static readonly IEnumerable<SmartAttribute> smartAttributes =
           new List<SmartAttribute> {

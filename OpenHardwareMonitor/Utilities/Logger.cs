@@ -15,8 +15,10 @@ using System.IO;
 using System.Linq;
 using OpenHardwareMonitor.Hardware;
 
-namespace OpenHardwareMonitor.Utilities {
-    public class Logger {
+namespace OpenHardwareMonitor.Utilities
+{
+    public class Logger
+    {
 
         private const string fileNameFormat =
           "OpenHardwareMonitorLog-{0:yyyy-MM-dd}.csv";
@@ -30,13 +32,15 @@ namespace OpenHardwareMonitor.Utilities {
 
         private DateTime lastLoggedTime = DateTime.MinValue;
 
-        public Logger(IComputer computer) {
+        public Logger(IComputer computer)
+        {
             this.computer = computer;
             this.computer.HardwareAdded += HardwareAdded;
             this.computer.HardwareRemoved += HardwareRemoved;
         }
 
-        private void HardwareRemoved(IHardware hardware) {
+        private void HardwareRemoved(IHardware hardware)
+        {
             hardware.SensorAdded -= SensorAdded;
             hardware.SensorRemoved -= SensorRemoved;
             foreach (ISensor sensor in hardware.Sensors)
@@ -45,7 +49,8 @@ namespace OpenHardwareMonitor.Utilities {
                 HardwareRemoved(subHardware);
         }
 
-        private void HardwareAdded(IHardware hardware) {
+        private void HardwareAdded(IHardware hardware)
+        {
             foreach (ISensor sensor in hardware.Sensors)
                 SensorAdded(sensor);
             hardware.SensorAdded += SensorAdded;
@@ -54,36 +59,43 @@ namespace OpenHardwareMonitor.Utilities {
                 HardwareAdded(subHardware);
         }
 
-        private void SensorAdded(ISensor sensor) {
+        private void SensorAdded(ISensor sensor)
+        {
             if (sensors == null)
                 return;
 
-            for (int i = 0; i < sensors.Length; i++) {
+            for (int i = 0; i < sensors.Length; i++)
+            {
                 if (sensor.Identifier.ToString() == identifiers[i])
                     sensors[i] = sensor;
             }
         }
 
-        private void SensorRemoved(ISensor sensor) {
+        private void SensorRemoved(ISensor sensor)
+        {
             if (sensors == null)
                 return;
 
-            for (int i = 0; i < sensors.Length; i++) {
+            for (int i = 0; i < sensors.Length; i++)
+            {
                 if (sensor == sensors[i])
                     sensors[i] = null;
             }
         }
 
-        private static string GetFileName(DateTime date) {
+        private static string GetFileName(DateTime date)
+        {
             return AppDomain.CurrentDomain.BaseDirectory +
               Path.DirectorySeparatorChar + string.Format(fileNameFormat, date);
         }
 
-        private bool OpenExistingLogFile() {
+        private bool OpenExistingLogFile()
+        {
             if (!File.Exists(fileName))
                 return false;
 
-            try {
+            try
+            {
                 string line;
                 using (StreamReader reader = new StreamReader(fileName))
                     line = reader.ReadLine();
@@ -92,19 +104,24 @@ namespace OpenHardwareMonitor.Utilities {
                     return false;
 
                 identifiers = line.Split(',').Skip(1).ToArray();
-            } catch {
+            }
+            catch
+            {
                 identifiers = null;
                 return false;
             }
 
-            if (identifiers.Length == 0) {
+            if (identifiers.Length == 0)
+            {
                 identifiers = null;
                 return false;
             }
 
             sensors = new ISensor[identifiers.Length];
-            SensorVisitor visitor = new SensorVisitor(sensor => {
-                for (int i = 0; i < identifiers.Length; i++) {
+            SensorVisitor visitor = new SensorVisitor(sensor =>
+            {
+                for (int i = 0; i < identifiers.Length; i++)
+                {
                     if (sensor.Identifier.ToString() == identifiers[i])
                         sensors[i] = sensor;
                 }
@@ -113,18 +130,22 @@ namespace OpenHardwareMonitor.Utilities {
             return true;
         }
 
-        private void CreateNewLogFile() {
+        private void CreateNewLogFile()
+        {
             IList<ISensor> list = new List<ISensor>();
-            SensorVisitor visitor = new SensorVisitor(sensor => {
+            SensorVisitor visitor = new SensorVisitor(sensor =>
+            {
                 list.Add(sensor);
             });
             visitor.VisitComputer(computer);
             sensors = list.ToArray();
             identifiers = sensors.Select(s => s.Identifier.ToString()).ToArray();
 
-            using (StreamWriter writer = new StreamWriter(fileName, false)) {
+            using (StreamWriter writer = new StreamWriter(fileName, false))
+            {
                 writer.Write(",");
-                for (int i = 0; i < sensors.Length; i++) {
+                for (int i = 0; i < sensors.Length; i++)
+                {
                     writer.Write(sensors[i].Identifier);
                     if (i < sensors.Length - 1)
                         writer.Write(",");
@@ -133,7 +154,8 @@ namespace OpenHardwareMonitor.Utilities {
                 }
 
                 writer.Write("Time,");
-                for (int i = 0; i < sensors.Length; i++) {
+                for (int i = 0; i < sensors.Length; i++)
+                {
                     writer.Write('"');
                     writer.Write(sensors[i].Name);
                     writer.Write('"');
@@ -147,13 +169,15 @@ namespace OpenHardwareMonitor.Utilities {
 
         public TimeSpan LoggingInterval { get; set; }
 
-        public void Log() {
+        public void Log()
+        {
             DateTime now = DateTime.Now;
 
             if (lastLoggedTime + LoggingInterval - new TimeSpan(5000000) > now)
                 return;
 
-            if (day != now.Date || !File.Exists(fileName)) {
+            if (day != now.Date || !File.Exists(fileName))
+            {
                 day = now.Date;
                 fileName = GetFileName(day);
 
@@ -161,15 +185,20 @@ namespace OpenHardwareMonitor.Utilities {
                     CreateNewLogFile();
             }
 
-            try {
+            try
+            {
                 using (StreamWriter writer = new StreamWriter(new FileStream(fileName,
-                  FileMode.Append, FileAccess.Write, FileShare.ReadWrite))) {
+                  FileMode.Append, FileAccess.Write, FileShare.ReadWrite)))
+                {
                     writer.Write(now.ToString("G", CultureInfo.InvariantCulture));
                     writer.Write(",");
-                    for (int i = 0; i < sensors.Length; i++) {
-                        if (sensors[i] != null) {
+                    for (int i = 0; i < sensors.Length; i++)
+                    {
+                        if (sensors[i] != null)
+                        {
                             float? value = sensors[i].Value;
-                            if (value.HasValue) {
+                            if (value.HasValue)
+                            {
                                 writer.Write(
                                   value.Value.ToString("R", CultureInfo.InvariantCulture));
                             }
@@ -180,7 +209,8 @@ namespace OpenHardwareMonitor.Utilities {
                             writer.WriteLine();
                     }
                 }
-            } catch (IOException) { }
+            }
+            catch (IOException) { }
 
             lastLoggedTime = now;
         }

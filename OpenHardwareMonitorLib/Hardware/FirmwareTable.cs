@@ -12,22 +12,29 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    internal static class FirmwareTable {
+    internal static class FirmwareTable
+    {
 
-        public static byte[] GetTable(Provider provider, string table) {
+        public static byte[] GetTable(Provider provider, string table)
+        {
             int id = (table[3] << 24) | (table[2] << 16) | (table[1] << 8) | table[0];
             return GetTable(provider, id);
         }
 
-        public static byte[] GetTable(Provider provider, int table) {
+        public static byte[] GetTable(Provider provider, int table)
+        {
 
             int size;
-            try {
+            try
+            {
                 size = NativeMethods.GetSystemFirmwareTable(provider, table,
                   IntPtr.Zero, 0);
-            } catch (DllNotFoundException) { return null; } catch (EntryPointNotFoundException) { return null; }
+            }
+            catch (DllNotFoundException) { return null; }
+            catch (EntryPointNotFoundException) { return null; }
 
             if (size <= 0)
                 return null;
@@ -45,12 +52,16 @@ namespace OpenHardwareMonitor.Hardware {
             return buffer;
         }
 
-        public static string[] EnumerateTables(Provider provider) {
+        public static string[] EnumerateTables(Provider provider)
+        {
             int size;
-            try {
+            try
+            {
                 size = NativeMethods.EnumSystemFirmwareTables(
                   provider, IntPtr.Zero, 0);
-            } catch (DllNotFoundException) { return null; } catch (EntryPointNotFoundException) { return null; }
+            }
+            catch (DllNotFoundException) { return null; }
+            catch (EntryPointNotFoundException) { return null; }
 
             IntPtr nativeBuffer = Marshal.AllocHGlobal(size);
             NativeMethods.EnumSystemFirmwareTables(
@@ -66,13 +77,15 @@ namespace OpenHardwareMonitor.Hardware {
             return result;
         }
 
-        public enum Provider : int {
+        public enum Provider : int
+        {
             ACPI = ((byte)'A' << 24) | ((byte)'C' << 16) | ((byte)'P' << 8) | (byte)'I',
             FIRM = ((byte)'F' << 24) | ((byte)'I' << 16) | ((byte)'R' << 8) | (byte)'M',
             RSMB = ((byte)'R' << 24) | ((byte)'S' << 16) | ((byte)'M' << 8) | (byte)'B'
         }
 
-        private static class NativeMethods {
+        private static class NativeMethods
+        {
             private const string KERNEL = "kernel32.dll";
 
             [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi,

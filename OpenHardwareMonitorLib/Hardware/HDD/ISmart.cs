@@ -11,9 +11,11 @@
 using System;
 
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
-    internal interface ISmart {
+    internal interface ISmart
+    {
 
         IntPtr OpenDrive(int driveNumber);
 

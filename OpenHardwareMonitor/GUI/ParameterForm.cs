@@ -15,19 +15,24 @@ using System.Windows.Forms;
 using OpenHardwareMonitor.Collections;
 using OpenHardwareMonitor.Hardware;
 
-namespace OpenHardwareMonitor.GUI {
-    public partial class ParameterForm : Form {
+namespace OpenHardwareMonitor.GUI
+{
+    public partial class ParameterForm : Form
+    {
 
         private IReadOnlyArray<IParameter> parameters;
         private BindingList<ParameterRow> parameterRows;
 
-        public ParameterForm() {
+        public ParameterForm()
+        {
             InitializeComponent();
         }
 
-        public IReadOnlyArray<IParameter> Parameters {
+        public IReadOnlyArray<IParameter> Parameters
+        {
             get => parameters;
-            set {
+            set
+            {
                 parameters = value;
                 parameterRows = new BindingList<ParameterRow>();
                 foreach (IParameter parameter in parameters)
@@ -36,18 +41,21 @@ namespace OpenHardwareMonitor.GUI {
             }
         }
 
-        private class ParameterRow : INotifyPropertyChanged {
+        private class ParameterRow : INotifyPropertyChanged
+        {
             public IParameter parameter;
             private float value;
             public bool isDefault;
 
             public event PropertyChangedEventHandler PropertyChanged;
 
-            private void NotifyPropertyChanged(string propertyName) {
+            private void NotifyPropertyChanged(string propertyName)
+            {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
 
-            public ParameterRow(IParameter parameter) {
+            public ParameterRow(IParameter parameter)
+            {
                 this.parameter = parameter;
                 this.value = parameter.Value;
                 this.isDefault = parameter.IsDefault;
@@ -55,9 +63,11 @@ namespace OpenHardwareMonitor.GUI {
 
             public string Name => parameter.Name;
 
-            public float Value {
+            public float Value
+            {
                 get => value;
-                set {
+                set
+                {
                     this.isDefault = false;
                     this.value = value;
                     NotifyPropertyChanged("Default");
@@ -65,9 +75,11 @@ namespace OpenHardwareMonitor.GUI {
                 }
             }
 
-            public bool Default {
+            public bool Default
+            {
                 get => isDefault;
-                set {
+                set
+                {
                     isDefault = value;
                     if (value)
                         this.value = parameter.DefaultValue;
@@ -78,7 +90,8 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void dataGridView_RowEnter(object sender,
-          DataGridViewCellEventArgs e) {
+          DataGridViewCellEventArgs e)
+        {
             if (e.RowIndex >= 0 && e.RowIndex < parameters.Length)
                 descriptionLabel.Text = parameters[e.RowIndex].Description;
             else
@@ -86,9 +99,11 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void dataGridView_CellValidating(object sender,
-          DataGridViewCellValidatingEventArgs e) {
+          DataGridViewCellValidatingEventArgs e)
+        {
             if (e.ColumnIndex == 2 &&
-              !float.TryParse(e.FormattedValue.ToString(), out float value)) {
+              !float.TryParse(e.FormattedValue.ToString(), out float value))
+            {
                 dataGridView.Rows[e.RowIndex].Cells[0].ErrorText =
                   "Invalid value";
                 e.Cancel = true;
@@ -96,24 +111,32 @@ namespace OpenHardwareMonitor.GUI {
         }
 
         private void dataGridView_CellEndEdit(object sender,
-          DataGridViewCellEventArgs e) {
+          DataGridViewCellEventArgs e)
+        {
             dataGridView.Rows[e.RowIndex].Cells[0].ErrorText = "";
         }
 
-        private void okButton_Click(object sender, EventArgs e) {
-            foreach (ParameterRow row in parameterRows) {
-                if (row.Default) {
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            foreach (ParameterRow row in parameterRows)
+            {
+                if (row.Default)
+                {
                     row.parameter.IsDefault = true;
-                } else {
+                }
+                else
+                {
                     row.parameter.Value = row.Value;
                 }
             }
         }
 
         private void dataGridView_CurrentCellDirtyStateChanged(object sender,
-          EventArgs e) {
+          EventArgs e)
+        {
             if (dataGridView.CurrentCell is DataGridViewCheckBoxCell ||
-              dataGridView.CurrentCell is DataGridViewComboBoxCell) {
+              dataGridView.CurrentCell is DataGridViewComboBoxCell)
+            {
                 dataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
         }

@@ -11,12 +11,14 @@
 using System.Collections.Generic;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
     [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xAC),
 RequireSmart(0xAD), RequireSmart(0xAE), RequireSmart(0xC4),
 RequireSmart(0xCA), RequireSmart(0xCE)]
-    internal class SSDMicron : AbstractHarddrive {
+    internal class SSDMicron : AbstractHarddrive
+    {
 
         private static readonly IEnumerable<SmartAttribute> smartAttributes =
           new List<SmartAttribute> {
@@ -67,7 +69,8 @@ RequireSmart(0xCA), RequireSmart(0xCE)]
 
         public SSDMicron(ISmart smart, string name, string firmwareRevision,
           int index, ISettings settings)
-          : base(smart, name, firmwareRevision, index, smartAttributes, settings) {
+          : base(smart, name, firmwareRevision, index, smartAttributes, settings)
+        {
             this.temperature = new Sensor("Temperature", 0, false,
               SensorType.Temperature, this,
               new[] { new ParameterDescription("Offset [°C]",
@@ -77,29 +80,36 @@ RequireSmart(0xCA), RequireSmart(0xCE)]
               SensorType.Factor, this, settings);
         }
 
-        public override void UpdateAdditionalSensors(DriveAttributeValue[] values) {
+        public override void UpdateAdditionalSensors(DriveAttributeValue[] values)
+        {
             float? hostProgramPagesCount = null;
             float? ftlProgramPagesCount = null;
-            foreach (DriveAttributeValue value in values) {
+            foreach (DriveAttributeValue value in values)
+            {
                 if (value.Identifier == 0xF7)
                     hostProgramPagesCount = RawToInt(value.RawValue, value.AttrValue, null);
 
                 if (value.Identifier == 0xF8)
                     ftlProgramPagesCount = RawToInt(value.RawValue, value.AttrValue, null);
 
-                if (value.Identifier == 0xC2) {
+                if (value.Identifier == 0xC2)
+                {
                     temperature.Value =
                       value.RawValue[0] + temperature.Parameters[0].Value;
                     if (value.RawValue[0] != 0)
                         ActivateSensor(temperature);
                 }
             }
-            if (hostProgramPagesCount.HasValue && ftlProgramPagesCount.HasValue) {
-                if (hostProgramPagesCount.Value > 0) {
+            if (hostProgramPagesCount.HasValue && ftlProgramPagesCount.HasValue)
+            {
+                if (hostProgramPagesCount.Value > 0)
+                {
                     writeAmplification.Value =
                       (hostProgramPagesCount.Value + ftlProgramPagesCount) /
                       hostProgramPagesCount.Value;
-                } else {
+                }
+                else
+                {
                     writeAmplification.Value = 0;
                 }
 

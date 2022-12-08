@@ -12,10 +12,12 @@
 using System.Collections.Generic;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
     [NamePrefix(""), RequireSmart(0xAB), RequireSmart(0xB1)]
-    internal class SSDSandforce : AbstractHarddrive {
+    internal class SSDSandforce : AbstractHarddrive
+    {
 
         private static readonly IEnumerable<SmartAttribute> smartAttributes =
           new List<SmartAttribute> {
@@ -55,26 +57,33 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
         public SSDSandforce(ISmart smart, string name, string firmwareRevision,
           int index, ISettings settings)
-          : base(smart, name, firmwareRevision, index, smartAttributes, settings) {
+          : base(smart, name, firmwareRevision, index, smartAttributes, settings)
+        {
             this.writeAmplification = new Sensor("Write Amplification", 1,
               SensorType.Factor, this, settings);
         }
 
-        public override void UpdateAdditionalSensors(DriveAttributeValue[] values) {
+        public override void UpdateAdditionalSensors(DriveAttributeValue[] values)
+        {
             float? controllerWritesToNAND = null;
             float? hostWritesToController = null;
-            foreach (DriveAttributeValue value in values) {
+            foreach (DriveAttributeValue value in values)
+            {
                 if (value.Identifier == 0xE9)
                     controllerWritesToNAND = RawToInt(value.RawValue, value.AttrValue, null);
 
                 if (value.Identifier == 0xEA)
                     hostWritesToController = RawToInt(value.RawValue, value.AttrValue, null);
             }
-            if (controllerWritesToNAND.HasValue && hostWritesToController.HasValue) {
-                if (hostWritesToController.Value > 0) {
+            if (controllerWritesToNAND.HasValue && hostWritesToController.HasValue)
+            {
+                if (hostWritesToController.Value > 0)
+                {
                     writeAmplification.Value =
                       controllerWritesToNAND.Value / hostWritesToController.Value;
-                } else {
+                }
+                else
+                {
                     writeAmplification.Value = 0;
                 }
 

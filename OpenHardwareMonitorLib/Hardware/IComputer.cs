@@ -8,11 +8,13 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
     public delegate void HardwareEventHandler(IHardware hardware);
 
-    public interface IComputer : IElement {
+    public interface IComputer : IElement
+    {
 
         IHardware[] Hardware { get; }
 

@@ -8,10 +8,13 @@
 	
 */
 
-namespace OpenHardwareMonitor.Collections {
+namespace OpenHardwareMonitor.Collections
+{
 
-    public struct Pair<F, S> {
-        public Pair(F first, S second) {
+    public struct Pair<F, S>
+    {
+        public Pair(F first, S second)
+        {
             First = first;
             Second = second;
         }
@@ -20,7 +23,8 @@ namespace OpenHardwareMonitor.Collections {
 
         public S Second { get; set; }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return (First != null ? First.GetHashCode() : 0) ^
               (Second != null ? Second.GetHashCode() : 0);
         }

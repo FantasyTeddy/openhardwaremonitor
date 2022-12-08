@@ -12,10 +12,12 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
-namespace OpenHardwareMonitor.Hardware.ATI {
+namespace OpenHardwareMonitor.Hardware.ATI
+{
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLAdapterInfo {
+    internal struct ADLAdapterInfo
+    {
         public int Size;
         public int AdapterIndex;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = ADL.ADL_MAX_PATH)]
@@ -40,7 +42,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLPMActivity {
+    internal struct ADLPMActivity
+    {
         public int Size;
         public int EngineClock;
         public int MemoryClock;
@@ -54,13 +57,15 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLTemperature {
+    internal struct ADLTemperature
+    {
         public int Size;
         public int Temperature;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLFanSpeedValue {
+    internal struct ADLFanSpeedValue
+    {
         public int Size;
         public int SpeedType;
         public int FanSpeed;
@@ -68,7 +73,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLFanSpeedInfo {
+    internal struct ADLFanSpeedInfo
+    {
         public int Size;
         public int Flags;
         public int MinPercent;
@@ -78,27 +84,31 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLSingleSensorData {
+    internal struct ADLSingleSensorData
+    {
         public bool Supported;
         public int Value;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLPMLogDataOutput {
+    internal struct ADLPMLogDataOutput
+    {
         public int Size;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = ADL.ADL_PMLOG_MAX_SENSORS)]
         public ADLSingleSensorData[] Sensors;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLODParameterRange {
+    internal struct ADLODParameterRange
+    {
         public int Min;
         public int Max;
         public int Step;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLODParameters {
+    internal struct ADLODParameters
+    {
         public int Size;
         public int NumberOfPerformanceLevels;
         public int ActivityReportingSupported;
@@ -110,7 +120,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLODNPerformanceStatus {
+    internal struct ADLODNPerformanceStatus
+    {
         public int CoreClock;
         public int MemoryClock;
         public int DCEFClock;
@@ -132,7 +143,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ADLVersionsInfo {
+    internal struct ADLVersionsInfo
+    {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string DriverVersion;
 
@@ -143,14 +155,16 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         public string CatalystWebLink;
     }
 
-    internal enum ADLODNCurrentPowerType {
+    internal enum ADLODNCurrentPowerType
+    {
         TOTAL_POWER = 0,
         PPT_POWER,
         SOCKET_POWER,
         CHIP_POWER,
     }
 
-    internal enum ADLODNTemperatureType {
+    internal enum ADLODNTemperatureType
+    {
         CORE = 1,
         MEMORY = 2,
         VRM_CORE = 3,
@@ -160,7 +174,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         HOTSPOT = 7,
     }
 
-    internal enum ADLSensorType {
+    internal enum ADLSensorType
+    {
         CLK_GFXCLK = 1,
         CLK_MEMCLK = 2,
         CLK_SOCCLK = 3,
@@ -202,7 +217,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         SMART_POWERSHIFT_DGPU = 39
     }
 
-    internal enum ADLStatus : int {
+    internal enum ADLStatus : int
+    {
         /// <summary>
         /// All OK, but need to wait.
         /// </summary>  
@@ -301,7 +317,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         ERR_NO_XDISPLAY = -21
     }
 
-    internal class ADL {
+    internal class ADL
+    {
         public const int ADL_MAX_PATH = 256;
         public const int ADL_MAX_ADAPTERS = 40;
         public const int ADL_MAX_DISPLAYS = 40;
@@ -421,8 +438,10 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         private static string dllName;
 
         private static void GetDelegate<T>(string entryPoint, out T newDelegate)
-          where T : class {
-            DllImportAttribute attribute = new DllImportAttribute(dllName) {
+          where T : class
+        {
+            DllImportAttribute attribute = new DllImportAttribute(dllName)
+            {
                 CallingConvention = CallingConvention.Cdecl,
                 PreserveSig = true,
                 EntryPoint = entryPoint
@@ -430,7 +449,8 @@ namespace OpenHardwareMonitor.Hardware.ATI {
             PInvokeDelegateFactory.CreateDelegate(attribute, out newDelegate);
         }
 
-        private static void CreateDelegates(string name) {
+        private static void CreateDelegates(string name)
+        {
             if (OperatingSystem.IsUnix)
                 dllName = name + ".so";
             else
@@ -482,47 +502,61 @@ namespace OpenHardwareMonitor.Hardware.ATI {
               out ADL_Graphics_Versions_Get);
         }
 
-        static ADL() {
+        static ADL()
+        {
             CreateDelegates("atiadlxx");
         }
 
         private ADL() { }
 
-        public static ADLStatus ADL_Main_Control_Create(int enumConnectedAdapters) {
-            try {
-                try {
+        public static ADLStatus ADL_Main_Control_Create(int enumConnectedAdapters)
+        {
+            try
+            {
+                try
+                {
                     return _ADL_Main_Control_Create(Main_Memory_Alloc,
                       enumConnectedAdapters);
-                } catch {
+                }
+                catch
+                {
                     CreateDelegates("atiadlxy");
                     return _ADL_Main_Control_Create(Main_Memory_Alloc,
                       enumConnectedAdapters);
                 }
-            } catch {
+            }
+            catch
+            {
                 return ADLStatus.ERR;
             }
         }
 
         public static ADLStatus ADL2_Main_Control_Create(int enumConnectedAdapters,
-          out IntPtr context) {
-            try {
+          out IntPtr context)
+        {
+            try
+            {
                 ADLStatus result = _ADL2_Main_Control_Create(Main_Memory_Alloc,
                   enumConnectedAdapters, out context);
                 if (result != ADLStatus.OK)
                     context = IntPtr.Zero;
                 return result;
-            } catch {
+            }
+            catch
+            {
                 context = IntPtr.Zero;
                 return ADLStatus.ERR;
             }
         }
 
-        public static ADLStatus ADL_Adapter_AdapterInfo_Get(ADLAdapterInfo[] info) {
+        public static ADLStatus ADL_Adapter_AdapterInfo_Get(ADLAdapterInfo[] info)
+        {
             int elementSize = Marshal.SizeOf(typeof(ADLAdapterInfo));
             int size = info.Length * elementSize;
             IntPtr ptr = Marshal.AllocHGlobal(size);
             ADLStatus status = _ADL_Adapter_AdapterInfo_Get(ptr, size);
-            for (int i = 0; i < info.Length; i++) {
+            for (int i = 0; i < info.Length; i++)
+            {
                 info[i] = (ADLAdapterInfo)
                   Marshal.PtrToStructure((IntPtr)((long)ptr + i * elementSize),
                   typeof(ADLAdapterInfo));
@@ -532,16 +566,19 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
             // the ADLAdapterInfo.VendorID field reported by ADL is wrong on 
             // Windows systems (parse error), so we fix this here
-            for (int i = 0; i < info.Length; i++) {
+            for (int i = 0; i < info.Length; i++)
+            {
                 // try Windows UDID format
                 Match m = Regex.Match(info[i].UDID, "PCI_VEN_([A-Fa-f0-9]{1,4})&.*");
-                if (m.Success && m.Groups.Count == 2) {
+                if (m.Success && m.Groups.Count == 2)
+                {
                     info[i].VendorID = Convert.ToInt32(m.Groups[1].Value, 16);
                     continue;
                 }
                 // if above failed, try Unix UDID format
                 m = Regex.Match(info[i].UDID, "[0-9]+:[0-9]+:([0-9]+):[0-9]+:[0-9]+");
-                if (m.Success && m.Groups.Count == 2) {
+                if (m.Success && m.Groups.Count == 2)
+                {
                     info[i].VendorID = Convert.ToInt32(m.Groups[1].Value, 10);
                 }
             }
@@ -550,13 +587,20 @@ namespace OpenHardwareMonitor.Hardware.ATI {
         }
 
         public static ADLStatus ADL_Adapter_ID_Get(int adapterIndex,
-          out int adapterID) {
-            try {
+          out int adapterID)
+        {
+            try
+            {
                 return _ADL_Adapter_ID_Get(adapterIndex, out adapterID);
-            } catch (EntryPointNotFoundException) {
-                try {
+            }
+            catch (EntryPointNotFoundException)
+            {
+                try
+                {
                     return _ADL_Display_AdapterID_Get(adapterIndex, out adapterID);
-                } catch (EntryPointNotFoundException) {
+                }
+                catch (EntryPointNotFoundException)
+                {
                     adapterID = 1;
                     return ADLStatus.OK;
                 }
@@ -567,11 +611,13 @@ namespace OpenHardwareMonitor.Hardware.ATI {
 
         // create a Main_Memory_Alloc delegate and keep it alive
         private static readonly ADL_Main_Memory_AllocDelegate Main_Memory_Alloc =
-          delegate (int size) {
+          delegate (int size)
+          {
               return Marshal.AllocHGlobal(size);
           };
 
-        private static void Main_Memory_Free(IntPtr buffer) {
+        private static void Main_Memory_Free(IntPtr buffer)
+        {
             if (IntPtr.Zero != buffer)
                 Marshal.FreeHGlobal(buffer);
         }

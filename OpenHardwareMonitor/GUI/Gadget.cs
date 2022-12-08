@@ -12,76 +12,94 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace OpenHardwareMonitor.GUI {
-    public abstract class Gadget : IDisposable {
+namespace OpenHardwareMonitor.GUI
+{
+    public abstract class Gadget : IDisposable
+    {
 
         private readonly GadgetWindow window;
 
-        public Gadget() {
+        public Gadget()
+        {
             this.window = new GadgetWindow();
-            this.window.Paint += delegate (object sender, PaintEventArgs e) {
+            this.window.Paint += delegate (object sender, PaintEventArgs e)
+            {
                 OnPaint(e);
             };
         }
 
-        public virtual void Dispose() {
+        public virtual void Dispose()
+        {
             window.Dispose();
         }
 
-        public Point Location {
+        public Point Location
+        {
             get => window.Location;
             set => window.Location = value;
         }
 
-        public event EventHandler LocationChanged {
+        public event EventHandler LocationChanged
+        {
             add => window.LocationChanged += value;
             remove => window.LocationChanged -= value;
         }
 
-        public virtual Size Size {
+        public virtual Size Size
+        {
             get => window.Size;
             set => this.window.Size = value;
         }
 
-        public event EventHandler SizeChanged {
+        public event EventHandler SizeChanged
+        {
             add => window.SizeChanged += value;
             remove => window.SizeChanged -= value;
         }
 
-        public byte Opacity {
+        public byte Opacity
+        {
             get => window.Opacity;
             set => window.Opacity = value;
         }
 
-        public bool LockPositionAndSize {
+        public bool LockPositionAndSize
+        {
             get => window.LockPositionAndSize;
             set => window.LockPositionAndSize = value;
         }
 
-        public bool AlwaysOnTop {
+        public bool AlwaysOnTop
+        {
             get => window.AlwaysOnTop;
             set => window.AlwaysOnTop = value;
         }
 
-        public ContextMenu ContextMenu {
+        public ContextMenu ContextMenu
+        {
             get => window.ContextMenu;
             set => window.ContextMenu = value;
         }
 
-        public event HitTestEventHandler HitTest {
+        public event HitTestEventHandler HitTest
+        {
             add => window.HitTest += value;
             remove => window.HitTest -= value;
         }
 
-        public event MouseEventHandler MouseDoubleClick {
+        public event MouseEventHandler MouseDoubleClick
+        {
             add => window.MouseDoubleClick += value;
             remove => window.MouseDoubleClick -= value;
         }
 
-        public bool Visible {
+        public bool Visible
+        {
             get => window.Visible;
-            set {
-                if (value != window.Visible) {
+            set
+            {
+                if (value != window.Visible)
+                {
                     window.Visible = value;
                     VisibleChanged?.Invoke(this, EventArgs.Empty);
                     if (value)
@@ -92,7 +110,8 @@ namespace OpenHardwareMonitor.GUI {
 
         public event EventHandler VisibleChanged;
 
-        public void Redraw() {
+        public void Redraw()
+        {
             window.Redraw();
         }
 

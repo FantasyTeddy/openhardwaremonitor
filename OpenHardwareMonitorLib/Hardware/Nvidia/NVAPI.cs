@@ -13,9 +13,11 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace OpenHardwareMonitor.Hardware.Nvidia {
+namespace OpenHardwareMonitor.Hardware.Nvidia
+{
 
-    internal enum NvStatus {
+    internal enum NvStatus
+    {
         OK = 0,
         ERROR = -1,
         LIBRARY_NOT_FOUND = -2,
@@ -69,7 +71,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         FUNCTION_NOT_FOUND = -136
     }
 
-    internal enum NvThermalController {
+    internal enum NvThermalController
+    {
         NONE = 0,
         GPU_INTERNAL,
         ADM1032,
@@ -85,7 +88,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         UNKNOWN = -1,
     }
 
-    internal enum NvThermalTarget {
+    internal enum NvThermalTarget
+    {
         NONE = 0,
         GPU = 1,
         MEMORY = 2,
@@ -96,7 +100,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     };
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvSensor {
+    internal struct NvSensor
+    {
         public NvThermalController Controller;
         public uint DefaultMinTemp;
         public uint DefaultMaxTemp;
@@ -105,7 +110,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvGPUThermalSettings {
+    internal struct NvGPUThermalSettings
+    {
         public uint Version;
         public uint Count;
         [MarshalAs(UnmanagedType.ByValArray,
@@ -114,29 +120,34 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NvDisplayHandle {
+    internal struct NvDisplayHandle
+    {
         private readonly IntPtr ptr;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct NvPhysicalGpuHandle {
+    internal struct NvPhysicalGpuHandle
+    {
         private readonly IntPtr ptr;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvClocks {
+    internal struct NvClocks
+    {
         public uint Version;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = NVAPI.MAX_CLOCKS_PER_GPU)]
         public uint[] Clock;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvUtilizationDomainEx {
+    internal struct NvUtilizationDomainEx
+    {
         public bool Present;
         public int Percentage;
     }
 
-    public enum UtilizationDomain {
+    public enum UtilizationDomain
+    {
         GPU,
         FrameBuffer,
         VideoEngine,
@@ -144,7 +155,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvDynamicPstatesInfoEx {
+    internal struct NvDynamicPstatesInfoEx
+    {
         public uint Version;
         public uint Flags;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = NVAPI.NVAPI_MAX_GPU_UTILIZATIONS)]
@@ -153,14 +165,16 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvUtilizationDomain {
+    internal struct NvUtilizationDomain
+    {
         public bool Present;
         public int Percentage;
         public ulong Reserved;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvDynamicPstatesInfo {
+    internal struct NvDynamicPstatesInfo
+    {
         public uint Version;
         public uint Flags;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = NVAPI.NVAPI_MAX_GPU_UTILIZATIONS)]
@@ -168,7 +182,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvCooler {
+    internal struct NvCooler
+    {
         public int Type;
         public int Controller;
         public int DefaultMin;
@@ -184,7 +199,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvGPUCoolerSettings {
+    internal struct NvGPUCoolerSettings
+    {
         public uint Version;
         public uint Count;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = NVAPI.MAX_COOLER_PER_GPU)]
@@ -192,20 +208,23 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvLevel {
+    internal struct NvLevel
+    {
         public int Level;
         public int Policy;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvGPUCoolerLevels {
+    internal struct NvGPUCoolerLevels
+    {
         public uint Version;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = NVAPI.MAX_COOLER_PER_GPU)]
         public NvLevel[] Levels;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvDisplayDriverMemoryInfo {
+    internal struct NvDisplayDriverMemoryInfo
+    {
         public uint Version;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst =
           NVAPI.MAX_MEMORY_VALUES_PER_GPU)]
@@ -213,7 +232,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvDisplayDriverVersion {
+    internal struct NvDisplayDriverVersion
+    {
         public uint Version;
         public uint DriverVersion;
         public uint BldChangeListNum;
@@ -224,7 +244,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvFanCoolersStatus {
+    internal struct NvFanCoolersStatus
+    {
         public uint Version;
         public uint Count;
 
@@ -239,7 +260,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 8)]
-    internal struct NvFanCoolersStatusItem {
+    internal struct NvFanCoolersStatusItem
+    {
         public uint Type;
         public uint CurrentRpm;
         public uint CurrentMinLevel;
@@ -256,7 +278,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         public uint Reserved8;
     }
 
-    internal class NVAPI {
+    internal class NVAPI
+    {
 
         public const int MAX_PHYSICAL_GPUS = 64;
         public const int SHORT_STRING_MAX = 64;
@@ -409,7 +432,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         private NVAPI() { }
 
         public static NvStatus NvAPI_GPU_GetFullName(NvPhysicalGpuHandle gpuHandle,
-          out string name) {
+          out string name)
+        {
             StringBuilder builder = new StringBuilder(SHORT_STRING_MAX);
             NvStatus status;
             if (_NvAPI_GPU_GetFullName != null)
@@ -420,7 +444,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             return status;
         }
 
-        public static NvStatus NvAPI_GetInterfaceVersionString(out string version) {
+        public static NvStatus NvAPI_GetInterfaceVersionString(out string version)
+        {
             StringBuilder builder = new StringBuilder(SHORT_STRING_MAX);
             NvStatus status;
             if (_NvAPI_GetInterfaceVersionString != null)
@@ -431,27 +456,37 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             return status;
         }
 
-        private static string GetDllName() {
-            if (IntPtr.Size == 4) {
+        private static string GetDllName()
+        {
+            if (IntPtr.Size == 4)
+            {
                 return "nvapi.dll";
-            } else {
+            }
+            else
+            {
                 return "nvapi64.dll";
             }
         }
 
         private static void GetDelegate<T>(uint id, out T newDelegate)
-          where T : class {
+          where T : class
+        {
             IntPtr ptr = nvapi_QueryInterface(id);
-            if (ptr != IntPtr.Zero) {
+            if (ptr != IntPtr.Zero)
+            {
                 newDelegate =
                   Marshal.GetDelegateForFunctionPointer(ptr, typeof(T)) as T;
-            } else {
+            }
+            else
+            {
                 newDelegate = null;
             }
         }
 
-        static NVAPI() {
-            DllImportAttribute attribute = new DllImportAttribute(GetDllName()) {
+        static NVAPI()
+        {
+            DllImportAttribute attribute = new DllImportAttribute(GetDllName())
+            {
                 CallingConvention = CallingConvention.Cdecl,
                 PreserveSig = true,
                 EntryPoint = "nvapi_QueryInterface"
@@ -459,11 +494,16 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             PInvokeDelegateFactory.CreateDelegate(attribute,
               out nvapi_QueryInterface);
 
-            try {
+            try
+            {
                 GetDelegate(0x0150E828, out NvAPI_Initialize);
-            } catch (DllNotFoundException) { return; } catch (EntryPointNotFoundException) { return; } catch (ArgumentNullException) { return; }
+            }
+            catch (DllNotFoundException) { return; }
+            catch (EntryPointNotFoundException) { return; }
+            catch (ArgumentNullException) { return; }
 
-            if (NvAPI_Initialize() == NvStatus.OK) {
+            if (NvAPI_Initialize() == NvStatus.OK)
+            {
                 GetDelegate(0xE3640A56, out NvAPI_GPU_GetThermalSettings);
                 GetDelegate(0xCEEE8E9F, out _NvAPI_GPU_GetFullName);
                 GetDelegate(0x9ABDD40D, out NvAPI_EnumNvidiaDisplayHandle);

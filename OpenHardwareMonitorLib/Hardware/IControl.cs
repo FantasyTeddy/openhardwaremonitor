@@ -8,15 +8,18 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    public enum ControlMode {
+    public enum ControlMode
+    {
         Undefined,
         Software,
         Default
     }
 
-    public interface IControl {
+    public interface IControl
+    {
 
         Identifier Identifier { get; }
 

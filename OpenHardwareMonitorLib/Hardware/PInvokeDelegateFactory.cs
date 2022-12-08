@@ -15,9 +15,11 @@ using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using OpenHardwareMonitor.Collections;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    internal static class PInvokeDelegateFactory {
+    internal static class PInvokeDelegateFactory
+    {
 
         private static readonly ModuleBuilder moduleBuilder =
           AppDomain.CurrentDomain.DefineDynamicAssembly(
@@ -30,12 +32,14 @@ namespace OpenHardwareMonitor.Hardware {
 
         public static void CreateDelegate<T>(DllImportAttribute dllImportAttribute,
           out T newDelegate, DllImportSearchPath dllImportSearchPath =
-          DllImportSearchPath.System32) where T : class {
+          DllImportSearchPath.System32) where T : class
+        {
             Pair<DllImportAttribute, Type> key =
               new Pair<DllImportAttribute, Type>(dllImportAttribute, typeof(T));
             wrapperTypes.TryGetValue(key, out Type wrapperType);
 
-            if (wrapperType == null) {
+            if (wrapperType == null)
+            {
                 wrapperType = CreateWrapperType(typeof(T), dllImportAttribute, dllImportSearchPath);
                 wrapperTypes.Add(key, wrapperType);
             }
@@ -46,7 +50,8 @@ namespace OpenHardwareMonitor.Hardware {
 
         private static Type CreateWrapperType(Type delegateType,
           DllImportAttribute dllImportAttribute,
-          DllImportSearchPath dllImportSearchPath) {
+          DllImportSearchPath dllImportSearchPath)
+        {
 
             TypeBuilder typeBuilder = moduleBuilder.DefineType(
               "PInvokeDelegateFactoryInternalWrapperType" + wrapperTypes.Count);
@@ -73,7 +78,8 @@ namespace OpenHardwareMonitor.Hardware {
                 new Type[] { typeof(DllImportSearchPath) }),
               new object[] { dllImportSearchPath }));
 
-            foreach (ParameterInfo parameterInfo in parameterInfos) {
+            foreach (ParameterInfo parameterInfo in parameterInfos)
+            {
                 methodBuilder.DefineParameter(parameterInfo.Position + 1,
                   parameterInfo.Attributes, parameterInfo.Name);
             }

@@ -19,15 +19,18 @@ using OpenHardwareMonitor.Hardware;
 [System.ComponentModel.RunInstaller(true)]
 public class InstanceInstaller : DefaultManagementProjectInstaller { }
 
-namespace OpenHardwareMonitor.WMI {
+namespace OpenHardwareMonitor.WMI
+{
     /// <summary>
     /// The WMI Provider.
     /// This class is not exposed to WMI itself.
     /// </summary>
-    public class WmiProvider : IDisposable {
+    public class WmiProvider : IDisposable
+    {
         private List<IWmiObject> activeInstances;
 
-        public WmiProvider(IComputer computer) {
+        public WmiProvider(IComputer computer)
+        {
             activeInstances = new List<IWmiObject>();
 
             foreach (IHardware hardware in computer.Hardware)
@@ -37,15 +40,18 @@ namespace OpenHardwareMonitor.WMI {
             computer.HardwareRemoved += ComputerHardwareRemoved;
         }
 
-        public void Update() {
+        public void Update()
+        {
             foreach (IWmiObject instance in activeInstances)
                 instance.Update();
         }
 
         #region Eventhandlers
 
-        private void ComputerHardwareAdded(IHardware hardware) {
-            if (!Exists(hardware.Identifier.ToString())) {
+        private void ComputerHardwareAdded(IHardware hardware)
+        {
+            if (!Exists(hardware.Identifier.ToString()))
+            {
                 foreach (ISensor sensor in hardware.Sensors)
                     HardwareSensorAdded(sensor);
 
@@ -55,25 +61,31 @@ namespace OpenHardwareMonitor.WMI {
                 Hardware hw = new Hardware(hardware);
                 activeInstances.Add(hw);
 
-                try {
+                try
+                {
                     Instrumentation.Publish(hw);
-                } catch (Exception) { }
+                }
+                catch (Exception) { }
             }
 
             foreach (IHardware subHardware in hardware.SubHardware)
                 ComputerHardwareAdded(subHardware);
         }
 
-        private void HardwareSensorAdded(ISensor data) {
+        private void HardwareSensorAdded(ISensor data)
+        {
             Sensor sensor = new Sensor(data);
             activeInstances.Add(sensor);
 
-            try {
+            try
+            {
                 Instrumentation.Publish(sensor);
-            } catch (Exception) { }
+            }
+            catch (Exception) { }
         }
 
-        private void ComputerHardwareRemoved(IHardware hardware) {
+        private void ComputerHardwareRemoved(IHardware hardware)
+        {
             hardware.SensorAdded -= HardwareSensorAdded;
             hardware.SensorRemoved -= HardwareSensorRemoved;
 
@@ -86,7 +98,8 @@ namespace OpenHardwareMonitor.WMI {
             RevokeInstance(hardware.Identifier.ToString());
         }
 
-        private void HardwareSensorRemoved(ISensor sensor) {
+        private void HardwareSensorRemoved(ISensor sensor)
+        {
             RevokeInstance(sensor.Identifier.ToString());
         }
 
@@ -94,11 +107,13 @@ namespace OpenHardwareMonitor.WMI {
 
         #region Helpers
 
-        private bool Exists(string identifier) {
+        private bool Exists(string identifier)
+        {
             return activeInstances.Exists(h => h.Identifier == identifier);
         }
 
-        private void RevokeInstance(string identifier) {
+        private void RevokeInstance(string identifier)
+        {
             int instanceIndex = activeInstances.FindIndex(
               item => item.Identifier == identifier.ToString()
             );
@@ -106,20 +121,26 @@ namespace OpenHardwareMonitor.WMI {
             if (instanceIndex == -1)
                 return;
 
-            try {
+            try
+            {
                 Instrumentation.Revoke(activeInstances[instanceIndex]);
-            } catch (Exception) { }
+            }
+            catch (Exception) { }
 
             activeInstances.RemoveAt(instanceIndex);
         }
 
         #endregion
 
-        public void Dispose() {
-            foreach (IWmiObject instance in activeInstances) {
-                try {
+        public void Dispose()
+        {
+            foreach (IWmiObject instance in activeInstances)
+            {
+                try
+                {
                     Instrumentation.Revoke(instance);
-                } catch (Exception) { }
+                }
+                catch (Exception) { }
             }
             activeInstances = null;
         }

@@ -8,9 +8,11 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.Mainboard {
+namespace OpenHardwareMonitor.Hardware.Mainboard
+{
 
-    internal enum Model {
+    internal enum Model
+    {
         // ASRock
         _880GMH_USB3,
         AOD790GX_128M,

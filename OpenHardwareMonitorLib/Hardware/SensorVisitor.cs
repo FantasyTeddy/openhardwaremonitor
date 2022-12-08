@@ -10,28 +10,34 @@
 
 using System;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    public class SensorVisitor : IVisitor {
+    public class SensorVisitor : IVisitor
+    {
         private readonly SensorEventHandler handler;
 
-        public SensorVisitor(SensorEventHandler handler) {
+        public SensorVisitor(SensorEventHandler handler)
+        {
             this.handler = handler ?? throw new ArgumentNullException("handler");
         }
 
-        public void VisitComputer(IComputer computer) {
+        public void VisitComputer(IComputer computer)
+        {
             if (computer == null)
                 throw new ArgumentNullException("computer");
             computer.Traverse(this);
         }
 
-        public void VisitHardware(IHardware hardware) {
+        public void VisitHardware(IHardware hardware)
+        {
             if (hardware == null)
                 throw new ArgumentNullException("hardware");
             hardware.Traverse(this);
         }
 
-        public void VisitSensor(ISensor sensor) {
+        public void VisitSensor(ISensor sensor)
+        {
             handler(sensor);
         }
 

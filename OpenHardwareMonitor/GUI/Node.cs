@@ -13,8 +13,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
 
-namespace OpenHardwareMonitor.GUI {
-    public class Node {
+namespace OpenHardwareMonitor.GUI
+{
+    public class Node
+    {
         private Node parent;
         private readonly NodeCollection nodes;
 
@@ -23,9 +25,11 @@ namespace OpenHardwareMonitor.GUI {
         private bool visible;
         private bool expanded;
 
-        private TreeModel RootTreeModel() {
+        private TreeModel RootTreeModel()
+        {
             Node node = this;
-            while (node != null) {
+            while (node != null)
+            {
                 if (node.Model != null)
                     return node.Model;
                 node = node.parent;
@@ -35,7 +39,8 @@ namespace OpenHardwareMonitor.GUI {
 
         public Node() : this(string.Empty) { }
 
-        public Node(string text) {
+        public Node(string text)
+        {
             this.text = text;
             this.nodes = new NodeCollection(this);
             this.visible = true;
@@ -44,10 +49,13 @@ namespace OpenHardwareMonitor.GUI {
 
         public TreeModel Model { get; set; }
 
-        public Node Parent {
+        public Node Parent
+        {
             get => parent;
-            set {
-                if (value != parent) {
+            set
+            {
+                if (value != parent)
+                {
                     parent?.nodes.Remove(this);
                     value?.nodes.Add(this);
                 }
@@ -56,51 +64,68 @@ namespace OpenHardwareMonitor.GUI {
 
         public Collection<Node> Nodes => nodes;
 
-        public virtual string Text {
+        public virtual string Text
+        {
             get => text;
-            set {
-                if (text != value) {
+            set
+            {
+                if (text != value)
+                {
                     text = value;
                 }
             }
         }
 
-        public Image Image {
+        public Image Image
+        {
             get => image;
-            set {
-                if (image != value) {
+            set
+            {
+                if (image != value)
+                {
                     image = value;
                 }
             }
         }
 
-        public virtual bool IsExpanded {
+        public virtual bool IsExpanded
+        {
             get => expanded;
-            set {
-                if (value != expanded) {
+            set
+            {
+                if (value != expanded)
+                {
                     expanded = value;
                 }
             }
         }
 
-        public virtual bool IsVisible {
+        public virtual bool IsVisible
+        {
             get => visible;
-            set {
-                if (value != visible) {
+            set
+            {
+                if (value != visible)
+                {
                     visible = value;
                     TreeModel model = RootTreeModel();
-                    if (model != null && parent != null) {
+                    if (model != null && parent != null)
+                    {
                         int index = 0;
-                        for (int i = 0; i < parent.nodes.Count; i++) {
+                        for (int i = 0; i < parent.nodes.Count; i++)
+                        {
                             Node node = parent.nodes[i];
                             if (node == this)
                                 break;
                             if (node.IsVisible || model.ForceVisible)
                                 index++;
                         }
-                        if (model.ForceVisible) {
+                        if (model.ForceVisible)
+                        {
                             model.OnNodeChanged(parent, index, this);
-                        } else {
+                        }
+                        else
+                        {
                             if (value)
                                 model.OnNodeInserted(parent, index, this);
                             else
@@ -118,23 +143,28 @@ namespace OpenHardwareMonitor.GUI {
         public event NodeEventHandler NodeAdded;
         public event NodeEventHandler NodeRemoved;
 
-        private class NodeCollection : Collection<Node> {
+        private class NodeCollection : Collection<Node>
+        {
             private readonly Node owner;
 
-            public NodeCollection(Node owner) {
+            public NodeCollection(Node owner)
+            {
                 this.owner = owner;
             }
 
-            protected override void ClearItems() {
+            protected override void ClearItems()
+            {
                 while (Count != 0)
                     RemoveAt(Count - 1);
             }
 
-            protected override void InsertItem(int index, Node item) {
+            protected override void InsertItem(int index, Node item)
+            {
                 if (item == null)
                     throw new ArgumentNullException("item");
 
-                if (item.parent != owner) {
+                if (item.parent != owner)
+                {
                     item.parent?.nodes.Remove(item);
                     item.parent = owner;
                     base.InsertItem(index, item);
@@ -145,7 +175,8 @@ namespace OpenHardwareMonitor.GUI {
                 }
             }
 
-            protected override void RemoveItem(int index) {
+            protected override void RemoveItem(int index)
+            {
                 Node item = this[index];
                 item.parent = null;
                 base.RemoveItem(index);
@@ -155,7 +186,8 @@ namespace OpenHardwareMonitor.GUI {
                 owner.NodeRemoved?.Invoke(item);
             }
 
-            protected override void SetItem(int index, Node item) {
+            protected override void SetItem(int index, Node item)
+            {
                 if (item == null)
                     throw new ArgumentNullException("item");
 

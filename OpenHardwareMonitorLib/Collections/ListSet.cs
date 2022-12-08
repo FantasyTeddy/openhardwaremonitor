@@ -11,13 +11,16 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace OpenHardwareMonitor.Collections {
+namespace OpenHardwareMonitor.Collections
+{
 
-    public class ListSet<T> : IEnumerable<T> {
+    public class ListSet<T> : IEnumerable<T>
+    {
 
         private readonly List<T> list = new List<T>();
 
-        public bool Add(T item) {
+        public bool Add(T item)
+        {
             if (list.Contains(item))
                 return false;
 
@@ -25,7 +28,8 @@ namespace OpenHardwareMonitor.Collections {
             return true;
         }
 
-        public bool Remove(T item) {
+        public bool Remove(T item)
+        {
             if (!list.Contains(item))
                 return false;
 
@@ -33,19 +37,23 @@ namespace OpenHardwareMonitor.Collections {
             return true;
         }
 
-        public bool Contains(T item) {
+        public bool Contains(T item)
+        {
             return list.Contains(item);
         }
 
-        public T[] ToArray() {
+        public T[] ToArray()
+        {
             return list.ToArray();
         }
 
-        public IEnumerator<T> GetEnumerator() {
+        public IEnumerator<T> GetEnumerator()
+        {
             return list.GetEnumerator();
         }
 
-        IEnumerator IEnumerable.GetEnumerator() {
+        IEnumerator IEnumerable.GetEnumerator()
+        {
             return list.GetEnumerator();
         }
 

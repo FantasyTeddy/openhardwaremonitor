@@ -10,10 +10,12 @@
 
 using System.Runtime.InteropServices;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DriveAttributeValue {
+    internal struct DriveAttributeValue
+    {
         public byte Identifier;
         public short StatusFlags;
         public byte AttrValue;

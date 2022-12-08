@@ -10,12 +10,15 @@
 
 using System;
 
-namespace OpenHardwareMonitor.Hardware.HDD {
+namespace OpenHardwareMonitor.Hardware.HDD
+{
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    internal class NamePrefixAttribute : Attribute {
+    internal class NamePrefixAttribute : Attribute
+    {
 
-        public NamePrefixAttribute(string namePrefix) {
+        public NamePrefixAttribute(string namePrefix)
+        {
             Prefix = namePrefix;
         }
 

@@ -13,8 +13,10 @@ using System;
 using System.Globalization;
 using System.Text;
 
-namespace OpenHardwareMonitor.Hardware.LPC {
-    internal class NCT677X : ISuperIO {
+namespace OpenHardwareMonitor.Hardware.LPC
+{
+    internal class NCT677X : ISuperIO
+    {
 
         private readonly ushort port;
         private readonly byte revision;
@@ -27,7 +29,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         private const uint DATA_REGISTER_OFFSET = 0x06;
         private const byte BANK_SELECT_REGISTER = 0x4E;
 
-        private byte ReadByte(ushort address) {
+        private byte ReadByte(ushort address)
+        {
             byte bank = (byte)(address >> 8);
             byte register = (byte)(address & 0xFF);
             Ring0.WriteIoPort(port + ADDRESS_REGISTER_OFFSET, BANK_SELECT_REGISTER);
@@ -36,7 +39,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             return Ring0.ReadIoPort(port + DATA_REGISTER_OFFSET);
         }
 
-        private void WriteByte(ushort address, byte value) {
+        private void WriteByte(ushort address, byte value)
+        {
             byte bank = (byte)(address >> 8);
             byte register = (byte)(address & 0xFF);
             Ring0.WriteIoPort(port + ADDRESS_REGISTER_OFFSET, BANK_SELECT_REGISTER);
@@ -80,7 +84,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
         private readonly ushort?[] alternateTemperatureRegister;
 
-        private enum SourceNCT6771F : byte {
+        private enum SourceNCT6771F : byte
+        {
             SYSTIN = 1,
             CPUTIN = 2,
             AUXTIN = 3,
@@ -103,7 +108,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             PCH_DIM3_TEMP = 20
         }
 
-        private enum SourceNCT6776F : byte {
+        private enum SourceNCT6776F : byte
+        {
             SYSTIN = 1,
             CPUTIN = 2,
             AUXTIN = 3,
@@ -128,7 +134,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             BYTE_TEMP = 22
         }
 
-        private enum SourceNCT67XXD : byte {
+        private enum SourceNCT67XXD : byte
+        {
             SYSTIN = 1,
             CPUTIN = 2,
             AUXTIN0 = 3,
@@ -156,7 +163,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             BYTE_TEMP = 26
         }
 
-        private enum SourceNCT610X : byte {
+        private enum SourceNCT610X : byte
+        {
             SYSTIN = 1,
             CPUTIN = 2,
             AUXTIN = 3,
@@ -181,13 +189,15 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             BYTE_TEMP = 22
         }
 
-        public NCT677X(Chip chip, byte revision, ushort port, LPCPort lpcPort) {
+        public NCT677X(Chip chip, byte revision, ushort port, LPCPort lpcPort)
+        {
             Chip = chip;
             this.revision = revision;
             this.port = port;
             this.lpcPort = lpcPort;
 
-            if (chip == LPC.Chip.NCT610X) {
+            if (chip == LPC.Chip.NCT610X)
+            {
                 VENDOR_ID_HIGH_REGISTER = 0x80FE;
                 VENDOR_ID_LOW_REGISTER = 0x00FE;
 
@@ -196,7 +206,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 FAN_CONTROL_MODE_REG = new ushort[] { 0x113, 0x123, 0x133 };
 
                 vBatMonitorControlRegister = 0x0318;
-            } else {
+            }
+            else
+            {
                 VENDOR_ID_HIGH_REGISTER = 0x804F;
                 VENDOR_ID_LOW_REGISTER = 0x004F;
 
@@ -215,10 +227,12 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             if (!isNuvotonVendor)
                 return;
 
-            switch (chip) {
+            switch (chip)
+            {
                 case Chip.NCT6771F:
                 case Chip.NCT6776F:
-                    if (chip == Chip.NCT6771F) {
+                    if (chip == Chip.NCT6771F)
+                    {
                         Fans = new float?[4];
 
                         // min RPM value with 16-bit fan counter
@@ -230,7 +244,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
               (byte)SourceNCT6771F.AUXTIN,
               (byte)SourceNCT6771F.SYSTIN
             };
-                    } else {
+                    }
+                    else
+                    {
                         Fans = new float?[5];
 
                         // min RPM value with 13-bit fan counter
@@ -277,7 +293,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 case Chip.NCT6796DR:
                 case Chip.NCT6797D:
                 case Chip.NCT6798D:
-                    switch (chip) {
+                    switch (chip)
+                    {
                         case Chip.NCT6791D:
                         case Chip.NCT6792D:
                         case Chip.NCT6792DA:
@@ -377,35 +394,42 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             }
         }
 
-        private bool IsNuvotonVendor() {
+        private bool IsNuvotonVendor()
+        {
             return ((ReadByte(VENDOR_ID_HIGH_REGISTER) << 8) |
               ReadByte(VENDOR_ID_LOW_REGISTER)) == NUVOTON_VENDOR_ID;
         }
 
-        public byte? ReadGPIO(int index) {
+        public byte? ReadGPIO(int index)
+        {
             return null;
         }
 
         public void WriteGPIO(int index, byte value) { }
 
 
-        private void SaveDefaultFanControl(int index) {
-            if (!restoreDefaultFanControlRequired[index]) {
+        private void SaveDefaultFanControl(int index)
+        {
+            if (!restoreDefaultFanControlRequired[index])
+            {
                 initialFanControlMode[index] = ReadByte(FAN_CONTROL_MODE_REG[index]);
                 initialFanPwmCommand[index] = ReadByte(FAN_PWM_COMMAND_REG[index]);
                 restoreDefaultFanControlRequired[index] = true;
             }
         }
 
-        private void RestoreDefaultFanControl(int index) {
-            if (restoreDefaultFanControlRequired[index]) {
+        private void RestoreDefaultFanControl(int index)
+        {
+            if (restoreDefaultFanControlRequired[index])
+            {
                 WriteByte(FAN_CONTROL_MODE_REG[index], initialFanControlMode[index]);
                 WriteByte(FAN_PWM_COMMAND_REG[index], initialFanPwmCommand[index]);
                 restoreDefaultFanControlRequired[index] = false;
             }
         }
 
-        public void SetControl(int index, byte? value) {
+        public void SetControl(int index, byte? value)
+        {
             if (!isNuvotonVendor)
                 return;
 
@@ -415,7 +439,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             if (!Ring0.WaitIsaBusMutex(10))
                 return;
 
-            if (value.HasValue) {
+            if (value.HasValue)
+            {
                 SaveDefaultFanControl(index);
 
                 // set manual mode
@@ -423,7 +448,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
                 // set output value
                 WriteByte(FAN_PWM_COMMAND_REG[index], value.Value);
-            } else {
+            }
+            else
+            {
                 RestoreDefaultFanControl(index);
             }
 
@@ -436,7 +463,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         public float?[] Fans { get; } = new float?[0];
         public float?[] Controls { get; } = new float?[0];
 
-        private void DisableIOSpaceLock() {
+        private void DisableIOSpaceLock()
+        {
             if (Chip != Chip.NCT6791D &&
                 Chip != Chip.NCT6792D &&
                 Chip != Chip.NCT6792DA &&
@@ -445,7 +473,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 Chip != Chip.NCT6796D &&
                 Chip != Chip.NCT6796DR &&
                 Chip != Chip.NCT6797D &&
-                Chip != Chip.NCT6798D) {
+                Chip != Chip.NCT6798D)
+            {
                 return;
             }
 
@@ -458,7 +487,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             lpcPort.WinbondNuvotonFintekExit();
         }
 
-        public void Update() {
+        public void Update()
+        {
             if (!isNuvotonVendor)
                 return;
 
@@ -467,7 +497,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
             DisableIOSpaceLock();
 
-            for (int i = 0; i < Voltages.Length; i++) {
+            for (int i = 0; i < Voltages.Length; i++)
+            {
                 float value = 0.008f * ReadByte(voltageRegisters[i]);
                 bool valid = value > 0;
 
@@ -479,9 +510,11 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             }
 
             int temperatureSourceMask = 0;
-            for (int i = temperatureRegister.Length - 1; i >= 0; i--) {
+            for (int i = temperatureRegister.Length - 1; i >= 0; i--)
+            {
                 int value = ((sbyte)ReadByte(temperatureRegister[i])) << 1;
-                if (temperatureHalfBit[i] > 0) {
+                if (temperatureHalfBit[i] > 0)
+                {
                     value |= (ReadByte(temperatureHalfRegister[i]) >>
                       temperatureHalfBit[i]) & 0x1;
                 }
@@ -493,12 +526,14 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 if (temperature > 125 || temperature < -55)
                     temperature = null;
 
-                for (int j = 0; j < Temperatures.Length; j++) {
+                for (int j = 0; j < Temperatures.Length; j++)
+                {
                     if (temperaturesSource[j] == source)
                         Temperatures[j] = temperature;
                 }
             }
-            for (int i = 0; i < alternateTemperatureRegister.Length; i++) {
+            for (int i = 0; i < alternateTemperatureRegister.Length; i++)
+            {
                 if (!alternateTemperatureRegister[i].HasValue)
                     continue;
 
@@ -514,21 +549,31 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 Temperatures[i] = temperature;
             }
 
-            for (int i = 0; i < Fans.Length; i++) {
-                if (fanCountRegister != null) {
+            for (int i = 0; i < Fans.Length; i++)
+            {
+                if (fanCountRegister != null)
+                {
                     byte high = ReadByte(fanCountRegister[i]);
                     byte low = ReadByte((ushort)(fanCountRegister[i] + 1));
                     int count = (high << 5) | (low & 0x1F);
-                    if (count < maxFanCount) {
-                        if (count >= minFanCount) {
+                    if (count < maxFanCount)
+                    {
+                        if (count >= minFanCount)
+                        {
                             Fans[i] = 1.35e6f / count;
-                        } else {
+                        }
+                        else
+                        {
                             Fans[i] = null;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         Fans[i] = 0;
                     }
-                } else {
+                }
+                else
+                {
                     byte high = ReadByte(fanRpmBaseRegister[i]);
                     byte low = ReadByte((ushort)(fanRpmBaseRegister[i] + 1));
                     int value = (high << 8) | low;
@@ -537,7 +582,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 }
             }
 
-            for (int i = 0; i < Controls.Length; i++) {
+            for (int i = 0; i < Controls.Length; i++)
+            {
                 int value = ReadByte(FAN_PWM_OUT_REG[i]);
                 Controls[i] = value / 2.55f;
             }
@@ -545,7 +591,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             Ring0.ReleaseIsaBusMutex();
         }
 
-        public string GetReport() {
+        public string GetReport()
+        {
             StringBuilder r = new StringBuilder();
 
             r.AppendLine("LPC " + GetType().Name);
@@ -584,11 +631,13 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             r.AppendLine();
             r.AppendLine("        00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
             r.AppendLine();
-            foreach (ushort address in addresses) {
+            foreach (ushort address in addresses)
+            {
                 r.Append(" ");
                 r.Append(address.ToString("X4", CultureInfo.InvariantCulture));
                 r.Append("  ");
-                for (ushort j = 0; j <= 0xF; j++) {
+                for (ushort j = 0; j <= 0xF; j++)
+                {
                     r.Append(" ");
                     r.Append(ReadByte((ushort)(address | j)).ToString(
                       "X2", CultureInfo.InvariantCulture));

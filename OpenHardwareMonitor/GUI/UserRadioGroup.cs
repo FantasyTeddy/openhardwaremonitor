@@ -12,8 +12,10 @@ using System;
 using System.Windows.Forms;
 using OpenHardwareMonitor.Utilities;
 
-namespace OpenHardwareMonitor.GUI {
-    public class UserRadioGroup {
+namespace OpenHardwareMonitor.GUI
+{
+    public class UserRadioGroup
+    {
         private readonly string name;
         private int value;
         private readonly MenuItem[] menuItems;
@@ -21,7 +23,8 @@ namespace OpenHardwareMonitor.GUI {
         private readonly PersistentSettings settings;
 
         public UserRadioGroup(string name, int value,
-          MenuItem[] menuItems, PersistentSettings settings) {
+          MenuItem[] menuItems, PersistentSettings settings)
+        {
             this.settings = settings;
             this.name = name;
             if (name != null)
@@ -31,19 +34,24 @@ namespace OpenHardwareMonitor.GUI {
             this.menuItems = menuItems;
             this.value = Math.Max(Math.Min(this.value, menuItems.Length - 1), 0);
 
-            for (int i = 0; i < this.menuItems.Length; i++) {
+            for (int i = 0; i < this.menuItems.Length; i++)
+            {
                 this.menuItems[i].Checked = i == this.value;
                 int index = i;
-                this.menuItems[i].Click += delegate (object sender, EventArgs e) {
+                this.menuItems[i].Click += delegate (object sender, EventArgs e)
+                {
                     Value = index;
                 };
             }
         }
 
-        public int Value {
+        public int Value
+        {
             get => value;
-            set {
-                if (this.value != value) {
+            set
+            {
+                if (this.value != value)
+                {
                     this.value = value;
                     if (this.name != null)
                         settings.SetValue(name, value);
@@ -54,8 +62,10 @@ namespace OpenHardwareMonitor.GUI {
             }
         }
 
-        public event EventHandler Changed {
-            add {
+        public event EventHandler Changed
+        {
+            add
+            {
                 changed += value;
                 changed?.Invoke(this, null);
             }

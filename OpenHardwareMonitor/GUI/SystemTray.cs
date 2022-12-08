@@ -14,8 +14,10 @@ using System.Windows.Forms;
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Utilities;
 
-namespace OpenHardwareMonitor.GUI {
-    public class SystemTray : IDisposable {
+namespace OpenHardwareMonitor.GUI
+{
+    public class SystemTray : IDisposable
+    {
         private readonly IComputer computer;
         private readonly PersistentSettings settings;
         private readonly UnitManager unitManager;
@@ -24,7 +26,8 @@ namespace OpenHardwareMonitor.GUI {
         private readonly NotifyIconAdv mainIcon;
 
         public SystemTray(IComputer computer, PersistentSettings settings,
-          UnitManager unitManager) {
+          UnitManager unitManager)
+        {
             this.computer = computer;
             this.settings = settings;
             this.unitManager = unitManager;
@@ -35,25 +38,29 @@ namespace OpenHardwareMonitor.GUI {
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem hideShowItem = new MenuItem("Hide/Show");
-            hideShowItem.Click += delegate (object obj, EventArgs args) {
+            hideShowItem.Click += delegate (object obj, EventArgs args)
+            {
                 SendHideShowCommand();
             };
             contextMenu.MenuItems.Add(hideShowItem);
             contextMenu.MenuItems.Add(new MenuItem("-"));
             MenuItem exitItem = new MenuItem("Exit");
-            exitItem.Click += delegate (object obj, EventArgs args) {
+            exitItem.Click += delegate (object obj, EventArgs args)
+            {
                 SendExitCommand();
             };
             contextMenu.MenuItems.Add(exitItem);
             this.mainIcon.ContextMenu = contextMenu;
-            this.mainIcon.DoubleClick += delegate (object obj, EventArgs args) {
+            this.mainIcon.DoubleClick += delegate (object obj, EventArgs args)
+            {
                 SendHideShowCommand();
             };
             this.mainIcon.Icon = EmbeddedResources.GetIcon("smallicon.ico");
             this.mainIcon.Text = "Open Hardware Monitor";
         }
 
-        private void HardwareRemoved(IHardware hardware) {
+        private void HardwareRemoved(IHardware hardware)
+        {
             hardware.SensorAdded -= new SensorEventHandler(SensorAdded);
             hardware.SensorRemoved -= new SensorEventHandler(SensorRemoved);
             foreach (ISensor sensor in hardware.Sensors)
@@ -62,7 +69,8 @@ namespace OpenHardwareMonitor.GUI {
                 HardwareRemoved(subHardware);
         }
 
-        private void HardwareAdded(IHardware hardware) {
+        private void HardwareAdded(IHardware hardware)
+        {
             foreach (ISensor sensor in hardware.Sensors)
                 SensorAdded(sensor);
             hardware.SensorAdded += new SensorEventHandler(SensorAdded);
@@ -71,31 +79,38 @@ namespace OpenHardwareMonitor.GUI {
                 HardwareAdded(subHardware);
         }
 
-        private void SensorAdded(ISensor sensor) {
+        private void SensorAdded(ISensor sensor)
+        {
             if (settings.GetValue(new Identifier(sensor.Identifier,
-              "tray").ToString(), false)) {
+              "tray").ToString(), false))
+            {
                 Add(sensor, false);
             }
         }
 
-        private void SensorRemoved(ISensor sensor) {
+        private void SensorRemoved(ISensor sensor)
+        {
             if (Contains(sensor))
                 Remove(sensor, false);
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             foreach (SensorNotifyIcon icon in list)
                 icon.Dispose();
             mainIcon.Dispose();
         }
 
-        public void Redraw() {
+        public void Redraw()
+        {
             foreach (SensorNotifyIcon icon in list)
                 icon.Update();
         }
 
-        public bool Contains(ISensor sensor) {
-            foreach (SensorNotifyIcon icon in list) {
+        public bool Contains(ISensor sensor)
+        {
+            foreach (SensorNotifyIcon icon in list)
+            {
                 if (icon.Sensor == sensor)
                     return true;
             }
@@ -103,34 +118,43 @@ namespace OpenHardwareMonitor.GUI {
             return false;
         }
 
-        public void Add(ISensor sensor, bool balloonTip) {
-            if (Contains(sensor)) {
+        public void Add(ISensor sensor, bool balloonTip)
+        {
+            if (Contains(sensor))
+            {
                 return;
-            } else {
+            }
+            else
+            {
                 list.Add(new SensorNotifyIcon(this, sensor, balloonTip, settings, unitManager));
                 UpdateMainIconVisibilty();
                 settings.SetValue(new Identifier(sensor.Identifier, "tray").ToString(), true);
             }
         }
 
-        public void Remove(ISensor sensor) {
+        public void Remove(ISensor sensor)
+        {
             Remove(sensor, true);
         }
 
-        private void Remove(ISensor sensor, bool deleteConfig) {
-            if (deleteConfig) {
+        private void Remove(ISensor sensor, bool deleteConfig)
+        {
+            if (deleteConfig)
+            {
                 settings.Remove(
                   new Identifier(sensor.Identifier, "tray").ToString());
                 settings.Remove(
                   new Identifier(sensor.Identifier, "traycolor").ToString());
             }
             SensorNotifyIcon instance = null;
-            foreach (SensorNotifyIcon icon in list) {
+            foreach (SensorNotifyIcon icon in list)
+            {
                 if (icon.Sensor == sensor)
                     instance = icon;
             }
 
-            if (instance != null) {
+            if (instance != null)
+            {
                 list.Remove(instance);
                 UpdateMainIconVisibilty();
                 instance.Dispose();
@@ -139,28 +163,37 @@ namespace OpenHardwareMonitor.GUI {
 
         public event EventHandler HideShowCommand;
 
-        public void SendHideShowCommand() {
+        public void SendHideShowCommand()
+        {
             HideShowCommand?.Invoke(this, null);
         }
 
         public event EventHandler ExitCommand;
 
-        public void SendExitCommand() {
+        public void SendExitCommand()
+        {
             ExitCommand?.Invoke(this, null);
         }
 
-        private void UpdateMainIconVisibilty() {
-            if (mainIconEnabled) {
+        private void UpdateMainIconVisibilty()
+        {
+            if (mainIconEnabled)
+            {
                 mainIcon.Visible = list.Count == 0;
-            } else {
+            }
+            else
+            {
                 mainIcon.Visible = false;
             }
         }
 
-        public bool IsMainIconEnabled {
+        public bool IsMainIconEnabled
+        {
             get => mainIconEnabled;
-            set {
-                if (mainIconEnabled != value) {
+            set
+            {
+                if (mainIconEnabled != value)
+                {
                     mainIconEnabled = value;
                     UpdateMainIconVisibilty();
                 }

@@ -14,8 +14,10 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 
-namespace OpenHardwareMonitor.Hardware.LPC {
-    internal class LPCIO {
+namespace OpenHardwareMonitor.Hardware.LPC
+{
+    internal class LPCIO
+    {
 
         private readonly List<ISuperIO> superIOs = new List<ISuperIO>();
         private readonly StringBuilder report = new StringBuilder();
@@ -29,7 +31,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         private const byte CHIP_REVISION_REGISTER = 0x21;
         private const byte BASE_ADDRESS_REGISTER = 0x60;
 
-        private void ReportUnknownChip(LPCPort port, string type, int chip) {
+        private void ReportUnknownChip(LPCPort port, string type, int chip)
+        {
             report.Append("Chip ID: Unknown ");
             report.Append(type);
             report.Append(" with ID 0x");
@@ -53,16 +56,19 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         private const byte F71858_HARDWARE_MONITOR_LDN = 0x02;
         private const byte FINTEK_HARDWARE_MONITOR_LDN = 0x04;
 
-        private bool DetectWinbondFintek(LPCPort port) {
+        private bool DetectWinbondFintek(LPCPort port)
+        {
             port.WinbondNuvotonFintekEnter();
 
             byte logicalDeviceNumber = 0;
             byte id = port.ReadByte(CHIP_ID_REGISTER);
             byte revision = port.ReadByte(CHIP_REVISION_REGISTER);
             Chip chip = Chip.Unknown;
-            switch (id) {
+            switch (id)
+            {
                 case 0x05:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x07:
                             chip = Chip.F71858;
                             logicalDeviceNumber = F71858_HARDWARE_MONITOR_LDN;
@@ -74,7 +80,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x06:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x01:
                             chip = Chip.F71862;
                             logicalDeviceNumber = FINTEK_HARDWARE_MONITOR_LDN;
@@ -82,7 +89,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x07:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x23:
                             chip = Chip.F71889F;
                             logicalDeviceNumber = FINTEK_HARDWARE_MONITOR_LDN;
@@ -90,7 +98,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x08:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x14:
                             chip = Chip.F71869;
                             logicalDeviceNumber = FINTEK_HARDWARE_MONITOR_LDN;
@@ -98,7 +107,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x09:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x01:
                             chip = Chip.F71808E;
                             logicalDeviceNumber = FINTEK_HARDWARE_MONITOR_LDN;
@@ -110,7 +120,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x10:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x05:
                             chip = Chip.F71889AD;
                             logicalDeviceNumber = FINTEK_HARDWARE_MONITOR_LDN;
@@ -122,7 +133,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x11:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x06:
                             chip = Chip.F71878AD;
                             logicalDeviceNumber = FINTEK_HARDWARE_MONITOR_LDN;
@@ -130,7 +142,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x52:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x17:
                         case 0x3A:
                         case 0x41:
@@ -140,7 +153,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x82:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x80:
                             chip = Chip.W83627THF;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -148,7 +162,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x85:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x41:
                             chip = Chip.W83687THF;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -156,7 +171,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0x88:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x50:
                         case 0x60:
                             chip = Chip.W83627EHF;
@@ -165,7 +181,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xA0:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x20:
                             chip = Chip.W83627DHG;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -173,7 +190,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xA5:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x10:
                             chip = Chip.W83667HG;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -181,7 +199,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xB0:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x70:
                             chip = Chip.W83627DHGP;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -189,7 +208,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xB3:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x50:
                             chip = Chip.W83667HGB;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -197,7 +217,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xB4:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x70:
                             chip = Chip.NCT6771F;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -205,7 +226,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xC3:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x30:
                             chip = Chip.NCT6776F;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -213,7 +235,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xC4:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x50:
                             chip = Chip.NCT610X;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -221,7 +244,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xC5:
-                    switch (revision & 0xF0) {
+                    switch (revision & 0xF0)
+                    {
                         case 0x60:
                             chip = Chip.NCT6779D;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -229,7 +253,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xC8:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x03:
                             chip = Chip.NCT6791D;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -237,7 +262,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xC9:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x11:
                             chip = Chip.NCT6792D;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -249,7 +275,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xD1:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x21:
                             chip = Chip.NCT6793D;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -257,7 +284,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xD3:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x52:
                             chip = Chip.NCT6795D;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -265,7 +293,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
                 case 0xD4:
-                    switch (revision) {
+                    switch (revision)
+                    {
                         case 0x23:
                             chip = Chip.NCT6796D;
                             logicalDeviceNumber = WINBOND_NUVOTON_HARDWARE_MONITOR_LDN;
@@ -285,14 +314,18 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     }
                     break;
             }
-            if (chip == Chip.Unknown) {
-                if (id != 0 && id != 0xff) {
+            if (chip == Chip.Unknown)
+            {
+                if (id != 0 && id != 0xff)
+                {
                     port.WinbondNuvotonFintekExit();
 
                     ReportUnknownChip(port, "Winbond / Nuvoton / Fintek",
                       (id << 8) | revision);
                 }
-            } else {
+            }
+            else
+            {
 
                 port.Select(logicalDeviceNumber);
                 ushort address = port.ReadWord(BASE_ADDRESS_REGISTER);
@@ -311,13 +344,15 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                   chip == Chip.NCT6796D ||
                   chip == Chip.NCT6796DR ||
                   chip == Chip.NCT6797D ||
-                  chip == Chip.NCT6798D)) {
+                  chip == Chip.NCT6798D))
+                {
                     port.NuvotonDisableIOSpaceLock();
                 }
 
                 port.WinbondNuvotonFintekExit();
 
-                if (address != verify) {
+                if (address != verify)
+                {
                     report.Append("Chip ID: 0x");
                     report.AppendLine(chip.ToString("X"));
                     report.Append("Chip revision: 0x");
@@ -332,7 +367,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 if ((address & 0x07) == 0x05)
                     address &= 0xFFF8;
 
-                if (address < 0x100 || (address & 0xF007) != 0) {
+                if (address < 0x100 || (address & 0xF007) != 0)
+                {
                     report.Append("Chip ID: 0x");
                     report.AppendLine(chip.ToString("X"));
                     report.Append("Chip revision: 0x");
@@ -345,7 +381,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     return false;
                 }
 
-                switch (chip) {
+                switch (chip)
+                {
                     case Chip.W83627DHG:
                     case Chip.W83627DHGP:
                     case Chip.W83627EHF:
@@ -381,7 +418,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                     case Chip.F71889ED:
                     case Chip.F71889F:
                     case Chip.F71808E:
-                        if (vendorID != FINTEK_VENDOR_ID) {
+                        if (vendorID != FINTEK_VENDOR_ID)
+                        {
                             report.Append("Chip ID: 0x");
                             report.AppendLine(chip.ToString("X"));
                             report.Append("Chip revision: 0x");
@@ -413,7 +451,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         private const byte IT87XX_GPIO_LDN = 0x07;
         private const byte IT87_CHIP_VERSION_REGISTER = 0x22;
 
-        private bool DetectIT87(LPCPort port) {
+        private bool DetectIT87(LPCPort port)
+        {
 
             // IT87XX can enter only on port 0x2E and 0x4E
             if (port.RegisterPort != 0x2E && port.RegisterPort != 0x4E)
@@ -423,7 +462,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
             ushort chipID = port.ReadWord(CHIP_ID_REGISTER);
             Chip chip;
-            switch (chipID) {
+            switch (chipID)
+            {
                 case 0x8620: chip = Chip.IT8620E; break;
                 case 0x8628: chip = Chip.IT8628E; break;
                 case 0x8655: chip = Chip.IT8655E; break;
@@ -443,13 +483,17 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 case 0x8772: chip = Chip.IT8772E; break;
                 default: chip = Chip.Unknown; break;
             }
-            if (chip == Chip.Unknown) {
-                if (chipID != 0 && chipID != 0xffff) {
+            if (chip == Chip.Unknown)
+            {
+                if (chipID != 0 && chipID != 0xffff)
+                {
                     port.IT87Exit();
 
                     ReportUnknownChip(port, "ITE", chipID);
                 }
-            } else {
+            }
+            else
+            {
                 port.Select(IT87_ENVIRONMENT_CONTROLLER_LDN);
                 ushort address = port.ReadWord(BASE_ADDRESS_REGISTER);
                 Thread.Sleep(1);
@@ -459,12 +503,15 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
                 ushort gpioAddress;
                 ushort gpioVerify;
-                if (chip == Chip.IT8705F) {
+                if (chip == Chip.IT8705F)
+                {
                     port.Select(IT8705_GPIO_LDN);
                     gpioAddress = port.ReadWord(BASE_ADDRESS_REGISTER);
                     Thread.Sleep(1);
                     gpioVerify = port.ReadWord(BASE_ADDRESS_REGISTER);
-                } else {
+                }
+                else
+                {
                     port.Select(IT87XX_GPIO_LDN);
                     gpioAddress = port.ReadWord(BASE_ADDRESS_REGISTER + 2);
                     Thread.Sleep(1);
@@ -473,7 +520,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
                 port.IT87Exit();
 
-                if (address != verify || address < 0x100 || (address & 0xF007) != 0) {
+                if (address != verify || address < 0x100 || (address & 0xF007) != 0)
+                {
                     report.Append("Chip ID: 0x");
                     report.AppendLine(chip.ToString("X"));
                     report.Append("Error: Invalid address 0x");
@@ -484,7 +532,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 }
 
                 if (gpioAddress != gpioVerify || gpioAddress < 0x100 ||
-                  (gpioAddress & 0xF007) != 0) {
+                  (gpioAddress & 0xF007) != 0)
+                {
                     report.Append("Chip ID: 0x");
                     report.AppendLine(chip.ToString("X"));
                     report.Append("Error: Invalid GPIO address 0x");
@@ -505,21 +554,27 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
         #region SMSC
 
-        private bool DetectSMSC(LPCPort port) {
+        private bool DetectSMSC(LPCPort port)
+        {
             port.SMSCEnter();
 
             ushort chipID = port.ReadWord(CHIP_ID_REGISTER);
             Chip chip;
-            switch (chipID) {
+            switch (chipID)
+            {
                 default: chip = Chip.Unknown; break;
             }
-            if (chip == Chip.Unknown) {
-                if (chipID != 0 && chipID != 0xffff) {
+            if (chip == Chip.Unknown)
+            {
+                if (chipID != 0 && chipID != 0xffff)
+                {
                     port.SMSCExit();
 
                     ReportUnknownChip(port, "SMSC", chipID);
                 }
-            } else {
+            }
+            else
+            {
                 port.SMSCExit();
                 return true;
             }
@@ -529,9 +584,11 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
         #endregion
 
-        private void Detect() {
+        private void Detect()
+        {
 
-            for (int i = 0; i < REGISTER_PORTS.Length; i++) {
+            for (int i = 0; i < REGISTER_PORTS.Length; i++)
+            {
                 var port = new LPCPort(REGISTER_PORTS[i], VALUE_PORTS[i]);
 
                 if (DetectWinbondFintek(port)) continue;
@@ -542,7 +599,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             }
         }
 
-        public LPCIO() {
+        public LPCIO()
+        {
             if (!Ring0.IsOpen)
                 return;
 
@@ -556,10 +614,14 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
         public ISuperIO[] SuperIO => superIOs.ToArray();
 
-        public string GetReport() {
-            if (report.Length > 0) {
+        public string GetReport()
+        {
+            if (report.Length > 0)
+            {
                 return "LPCIO" + Environment.NewLine + Environment.NewLine + report;
-            } else {
+            }
+            else
+            {
                 return null;
             }
         }

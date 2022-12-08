@@ -11,34 +11,40 @@
 using System;
 using System.Text;
 
-namespace OpenHardwareMonitor.Hardware.CPU {
+namespace OpenHardwareMonitor.Hardware.CPU
+{
 
-    internal enum Vendor {
+    internal enum Vendor
+    {
         Unknown,
         Intel,
         AMD,
     }
 
-    internal class CPUID {
+    internal class CPUID
+    {
         private readonly uint threadMaskWith;
         private readonly uint coreMaskWith;
         public const uint CPUID_0 = 0;
         public const uint CPUID_EXT = 0x80000000;
 
-        private static void AppendRegister(StringBuilder b, uint value) {
+        private static void AppendRegister(StringBuilder b, uint value)
+        {
             b.Append((char)((value) & 0xff));
             b.Append((char)((value >> 8) & 0xff));
             b.Append((char)((value >> 16) & 0xff));
             b.Append((char)((value >> 24) & 0xff));
         }
 
-        private static uint NextLog2(long x) {
+        private static uint NextLog2(long x)
+        {
             if (x <= 0)
                 return 0;
 
             x--;
             uint count = 0;
-            while (x > 0) {
+            while (x > 0)
+            {
                 x >>= 1;
                 count++;
             }
@@ -46,7 +52,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             return count;
         }
 
-        public static CPUID Get(int group, int thread) {
+        public static CPUID Get(int group, int thread)
+        {
             if (thread >= 64)
                 return null;
 
@@ -56,14 +63,18 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             if (previousAffinity == GroupAffinity.Undefined)
                 return null;
 
-            try {
+            try
+            {
                 return new CPUID(group, thread, affinity);
-            } finally {
+            }
+            finally
+            {
                 ThreadAffinity.Set(previousAffinity);
             }
         }
 
-        private CPUID(int group, int thread, GroupAffinity affinity) {
+        private CPUID(int group, int thread, GroupAffinity affinity)
+        {
             Group = group;
             Thread = thread;
             Affinity = affinity;
@@ -83,7 +94,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             AppendRegister(vendorBuilder, edx);
             AppendRegister(vendorBuilder, ecx);
             string cpuVendor = vendorBuilder.ToString();
-            switch (cpuVendor) {
+            switch (cpuVendor)
+            {
                 case "GenuineIntel":
                     Vendor = Vendor.Intel;
                     break;
@@ -105,21 +117,24 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             maxCpuidExt = Math.Min(maxCpuidExt, 1024);
 
             Data = new uint[maxCpuid + 1, 4];
-            for (uint i = 0; i < (maxCpuid + 1); i++) {
+            for (uint i = 0; i < (maxCpuid + 1); i++)
+            {
                 Opcode.Cpuid(CPUID_0 + i, 0,
                   out Data[i, 0], out Data[i, 1],
                   out Data[i, 2], out Data[i, 3]);
             }
 
             ExtData = new uint[maxCpuidExt + 1, 4];
-            for (uint i = 0; i < (maxCpuidExt + 1); i++) {
+            for (uint i = 0; i < (maxCpuidExt + 1); i++)
+            {
                 Opcode.Cpuid(CPUID_EXT + i, 0,
                   out ExtData[i, 0], out ExtData[i, 1],
                   out ExtData[i, 2], out ExtData[i, 3]);
             }
 
             StringBuilder nameBuilder = new StringBuilder();
-            for (uint i = 2; i <= 4; i++) {
+            for (uint i = 2; i <= 4; i++)
+            {
                 Opcode.Cpuid(CPUID_EXT + i, 0, out eax, out ebx, out ecx, out edx);
                 AppendRegister(nameBuilder, eax);
                 AppendRegister(nameBuilder, ebx);
@@ -185,7 +200,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             ApicId = (Data[1, 1] >> 24) & 0xFF;
 
-            switch (Vendor) {
+            switch (Vendor)
+            {
                 case Vendor.Intel:
                     uint maxCoreAndThreadIdPerPackage = (Data[1, 1] >> 16) & 0xFF;
                     uint maxCoreIdPerPackage;
@@ -198,11 +214,14 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                     coreMaskWith = NextLog2(maxCoreIdPerPackage);
                     break;
                 case Vendor.AMD:
-                    if (Family == 0x17 || Family == 0x19) {
+                    if (Family == 0x17 || Family == 0x19)
+                    {
                         coreMaskWith = (ExtData[8, 2] >> 12) & 0xF;
                         threadMaskWith =
                           NextLog2(((ExtData[0x1E, 1] >> 8) & 0xFF) + 1);
-                    } else {
+                    }
+                    else
+                    {
                         uint corePerPackage;
                         if (maxCpuidExt >= 8)
                             corePerPackage = (ExtData[8, 2] & 0xFF) + 1;

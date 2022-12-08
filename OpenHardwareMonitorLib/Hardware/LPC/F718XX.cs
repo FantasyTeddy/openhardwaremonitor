@@ -12,8 +12,10 @@ using System;
 using System.Globalization;
 using System.Text;
 
-namespace OpenHardwareMonitor.Hardware.LPC {
-    internal class F718XX : ISuperIO {
+namespace OpenHardwareMonitor.Hardware.LPC
+{
+    internal class F718XX : ISuperIO
+    {
 
         private readonly ushort address;
 
@@ -35,57 +37,69 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         private readonly bool[] restoreDefaultFanPwmControlRequired = new bool[4];
         private readonly byte[] initialFanPwmControl = new byte[4];
 
-        private byte ReadByte(byte register) {
+        private byte ReadByte(byte register)
+        {
             Ring0.WriteIoPort(
               (ushort)(address + ADDRESS_REGISTER_OFFSET), register);
             return Ring0.ReadIoPort((ushort)(address + DATA_REGISTER_OFFSET));
         }
-        private void WriteByte(byte register, byte value) {
+        private void WriteByte(byte register, byte value)
+        {
             Ring0.WriteIoPort(
               (ushort)(address + ADDRESS_REGISTER_OFFSET), register);
             Ring0.WriteIoPort((ushort)(address + DATA_REGISTER_OFFSET), value);
         }
 
-        public byte? ReadGPIO(int index) {
+        public byte? ReadGPIO(int index)
+        {
             return null;
         }
 
         public void WriteGPIO(int index, byte value) { }
 
-        private void SaveDefaultFanPwmControl(int index) {
+        private void SaveDefaultFanPwmControl(int index)
+        {
 
-            if (!restoreDefaultFanPwmControlRequired[index]) {
+            if (!restoreDefaultFanPwmControlRequired[index])
+            {
                 initialFanPwmControl[index] = ReadByte(FAN_PWM_REG[index]);
                 restoreDefaultFanPwmControlRequired[index] = true;
             }
         }
 
-        private void RestoreDefaultFanPwmControl(int index) {
-            if (restoreDefaultFanPwmControlRequired[index]) {
+        private void RestoreDefaultFanPwmControl(int index)
+        {
+            if (restoreDefaultFanPwmControlRequired[index])
+            {
                 WriteByte(FAN_PWM_REG[index], initialFanPwmControl[index]);
                 restoreDefaultFanPwmControlRequired[index] = false;
             }
         }
 
-        public void SetControl(int index, byte? value) {
+        public void SetControl(int index, byte? value)
+        {
             if (index < 0 || index >= Controls.Length)
                 throw new ArgumentOutOfRangeException("index");
 
             if (!Ring0.WaitIsaBusMutex(10))
                 return;
 
-            if (value.HasValue) {
+            if (value.HasValue)
+            {
                 SaveDefaultFanPwmControl(index);
 
                 WriteByte(FAN_PWM_REG[index], value.Value);
-            } else {
+            }
+            else
+            {
                 RestoreDefaultFanPwmControl(index);
             }
 
             Ring0.ReleaseIsaBusMutex();
         }
 
-        public F718XX(Chip chip, ushort address) {
+        public F718XX(Chip chip, ushort address)
+        {
             this.address = address;
             Chip = chip;
 
@@ -101,7 +115,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         public float?[] Fans { get; }
         public float?[] Controls { get; }
 
-        public string GetReport() {
+        public string GetReport()
+        {
             StringBuilder r = new StringBuilder();
 
             r.AppendLine("LPC " + GetType().Name);
@@ -117,11 +132,13 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             r.AppendLine();
             r.AppendLine("      00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
             r.AppendLine();
-            for (int i = 0; i <= 0xF; i++) {
+            for (int i = 0; i <= 0xF; i++)
+            {
                 r.Append(" ");
                 r.Append((i << 4).ToString("X2", CultureInfo.InvariantCulture));
                 r.Append("  ");
-                for (int j = 0; j <= 0xF; j++) {
+                for (int j = 0; j <= 0xF; j++)
+                {
                     r.Append(" ");
                     r.Append(ReadByte((byte)((i << 4) | j)).ToString("X2",
                       CultureInfo.InvariantCulture));
@@ -135,31 +152,41 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             return r.ToString();
         }
 
-        public void Update() {
+        public void Update()
+        {
             if (!Ring0.WaitIsaBusMutex(10))
                 return;
 
-            for (int i = 0; i < Voltages.Length; i++) {
-                if (Chip == Chip.F71808E && i == 6) {
+            for (int i = 0; i < Voltages.Length; i++)
+            {
+                if (Chip == Chip.F71808E && i == 6)
+                {
                     // 0x26 is reserved on F71808E
                     Voltages[i] = 0;
-                } else {
+                }
+                else
+                {
                     int value = ReadByte((byte)(VOLTAGE_BASE_REG + i));
                     Voltages[i] = 0.008f * value;
                 }
             }
 
-            for (int i = 0; i < Temperatures.Length; i++) {
-                switch (Chip) {
-                    case Chip.F71858: {
+            for (int i = 0; i < Temperatures.Length; i++)
+            {
+                switch (Chip)
+                {
+                    case Chip.F71858:
+                        {
                             int tableMode = 0x3 & ReadByte(TEMPERATURE_CONFIG_REG);
                             int high =
                               ReadByte((byte)(TEMPERATURE_BASE_REG + 2 * i));
                             int low =
                               ReadByte((byte)(TEMPERATURE_BASE_REG + 2 * i + 1));
-                            if (high != 0xbb && high != 0xcc) {
+                            if (high != 0xbb && high != 0xcc)
+                            {
                                 int bits = 0;
-                                switch (tableMode) {
+                                switch (tableMode)
+                                {
                                     case 0: bits = 0; break;
                                     case 1: bits = 0; break;
                                     case 2: bits = (high & 0x80) << 8; break;
@@ -169,12 +196,15 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                                 bits |= (low & 0xe0) >> 1;
                                 short value = (short)(bits & 0xfff0);
                                 Temperatures[i] = value / 128.0f;
-                            } else {
+                            }
+                            else
+                            {
                                 Temperatures[i] = null;
                             }
                         }
                         break;
-                    default: {
+                    default:
+                        {
                             sbyte value = (sbyte)ReadByte((byte)(
                               TEMPERATURE_BASE_REG + 2 * (i + 1)));
                             if (value < sbyte.MaxValue && value > 0)
@@ -186,7 +216,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 }
             }
 
-            for (int i = 0; i < Fans.Length; i++) {
+            for (int i = 0; i < Fans.Length; i++)
+            {
                 int value = ReadByte(FAN_TACHOMETER_REG[i]) << 8;
                 value |= ReadByte((byte)(FAN_TACHOMETER_REG[i] + 1));
 
@@ -195,7 +226,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 else
                     Fans[i] = null;
             }
-            for (int i = 0; i < Controls.Length; i++) {
+            for (int i = 0; i < Controls.Length; i++)
+            {
                 Controls[i] = ReadByte((byte)(PWM_VALUES_OFFSET + i)) * 100.0f / 0xFF;
             }
 

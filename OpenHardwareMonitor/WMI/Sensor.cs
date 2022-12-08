@@ -11,9 +11,11 @@
 using System.Management.Instrumentation;
 using OpenHardwareMonitor.Hardware;
 
-namespace OpenHardwareMonitor.WMI {
+namespace OpenHardwareMonitor.WMI
+{
     [InstrumentationClass(InstrumentationType.Instance)]
-    public class Sensor : IWmiObject {
+    public class Sensor : IWmiObject
+    {
         private readonly ISensor sensor;
 
         #region WMI Exposed
@@ -29,7 +31,8 @@ namespace OpenHardwareMonitor.WMI {
 
         #endregion
 
-        public Sensor(ISensor sensor) {
+        public Sensor(ISensor sensor)
+        {
             Name = sensor.Name;
             Index = sensor.Index;
 
@@ -40,7 +43,8 @@ namespace OpenHardwareMonitor.WMI {
             this.sensor = sensor;
         }
 
-        public void Update() {
+        public void Update()
+        {
             Value = (sensor.Value != null) ? (float)sensor.Value : 0;
 
             if (sensor.Min != null)

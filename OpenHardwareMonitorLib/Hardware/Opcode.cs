@@ -12,31 +12,41 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace OpenHardwareMonitor.Hardware {
-    internal static class Opcode {
+namespace OpenHardwareMonitor.Hardware
+{
+    internal static class Opcode
+    {
 
         private static IntPtr codeBuffer;
         private static ulong size;
 
-        public static void Open() {
+        public static void Open()
+        {
             byte[] rdtscCode;
             byte[] cpuidCode;
-            if (IntPtr.Size == 4) {
+            if (IntPtr.Size == 4)
+            {
                 rdtscCode = RDTSC_32;
                 cpuidCode = CPUID_32;
-            } else {
+            }
+            else
+            {
                 rdtscCode = RDTSC_64;
 
-                if (OperatingSystem.IsUnix) { // Unix
+                if (OperatingSystem.IsUnix)
+                { // Unix
                     cpuidCode = CPUID_64_LINUX;
-                } else { // Windows
+                }
+                else
+                { // Windows
                     cpuidCode = CPUID_64_WINDOWS;
                 }
             }
 
             size = (ulong)(rdtscCode.Length + cpuidCode.Length);
 
-            if (OperatingSystem.IsUnix) { // Unix   
+            if (OperatingSystem.IsUnix)
+            { // Unix   
                 Assembly assembly =
                   Assembly.Load("Mono.Posix, Version=2.0.0.0, Culture=neutral, " +
                   "PublicKeyToken=0738eb9f132ed756");
@@ -57,7 +67,9 @@ namespace OpenHardwareMonitor.Hardware {
 
                 codeBuffer = (IntPtr)mmap.Invoke(null, new object[] { IntPtr.Zero,
           size, mmapProtsParam, mmapFlagsParam, -1, 0 });
-            } else { // Windows
+            }
+            else
+            { // Windows
                 codeBuffer = NativeMethods.VirtualAlloc(IntPtr.Zero,
                   (UIntPtr)size, AllocationType.COMMIT | AllocationType.RESERVE,
                   MemoryProtection.EXECUTE_READWRITE);
@@ -75,11 +87,13 @@ namespace OpenHardwareMonitor.Hardware {
               cpuidAddress, typeof(CpuidDelegate)) as CpuidDelegate;
         }
 
-        public static void Close() {
+        public static void Close()
+        {
             Rdtsc = null;
             Cpuid = null;
 
-            if (OperatingSystem.IsUnix) { // Unix
+            if (OperatingSystem.IsUnix)
+            { // Unix
                 Assembly assembly =
                   Assembly.Load("Mono.Posix, Version=2.0.0.0, Culture=neutral, " +
                   "PublicKeyToken=0738eb9f132ed756");
@@ -88,7 +102,9 @@ namespace OpenHardwareMonitor.Hardware {
                 MethodInfo munmap = syscall.GetMethod("munmap");
                 munmap.Invoke(null, new object[] { codeBuffer, size });
 
-            } else { // Windows
+            }
+            else
+            { // Windows
                 NativeMethods.VirtualFree(codeBuffer, UIntPtr.Zero,
                   FreeType.RELEASE);
             }
@@ -198,10 +214,12 @@ namespace OpenHardwareMonitor.Hardware {
 
         public static bool CpuidTx(uint index, uint ecxValue,
           out uint eax, out uint ebx, out uint ecx, out uint edx,
-          GroupAffinity affinity) {
+          GroupAffinity affinity)
+        {
             GroupAffinity previousAffinity = ThreadAffinity.Set(affinity);
 
-            if (previousAffinity == GroupAffinity.Undefined) {
+            if (previousAffinity == GroupAffinity.Undefined)
+            {
                 eax = ebx = ecx = edx = 0;
                 return false;
             }
@@ -213,7 +231,8 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         [Flags()]
-        public enum AllocationType : uint {
+        public enum AllocationType : uint
+        {
             COMMIT = 0x1000,
             RESERVE = 0x2000,
             RESET = 0x80000,
@@ -224,7 +243,8 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         [Flags()]
-        public enum MemoryProtection : uint {
+        public enum MemoryProtection : uint
+        {
             EXECUTE = 0x10,
             EXECUTE_READ = 0x20,
             EXECUTE_READWRITE = 0x40,
@@ -239,12 +259,14 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         [Flags]
-        public enum FreeType {
+        public enum FreeType
+        {
             DECOMMIT = 0x4000,
             RELEASE = 0x8000
         }
 
-        private static class NativeMethods {
+        private static class NativeMethods
+        {
             private const string KERNEL = "kernel32.dll";
 
             [DllImport(KERNEL, CallingConvention = CallingConvention.Winapi)]

@@ -14,9 +14,11 @@ using System.Globalization;
 using System.IO;
 using System.Security.Permissions;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    public class Computer : IComputer {
+    public class Computer : IComputer
+    {
 
         private readonly List<IGroup> groups = new List<IGroup>();
         private readonly ISettings settings;
@@ -32,33 +34,39 @@ namespace OpenHardwareMonitor.Hardware {
         private bool fanControllerEnabled;
         private bool hddEnabled;
 
-        public Computer() {
+        public Computer()
+        {
             this.settings = new Settings();
         }
 
-        public Computer(ISettings settings) {
+        public Computer(ISettings settings)
+        {
             this.settings = settings ?? new Settings();
         }
 
-        private void Add(IGroup group) {
+        private void Add(IGroup group)
+        {
             if (groups.Contains(group))
                 return;
 
             groups.Add(group);
 
-            if (HardwareAdded != null) {
+            if (HardwareAdded != null)
+            {
                 foreach (IHardware hardware in group.Hardware)
                     HardwareAdded(hardware);
             }
         }
 
-        private void Remove(IGroup group) {
+        private void Remove(IGroup group)
+        {
             if (!groups.Contains(group))
                 return;
 
             groups.Remove(group);
 
-            if (HardwareRemoved != null) {
+            if (HardwareRemoved != null)
+            {
                 foreach (IHardware hardware in group.Hardware)
                     HardwareRemoved(hardware);
             }
@@ -66,9 +74,11 @@ namespace OpenHardwareMonitor.Hardware {
             group.Close();
         }
 
-        private void RemoveType<T>() where T : IGroup {
+        private void RemoveType<T>() where T : IGroup
+        {
             List<IGroup> list = new List<IGroup>();
-            foreach (IGroup group in groups) {
+            foreach (IGroup group in groups)
+            {
                 if (group is T)
                     list.Add(group);
             }
@@ -78,7 +88,8 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-        public void Open() {
+        public void Open()
+        {
             if (open)
                 return;
 
@@ -92,7 +103,8 @@ namespace OpenHardwareMonitor.Hardware {
             open = true;
         }
 
-        private void AddGroups() {
+        private void AddGroups()
+        {
             if (mainboardEnabled)
                 Add(new Mainboard.MainboardGroup(smbios, settings));
 
@@ -102,12 +114,14 @@ namespace OpenHardwareMonitor.Hardware {
             if (ramEnabled)
                 Add(new RAM.RAMGroup(smbios, settings));
 
-            if (gpuEnabled) {
+            if (gpuEnabled)
+            {
                 Add(new ATI.ATIGroup(settings));
                 Add(new Nvidia.NvidiaGroup(settings));
             }
 
-            if (fanControllerEnabled) {
+            if (fanControllerEnabled)
+            {
                 Add(new TBalancer.TBalancerGroup(settings));
                 Add(new Heatmaster.HeatmasterGroup(settings));
             }
@@ -116,7 +130,8 @@ namespace OpenHardwareMonitor.Hardware {
                 Add(new HDD.HarddriveGroup(settings));
         }
 
-        public void Reset() {
+        public void Reset()
+        {
             if (!open)
                 return;
 
@@ -124,12 +139,15 @@ namespace OpenHardwareMonitor.Hardware {
             AddGroups();
         }
 
-        public bool MainboardEnabled {
+        public bool MainboardEnabled
+        {
             get => mainboardEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-            set {
-                if (open && value != mainboardEnabled) {
+            set
+            {
+                if (open && value != mainboardEnabled)
+                {
                     if (value)
                         Add(new Mainboard.MainboardGroup(smbios, settings));
                     else
@@ -139,12 +157,15 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public bool CPUEnabled {
+        public bool CPUEnabled
+        {
             get => cpuEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-            set {
-                if (open && value != cpuEnabled) {
+            set
+            {
+                if (open && value != cpuEnabled)
+                {
                     if (value)
                         Add(new CPU.CPUGroup(settings));
                     else
@@ -154,12 +175,15 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public bool RAMEnabled {
+        public bool RAMEnabled
+        {
             get => ramEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-            set {
-                if (open && value != ramEnabled) {
+            set
+            {
+                if (open && value != ramEnabled)
+                {
                     if (value)
                         Add(new RAM.RAMGroup(smbios, settings));
                     else
@@ -169,16 +193,22 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public bool GPUEnabled {
+        public bool GPUEnabled
+        {
             get => gpuEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-            set {
-                if (open && value != gpuEnabled) {
-                    if (value) {
+            set
+            {
+                if (open && value != gpuEnabled)
+                {
+                    if (value)
+                    {
                         Add(new ATI.ATIGroup(settings));
                         Add(new Nvidia.NvidiaGroup(settings));
-                    } else {
+                    }
+                    else
+                    {
                         RemoveType<ATI.ATIGroup>();
                         RemoveType<Nvidia.NvidiaGroup>();
                     }
@@ -187,16 +217,22 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public bool FanControllerEnabled {
+        public bool FanControllerEnabled
+        {
             get => fanControllerEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-            set {
-                if (open && value != fanControllerEnabled) {
-                    if (value) {
+            set
+            {
+                if (open && value != fanControllerEnabled)
+                {
+                    if (value)
+                    {
                         Add(new TBalancer.TBalancerGroup(settings));
                         Add(new Heatmaster.HeatmasterGroup(settings));
-                    } else {
+                    }
+                    else
+                    {
                         RemoveType<TBalancer.TBalancerGroup>();
                         RemoveType<Heatmaster.HeatmasterGroup>();
                     }
@@ -205,12 +241,15 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public bool HDDEnabled {
+        public bool HDDEnabled
+        {
             get => hddEnabled;
 
             [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
-            set {
-                if (open && value != hddEnabled) {
+            set
+            {
+                if (open && value != hddEnabled)
+                {
                     if (value)
                         Add(new HDD.HarddriveGroup(settings));
                     else
@@ -220,10 +259,13 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public IHardware[] Hardware {
-            get {
+        public IHardware[] Hardware
+        {
+            get
+            {
                 List<IHardware> list = new List<IHardware>();
-                foreach (IGroup group in groups) {
+                foreach (IGroup group in groups)
+                {
                     foreach (IHardware hardware in group.Hardware)
                         list.Add(hardware);
                 }
@@ -232,14 +274,16 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        private static void NewSection(TextWriter writer) {
+        private static void NewSection(TextWriter writer)
+        {
             for (int i = 0; i < 8; i++)
                 writer.Write("----------");
             writer.WriteLine();
             writer.WriteLine();
         }
 
-        private static int CompareSensor(ISensor a, ISensor b) {
+        private static int CompareSensor(ISensor a, ISensor b)
+        {
             int c = a.SensorType.CompareTo(b.SensorType);
             if (c == 0)
                 return a.Index.CompareTo(b.Index);
@@ -248,13 +292,15 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         private static void ReportHardwareSensorTree(
-          IHardware hardware, TextWriter w, string space) {
+          IHardware hardware, TextWriter w, string space)
+        {
             w.WriteLine("{0}|", space);
             w.WriteLine("{0}+- {1} ({2})",
               space, hardware.Name, hardware.Identifier);
             ISensor[] sensors = hardware.Sensors;
             Array.Sort(sensors, CompareSensor);
-            foreach (ISensor sensor in sensors) {
+            foreach (ISensor sensor in sensors)
+            {
                 w.WriteLine("{0}|  +- {1,-14} : {2,8:G6} {3,8:G6} {4,8:G6} ({5})",
                   space, sensor.Name, sensor.Value, sensor.Min, sensor.Max,
                   sensor.Identifier);
@@ -264,19 +310,23 @@ namespace OpenHardwareMonitor.Hardware {
         }
 
         private static void ReportHardwareParameterTree(
-          IHardware hardware, TextWriter w, string space) {
+          IHardware hardware, TextWriter w, string space)
+        {
             w.WriteLine("{0}|", space);
             w.WriteLine("{0}+- {1} ({2})",
               space, hardware.Name, hardware.Identifier);
             ISensor[] sensors = hardware.Sensors;
             Array.Sort(sensors, CompareSensor);
-            foreach (ISensor sensor in sensors) {
+            foreach (ISensor sensor in sensors)
+            {
                 string innerSpace = space + "|  ";
-                if (sensor.Parameters.Length > 0) {
+                if (sensor.Parameters.Length > 0)
+                {
                     w.WriteLine("{0}|", innerSpace);
                     w.WriteLine("{0}+- {1} ({2})",
                       innerSpace, sensor.Name, sensor.Identifier);
-                    foreach (IParameter parameter in sensor.Parameters) {
+                    foreach (IParameter parameter in sensor.Parameters)
+                    {
                         string innerInnerSpace = innerSpace + "|  ";
                         w.WriteLine("{0}+- {1} : {2}",
                           innerInnerSpace, parameter.Name,
@@ -289,9 +339,11 @@ namespace OpenHardwareMonitor.Hardware {
                 ReportHardwareParameterTree(subHardware, w, "|  ");
         }
 
-        private static void ReportHardware(IHardware hardware, TextWriter w) {
+        private static void ReportHardware(IHardware hardware, TextWriter w)
+        {
             string hardwareReport = hardware.GetReport();
-            if (!string.IsNullOrEmpty(hardwareReport)) {
+            if (!string.IsNullOrEmpty(hardwareReport))
+            {
                 NewSection(w);
                 w.Write(hardwareReport);
             }
@@ -299,9 +351,11 @@ namespace OpenHardwareMonitor.Hardware {
                 ReportHardware(subHardware, w);
         }
 
-        public string GetReport() {
+        public string GetReport()
+        {
 
-            using (StringWriter w = new StringWriter(CultureInfo.InvariantCulture)) {
+            using (StringWriter w = new StringWriter(CultureInfo.InvariantCulture))
+            {
 
                 w.WriteLine();
                 w.WriteLine("Open Hardware Monitor Report");
@@ -323,7 +377,8 @@ namespace OpenHardwareMonitor.Hardware {
                 w.WriteLine();
 
                 string r = Ring0.GetReport();
-                if (r != null) {
+                if (r != null)
+                {
                     NewSection(w);
                     w.Write(r);
                     w.WriteLine();
@@ -332,7 +387,8 @@ namespace OpenHardwareMonitor.Hardware {
                 NewSection(w);
                 w.WriteLine("Sensors");
                 w.WriteLine();
-                foreach (IGroup group in groups) {
+                foreach (IGroup group in groups)
+                {
                     foreach (IHardware hardware in group.Hardware)
                         ReportHardwareSensorTree(hardware, w, "");
                 }
@@ -341,15 +397,18 @@ namespace OpenHardwareMonitor.Hardware {
                 NewSection(w);
                 w.WriteLine("Parameters");
                 w.WriteLine();
-                foreach (IGroup group in groups) {
+                foreach (IGroup group in groups)
+                {
                     foreach (IHardware hardware in group.Hardware)
                         ReportHardwareParameterTree(hardware, w, "");
                 }
                 w.WriteLine();
 
-                foreach (IGroup group in groups) {
+                foreach (IGroup group in groups)
+                {
                     string report = group.GetReport();
-                    if (!string.IsNullOrEmpty(report)) {
+                    if (!string.IsNullOrEmpty(report))
+                    {
                         NewSection(w);
                         w.Write(report);
                     }
@@ -363,7 +422,8 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public void Close() {
+        public void Close()
+        {
             if (!open)
                 return;
 
@@ -377,8 +437,10 @@ namespace OpenHardwareMonitor.Hardware {
             open = false;
         }
 
-        private void RemoveGroups() {
-            while (groups.Count > 0) {
+        private void RemoveGroups()
+        {
+            while (groups.Count > 0)
+            {
                 IGroup group = groups[groups.Count - 1];
                 Remove(group);
             }
@@ -387,28 +449,34 @@ namespace OpenHardwareMonitor.Hardware {
         public event HardwareEventHandler HardwareAdded;
         public event HardwareEventHandler HardwareRemoved;
 
-        public void Accept(IVisitor visitor) {
+        public void Accept(IVisitor visitor)
+        {
             if (visitor == null)
                 throw new ArgumentNullException("visitor");
             visitor.VisitComputer(this);
         }
 
-        public void Traverse(IVisitor visitor) {
-            foreach (IGroup group in groups) {
+        public void Traverse(IVisitor visitor)
+        {
+            foreach (IGroup group in groups)
+            {
                 foreach (IHardware hardware in group.Hardware)
                     hardware.Accept(visitor);
             }
         }
 
-        private class Settings : ISettings {
+        private class Settings : ISettings
+        {
 
-            public bool Contains(string name) {
+            public bool Contains(string name)
+            {
                 return false;
             }
 
             public void SetValue(string name, string value) { }
 
-            public string GetValue(string name, string value) {
+            public string GetValue(string name, string value)
+            {
                 return value;
             }
 

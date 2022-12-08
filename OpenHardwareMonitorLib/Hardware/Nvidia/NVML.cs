@@ -11,8 +11,10 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace OpenHardwareMonitor.Hardware.Nvidia {
-    internal class NVML {
+namespace OpenHardwareMonitor.Hardware.Nvidia
+{
+    internal class NVML
+    {
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate NvmlReturn nvmlInitDelegate();
@@ -44,31 +46,41 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
           NvmlDeviceGetPcieThroughput;
 
 
-        public static NvmlReturn NvmlInit() {
-            try {
+        public static NvmlReturn NvmlInit()
+        {
+            try
+            {
                 NvmlReturn result = nvmlInit_v2();
                 IsInitialized = result == NvmlReturn.Success;
                 return result;
-            } catch {
-                try {
+            }
+            catch
+            {
+                try
+                {
                     NvmlReturn result = nvmlInit();
                     IsInitialized = result == NvmlReturn.Success;
                     return result;
-                } catch {
+                }
+                catch
+                {
                     return NvmlReturn.ErrorLibraryNotFound;
                 }
             }
         }
 
-        private static string GetDllName() {
+        private static string GetDllName()
+        {
             if (OperatingSystem.IsUnix)
                 return "libnvidia-ml.so";
             else
                 return "nvml.dll";
         }
 
-        private static T CreateDelegate<T>(string entryPoint) where T : Delegate {
-            var attribute = new DllImportAttribute(GetDllName()) {
+        private static T CreateDelegate<T>(string entryPoint) where T : Delegate
+        {
+            var attribute = new DllImportAttribute(GetDllName())
+            {
                 CallingConvention = CallingConvention.Cdecl,
                 PreserveSig = true,
                 EntryPoint = entryPoint
@@ -77,7 +89,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             return newDelegate;
         }
 
-        static NVML() {
+        static NVML()
+        {
             nvmlInit =
               CreateDelegate<nvmlInitDelegate>(
               "nvmlInit");
@@ -101,16 +114,19 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         public static bool IsInitialized { get; private set; }
 
         [StructLayout(LayoutKind.Sequential)]
-        internal struct NvmlDevice {
+        internal struct NvmlDevice
+        {
             private readonly IntPtr ptr;
         }
 
-        internal enum NvmlPcieUtilCounter {
+        internal enum NvmlPcieUtilCounter
+        {
             TxBytes = 0,
             RxBytes = 1
         }
 
-        internal enum NvmlReturn {
+        internal enum NvmlReturn
+        {
             /// <summary>
             /// The operation was successful
             /// </summary>

@@ -10,17 +10,20 @@
 
 using System.Globalization;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
     internal delegate void ControlEventHandler(Control control);
 
-    internal class Control : IControl {
+    internal class Control : IControl
+    {
         private readonly ISettings settings;
         private ControlMode mode;
         private float softwareValue;
 
         public Control(ISensor sensor, ISettings settings, float minSoftwareValue,
-          float maxSoftwareValue) {
+          float maxSoftwareValue)
+        {
             Identifier = new Identifier(sensor.Identifier, "control");
             this.settings = settings;
             MinSoftwareValue = minSoftwareValue;
@@ -29,26 +32,33 @@ namespace OpenHardwareMonitor.Hardware {
             if (!float.TryParse(settings.GetValue(
                 new Identifier(Identifier, "value").ToString(), "0"),
               NumberStyles.Float, CultureInfo.InvariantCulture,
-              out this.softwareValue)) {
+              out this.softwareValue))
+            {
                 this.softwareValue = 0;
             }
             if (!int.TryParse(settings.GetValue(
                 new Identifier(Identifier, "mode").ToString(),
                 ((int)ControlMode.Undefined).ToString(CultureInfo.InvariantCulture)),
               NumberStyles.Integer, CultureInfo.InvariantCulture,
-              out int mode)) {
+              out int mode))
+            {
                 this.mode = ControlMode.Undefined;
-            } else {
+            }
+            else
+            {
                 this.mode = (ControlMode)mode;
             }
         }
 
         public Identifier Identifier { get; }
 
-        public ControlMode ControlMode {
+        public ControlMode ControlMode
+        {
             get => mode;
-            private set {
-                if (mode != value) {
+            private set
+            {
+                if (mode != value)
+                {
                     mode = value;
                     ControlModeChanged?.Invoke(this);
                     this.settings.SetValue(new Identifier(Identifier, "mode").ToString(),
@@ -57,10 +67,13 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public float SoftwareValue {
+        public float SoftwareValue
+        {
             get => softwareValue;
-            private set {
-                if (softwareValue != value) {
+            private set
+            {
+                if (softwareValue != value)
+                {
                     softwareValue = value;
                     SoftwareControlValueChanged?.Invoke(this);
                     this.settings.SetValue(new Identifier(Identifier,
@@ -70,7 +83,8 @@ namespace OpenHardwareMonitor.Hardware {
             }
         }
 
-        public void SetDefault() {
+        public void SetDefault()
+        {
             ControlMode = ControlMode.Default;
         }
 
@@ -78,7 +92,8 @@ namespace OpenHardwareMonitor.Hardware {
 
         public float MaxSoftwareValue { get; }
 
-        public void SetSoftware(float value) {
+        public void SetSoftware(float value)
+        {
             ControlMode = ControlMode.Software;
             SoftwareValue = value;
         }

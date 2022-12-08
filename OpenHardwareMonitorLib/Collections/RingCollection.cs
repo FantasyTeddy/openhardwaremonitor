@@ -12,8 +12,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace OpenHardwareMonitor.Collections {
-    public class RingCollection<T> : IEnumerable<T> {
+namespace OpenHardwareMonitor.Collections
+{
+    public class RingCollection<T> : IEnumerable<T>
+    {
 
         private T[] array;
 
@@ -25,7 +27,8 @@ namespace OpenHardwareMonitor.Collections {
 
         public RingCollection() : this(0) { }
 
-        public RingCollection(int capacity) {
+        public RingCollection(int capacity)
+        {
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException("capacity");
             this.array = new T[capacity];
@@ -34,14 +37,20 @@ namespace OpenHardwareMonitor.Collections {
             Count = 0;
         }
 
-        public int Capacity {
+        public int Capacity
+        {
             get => array.Length;
-            set {
+            set
+            {
                 T[] newArray = new T[value];
-                if (Count > 0) {
-                    if (head < tail) {
+                if (Count > 0)
+                {
+                    if (head < tail)
+                    {
                         Array.Copy(array, head, newArray, 0, Count);
-                    } else {
+                    }
+                    else
+                    {
                         Array.Copy(array, head, newArray, 0, array.Length - head);
                         Array.Copy(array, 0, newArray, array.Length - head, tail);
                     }
@@ -52,12 +61,16 @@ namespace OpenHardwareMonitor.Collections {
             }
         }
 
-        public void Clear() {
+        public void Clear()
+        {
 
             // remove potential references 
-            if (head < tail) {
+            if (head < tail)
+            {
                 Array.Clear(array, head, Count);
-            } else {
+            }
+            else
+            {
                 Array.Clear(array, 0, tail);
                 Array.Clear(array, head, array.Length - head);
             }
@@ -67,8 +80,10 @@ namespace OpenHardwareMonitor.Collections {
             Count = 0;
         }
 
-        public void Append(T item) {
-            if (Count == array.Length) {
+        public void Append(T item)
+        {
+            if (Count == array.Length)
+            {
                 int newCapacity = array.Length * 3 / 2;
                 if (newCapacity < array.Length + 8)
                     newCapacity = array.Length + 8;
@@ -80,7 +95,8 @@ namespace OpenHardwareMonitor.Collections {
             Count++;
         }
 
-        public T Remove() {
+        public T Remove()
+        {
             if (Count == 0)
                 throw new InvalidOperationException();
 
@@ -94,8 +110,10 @@ namespace OpenHardwareMonitor.Collections {
 
         public int Count { get; private set; }
 
-        public T this[int index] {
-            get {
+        public T this[int index]
+        {
+            get
+            {
                 if (index < 0 || index >= Count)
                     throw new IndexOutOfRangeException();
                 int i = head + index;
@@ -103,7 +121,8 @@ namespace OpenHardwareMonitor.Collections {
                     i -= array.Length;
                 return array[i];
             }
-            set {
+            set
+            {
                 if (index < 0 || index >= Count)
                     throw new IndexOutOfRangeException();
                 int i = head + index;
@@ -113,81 +132,99 @@ namespace OpenHardwareMonitor.Collections {
             }
         }
 
-        public T First {
-            get {
+        public T First
+        {
+            get
+            {
                 if (Count == 0)
                     throw new InvalidOperationException();
                 return array[head];
             }
-            set {
+            set
+            {
                 if (Count == 0)
                     throw new InvalidOperationException();
                 array[head] = value;
             }
         }
 
-        public T Last {
-            get {
+        public T Last
+        {
+            get
+            {
                 if (Count == 0)
                     throw new InvalidOperationException();
                 return array[tail == 0 ? array.Length - 1 : tail - 1];
             }
-            set {
+            set
+            {
                 if (Count == 0)
                     throw new InvalidOperationException();
                 array[tail == 0 ? array.Length - 1 : tail - 1] = value;
             }
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() {
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
             return new RingCollection<T>.Enumerator(this);
         }
 
-        IEnumerator IEnumerable.GetEnumerator() {
+        IEnumerator IEnumerable.GetEnumerator()
+        {
             return new RingCollection<T>.Enumerator(this);
         }
 
-        private struct Enumerator : IEnumerator<T>, IEnumerator {
+        private struct Enumerator : IEnumerator<T>, IEnumerator
+        {
 
             private readonly RingCollection<T> collection;
             private int index;
 
-            public Enumerator(RingCollection<T> collection) {
+            public Enumerator(RingCollection<T> collection)
+            {
                 this.collection = collection;
                 this.index = -1;
             }
 
-            public void Dispose() {
+            public void Dispose()
+            {
                 this.index = -2;
             }
 
-            public void Reset() {
+            public void Reset()
+            {
                 this.index = -1;
             }
 
-            public T Current {
-                get {
+            public T Current
+            {
+                get
+                {
                     if (index < 0)
                         throw new InvalidOperationException();
                     return collection[index];
                 }
             }
 
-            object IEnumerator.Current {
-                get {
+            object IEnumerator.Current
+            {
+                get
+                {
                     if (index < 0)
                         throw new InvalidOperationException();
                     return collection[index];
                 }
             }
 
-            public bool MoveNext() {
+            public bool MoveNext()
+            {
                 if (index == -2)
                     return false;
 
                 index++;
 
-                if (index == collection.Count) {
+                if (index == collection.Count)
+                {
                     index = -2;
                     return false;
                 }

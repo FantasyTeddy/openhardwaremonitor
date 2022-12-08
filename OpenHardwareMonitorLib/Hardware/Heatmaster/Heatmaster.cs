@@ -16,8 +16,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace OpenHardwareMonitor.Hardware.Heatmaster {
-    internal class Heatmaster : Hardware, IDisposable {
+namespace OpenHardwareMonitor.Hardware.Heatmaster
+{
+    internal class Heatmaster : Hardware, IDisposable
+    {
 
         private readonly string portName;
         private SerialPort serialPort;
@@ -36,13 +38,17 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
 
         private readonly StringBuilder buffer = new StringBuilder();
 
-        private string ReadLine(int timeout) {
+        private string ReadLine(int timeout)
+        {
             int i = 0;
             StringBuilder builder = new StringBuilder();
-            while (i <= timeout) {
-                while (serialPort.BytesToRead > 0) {
+            while (i <= timeout)
+            {
+                while (serialPort.BytesToRead > 0)
+                {
                     byte b = (byte)serialPort.ReadByte();
-                    switch (b) {
+                    switch (b)
+                    {
                         case 0xAA: return ((char)b).ToString();
                         case 0x0D: return builder.ToString();
                         default: builder.Append((char)b); break;
@@ -54,9 +60,11 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
             throw new TimeoutException();
         }
 
-        private string ReadField(int device, char field) {
+        private string ReadField(int device, char field)
+        {
             serialPort.WriteLine("[0:" + device + "]R" + field);
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++)
+            {
                 string s = ReadLine(200);
                 Match match = Regex.Match(s, @"-\[0:" +
                   device.ToString(CultureInfo.InvariantCulture) + @"\]R" +
@@ -67,7 +75,8 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
             return null;
         }
 
-        protected string ReadString(int device, char field) {
+        protected string ReadString(int device, char field)
+        {
             string s = ReadField(device, field);
             if (s != null && s[0] == '"' && s[s.Length - 1] == '"')
                 return s.Substring(1, s.Length - 2);
@@ -75,7 +84,8 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                 return null;
         }
 
-        protected int ReadInteger(int device, char field) {
+        protected int ReadInteger(int device, char field)
+        {
             string s = ReadField(device, field);
             if (int.TryParse(s, out int i))
                 return i;
@@ -83,9 +93,11 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                 return 0;
         }
 
-        private bool WriteField(int device, char field, string value) {
+        private bool WriteField(int device, char field, string value)
+        {
             serialPort.WriteLine("[0:" + device + "]W" + field + ":" + value);
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++)
+            {
                 string s = ReadLine(200);
                 Match match = Regex.Match(s, @"-\[0:" +
                   device.ToString(CultureInfo.InvariantCulture) + @"\]W" +
@@ -97,20 +109,24 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
             return false;
         }
 
-        protected bool WriteInteger(int device, char field, int value) {
+        protected bool WriteInteger(int device, char field, int value)
+        {
             return WriteField(device, field,
               value.ToString(CultureInfo.InvariantCulture));
         }
 
-        protected bool WriteString(int device, char field, string value) {
+        protected bool WriteString(int device, char field, string value)
+        {
             return WriteField(device, field, '"' + value + '"');
         }
 
         public Heatmaster(string portName, ISettings settings)
           : base("Heatmaster", new Identifier("heatmaster",
-            portName.TrimStart(new[] { '/' }).ToLowerInvariant()), settings) {
+            portName.TrimStart(new[] { '/' }).ToLowerInvariant()), settings)
+        {
             this.portName = portName;
-            try {
+            try
+            {
                 serialPort = new SerialPort(portName, 38400, Parity.None, 8,
                   StopBits.One);
                 serialPort.Open();
@@ -127,22 +143,26 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
 
                 fans = new Sensor[fanCount];
                 controls = new Sensor[fanCount];
-                for (int i = 0; i < fanCount; i++) {
+                for (int i = 0; i < fanCount; i++)
+                {
                     int device = 33 + i;
                     string name = ReadString(device, 'C');
-                    fans[i] = new Sensor(name, device, SensorType.Fan, this, settings) {
+                    fans[i] = new Sensor(name, device, SensorType.Fan, this, settings)
+                    {
                         Value = ReadInteger(device, 'R')
                     };
                     ActivateSensor(fans[i]);
                     controls[i] =
-                      new Sensor(name, device, SensorType.Control, this, settings) {
+                      new Sensor(name, device, SensorType.Control, this, settings)
+                      {
                           Value = 100 / 255.0f * ReadInteger(device, 'P')
                       };
                     ActivateSensor(controls[i]);
                 }
 
                 temperatures = new Sensor[temperatureCount];
-                for (int i = 0; i < temperatureCount; i++) {
+                for (int i = 0; i < temperatureCount; i++)
+                {
                     int device = 49 + i;
                     string name = ReadString(device, 'C');
                     temperatures[i] =
@@ -154,21 +174,25 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                 }
 
                 flows = new Sensor[flowCount];
-                for (int i = 0; i < flowCount; i++) {
+                for (int i = 0; i < flowCount; i++)
+                {
                     int device = 65 + i;
                     string name = ReadString(device, 'C');
-                    flows[i] = new Sensor(name, device, SensorType.Flow, this, settings) {
+                    flows[i] = new Sensor(name, device, SensorType.Flow, this, settings)
+                    {
                         Value = 0.1f * ReadInteger(device, 'L')
                     };
                     ActivateSensor(flows[i]);
                 }
 
                 relays = new Sensor[relayCount];
-                for (int i = 0; i < relayCount; i++) {
+                for (int i = 0; i < relayCount; i++)
+                {
                     int device = 81 + i;
                     string name = ReadString(device, 'C');
                     relays[i] =
-                      new Sensor(name, device, SensorType.Control, this, settings) {
+                      new Sensor(name, device, SensorType.Control, this, settings)
+                      {
                           Value = 100 * ReadInteger(device, 'S')
                       };
                     ActivateSensor(relays[i]);
@@ -179,21 +203,29 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
 
                 available = true;
 
-            } catch (IOException) { } catch (TimeoutException) { }
+            }
+            catch (IOException) { }
+            catch (TimeoutException) { }
         }
 
         public override HardwareType HardwareType => HardwareType.Heatmaster;
 
-        private void ProcessUpdateLine(string line) {
+        private void ProcessUpdateLine(string line)
+        {
             Match match = Regex.Match(line, @">\[0:(\d+)\]([0-9:\|-]+)");
-            if (match.Success) {
-                if (int.TryParse(match.Groups[1].Value, out int device)) {
-                    foreach (string s in match.Groups[2].Value.Split('|')) {
+            if (match.Success)
+            {
+                if (int.TryParse(match.Groups[1].Value, out int device))
+                {
+                    foreach (string s in match.Groups[2].Value.Split('|'))
+                    {
                         string[] strings = s.Split(':');
                         int[] ints = new int[strings.Length];
                         bool valid = true;
-                        for (int i = 0; i < ints.Length; i++) {
-                            if (!int.TryParse(strings[i], out ints[i])) {
+                        for (int i = 0; i < ints.Length; i++)
+                        {
+                            if (!int.TryParse(strings[i], out ints[i]))
+                            {
                                 valid = false;
                                 break;
                             }
@@ -201,9 +233,11 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
 
                         if (!valid)
                             continue;
-                        switch (device) {
+                        switch (device)
+                        {
                             case 32:
-                                if (ints.Length == 3 && ints[0] <= fans.Length) {
+                                if (ints.Length == 3 && ints[0] <= fans.Length)
+                                {
                                     fans[ints[0] - 1].Value = ints[1];
                                     controls[ints[0] - 1].Value = 100 / 255.0f * ints[2];
                                 }
@@ -226,22 +260,28 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
             }
         }
 
-        public override void Update() {
+        public override void Update()
+        {
             if (!available)
                 return;
 
-            while (serialPort.IsOpen && serialPort.BytesToRead > 0) {
+            while (serialPort.IsOpen && serialPort.BytesToRead > 0)
+            {
                 byte b = (byte)serialPort.ReadByte();
-                if (b == 0x0D) {
+                if (b == 0x0D)
+                {
                     ProcessUpdateLine(buffer.ToString());
                     buffer.Length = 0;
-                } else {
+                }
+                else
+                {
                     buffer.Append((char)b);
                 }
             }
         }
 
-        public override string GetReport() {
+        public override string GetReport()
+        {
             StringBuilder r = new StringBuilder();
 
             r.AppendLine("Heatmaster");
@@ -259,15 +299,18 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
             return r.ToString();
         }
 
-        public override void Close() {
+        public override void Close()
+        {
             serialPort.Close();
             serialPort.Dispose();
             serialPort = null;
             base.Close();
         }
 
-        public void Dispose() {
-            if (serialPort != null) {
+        public void Dispose()
+        {
+            if (serialPort != null)
+            {
                 serialPort.Dispose();
                 serialPort = null;
             }

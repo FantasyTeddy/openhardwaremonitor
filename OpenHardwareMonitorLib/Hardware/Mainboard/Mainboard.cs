@@ -12,8 +12,10 @@ using System;
 using System.Text;
 using OpenHardwareMonitor.Hardware.LPC;
 
-namespace OpenHardwareMonitor.Hardware.Mainboard {
-    internal class Mainboard : IHardware {
+namespace OpenHardwareMonitor.Hardware.Mainboard
+{
+    internal class Mainboard : IHardware
+    {
         private readonly SMBIOS smbios;
         private readonly string name;
         private string customName;
@@ -22,7 +24,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         private readonly LMSensors lmSensors;
         private readonly Hardware[] superIOHardware;
 
-        public Mainboard(SMBIOS smbios, ISettings settings) {
+        public Mainboard(SMBIOS smbios, ISettings settings)
+        {
             this.settings = settings;
             this.smbios = smbios;
 
@@ -32,18 +35,27 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             Model model = smbios.Board == null ? Model.Unknown :
               Identification.GetModel(smbios.Board.ProductName);
 
-            if (smbios.Board != null) {
-                if (!string.IsNullOrEmpty(smbios.Board.ProductName)) {
-                    if (manufacturer == Manufacturer.Unknown) {
+            if (smbios.Board != null)
+            {
+                if (!string.IsNullOrEmpty(smbios.Board.ProductName))
+                {
+                    if (manufacturer == Manufacturer.Unknown)
+                    {
                         this.name = smbios.Board.ProductName;
-                    } else {
+                    }
+                    else
+                    {
                         this.name = manufacturer + " " +
                           smbios.Board.ProductName;
                     }
-                } else {
+                }
+                else
+                {
                     this.name = manufacturer.ToString();
                 }
-            } else {
+            }
+            else
+            {
                 this.name = Manufacturer.Unknown.ToString();
             }
 
@@ -51,24 +63,30 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
               new Identifier(Identifier, "name").ToString(), name);
 
             ISuperIO[] superIO;
-            if (OperatingSystem.IsUnix) {
+            if (OperatingSystem.IsUnix)
+            {
                 this.lmSensors = new LMSensors();
                 superIO = lmSensors.SuperIO;
-            } else {
+            }
+            else
+            {
                 this.lpcio = new LPCIO();
                 superIO = lpcio.SuperIO;
             }
 
             superIOHardware = new Hardware[superIO.Length];
-            for (int i = 0; i < superIO.Length; i++) {
+            for (int i = 0; i < superIO.Length; i++)
+            {
                 superIOHardware[i] = new SuperIOHardware(this, superIO[i],
                   manufacturer, model, settings);
             }
         }
 
-        public string Name {
+        public string Name
+        {
             get => customName;
-            set {
+            set
+            {
                 if (!string.IsNullOrEmpty(value))
                     customName = value;
                 else
@@ -84,7 +102,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
         public virtual IHardware Parent => null;
 
-        public string GetReport() {
+        public string GetReport()
+        {
             StringBuilder r = new StringBuilder();
 
             r.AppendLine("Mainboard");
@@ -96,7 +115,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
             byte[] table =
               FirmwareTable.GetTable(FirmwareTable.Provider.ACPI, "TAMG");
-            if (table != null) {
+            if (table != null)
+            {
                 GigabyteTAMG tamg = new GigabyteTAMG(table);
                 r.Append(tamg.GetReport());
             }
@@ -106,7 +126,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
         public void Update() { }
 
-        public void Close() {
+        public void Close()
+        {
             lmSensors?.Close();
             foreach (Hardware hardware in superIOHardware)
                 hardware.Close();
@@ -121,13 +142,15 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         public event SensorEventHandler SensorRemoved;
 #pragma warning restore 67
 
-        public void Accept(IVisitor visitor) {
+        public void Accept(IVisitor visitor)
+        {
             if (visitor == null)
                 throw new ArgumentNullException("visitor");
             visitor.VisitHardware(this);
         }
 
-        public void Traverse(IVisitor visitor) {
+        public void Traverse(IVisitor visitor)
+        {
             foreach (IHardware hardware in superIOHardware)
                 hardware.Accept(visitor);
         }

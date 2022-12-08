@@ -8,9 +8,11 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.LPC {
+namespace OpenHardwareMonitor.Hardware.LPC
+{
 
-    internal enum Chip : ushort {
+    internal enum Chip : ushort
+    {
         Unknown = 0,
 
         ATK0110 = 0x0110,
@@ -68,12 +70,15 @@ namespace OpenHardwareMonitor.Hardware.LPC {
         W83687THF = 0x8541
     }
 
-    internal class ChipName {
+    internal class ChipName
+    {
 
         private ChipName() { }
 
-        public static string GetName(Chip chip) {
-            switch (chip) {
+        public static string GetName(Chip chip)
+        {
+            switch (chip)
+            {
                 case Chip.ATK0110: return "Asus ATK0110";
 
                 case Chip.F71858: return "Fintek F71858";

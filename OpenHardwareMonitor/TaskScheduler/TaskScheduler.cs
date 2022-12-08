@@ -14,10 +14,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace OpenHardwareMonitor.TaskScheduler {
+namespace OpenHardwareMonitor.TaskScheduler
+{
 
     [StructLayout(LayoutKind.Sequential, Pack = 2)]
-    public struct SYSTEMTIME {
+    public struct SYSTEMTIME
+    {
         public ushort wYear;
         public ushort wMonth;
         public ushort wDayOfWeek;
@@ -28,21 +30,24 @@ namespace OpenHardwareMonitor.TaskScheduler {
         public ushort wMilliseconds;
     }
 
-    public enum TASK_ACTION_TYPE {
+    public enum TASK_ACTION_TYPE
+    {
         TASK_ACTION_COM_HANDLER = 5,
         TASK_ACTION_EXEC = 0,
         TASK_ACTION_SEND_EMAIL = 6,
         TASK_ACTION_SHOW_MESSAGE = 7
     }
 
-    public enum TASK_COMPATIBILITY {
+    public enum TASK_COMPATIBILITY
+    {
         TASK_COMPATIBILITY_AT,
         TASK_COMPATIBILITY_V1,
         TASK_COMPATIBILITY_V2,
         TASK_COMPATIBILITY_V2_1
     }
 
-    public enum TASK_CREATION {
+    public enum TASK_CREATION
+    {
         TASK_CREATE = 2,
         TASK_CREATE_OR_UPDATE = 6,
         TASK_DISABLE = 8,
@@ -52,18 +57,21 @@ namespace OpenHardwareMonitor.TaskScheduler {
         TASK_VALIDATE_ONLY = 1
     }
 
-    public enum TASK_ENUM_FLAGS {
+    public enum TASK_ENUM_FLAGS
+    {
         TASK_ENUM_HIDDEN = 1
     }
 
-    public enum TASK_INSTANCES_POLICY {
+    public enum TASK_INSTANCES_POLICY
+    {
         TASK_INSTANCES_PARALLEL,
         TASK_INSTANCES_QUEUE,
         TASK_INSTANCES_IGNORE_NEW,
         TASK_INSTANCES_STOP_EXISTING
     }
 
-    public enum TASK_LOGON_TYPE {
+    public enum TASK_LOGON_TYPE
+    {
         TASK_LOGON_NONE,
         TASK_LOGON_PASSWORD,
         TASK_LOGON_S4U,
@@ -73,7 +81,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
         TASK_LOGON_INTERACTIVE_TOKEN_OR_PASSWORD
     }
 
-    public enum TASK_RUN_FLAGS {
+    public enum TASK_RUN_FLAGS
+    {
         TASK_RUN_AS_SELF = 1,
         TASK_RUN_IGNORE_CONSTRAINTS = 2,
         TASK_RUN_NO_FLAGS = 0,
@@ -81,12 +90,14 @@ namespace OpenHardwareMonitor.TaskScheduler {
         TASK_RUN_USER_SID = 8
     }
 
-    public enum TASK_RUNLEVEL {
+    public enum TASK_RUNLEVEL
+    {
         TASK_RUNLEVEL_LUA,
         TASK_RUNLEVEL_HIGHEST
     }
 
-    public enum TASK_SESSION_STATE_CHANGE_TYPE {
+    public enum TASK_SESSION_STATE_CHANGE_TYPE
+    {
         TASK_CONSOLE_CONNECT = 1,
         TASK_CONSOLE_DISCONNECT = 2,
         TASK_REMOTE_CONNECT = 3,
@@ -95,7 +106,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
         TASK_SESSION_UNLOCK = 8
     }
 
-    public enum TASK_STATE {
+    public enum TASK_STATE
+    {
         TASK_STATE_UNKNOWN,
         TASK_STATE_DISABLED,
         TASK_STATE_QUEUED,
@@ -103,7 +115,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
         TASK_STATE_RUNNING
     }
 
-    public enum TASK_TRIGGER_TYPE2 {
+    public enum TASK_TRIGGER_TYPE2
+    {
         TASK_TRIGGER_BOOT = 8,
         TASK_TRIGGER_DAILY = 2,
         TASK_TRIGGER_EVENT = 0,
@@ -118,7 +131,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("BAE54997-48B1-4CBE-9965-D6BE263EBEA4")]
-    public interface IAction {
+    public interface IAction
+    {
         [DispId(1)]
         string Id { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -126,7 +140,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("02820E19-7B98-4ED2-B2E8-FDCCCEFF619B")]
-    public interface IActionCollection : IEnumerable {
+    public interface IActionCollection : IEnumerable
+    {
         [DispId(1)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(0)]
@@ -148,7 +163,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("2A9C35DA-D357-41F4-BBC1-207AC1B1F3CB"), TypeLibType((short)0x10c0)]
-    public interface IBootTrigger : ITrigger {
+    public interface IBootTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -168,7 +184,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("6D2FD252-75C5-4F66-90BA-2A7D8CC3039F")]
-    public interface IComHandlerAction : IAction {
+    public interface IComHandlerAction : IAction
+    {
         [DispId(1)]
         new string Id { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -180,7 +197,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("126C5CD8-B288-41D5-8DBF-E491446ADC5C")]
-    public interface IDailyTrigger : ITrigger {
+    public interface IDailyTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -202,7 +220,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("10F62C64-7E16-4314-A0C2-0C3683F99D40")]
-    public interface IEmailAction : IAction {
+    public interface IEmailAction : IAction
+    {
         [DispId(1)]
         new string Id { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -230,7 +249,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("D45B0167-9653-4EEF-B94F-0732CA7AF251")]
-    public interface IEventTrigger : ITrigger {
+    public interface IEventTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -254,7 +274,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("4C3D624D-FD6B-49A3-B9B7-09CB3CD3F047"), TypeLibType((short)0x10c0)]
-    public interface IExecAction : IAction {
+    public interface IExecAction : IAction
+    {
         [DispId(1)]
         new string Id { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -268,7 +289,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("84594461-0053-4342-A8FD-088FABF11F32"), TypeLibType((short)0x10c0)]
-    public interface IIdleSettings {
+    public interface IIdleSettings
+    {
         [DispId(1)]
         string IdleDuration { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -280,7 +302,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("D537D2B0-9FB3-4D34-9739-1FF5CE7B1EF3"), TypeLibType((short)0x10c0)]
-    public interface IIdleTrigger : ITrigger {
+    public interface IIdleTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -298,7 +321,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("72DADE38-FAE4-4B3E-BAF4-5D009AF02B1C"), TypeLibType((short)0x10c0)]
-    public interface ILogonTrigger : ITrigger {
+    public interface ILogonTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -320,7 +344,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("77D025A3-90FA-43AA-B52E-CDA5499B946A"), TypeLibType((short)0x10c0)]
-    public interface IMonthlyDOWTrigger : ITrigger {
+    public interface IMonthlyDOWTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -348,7 +373,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("97C45EF1-6B02-4A1A-9C0E-1EBFBA1500AC"), TypeLibType((short)0x10c0)]
-    public interface IMonthlyTrigger : ITrigger {
+    public interface IMonthlyTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -374,7 +400,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("9F7DEA84-C30B-4245-80B6-00E9F646F1B4"), TypeLibType((short)0x10c0)]
-    public interface INetworkSettings {
+    public interface INetworkSettings
+    {
         [DispId(1)]
         string Name { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -382,7 +409,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("D98D51E5-C9B4-496A-A9C1-18980261CF0F"), TypeLibType((short)0x10c0)]
-    public interface IPrincipal {
+    public interface IPrincipal
+    {
         [DispId(1)]
         string Id { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -398,7 +426,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, DefaultMember("Path"), Guid("9C86F320-DEE3-4DD1-B972-A303F26B061E"), TypeLibType((short)0x10c0), ComConversionLoss]
-    public interface IRegisteredTask {
+    public interface IRegisteredTask
+    {
         [DispId(1)]
         string Name { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(0)]
@@ -440,7 +469,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("86627EB4-42A7-41E4-A4D9-AC33A72F2D52")]
-    public interface IRegisteredTaskCollection : IEnumerable {
+    public interface IRegisteredTaskCollection : IEnumerable
+    {
         [DispId(0x60020000)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x60020000)] get; }
         [DispId(0)]
@@ -451,7 +481,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("416D8B73-CB41-4EA1-805C-9BE9A5AC4A74"), TypeLibType((short)0x10c0)]
-    public interface IRegistrationInfo {
+    public interface IRegistrationInfo
+    {
         [DispId(1)]
         string Description { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -473,7 +504,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("4C8FEC3A-C218-4E0C-B23D-629024DB91A2"), TypeLibType((short)0x10c0)]
-    public interface IRegistrationTrigger : ITrigger {
+    public interface IRegistrationTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -493,7 +525,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("7FB9ACF1-26BE-400E-85B5-294B9C75DFD6")]
-    public interface IRepetitionPattern {
+    public interface IRepetitionPattern
+    {
         [DispId(1)]
         string Interval { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -503,7 +536,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("653758FB-7B9A-4F1E-A471-BEEB8E9B834E"), TypeLibType((short)0x10c0), DefaultMember("InstanceGuid")]
-    public interface IRunningTask {
+    public interface IRunningTask
+    {
         [DispId(1)]
         string Name { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(0)]
@@ -523,7 +557,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("6A67614B-6828-4FEC-AA54-6D52E8F1F2DB"), TypeLibType((short)0x10c0)]
-    public interface IRunningTaskCollection : IEnumerable {
+    public interface IRunningTaskCollection : IEnumerable
+    {
         [DispId(1)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(0)]
@@ -534,7 +569,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("754DA71B-4385-4475-9DD9-598294FA3641"), TypeLibType((short)0x10c0)]
-    public interface ISessionStateChangeTrigger : ITrigger {
+    public interface ISessionStateChangeTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -558,7 +594,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("505E9E68-AF89-46B8-A30F-56162A83D537")]
-    public interface IShowMessageAction : IAction {
+    public interface IShowMessageAction : IAction
+    {
         [DispId(1)]
         new string Id { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -570,7 +607,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("F5BC8FC5-536D-4F77-B852-FBC1356FDEB6")]
-    public interface ITaskDefinition {
+    public interface ITaskDefinition
+    {
         [DispId(1)]
         IRegistrationInfo RegistrationInfo { [return: MarshalAs(UnmanagedType.Interface)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; [param: In, MarshalAs(UnmanagedType.Interface)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] set; }
         [DispId(2)]
@@ -588,7 +626,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, DefaultMember("Path"), Guid("8CFAC062-A080-4C15-9A88-AA7C2AF80DFC"), TypeLibType((short)0x10c0)]
-    public interface ITaskFolder {
+    public interface ITaskFolder
+    {
         [DispId(1)]
         string Name { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(0)]
@@ -626,7 +665,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("79184A66-8664-423F-97F1-637356A5D812")]
-    public interface ITaskFolderCollection : IEnumerable {
+    public interface ITaskFolderCollection : IEnumerable
+    {
         [DispId(0x60020000)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0x60020000)] get; }
         [DispId(0)]
@@ -637,7 +677,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("839D7762-5121-4009-9234-4F0D19394F04"), InterfaceType((short)1)]
-    public interface ITaskHandler {
+    public interface ITaskHandler
+    {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void Start([In, MarshalAs(UnmanagedType.IUnknown)] object pHandlerServices, [In, MarshalAs(UnmanagedType.BStr)] string Data);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -649,7 +690,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("EAEC7A8F-27A0-4DDC-8675-14726A01A38A"), InterfaceType((short)1)]
-    public interface ITaskHandlerStatus {
+    public interface ITaskHandlerStatus
+    {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         void UpdateStatus([In] short percentComplete, [In, MarshalAs(UnmanagedType.BStr)] string statusMessage);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -657,7 +699,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("B4EF826B-63C3-46E4-A504-EF69E4F7EA4D"), TypeLibType((short)0x10c0)]
-    public interface ITaskNamedValueCollection : IEnumerable {
+    public interface ITaskNamedValueCollection : IEnumerable
+    {
         [DispId(1)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(0)]
@@ -675,7 +718,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), DefaultMember("Name"), Guid("39038068-2B46-4AFD-8662-7BB6F868D221")]
-    public interface ITaskNamedValuePair {
+    public interface ITaskNamedValuePair
+    {
         [DispId(0)]
         string Name { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0)] get; [param: In, MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0)] set; }
         [DispId(1)]
@@ -683,7 +727,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), DefaultMember("TargetServer"), Guid("2FABA4C7-4DA9-4013-9697-20CC3FD40F85")]
-    public interface ITaskService {
+    public interface ITaskService
+    {
         [return: MarshalAs(UnmanagedType.Interface)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)]
         ITaskFolder GetFolder([In, MarshalAs(UnmanagedType.BStr)] string Path);
@@ -708,7 +753,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("8FD4711D-2D02-4C8C-87E3-EFF699DE127E")]
-    public interface ITaskSettings {
+    public interface ITaskSettings
+    {
         [DispId(3)]
         bool AllowDemandStart { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(3)] get; [param: In][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(3)] set; }
         [DispId(4)]
@@ -752,7 +798,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("2C05C3F0-6EED-4C05-A15F-ED7D7A98A369"), TypeLibType((short)0x10c0)]
-    public interface ITaskSettings2 {
+    public interface ITaskSettings2
+    {
         [DispId(30)]
         bool DisallowStartOnRemoteAppSession { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(30)] get; [param: In][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(30)] set; }
         [DispId(0x1f)]
@@ -760,7 +807,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("3E4C9351-D966-4B8B-BB87-CEBA68BB0107"), InterfaceType((short)1)]
-    public interface ITaskVariables {
+    public interface ITaskVariables
+    {
         [return: MarshalAs(UnmanagedType.BStr)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         string GetInput();
@@ -772,7 +820,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("B45747E0-EBA7-4276-9F29-85C5BB300006"), TypeLibType((short)0x10c0)]
-    public interface ITimeTrigger : ITrigger {
+    public interface ITimeTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -792,7 +841,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("09941815-EA89-4B5B-89E0-2A773801FAC3")]
-    public interface ITrigger {
+    public interface ITrigger
+    {
         [DispId(1)]
         TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -810,7 +860,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, TypeLibType((short)0x10c0), Guid("85DF5081-1B24-4F32-878A-D9D14DF4CB77")]
-    public interface ITriggerCollection : IEnumerable {
+    public interface ITriggerCollection : IEnumerable
+    {
         [DispId(1)]
         int Count { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(0)]
@@ -828,7 +879,8 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("5038FC98-82FF-436D-8728-A512A57C9DC1"), TypeLibType((short)0x10c0)]
-    public interface IWeeklyTrigger : ITrigger {
+    public interface IWeeklyTrigger : ITrigger
+    {
         [DispId(1)]
         new TASK_TRIGGER_TYPE2 Type { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)] get; }
         [DispId(2)]
@@ -852,11 +904,13 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("839D7762-5121-4009-9234-4F0D19394F04"), CoClass(typeof(TaskHandlerPSClass))]
-    public interface TaskHandlerPS : ITaskHandler {
+    public interface TaskHandlerPS : ITaskHandler
+    {
     }
 
     [ComImport, TypeLibType((short)2), ClassInterface((short)0), Guid("F2A69DB7-DA2C-4352-9066-86FEE6DACAC9")]
-    public class TaskHandlerPSClass : ITaskHandler, TaskHandlerPS {
+    public class TaskHandlerPSClass : ITaskHandler, TaskHandlerPS
+    {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         public extern virtual void Pause();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -868,11 +922,13 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, Guid("EAEC7A8F-27A0-4DDC-8675-14726A01A38A"), CoClass(typeof(TaskHandlerStatusPSClass))]
-    public interface TaskHandlerStatusPS : ITaskHandlerStatus {
+    public interface TaskHandlerStatusPS : ITaskHandlerStatus
+    {
     }
 
     [ComImport, ClassInterface((short)0), Guid("9F15266D-D7BA-48F0-93C1-E6895F6FE5AC"), TypeLibType((short)2)]
-    public class TaskHandlerStatusPSClass : ITaskHandlerStatus, TaskHandlerStatusPS, ITaskVariables {
+    public class TaskHandlerStatusPSClass : ITaskHandlerStatus, TaskHandlerStatusPS, ITaskVariables
+    {
         [return: MarshalAs(UnmanagedType.BStr)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         public extern virtual string GetContext();
@@ -888,11 +944,13 @@ namespace OpenHardwareMonitor.TaskScheduler {
     }
 
     [ComImport, CoClass(typeof(TaskSchedulerClass)), Guid("2FABA4C7-4DA9-4013-9697-20CC3FD40F85")]
-    public interface TaskScheduler : ITaskService {
+    public interface TaskScheduler : ITaskService
+    {
     }
 
     [ComImport, ClassInterface((short)0), DefaultMember("TargetServer"), Guid("0F87369F-A4E5-4CFC-BD3E-73E6154572DD"), TypeLibType((short)2)]
-    public class TaskSchedulerClass : ITaskService, TaskScheduler {
+    public class TaskSchedulerClass : ITaskService, TaskScheduler
+    {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(4)]
         public extern virtual void Connect([In, Optional, MarshalAs(UnmanagedType.Struct)] object serverName, [In, Optional, MarshalAs(UnmanagedType.Struct)] object user, [In, Optional, MarshalAs(UnmanagedType.Struct)] object domain, [In, Optional, MarshalAs(UnmanagedType.Struct)] object password);
         [return: MarshalAs(UnmanagedType.Interface)]

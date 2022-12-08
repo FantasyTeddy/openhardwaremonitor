@@ -11,11 +11,14 @@
 using System;
 using System.Globalization;
 
-namespace OpenHardwareMonitor.Hardware {
+namespace OpenHardwareMonitor.Hardware
+{
 
-    internal struct ParameterDescription {
+    internal struct ParameterDescription
+    {
         public ParameterDescription(string name, string description,
-          float defaultValue) {
+          float defaultValue)
+        {
             Name = name;
             Description = description;
             DefaultValue = defaultValue;
@@ -28,24 +31,28 @@ namespace OpenHardwareMonitor.Hardware {
         public float DefaultValue { get; }
     }
 
-    internal class Parameter : IParameter {
+    internal class Parameter : IParameter
+    {
         private readonly ParameterDescription description;
         private float value;
         private bool isDefault;
         private readonly ISettings settings;
 
         public Parameter(ParameterDescription description, ISensor sensor,
-          ISettings settings) {
+          ISettings settings)
+        {
             Sensor = sensor;
             this.description = description;
             this.settings = settings;
             this.isDefault = !settings.Contains(Identifier.ToString());
             this.value = description.DefaultValue;
-            if (!this.isDefault) {
+            if (!this.isDefault)
+            {
                 if (!float.TryParse(settings.GetValue(Identifier.ToString(), "0"),
                   NumberStyles.Float,
                   CultureInfo.InvariantCulture,
-                  out this.value)) {
+                  out this.value))
+                {
                     this.value = description.DefaultValue;
                 }
             }
@@ -60,9 +67,11 @@ namespace OpenHardwareMonitor.Hardware {
 
         public string Description => description.Description;
 
-        public float Value {
+        public float Value
+        {
             get => value;
-            set {
+            set
+            {
                 this.isDefault = false;
                 this.value = value;
                 this.settings.SetValue(Identifier.ToString(), value.ToString(
@@ -72,18 +81,22 @@ namespace OpenHardwareMonitor.Hardware {
 
         public float DefaultValue => description.DefaultValue;
 
-        public bool IsDefault {
+        public bool IsDefault
+        {
             get => isDefault;
-            set {
+            set
+            {
                 this.isDefault = value;
-                if (value) {
+                if (value)
+                {
                     this.value = description.DefaultValue;
                     this.settings.Remove(Identifier.ToString());
                 }
             }
         }
 
-        public void Accept(IVisitor visitor) {
+        public void Accept(IVisitor visitor)
+        {
             if (visitor == null)
                 throw new ArgumentNullException("visitor");
             visitor.VisitParameter(this);

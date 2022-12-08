@@ -13,8 +13,10 @@ using System.Collections.Generic;
 using System.Threading;
 using OpenHardwareMonitor.Hardware.LPC;
 
-namespace OpenHardwareMonitor.Hardware.Mainboard {
-    internal sealed class SuperIOHardware : Hardware {
+namespace OpenHardwareMonitor.Hardware.Mainboard
+{
+    internal sealed class SuperIOHardware : Hardware
+    {
 
         private readonly Mainboard mainboard;
         private readonly ISuperIO superIO;
@@ -42,7 +44,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         public SuperIOHardware(Mainboard mainboard, ISuperIO superIO,
           Manufacturer manufacturer, Model model, ISettings settings)
           : base(ChipName.GetName(superIO.Chip), new Identifier("lpc",
-            superIO.Chip.ToString().ToLowerInvariant()), settings) {
+            superIO.Chip.ToString().ToLowerInvariant()), settings)
+        {
             this.mainboard = mainboard;
             this.superIO = superIO;
 
@@ -58,15 +61,20 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         }
 
         private void CreateControlSensors(ISuperIO superIO, ISettings settings,
-          IList<Ctrl> c) {
-            foreach (Ctrl ctrl in c) {
+          IList<Ctrl> c)
+        {
+            foreach (Ctrl ctrl in c)
+            {
                 int index = ctrl.Index;
-                if (index < superIO.Controls.Length) {
+                if (index < superIO.Controls.Length)
+                {
                     Sensor sensor = new Sensor(ctrl.Name, index, SensorType.Control,
                       this, settings);
                     Control control = new Control(sensor, settings, 0, 100);
-                    control.ControlModeChanged += (cc) => {
-                        switch (cc.ControlMode) {
+                    control.ControlModeChanged += (cc) =>
+                    {
+                        switch (cc.ControlMode)
+                        {
                             case ControlMode.Undefined:
                                 return;
                             case ControlMode.Default:
@@ -79,12 +87,14 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                                 return;
                         }
                     };
-                    control.SoftwareControlValueChanged += (cc) => {
+                    control.SoftwareControlValueChanged += (cc) =>
+                    {
                         if (cc.ControlMode == ControlMode.Software)
                             superIO.SetControl(index, (byte)(cc.SoftwareValue * 2.55));
                     };
 
-                    switch (control.ControlMode) {
+                    switch (control.ControlMode)
+                    {
                         case ControlMode.Undefined:
                             break;
                         case ControlMode.Default:
@@ -105,9 +115,12 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         }
 
         private void CreateFanSensors(ISuperIO superIO, ISettings settings,
-          IList<Fan> f) {
-            foreach (Fan fan in f) {
-                if (fan.Index < superIO.Fans.Length) {
+          IList<Fan> f)
+        {
+            foreach (Fan fan in f)
+            {
+                if (fan.Index < superIO.Fans.Length)
+                {
                     Sensor sensor = new Sensor(fan.Name, fan.Index, SensorType.Fan,
                       this, settings);
                     fans.Add(sensor);
@@ -116,9 +129,12 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         }
 
         private void CreateTemperatureSensors(ISuperIO superIO, ISettings settings,
-          IList<Temperature> t) {
-            foreach (Temperature temperature in t) {
-                if (temperature.Index < superIO.Temperatures.Length) {
+          IList<Temperature> t)
+        {
+            foreach (Temperature temperature in t)
+            {
+                if (temperature.Index < superIO.Temperatures.Length)
+                {
                     Sensor sensor = new Sensor(temperature.Name, temperature.Index,
                       SensorType.Temperature, this, new[] {
           new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
@@ -129,10 +145,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         }
 
         private void CreateVoltageSensors(ISuperIO superIO, ISettings settings,
-          IList<Voltage> v) {
+          IList<Voltage> v)
+        {
             const string formula = "Voltage = value + (value - Vf) * Ri / Rf.";
-            foreach (Voltage voltage in v) {
-                if (voltage.Index < superIO.Voltages.Length) {
+            foreach (Voltage voltage in v)
+            {
+                if (voltage.Index < superIO.Voltages.Length)
+                {
                     Sensor sensor = new Sensor(voltage.Name, voltage.Index,
                       voltage.Hidden, SensorType.Voltage, this, new[] {
             new ParameterDescription("Ri [kΩ]", "Input resistance.\n" +
@@ -154,7 +173,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
           out ReadValueDelegate readTemperature,
           out ReadValueDelegate readFan,
           out ReadValueDelegate readControl,
-          out UpdateDelegate postUpdate, out Mutex mutex) {
+          out UpdateDelegate postUpdate, out Mutex mutex)
+        {
             readVoltage = (index) => superIO.Voltages[index];
             readTemperature = (index) => superIO.Temperatures[index];
             readFan = (index) => superIO.Fans[index];
@@ -168,7 +188,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             f = new List<Fan>();
             c = new List<Ctrl>();
 
-            switch (superIO.Chip) {
+            switch (superIO.Chip)
+            {
                 case Chip.IT8705F:
                 case Chip.IT8712F:
                 case Chip.IT8716F:
@@ -284,7 +305,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         }
 
         private static void GetDefaultConfiguration(ISuperIO superIO,
-          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c) {
+          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c)
+        {
             for (int i = 0; i < superIO.Voltages.Length; i++)
                 v.Add(new Voltage("Voltage #" + (i + 1), i, true));
             for (int i = 0; i < superIO.Temperatures.Length; i++)
@@ -299,10 +321,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
           Manufacturer manufacturer, Model model,
           IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c,
           ref ReadValueDelegate readFan, ref UpdateDelegate postUpdate,
-          ref Mutex mutex) {
-            switch (manufacturer) {
+          ref Mutex mutex)
+        {
+            switch (manufacturer)
+            {
                 case Manufacturer.ASUS:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.Crosshair_III_Formula: // IT8720F
                             v.Add(new Voltage("VBat", 8));
                             t.Add(new Temperature("CPU", 0));
@@ -352,7 +377,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                     break;
 
                 case Manufacturer.ASRock:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.P55_Deluxe: // IT8720F
                             GetASRockConfiguration(superIO, v, t, f,
                               ref readFan, ref postUpdate, ref mutex);
@@ -376,7 +402,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                     break;
 
                 case Manufacturer.DFI:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.LP_BI_P45_T2RS_Elite: // IT8718F
                             v.Add(new Voltage("CPU VCore", 0));
                             v.Add(new Voltage("FSB VTT", 1));
@@ -432,7 +459,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                     break;
 
                 case Manufacturer.Gigabyte:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model._965P_S3: // IT8718F
                             v.Add(new Voltage("CPU VCore", 0));
                             v.Add(new Voltage("DRAM", 1));
@@ -652,7 +680,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         private static void GetASRockConfiguration(ISuperIO superIO,
           IList<Voltage> v, IList<Temperature> t, IList<Fan> f,
           ref ReadValueDelegate readFan, ref UpdateDelegate postUpdate,
-          ref Mutex mutex) {
+          ref Mutex mutex)
+        {
             v.Add(new Voltage("CPU VCore", 0));
             v.Add(new Voltage("+3.3V", 2));
             v.Add(new Voltage("+12V", 4, 30, 10));
@@ -667,21 +696,29 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             mutex = new Mutex(false, "ASRockOCMark");
 
             bool exclusiveAccess = false;
-            try {
+            try
+            {
                 exclusiveAccess = mutex.WaitOne(10, false);
-            } catch (AbandonedMutexException) { } catch (InvalidOperationException) { }
+            }
+            catch (AbandonedMutexException) { }
+            catch (InvalidOperationException) { }
 
             // only read additional fans if we get exclusive access
-            if (exclusiveAccess) {
+            if (exclusiveAccess)
+            {
 
                 f.Add(new Fan("Chassis Fan #2", 2));
                 f.Add(new Fan("Chassis Fan #3", 3));
                 f.Add(new Fan("Power Fan", 4));
 
-                readFan = (index) => {
-                    if (index < 2) {
+                readFan = (index) =>
+                {
+                    if (index < 2)
+                    {
                         return superIO.Fans[index];
-                    } else {
+                    }
+                    else
+                    {
                         // get GPIO 80-87
                         byte? gpio = superIO.ReadGPIO(7);
                         if (!gpio.HasValue)
@@ -695,7 +732,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                 };
 
                 int fanIndex = 0;
-                postUpdate = () => {
+                postUpdate = () =>
+                {
                     // get GPIO 80-87
                     byte? gpio = superIO.ReadGPIO(7);
                     if (!gpio.HasValue)
@@ -712,10 +750,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
         private static void GetITEConfigurationsB(ISuperIO superIO,
           Manufacturer manufacturer, Model model,
-          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c) {
-            switch (manufacturer) {
+          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c)
+        {
+            switch (manufacturer)
+            {
                 case Manufacturer.ECS:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.A890GXM_A: // IT8721F
                             v.Add(new Voltage("CPU VCore", 0));
                             v.Add(new Voltage("VDIMM", 1));
@@ -751,7 +792,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                     }
                     break;
                 case Manufacturer.Gigabyte:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.H61M_DS2_REV_1_2: // IT8728F
                         case Model.H61M_USB3_B3_REV_2_0: // IT8728F
                             v.Add(new Voltage("VTT", 0));
@@ -905,7 +947,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                     }
                     break;
                 case Manufacturer.Shuttle:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.FH67: // IT8772E 
                             v.Add(new Voltage("CPU VCore", 0));
                             v.Add(new Voltage("DRAM", 1));
@@ -960,10 +1003,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
         private static void GetITEConfigurationsC(ISuperIO superIO,
           Manufacturer manufacturer, Model model,
-          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c) {
-            switch (manufacturer) {
+          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c)
+        {
+            switch (manufacturer)
+            {
                 case Manufacturer.Gigabyte:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.X570_AORUS_MASTER: // IT879XE
                             v.Add(new Voltage("CPU VDD18", 0));
                             v.Add(new Voltage("DDRVTT CH(A/B)", 1));
@@ -1022,10 +1068,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
         private static void GetFintekConfiguration(ISuperIO superIO,
           Manufacturer manufacturer, Model model,
-          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c) {
-            switch (manufacturer) {
+          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c)
+        {
+            switch (manufacturer)
+            {
                 case Manufacturer.EVGA:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.X58_SLI_Classified: // F71882 
                             v.Add(new Voltage("VCC3V", 0, 150, 150));
                             v.Add(new Voltage("CPU VCore", 1, 47, 100));
@@ -1084,10 +1133,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
         private static void GetNuvotonConfigurationF(ISuperIO superIO,
           Manufacturer manufacturer, Model model,
-          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c) {
-            switch (manufacturer) {
+          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c)
+        {
+            switch (manufacturer)
+            {
                 case Manufacturer.ASUS:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.P8P67: // NCT6776F
                         case Model.P8P67_EVO: // NCT6776F
                         case Model.P8P67_PRO: // NCT6776F
@@ -1203,10 +1255,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
 
         private static void GetNuvotonConfigurationD(ISuperIO superIO,
           Manufacturer manufacturer, Model model,
-          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c) {
-            switch (manufacturer) {
+          IList<Voltage> v, IList<Temperature> t, IList<Fan> f, IList<Ctrl> c)
+        {
+            switch (manufacturer)
+            {
                 case Manufacturer.ASUS:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.P8Z77_V: // NCT6779D
                             v.Add(new Voltage("CPU VCore", 0));
                             v.Add(new Voltage("Voltage #2", 1, true));
@@ -1297,10 +1352,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         }
 
         private static void GetWinbondConfigurationEHF(Manufacturer manufacturer,
-          Model model, IList<Voltage> v, IList<Temperature> t, IList<Fan> f) {
-            switch (manufacturer) {
+          Model model, IList<Voltage> v, IList<Temperature> t, IList<Fan> f)
+        {
+            switch (manufacturer)
+            {
                 case Manufacturer.ASRock:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.AOD790GX_128M: // W83627EHF
                             v.Add(new Voltage("CPU VCore", 0));
                             v.Add(new Voltage("Analog +3.3V", 2, 34, 34));
@@ -1360,10 +1418,13 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         }
 
         private static void GetWinbondConfigurationHG(Manufacturer manufacturer,
-          Model model, IList<Voltage> v, IList<Temperature> t, IList<Fan> f) {
-            switch (manufacturer) {
+          Model model, IList<Voltage> v, IList<Temperature> t, IList<Fan> f)
+        {
+            switch (manufacturer)
+            {
                 case Manufacturer.ASRock:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model._880GMH_USB3: // W83627DHG-P
                             v.Add(new Voltage("CPU VCore", 0));
                             v.Add(new Voltage("+3.3V", 3, 34, 34));
@@ -1399,7 +1460,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
                     }
                     break;
                 case Manufacturer.ASUS:
-                    switch (model) {
+                    switch (model)
+                    {
                         case Model.P6T: // W83667HG
                         case Model.P6X58D_E: // W83667HG                 
                         case Model.Rampage_II_GENE: // W83667HG 
@@ -1482,40 +1544,49 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
         public override IHardware Parent => mainboard;
 
 
-        public override string GetReport() {
+        public override string GetReport()
+        {
             return superIO.GetReport();
         }
 
-        public override void Update() {
+        public override void Update()
+        {
             superIO.Update();
 
-            foreach (Sensor sensor in voltages) {
+            foreach (Sensor sensor in voltages)
+            {
                 float? value = readVoltage(sensor.Index);
-                if (value.HasValue) {
+                if (value.HasValue)
+                {
                     sensor.Value = value + (value - sensor.Parameters[2].Value) *
                       sensor.Parameters[0].Value / sensor.Parameters[1].Value;
                     ActivateSensor(sensor);
                 }
             }
 
-            foreach (Sensor sensor in temperatures) {
+            foreach (Sensor sensor in temperatures)
+            {
                 float? value = readTemperature(sensor.Index);
-                if (value.HasValue) {
+                if (value.HasValue)
+                {
                     sensor.Value = value + sensor.Parameters[0].Value;
                     ActivateSensor(sensor);
                 }
             }
 
-            foreach (Sensor sensor in fans) {
+            foreach (Sensor sensor in fans)
+            {
                 float? value = readFan(sensor.Index);
-                if (value.HasValue) {
+                if (value.HasValue)
+                {
                     sensor.Value = value;
                     if (value.Value > 0)
                         ActivateSensor(sensor);
                 }
             }
 
-            foreach (Sensor sensor in controls) {
+            foreach (Sensor sensor in controls)
+            {
                 float? value = readControl(sensor.Index);
                 sensor.Value = value;
             }
@@ -1523,15 +1594,18 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             postUpdate();
         }
 
-        public override void Close() {
-            foreach (Sensor sensor in controls) {
+        public override void Close()
+        {
+            foreach (Sensor sensor in controls)
+            {
                 // restore all controls back to default
                 superIO.SetControl(sensor.Index, null);
             }
             base.Close();
         }
 
-        private class Voltage {
+        private class Voltage
+        {
             public readonly string Name;
             public readonly int Index;
             public readonly float Ri;
@@ -1540,18 +1614,22 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             public readonly bool Hidden;
 
             public Voltage(string name, int index) :
-              this(name, index, false) { }
+              this(name, index, false)
+            { }
 
             public Voltage(string name, int index, bool hidden) :
-              this(name, index, 0, 1, 0, hidden) { }
+              this(name, index, 0, 1, 0, hidden)
+            { }
 
             public Voltage(string name, int index, float ri, float rf) :
-              this(name, index, ri, rf, 0, false) { }
+              this(name, index, ri, rf, 0, false)
+            { }
 
             // float ri = 0, float rf = 1, float vf = 0, bool hidden = false) 
 
             public Voltage(string name, int index,
-              float ri, float rf, float vf, bool hidden) {
+              float ri, float rf, float vf, bool hidden)
+            {
                 this.Name = name;
                 this.Index = index;
                 this.Ri = ri;
@@ -1561,31 +1639,37 @@ namespace OpenHardwareMonitor.Hardware.Mainboard {
             }
         }
 
-        private class Temperature {
+        private class Temperature
+        {
             public readonly string Name;
             public readonly int Index;
 
-            public Temperature(string name, int index) {
+            public Temperature(string name, int index)
+            {
                 this.Name = name;
                 this.Index = index;
             }
         }
 
-        private class Fan {
+        private class Fan
+        {
             public readonly string Name;
             public readonly int Index;
 
-            public Fan(string name, int index) {
+            public Fan(string name, int index)
+            {
                 this.Name = name;
                 this.Index = index;
             }
         }
 
-        private class Ctrl {
+        private class Ctrl
+        {
             public readonly string Name;
             public readonly int Index;
 
-            public Ctrl(string name, int index) {
+            public Ctrl(string name, int index)
+            {
                 this.Name = name;
                 this.Index = index;
             }

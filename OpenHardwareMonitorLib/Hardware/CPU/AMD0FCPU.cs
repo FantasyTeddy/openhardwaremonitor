@@ -13,8 +13,10 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 
-namespace OpenHardwareMonitor.Hardware.CPU {
-    internal sealed class AMD0FCPU : AMDCPU {
+namespace OpenHardwareMonitor.Hardware.CPU
+{
+    internal sealed class AMD0FCPU : AMDCPU
+    {
 
         private readonly Sensor[] coreTemperatures;
         private readonly Sensor[] coreClocks;
@@ -31,7 +33,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
         private readonly uint miscellaneousControlAddress;
 
         public AMD0FCPU(int processorIndex, CPUID[][] cpuid, ISettings settings)
-          : base(processorIndex, cpuid, settings) {
+          : base(processorIndex, cpuid, settings)
+        {
             float offset = -49.0f;
 
             // AM2+ 65nm +21 offset
@@ -39,11 +42,14 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             if (model >= 0x69 && model != 0xc1 && model != 0x6c && model != 0x7c)
                 offset += 21;
 
-            if (model < 40) {
+            if (model < 40)
+            {
                 // AMD Athlon 64 Processors
                 thermSenseCoreSelCPU0 = 0x0;
                 thermSenseCoreSelCPU1 = 0x4;
-            } else {
+            }
+            else
+            {
                 // AMD NPT Family 0Fh Revision F, G have the core selection swapped
                 thermSenseCoreSelCPU0 = 0x4;
                 thermSenseCoreSelCPU1 = 0x0;
@@ -51,9 +57,11 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             // check if processor supports a digital thermal sensor 
             if (cpuid[0][0].ExtData.GetLength(0) > 7 &&
-              (cpuid[0][0].ExtData[7, 3] & 1) != 0) {
+              (cpuid[0][0].ExtData[7, 3] & 1) != 0)
+            {
                 coreTemperatures = new Sensor[coreCount];
-                for (int i = 0; i < coreCount; i++) {
+                for (int i = 0; i < coreCount; i++)
+                {
                     coreTemperatures[i] =
                       new Sensor("Core #" + (i + 1), i, SensorType.Temperature,
                         this, new[] { new ParameterDescription("Offset [°C]",
@@ -61,7 +69,9 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                   "Temperature = Value + Offset.", offset)
                     }, settings);
                 }
-            } else {
+            }
+            else
+            {
                 coreTemperatures = new Sensor[0];
             }
 
@@ -70,7 +80,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             busClock = new Sensor("Bus Speed", 0, SensorType.Clock, this, settings);
             coreClocks = new Sensor[coreCount];
-            for (int i = 0; i < coreClocks.Length; i++) {
+            for (int i = 0; i < coreClocks.Length; i++)
+            {
                 coreClocks[i] = new Sensor(CoreString(i), i + 1, SensorType.Clock,
                   this, settings);
                 if (HasTimeStampCounter)
@@ -80,11 +91,13 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             Update();
         }
 
-        protected override uint[] GetMSRs() {
+        protected override uint[] GetMSRs()
+        {
             return new[] { FIDVID_STATUS };
         }
 
-        public override string GetReport() {
+        public override string GetReport()
+        {
             StringBuilder r = new StringBuilder();
             r.Append(base.GetReport());
 
@@ -96,23 +109,31 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             return r.ToString();
         }
 
-        public override void Update() {
+        public override void Update()
+        {
             base.Update();
 
-            if (Ring0.WaitPciBusMutex(10)) {
+            if (Ring0.WaitPciBusMutex(10))
+            {
 
-                if (miscellaneousControlAddress != Ring0.InvalidPciAddress) {
-                    for (uint i = 0; i < coreTemperatures.Length; i++) {
+                if (miscellaneousControlAddress != Ring0.InvalidPciAddress)
+                {
+                    for (uint i = 0; i < coreTemperatures.Length; i++)
+                    {
                         if (Ring0.WritePciConfig(
                           miscellaneousControlAddress, THERMTRIP_STATUS_REGISTER,
-                          i > 0 ? thermSenseCoreSelCPU1 : thermSenseCoreSelCPU0)) {
+                          i > 0 ? thermSenseCoreSelCPU1 : thermSenseCoreSelCPU0))
+                        {
                             if (Ring0.ReadPciConfig(
                               miscellaneousControlAddress, THERMTRIP_STATUS_REGISTER,
-                              out uint value)) {
+                              out uint value))
+                            {
                                 coreTemperatures[i].Value = ((value >> 16) & 0xFF) +
                                   coreTemperatures[i].Parameters[0].Value;
                                 ActivateSensor(coreTemperatures[i]);
-                            } else {
+                            }
+                            else
+                            {
                                 DeactivateSensor(coreTemperatures[i]);
                             }
                         }
@@ -122,14 +143,17 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 Ring0.ReleasePciBusMutex();
             }
 
-            if (HasTimeStampCounter) {
+            if (HasTimeStampCounter)
+            {
                 double newBusClock = 0;
 
-                for (int i = 0; i < coreClocks.Length; i++) {
+                for (int i = 0; i < coreClocks.Length; i++)
+                {
                     Thread.Sleep(1);
 
                     if (Ring0.RdmsrTx(FIDVID_STATUS, out uint eax, out uint edx,
-                      cpuid[i][0].Affinity)) {
+                      cpuid[i][0].Affinity))
+                    {
                         // CurrFID can be found in eax bits 0-5, MaxFID in 16-21
                         // 8-13 hold StartFID, we don't use that here.
                         double curMP = 0.5 * ((eax & 0x3F) + 8);
@@ -137,13 +161,16 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                         coreClocks[i].Value =
                           (float)(curMP * TimeStampCounterFrequency / maxMP);
                         newBusClock = (float)(TimeStampCounterFrequency / maxMP);
-                    } else {
+                    }
+                    else
+                    {
                         // Fail-safe value - if the code above fails, we'll use this instead
                         coreClocks[i].Value = (float)TimeStampCounterFrequency;
                     }
                 }
 
-                if (newBusClock > 0) {
+                if (newBusClock > 0)
+                {
                     this.busClock.Value = (float)newBusClock;
                     ActivateSensor(this.busClock);
                 }
