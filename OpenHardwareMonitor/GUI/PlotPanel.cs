@@ -299,7 +299,7 @@ namespace OpenHardwareMonitor.GUI
                 }
             }
 
-            this.plot.InvalidatePlot(true);
+            this.plot?.InvalidatePlot(true);
         }
 
     }

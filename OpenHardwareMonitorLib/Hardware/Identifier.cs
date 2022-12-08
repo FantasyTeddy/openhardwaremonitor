@@ -120,5 +120,20 @@ namespace OpenHardwareMonitor.Hardware
                 return id1.CompareTo(id2) > 0;
         }
 
+        public static bool operator <=(Identifier id1, Identifier id2)
+        {
+            if (id1 == null)
+                return true;
+            else
+                return id1.CompareTo(id2) <= 0;
+        }
+
+        public static bool operator >=(Identifier id1, Identifier id2)
+        {
+            if (id1 == null)
+                return id2 == null;
+            else
+                return id1.CompareTo(id2) >= 0;
+        }
     }
 }
