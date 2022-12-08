@@ -1,11 +1,11 @@
 /*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2009-2012 Michael Möller <mmoeller@openhardwaremonitor.org>
-	
+
 */
 
 using System;
@@ -104,7 +104,7 @@ namespace OpenHardwareMonitor.GUI
                 dpiY = b.VerticalResolution;
             }
 
-            // adjust the size of the icon to current dpi (default is 16x16 at 96 dpi) 
+            // adjust the size of the icon to current dpi (default is 16x16 at 96 dpi)
             int width = (int)Math.Round(16 * dpiX / 96);
             int height = (int)Math.Round(16 * dpiY / 96);
 

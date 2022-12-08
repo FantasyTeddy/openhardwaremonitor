@@ -1,11 +1,11 @@
 /*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2009-2020 Michael Möller <mmoeller@openhardwaremonitor.org>
-	
+
 */
 
 using System;
@@ -35,7 +35,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
         private const byte ADDRESS_REGISTER_OFFSET = 0x05;
         private const byte DATA_REGISTER_OFFSET = 0x06;
 
-        // Environment Controller Registers    
+        // Environment Controller Registers
         private const byte CONFIGURATION_REGISTER = 0x00;
         private const byte TEMPERATURE_BASE_REG = 0x29;
         private const byte VENDOR_ID_REGISTER = 0x58;
@@ -256,7 +256,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     break;
             }
 
-            // set the voltage for the ADC LSB 
+            // set the voltage for the ADC LSB
             switch (chip)
             {
                 case Chip.IT8620E:

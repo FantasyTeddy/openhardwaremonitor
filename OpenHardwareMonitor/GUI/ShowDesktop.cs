@@ -1,11 +1,11 @@
 ﻿/*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2010 Michael Möller <mmoeller@openhardwaremonitor.org>
-	
+
 */
 
 using System;
@@ -49,7 +49,7 @@ namespace OpenHardwareMonitor.GUI
               GadgetWindow.SWP_NOSIZE | GadgetWindow.SWP_NOACTIVATE |
               GadgetWindow.SWP_NOSENDCHANGING);
 
-            // start a repeated timer to detect "Show Desktop" events 
+            // start a repeated timer to detect "Show Desktop" events
             timer = new System.Threading.Timer(OnTimer, null,
               System.Threading.Timeout.Infinite, System.Threading.Timeout.Infinite);
         }

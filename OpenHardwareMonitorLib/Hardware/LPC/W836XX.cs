@@ -1,11 +1,11 @@
 ﻿/*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2009-2011 Michael Möller <mmoeller@openhardwaremonitor.org>
-	
+
 */
 
 using System;
@@ -24,7 +24,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
         private readonly byte[] voltageBank = Array.Empty<byte>();
         private readonly float voltageGain = 0.008f;
 
-        // Consts 
+        // Consts
         private const ushort WINBOND_VENDOR_ID = 0x5CA3;
         private const byte HIGH_BYTE = 0x80;
 
@@ -277,7 +277,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 newBits = SetBit(newBits, FAN_DIV_BIT0[i], divisorBits & 1);
             }
 
-            // write new fan divisors 
+            // write new fan divisors
             for (int i = FAN_BIT_REG.Length - 1; i >= 0; i--)
             {
                 byte oldByte = (byte)(bits & 0xFF);

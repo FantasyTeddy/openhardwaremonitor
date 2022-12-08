@@ -1,9 +1,9 @@
 ﻿/*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2010-2020 Michael Möller <mmoeller@openhardwaremonitor.org>
 	Copyright (C) 2015 Dawid Gan <deveee@gmail.com>
 
@@ -49,10 +49,10 @@ namespace OpenHardwareMonitor.Hardware.LPC
             Ring0.WriteIoPort(port + DATA_REGISTER_OFFSET, value);
         }
 
-        // Consts 
+        // Consts
         private const ushort NUVOTON_VENDOR_ID = 0x5CA3;
 
-        // Hardware Monitor Registers    
+        // Hardware Monitor Registers
         private readonly ushort VENDOR_ID_HIGH_REGISTER;
         private readonly ushort VENDOR_ID_LOW_REGISTER;
 

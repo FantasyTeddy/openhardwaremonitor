@@ -1,9 +1,9 @@
 /*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2009-2020 Michael Möller <mmoeller@openhardwaremonitor.org>
 	Copyright (C) 2010 Paul Werelds <paul@werelds.net>
 	Copyright (C) 2012 Prince Samuel <prince.samuel@gmail.com>
@@ -92,7 +92,7 @@ namespace OpenHardwareMonitor.GUI
 
             this.unitManager = new UnitManager(settings);
 
-            // make sure the buffers used for double buffering are not disposed 
+            // make sure the buffers used for double buffering are not disposed
             // after each draw call
             BufferedGraphicsManager.Current.MaximumBuffer =
               Screen.PrimaryScreen.Bounds.Size;
@@ -369,7 +369,7 @@ namespace OpenHardwareMonitor.GUI
                 Show();
             }
 
-            // Create a handle, otherwise calling Close() does not fire FormClosed     
+            // Create a handle, otherwise calling Close() does not fire FormClosed
             IntPtr handle = Handle;
 
             // Make sure the settings are saved when the user logs off
@@ -595,10 +595,10 @@ namespace OpenHardwareMonitor.GUI
                 }
             }
 
-            // if a sensor is assigned a color that's already being used by another 
-            // sensor, try to assign it a new color. This is done only after the 
-            // previous loop sets an unchanging default color for all sensors, so that 
-            // colors jump around as little as possible as sensors get added/removed 
+            // if a sensor is assigned a color that's already being used by another
+            // sensor, try to assign it a new color. This is done only after the
+            // previous loop sets an unchanging default color for all sensors, so that
+            // colors jump around as little as possible as sensors get added/removed
             // from the plot
             var usedColors = new List<Color>();
             foreach (ISensor curSelectedSensor in selected)
@@ -962,7 +962,7 @@ namespace OpenHardwareMonitor.GUI
                 /*
                  * Apparently the user wants to minimize rather than close
                  * Now we still need to check if we're going to the tray or not
-                 * 
+                 *
                  * Note: the correct way to do this would be to send out SC_MINIMIZE,
                  * but since the code here is so simple,
                  * that would just be a waste of time.
@@ -1049,7 +1049,7 @@ namespace OpenHardwareMonitor.GUI
         private void resetClick(object sender, EventArgs e)
         {
             // disable the fallback MainIcon during reset, otherwise icon visibility
-            // might be lost 
+            // might be lost
             systemTray.IsMainIconEnabled = false;
             computer.Reset();
             // restore the MainIcon setting

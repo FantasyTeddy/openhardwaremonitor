@@ -1,11 +1,11 @@
 /*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2009-2020 Michael Möller <mmoeller@openhardwaremonitor.org>
-	
+
 */
 
 using System;
@@ -221,12 +221,12 @@ namespace OpenHardwareMonitor.Hardware.ATI
     {
         /// <summary>
         /// All OK, but need to wait.
-        /// </summary>  
+        /// </summary>
         OK_WAIT = 4,
 
         /// <summary>
         /// All OK, but need restart.
-        /// </summary>  
+        /// </summary>
         OK_RESTART = 3,
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
         OK = 0,
 
         /// <summary>
-        /// Generic Error. Most likely one or more of the Escape calls to the driver 
+        /// Generic Error. Most likely one or more of the Escape calls to the driver
         /// failed!
         /// </summary>
         ERR = -1,
@@ -306,13 +306,13 @@ namespace OpenHardwareMonitor.Hardware.ATI
         ERR_RESOURCE_CONFLICT = -12,
 
         /// <summary>
-        /// Failed to update some of the values. Can be returned by set request that 
+        /// Failed to update some of the values. Can be returned by set request that
         /// include multiple values if not all values were successfully committed.
         /// </summary>
         ERR_SET_INCOMPLETE = -20,
 
         /// <summary>
-        /// There's no Linux XDisplay in Linux Console environment. 
+        /// There's no Linux XDisplay in Linux Console environment.
         /// </summary>
         ERR_NO_XDISPLAY = -21
     }
@@ -563,7 +563,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
 
             Marshal.FreeHGlobal(ptr);
 
-            // the ADLAdapterInfo.VendorID field reported by ADL is wrong on 
+            // the ADLAdapterInfo.VendorID field reported by ADL is wrong on
             // Windows systems (parse error), so we fix this here
             for (int i = 0; i < info.Length; i++)
             {

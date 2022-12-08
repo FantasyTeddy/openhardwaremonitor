@@ -1,11 +1,11 @@
 ﻿/*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2020 Michael Möller <mmoeller@openhardwaremonitor.org>
- 
+
 */
 
 using System;
@@ -153,7 +153,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             ErrorNoPermission = 4,
 
             /// <summary>
-            /// Deprecated: Multiple initializations are now allowed through ref 
+            /// Deprecated: Multiple initializations are now allowed through ref
             /// counting
             /// </summary>
             ErrorAlreadyInitialized = 5,
@@ -214,7 +214,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             ErrorResetRequired = 16,
 
             /// <summary>
-            /// The GPU control device has been blocked by the operating 
+            /// The GPU control device has been blocked by the operating
             /// system/cgroups
             /// </summary>
             ErrorOperatingSystem = 17,
@@ -240,7 +240,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             ErrorNoData = 21,
 
             /// <summary>
-            /// The requested vgpu operation is not available on target device, 
+            /// The requested vgpu operation is not available on target device,
             /// becasue ECC is enabled
             /// </summary>
             ErrorvGpuEccNotSupported = 22,

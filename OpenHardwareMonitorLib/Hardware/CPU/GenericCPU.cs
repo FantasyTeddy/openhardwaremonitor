@@ -1,11 +1,11 @@
 ﻿/*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2010-2011 Michael Möller <mmoeller@openhardwaremonitor.org>
-	
+
 */
 
 using System;
@@ -83,7 +83,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 HasTimeStampCounter = false;
             }
 
-            // check if processor supports an invariant TSC 
+            // check if processor supports an invariant TSC
             if (cpuid[0][0].ExtData.GetLength(0) > 7
               && (cpuid[0][0].ExtData[7, 3] & 0x100) != 0)
             {
@@ -300,7 +300,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 if (error < 0.0001)
                 {
 
-                    // ignore the first reading because there are no initial values 
+                    // ignore the first reading because there are no initial values
                     // ignore readings with too large or too small time window
                     if (lastTime != 0 && delta > 0.5 && delta < 2)
                     {

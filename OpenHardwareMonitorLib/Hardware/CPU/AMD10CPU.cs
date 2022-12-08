@@ -1,11 +1,11 @@
 ﻿/*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2009-2020 Michael Möller <mmoeller@openhardwaremonitor.org>
-	
+
 */
 
 using System;
@@ -123,7 +123,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 default: miscellaneousControlDeviceId = 0; break;
             }
 
-            // get the pci address for the Miscellaneous Control registers 
+            // get the pci address for the Miscellaneous Control registers
             miscellaneousControlAddress = GetPciAddress(
               MISCELLANEOUS_CONTROL_FUNCTION, miscellaneousControlDeviceId);
 
@@ -139,10 +139,10 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
             corePerformanceBoostSupport = (cpuid[0][0].ExtData[7, 3] & (1 << 9)) > 0;
 
-            // set affinity to the first thread for all frequency estimations     
+            // set affinity to the first thread for all frequency estimations
             GroupAffinity previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
 
-            // disable core performance boost  
+            // disable core performance boost
             Ring0.Rdmsr(HWCR, out uint hwcrEax, out uint hwcrEdx);
             if (corePerformanceBoostSupport)
                 Ring0.Wrmsr(HWCR, hwcrEax | (1 << 25), hwcrEdx);

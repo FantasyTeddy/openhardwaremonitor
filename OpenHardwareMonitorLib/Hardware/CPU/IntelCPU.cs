@@ -1,11 +1,11 @@
 /*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2009-2020 Michael Möller <mmoeller@openhardwaremonitor.org>
-	
+
 */
 
 using System;
@@ -147,7 +147,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                                 break;
                             case 0x1A: // Intel Core i7 LGA1366 (45nm)
                             case 0x1E: // Intel Core i5, i7 LGA1156 (45nm)
-                            case 0x1F: // Intel Core i5, i7 
+                            case 0x1F: // Intel Core i5, i7
                             case 0x25: // Intel Core i3, i5, i7 LGA1156 (32nm)
                             case 0x2C: // Intel Core i7 LGA1366 (32nm) 6 Core
                             case 0x2E: // Intel Xeon Processor 7500 series (45nm)
@@ -165,7 +165,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                                 microarchitecture = Microarchitecture.IvyBridge;
                                 tjMax = GetTjMaxFromMSR();
                                 break;
-                            case 0x3C: // Intel Core i5, i7 4xxx LGA1150 (22nm)              
+                            case 0x3C: // Intel Core i5, i7 4xxx LGA1150 (22nm)
                             case 0x3F: // Intel Xeon E5-2600/1600 v3, Core i7-59xx
                                        // LGA2011-v3, Haswell-E (22nm)
                             case 0x45: // Intel Core i5, i7 4xxxU (22nm)
@@ -220,7 +220,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                                 microarchitecture = Microarchitecture.CannonLake;
                                 tjMax = GetTjMaxFromMSR();
                                 break;
-                            case 0x7D: // Intel Core i3, i5, i7 10xxGx (10nm) 
+                            case 0x7D: // Intel Core i3, i5, i7 10xxGx (10nm)
                             case 0x7E:
                             case 0x6A: // Intel Xeon (10nm)
                             case 0x6C:

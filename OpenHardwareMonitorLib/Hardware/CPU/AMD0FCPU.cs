@@ -1,9 +1,9 @@
 ﻿/*
- 
+
   This Source Code Form is subject to the terms of the Mozilla Public
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
- 
+
   Copyright (C) 2009-2020 Michael Möller <mmoeller@openhardwaremonitor.org>
   Copyright (C) 2010 Paul Werelds <paul@werelds.net>
 
@@ -55,7 +55,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 thermSenseCoreSelCPU1 = 0x0;
             }
 
-            // check if processor supports a digital thermal sensor 
+            // check if processor supports a digital thermal sensor
             if (cpuid[0][0].ExtData.GetLength(0) > 7 &&
               (cpuid[0][0].ExtData[7, 3] & 1) != 0)
             {
