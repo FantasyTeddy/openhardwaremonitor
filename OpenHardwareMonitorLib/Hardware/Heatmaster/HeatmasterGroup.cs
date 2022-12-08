@@ -53,8 +53,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
                             RegistryKey subKey =
                               key.OpenSubKey(subKeyName + "\\" + "Device Parameters");
                             if (subKey != null) {
-                                string name = subKey.GetValue("PortName") as string;
-                                if (name != null && !result.Contains(name))
+                                if (subKey.GetValue("PortName") is string name && !result.Contains(name))
                                     result.Add(name);
                             }
                         }

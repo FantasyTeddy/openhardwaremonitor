@@ -44,8 +44,7 @@ namespace OpenHardwareMonitor.GUI {
         private Node GetNode(TreePath treePath) {
             Node parent = root;
             foreach (object obj in treePath.FullPath) {
-                Node node = obj as Node;
-                if (node == null || node.Parent != parent)
+                if (!(obj is Node node) || node.Parent != parent)
                     return null;
                 parent = node;
             }

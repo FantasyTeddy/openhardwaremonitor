@@ -128,8 +128,7 @@ namespace OpenHardwareMonitor.GUI {
             if (obj == null)
                 return false;
 
-            SensorNode s = obj as SensorNode;
-            if (s == null)
+            if (!(obj is SensorNode s))
                 return false;
 
             return Sensor == s.Sensor;

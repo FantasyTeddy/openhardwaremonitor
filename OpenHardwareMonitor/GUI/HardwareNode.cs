@@ -80,8 +80,7 @@ namespace OpenHardwareMonitor.GUI {
                 if (typeNode.SensorType == sensor.SensorType) {
                     SensorNode sensorNode = null;
                     foreach (Node node in typeNode.Nodes) {
-                        SensorNode n = node as SensorNode;
-                        if (n != null && n.Sensor == sensor)
+                        if (node is SensorNode n && n.Sensor == sensor)
                             sensorNode = n;
                     }
                     if (sensorNode != null) {

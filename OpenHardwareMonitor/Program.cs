@@ -110,8 +110,7 @@ namespace OpenHardwareMonitor {
         public static void CurrentDomain_UnhandledException(object sender,
           UnhandledExceptionEventArgs args) {
             try {
-                Exception e = args.ExceptionObject as Exception;
-                if (e != null)
+                if (args.ExceptionObject is Exception e)
                     ReportException(e);
             } catch {
             } finally {
