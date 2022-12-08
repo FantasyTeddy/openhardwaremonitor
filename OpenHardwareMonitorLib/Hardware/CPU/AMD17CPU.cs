@@ -71,7 +71,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             {
                 foreach (TctlOffsetItem item in tctlOffsetItems)
                 {
-                    if (cpuName.StartsWith(item.Name))
+                    if (cpuName.StartsWith(item.Name, StringComparison.Ordinal))
                     {
                         tctlOffset = item.Offset;
                         break;
