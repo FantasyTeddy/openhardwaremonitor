@@ -100,6 +100,9 @@ csharp_style_prefer_index_operator = false:none
 csharp_style_prefer_range_operator = false:none
 csharp_style_throw_expression = true:suggestion
 
+# 'using' directive preferences
+csharp_using_directive_placement = outside_namespace:suggestion
+
 # New line preferences
 csharp_new_line_before_open_brace = none
 csharp_new_line_before_else = false
@@ -126,7 +129,6 @@ dotnet_naming_symbols.constant_fields.required_modifiers = const
 dotnet_naming_style.pascal_case_style.capitalization = pascal_case
 
 # Code style defaults
-csharp_using_directive_placement = outside_namespace:suggestion
 csharp_preserve_single_line_blocks = true:none
 csharp_preserve_single_line_statements = false:none
 

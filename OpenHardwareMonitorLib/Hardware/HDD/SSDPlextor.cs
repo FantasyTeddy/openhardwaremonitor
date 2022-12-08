@@ -8,10 +8,10 @@
 	
 */
 
-namespace OpenHardwareMonitor.Hardware.HDD {
-    using System.Collections.Generic;
-    using OpenHardwareMonitor.Collections;
+using System.Collections.Generic;
+using OpenHardwareMonitor.Collections;
 
+namespace OpenHardwareMonitor.Hardware.HDD {
     [NamePrefix("PLEXTOR")]
     internal class SSDPlextor : AbstractHarddrive {
 
