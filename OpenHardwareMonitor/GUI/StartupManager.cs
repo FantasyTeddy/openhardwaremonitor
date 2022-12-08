@@ -10,19 +10,21 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using OpenHardwareMonitor.TaskScheduler;
+using Microsoft.Win32.TaskScheduler;
 
 namespace OpenHardwareMonitor.GUI
 {
     public class StartupManager
     {
 
-        private readonly TaskSchedulerClass scheduler;
+        private readonly TaskService taskService;
         private bool startup;
         private const string REGISTRY_RUN =
           @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -45,7 +47,7 @@ namespace OpenHardwareMonitor.GUI
         {
             if (Hardware.OperatingSystem.IsUnix)
             {
-                scheduler = null;
+                taskService = null;
                 IsAvailable = false;
                 return;
             }
@@ -54,37 +56,43 @@ namespace OpenHardwareMonitor.GUI
             {
                 try
                 {
-                    scheduler = new TaskSchedulerClass();
-                    scheduler.Connect(null, null, null, null);
+                    taskService = new TaskService();
                 }
                 catch
                 {
-                    scheduler = null;
+                    taskService = null;
                 }
 
-                if (scheduler != null)
+                if (taskService != null)
                 {
                     try
                     {
                         try
                         {
                             // check if the taskscheduler is running
-                            IRunningTaskCollection collection = scheduler.GetRunningTasks(0);
+                            RunningTaskCollection collection = taskService.GetRunningTasks(false);
                         }
                         catch (ArgumentException) { }
 
-                        ITaskFolder folder = scheduler.GetFolder("\\Open Hardware Monitor");
-                        IRegisteredTask task = folder.GetTask("Startup");
-                        startup = (task != null) &&
-                          (task.Definition.Triggers.Count > 0) &&
-                          (task.Definition.Triggers[1].Type ==
-                            TASK_TRIGGER_TYPE2.TASK_TRIGGER_LOGON) &&
-                          (task.Definition.Actions.Count > 0) &&
-                          (task.Definition.Actions[1].Type ==
-                            TASK_ACTION_TYPE.TASK_ACTION_EXEC) &&
-                          ((task.Definition.Actions[1] as IExecAction) != null) &&
-                          ((task.Definition.Actions[1] as IExecAction).Path ==
-                            Application.ExecutablePath);
+                        TaskFolder folder = taskService.GetFolder("\\Open Hardware Monitor");
+                        if (folder != null)
+                        {
+                            Task task = folder.Tasks["Startup"];
+                            startup = (task != null) &&
+                              (task.Definition.Triggers.Count > 0) &&
+                              (task.Definition.Triggers[1].TriggerType ==
+                                TaskTriggerType.Logon) &&
+                              (task.Definition.Actions.Count > 0) &&
+                              (task.Definition.Actions[1].ActionType ==
+                                TaskActionType.Execute) &&
+                              ((task.Definition.Actions[1] as ExecAction) != null) &&
+                              ((task.Definition.Actions[1] as ExecAction).Path ==
+                                Application.ExecutablePath);
+                        }
+                        else
+                        {
+                            startup = false;
+                        }
 
                     }
                     catch (IOException)
@@ -93,24 +101,24 @@ namespace OpenHardwareMonitor.GUI
                     }
                     catch (UnauthorizedAccessException)
                     {
-                        scheduler = null;
+                        taskService = null;
                     }
                     catch (COMException)
                     {
-                        scheduler = null;
+                        taskService = null;
                     }
                     catch (NotImplementedException)
                     {
-                        scheduler = null;
+                        taskService = null;
                     }
                 }
             }
             else
             {
-                scheduler = null;
+                taskService = null;
             }
 
-            if (scheduler == null)
+            if (taskService == null)
             {
                 try
                 {
@@ -140,51 +148,51 @@ namespace OpenHardwareMonitor.GUI
 
         private void CreateSchedulerTask()
         {
-            ITaskDefinition definition = scheduler.NewTask(0);
+            TaskDefinition definition = taskService.NewTask();
             definition.RegistrationInfo.Description =
               "This task starts the Open Hardware Monitor on Windows startup.";
             definition.Principal.RunLevel =
-              TASK_RUNLEVEL.TASK_RUNLEVEL_HIGHEST;
+              TaskRunLevel.Highest;
             definition.Settings.DisallowStartIfOnBatteries = false;
             definition.Settings.StopIfGoingOnBatteries = false;
-            definition.Settings.ExecutionTimeLimit = "PT0S";
+            definition.Settings.ExecutionTimeLimit = TimeSpan.Zero;
 
-            ILogonTrigger trigger = (ILogonTrigger)definition.Triggers.Create(
-              TASK_TRIGGER_TYPE2.TASK_TRIGGER_LOGON);
+            LogonTrigger trigger = (LogonTrigger)definition.Triggers.AddNew(
+              TaskTriggerType.Logon);
 
-            IExecAction action = (IExecAction)definition.Actions.Create(
-              TASK_ACTION_TYPE.TASK_ACTION_EXEC);
+            ExecAction action = (ExecAction)definition.Actions.AddNew(
+              TaskActionType.Execute);
             action.Path = Application.ExecutablePath;
             action.WorkingDirectory =
               Path.GetDirectoryName(Application.ExecutablePath);
 
-            ITaskFolder root = scheduler.GetFolder("\\");
-            ITaskFolder folder;
+            TaskFolder root = taskService.GetFolder("\\");
+            TaskFolder folder;
             try
             {
-                folder = root.GetFolder("Open Hardware Monitor");
+                folder = root.SubFolders["Open Hardware Monitor"];
             }
             catch (IOException)
             {
                 folder = root.CreateFolder("Open Hardware Monitor", "");
             }
             folder.RegisterTaskDefinition("Startup", definition,
-              (int)TASK_CREATION.TASK_CREATE_OR_UPDATE, null, null,
-              TASK_LOGON_TYPE.TASK_LOGON_INTERACTIVE_TOKEN, "");
+              TaskCreation.CreateOrUpdate, null, null,
+              TaskLogonType.InteractiveToken, "");
         }
 
         private void DeleteSchedulerTask()
         {
-            ITaskFolder root = scheduler.GetFolder("\\");
+            TaskFolder root = taskService.GetFolder("\\");
             try
             {
-                ITaskFolder folder = root.GetFolder("Open Hardware Monitor");
-                folder.DeleteTask("Startup", 0);
+                TaskFolder folder = root.SubFolders["Open Hardware Monitor"];
+                folder.DeleteTask("Startup");
             }
             catch (IOException) { }
             try
             {
-                root.DeleteFolder("Open Hardware Monitor", 0);
+                root.DeleteFolder("Open Hardware Monitor");
             }
             catch (IOException) { }
         }
@@ -212,7 +220,7 @@ namespace OpenHardwareMonitor.GUI
                 {
                     if (IsAvailable)
                     {
-                        if (scheduler != null)
+                        if (taskService != null)
                         {
                             if (value)
                                 CreateSchedulerTask();
