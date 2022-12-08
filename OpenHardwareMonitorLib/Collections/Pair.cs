@@ -11,17 +11,17 @@
 namespace OpenHardwareMonitor.Collections
 {
 
-    public struct Pair<F, S>
+    public struct Pair<TFirst, TSecond>
     {
-        public Pair(F first, S second)
+        public Pair(TFirst first, TSecond second)
         {
             First = first;
             Second = second;
         }
 
-        public F First { get; set; }
+        public TFirst First { get; set; }
 
-        public S Second { get; set; }
+        public TSecond Second { get; set; }
 
         public override int GetHashCode()
         {

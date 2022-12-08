@@ -904,12 +904,12 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, Guid("839D7762-5121-4009-9234-4F0D19394F04"), CoClass(typeof(TaskHandlerPSClass))]
-    public interface TaskHandlerPS : ITaskHandler
+    public interface ITaskHandlerPS : ITaskHandler
     {
     }
 
     [ComImport, TypeLibType(2), ClassInterface((short)0), Guid("F2A69DB7-DA2C-4352-9066-86FEE6DACAC9")]
-    public class TaskHandlerPSClass : ITaskHandler, TaskHandlerPS
+    public class TaskHandlerPSClass : ITaskHandler, ITaskHandlerPS
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         public extern virtual void Pause();
@@ -922,12 +922,12 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, Guid("EAEC7A8F-27A0-4DDC-8675-14726A01A38A"), CoClass(typeof(TaskHandlerStatusPSClass))]
-    public interface TaskHandlerStatusPS : ITaskHandlerStatus
+    public interface ITaskHandlerStatusPS : ITaskHandlerStatus
     {
     }
 
     [ComImport, ClassInterface((short)0), Guid("9F15266D-D7BA-48F0-93C1-E6895F6FE5AC"), TypeLibType(2)]
-    public class TaskHandlerStatusPSClass : ITaskHandlerStatus, TaskHandlerStatusPS, ITaskVariables
+    public class TaskHandlerStatusPSClass : ITaskHandlerStatus, ITaskHandlerStatusPS, ITaskVariables
     {
         [return: MarshalAs(UnmanagedType.BStr)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
@@ -944,12 +944,12 @@ namespace OpenHardwareMonitor.TaskScheduler
     }
 
     [ComImport, CoClass(typeof(TaskSchedulerClass)), Guid("2FABA4C7-4DA9-4013-9697-20CC3FD40F85")]
-    public interface TaskScheduler : ITaskService
+    public interface ITaskScheduler : ITaskService
     {
     }
 
     [ComImport, ClassInterface((short)0), DefaultMember("TargetServer"), Guid("0F87369F-A4E5-4CFC-BD3E-73E6154572DD"), TypeLibType(2)]
-    public class TaskSchedulerClass : ITaskService, TaskScheduler
+    public class TaskSchedulerClass : ITaskService, ITaskScheduler
     {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(4)]
         public extern virtual void Connect([In, Optional, MarshalAs(UnmanagedType.Struct)] object serverName, [In, Optional, MarshalAs(UnmanagedType.Struct)] object user, [In, Optional, MarshalAs(UnmanagedType.Struct)] object domain, [In, Optional, MarshalAs(UnmanagedType.Struct)] object password);
