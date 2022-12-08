@@ -633,12 +633,12 @@ namespace OpenHardwareMonitor.Hardware.LPC
             r.AppendLine();
             foreach (ushort address in addresses)
             {
-                r.Append(" ");
+                r.Append(' ');
                 r.Append(address.ToString("X4", CultureInfo.InvariantCulture));
                 r.Append("  ");
                 for (ushort j = 0; j <= 0xF; j++)
                 {
-                    r.Append(" ");
+                    r.Append(' ');
                     r.Append(ReadByte((ushort)(address | j)).ToString(
                       "X2", CultureInfo.InvariantCulture));
                 }

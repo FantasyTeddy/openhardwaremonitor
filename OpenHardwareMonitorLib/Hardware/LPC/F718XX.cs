@@ -134,12 +134,12 @@ namespace OpenHardwareMonitor.Hardware.LPC
             r.AppendLine();
             for (int i = 0; i <= 0xF; i++)
             {
-                r.Append(" ");
+                r.Append(' ');
                 r.Append((i << 4).ToString("X2", CultureInfo.InvariantCulture));
                 r.Append("  ");
                 for (int j = 0; j <= 0xF; j++)
                 {
-                    r.Append(" ");
+                    r.Append(' ');
                     r.Append(ReadByte((byte)((i << 4) | j)).ToString("X2",
                       CultureInfo.InvariantCulture));
                 }

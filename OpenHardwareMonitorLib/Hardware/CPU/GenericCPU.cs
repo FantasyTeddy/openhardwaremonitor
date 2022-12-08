@@ -204,7 +204,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
             if (Ring0.RdmsrTx(msr, out uint eax, out uint edx, affinity))
             {
-                r.Append(" ");
+                r.Append(' ');
                 r.Append(msr.ToString("X8", CultureInfo.InvariantCulture));
                 r.Append("  ");
                 r.Append(edx.ToString("X8", CultureInfo.InvariantCulture));

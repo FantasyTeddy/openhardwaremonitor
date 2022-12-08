@@ -312,7 +312,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
             r.AppendLine();
             for (int i = 0; i <= 0x11; i++)
             {
-                r.Append(" ");
+                r.Append(' ');
                 r.Append((i << 4).ToString("X3", CultureInfo.InvariantCulture));
                 r.Append("  ");
                 for (int j = 0; j <= 0xF; j++)
@@ -320,7 +320,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
                     int index = (i << 4) | j;
                     if (index < primaryData.Length)
                     {
-                        r.Append(" ");
+                        r.Append(' ');
                         r.Append(primaryData[index].ToString("X2", CultureInfo.InvariantCulture));
                     }
                 }
@@ -336,7 +336,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
                 r.AppendLine();
                 for (int i = 0; i <= 0x11; i++)
                 {
-                    r.Append(" ");
+                    r.Append(' ');
                     r.Append((i << 4).ToString("X3", CultureInfo.InvariantCulture));
                     r.Append("  ");
                     for (int j = 0; j <= 0xF; j++)
@@ -344,7 +344,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
                         int index = (i << 4) | j;
                         if (index < alternativeData.Length)
                         {
-                            r.Append(" ");
+                            r.Append(' ');
                             r.Append(alternativeData[index].ToString("X2", CultureInfo.InvariantCulture));
                         }
                     }

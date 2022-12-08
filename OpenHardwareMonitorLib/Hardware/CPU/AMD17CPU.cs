@@ -191,7 +191,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 {
                     if (ReadSmnRegister(registers[i], out uint value))
                     {
-                        r.Append(" ");
+                        r.Append(' ');
                         r.Append(registers[i].ToString("X8", CultureInfo.InvariantCulture));
                         r.Append("  ");
                         r.Append(value.ToString("X8", CultureInfo.InvariantCulture));

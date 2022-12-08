@@ -249,7 +249,7 @@ namespace OpenHardwareMonitor.Hardware
 
                 for (int i = 0; i < Math.Ceiling(base64.Length / 64.0); i++)
                 {
-                    r.Append(" ");
+                    r.Append(' ');
                     for (int j = 0; j < 0x40; j++)
                     {
                         int index = (i << 6) | j;

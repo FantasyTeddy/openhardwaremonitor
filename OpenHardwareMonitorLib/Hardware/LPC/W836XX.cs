@@ -313,12 +313,12 @@ namespace OpenHardwareMonitor.Hardware.LPC
             r.AppendLine();
             for (int i = 0; i <= 0x7; i++)
             {
-                r.Append(" ");
+                r.Append(' ');
                 r.Append((i << 4).ToString("X2", CultureInfo.InvariantCulture));
                 r.Append("  ");
                 for (int j = 0; j <= 0xF; j++)
                 {
-                    r.Append(" ");
+                    r.Append(' ');
                     r.Append(ReadByte(0, (byte)((i << 4) | j)).ToString(
                       "X2", CultureInfo.InvariantCulture));
                 }
@@ -329,12 +329,12 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 r.AppendLine("Bank " + k);
                 for (int i = 0x5; i < 0x6; i++)
                 {
-                    r.Append(" ");
+                    r.Append(' ');
                     r.Append((i << 4).ToString("X2", CultureInfo.InvariantCulture));
                     r.Append("  ");
                     for (int j = 0; j <= 0xF; j++)
                     {
-                        r.Append(" ");
+                        r.Append(' ');
                         r.Append(ReadByte((byte)k, (byte)((i << 4) | j)).ToString(
                           "X2", CultureInfo.InvariantCulture));
                     }

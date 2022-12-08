@@ -153,7 +153,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
             for (int i = 0; i < data.GetLength(0); i++)
             {
-                r.Append(" ");
+                r.Append(' ');
                 r.Append((i + offset).ToString("X8", CultureInfo.InvariantCulture));
                 for (int j = 0; j < 4; j++)
                 {

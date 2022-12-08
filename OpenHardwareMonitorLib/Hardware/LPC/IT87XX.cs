@@ -339,12 +339,12 @@ namespace OpenHardwareMonitor.Hardware.LPC
             r.AppendLine();
             for (int i = 0; i <= 0xA; i++)
             {
-                r.Append(" ");
+                r.Append(' ');
                 r.Append((i << 4).ToString("X2", CultureInfo.InvariantCulture));
                 r.Append("  ");
                 for (int j = 0; j <= 0xF; j++)
                 {
-                    r.Append(" ");
+                    r.Append(' ');
                     byte value = ReadByte((byte)((i << 4) | j), out bool valid);
                     r.Append(
                       valid ? value.ToString("X2", CultureInfo.InvariantCulture) : "??");
@@ -357,7 +357,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
             r.AppendLine();
             for (int i = 0; i < gpioCount; i++)
             {
-                r.Append(" ");
+                r.Append(' ');
                 r.Append(ReadGPIO(i).Value.ToString("X2",
                   CultureInfo.InvariantCulture));
             }

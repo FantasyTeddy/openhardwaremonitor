@@ -377,7 +377,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 {
                     r.Append("Driver Version: ");
                     r.Append(driverVersion.DriverVersion / 100);
-                    r.Append(".");
+                    r.Append('.');
                     r.Append((driverVersion.DriverVersion % 100).ToString("00",
                       CultureInfo.InvariantCulture));
                     r.AppendLine();
