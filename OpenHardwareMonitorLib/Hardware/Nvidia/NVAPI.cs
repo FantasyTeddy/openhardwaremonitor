@@ -291,24 +291,15 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
         public const int MAX_MEMORY_VALUES_PER_GPU = 5;
         public const int MAX_FAN_COOLERS_STATUS_ITEMS = 32;
 
-        public static readonly uint GPU_THERMAL_SETTINGS_VER = (uint)
-          Marshal.SizeOf(typeof(NvGPUThermalSettings)) | 0x10000;
-        public static readonly uint GPU_CLOCKS_VER = (uint)
-          Marshal.SizeOf(typeof(NvClocks)) | 0x20000;
-        public static readonly uint GPU_DYNAMIC_PSTATES_INFO_EX_VER = (uint)
-          Marshal.SizeOf(typeof(NvDynamicPstatesInfoEx)) | 0x10000;
-        public static readonly uint GPU_DYNAMIC_PSTATES_INFO_VER = (uint)
-          Marshal.SizeOf(typeof(NvDynamicPstatesInfo)) | 0x10000;
-        public static readonly uint GPU_COOLER_SETTINGS_VER = (uint)
-          Marshal.SizeOf(typeof(NvGPUCoolerSettings)) | 0x20000;
-        public static readonly uint DISPLAY_DRIVER_MEMORY_INFO_VER = (uint)
-          Marshal.SizeOf(typeof(NvDisplayDriverMemoryInfo)) | 0x20000;
-        public static readonly uint DISPLAY_DRIVER_VERSION_VER = (uint)
-          Marshal.SizeOf(typeof(NvDisplayDriverVersion)) | 0x10000;
-        public static readonly uint GPU_COOLER_LEVELS_VER = (uint)
-          Marshal.SizeOf(typeof(NvGPUCoolerLevels)) | 0x10000;
-        public static readonly uint GPU_FAN_COOLERS_STATUS_VER = (uint)
-          Marshal.SizeOf(typeof(NvFanCoolersStatus)) | 0x10000;
+        public static readonly uint GPU_THERMAL_SETTINGS_VER = (uint)Marshal.SizeOf(typeof(NvGPUThermalSettings)) | 0x10000;
+        public static readonly uint GPU_CLOCKS_VER = (uint)Marshal.SizeOf(typeof(NvClocks)) | 0x20000;
+        public static readonly uint GPU_DYNAMIC_PSTATES_INFO_EX_VER = (uint)Marshal.SizeOf(typeof(NvDynamicPstatesInfoEx)) | 0x10000;
+        public static readonly uint GPU_DYNAMIC_PSTATES_INFO_VER = (uint)Marshal.SizeOf(typeof(NvDynamicPstatesInfo)) | 0x10000;
+        public static readonly uint GPU_COOLER_SETTINGS_VER = (uint)Marshal.SizeOf(typeof(NvGPUCoolerSettings)) | 0x20000;
+        public static readonly uint DISPLAY_DRIVER_MEMORY_INFO_VER = (uint)Marshal.SizeOf(typeof(NvDisplayDriverMemoryInfo)) | 0x20000;
+        public static readonly uint DISPLAY_DRIVER_VERSION_VER = (uint)Marshal.SizeOf(typeof(NvDisplayDriverVersion)) | 0x10000;
+        public static readonly uint GPU_COOLER_LEVELS_VER = (uint)Marshal.SizeOf(typeof(NvGPUCoolerLevels)) | 0x10000;
+        public static readonly uint GPU_FAN_COOLERS_STATUS_VER = (uint)Marshal.SizeOf(typeof(NvFanCoolersStatus)) | 0x10000;
 
         private delegate IntPtr nvapi_QueryInterfaceDelegate(uint id);
 

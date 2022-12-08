@@ -557,8 +557,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
             ADLStatus status = _ADL_Adapter_AdapterInfo_Get(ptr, size);
             for (int i = 0; i < info.Length; i++)
             {
-                info[i] = (ADLAdapterInfo)
-                  Marshal.PtrToStructure((IntPtr)((long)ptr + i * elementSize),
+                info[i] = (ADLAdapterInfo)Marshal.PtrToStructure((IntPtr)((long)ptr + i * elementSize),
                   typeof(ADLAdapterInfo));
             }
 

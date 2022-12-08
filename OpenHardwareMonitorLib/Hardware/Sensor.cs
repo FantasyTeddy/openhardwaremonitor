@@ -34,14 +34,14 @@ namespace OpenHardwareMonitor.Hardware
         private int count;
 
         public Sensor(string name, int index, SensorType sensorType,
-          Hardware hardware, ISettings settings) :
-          this(name, index, sensorType, hardware, null, settings)
+          Hardware hardware, ISettings settings)
+          : this(name, index, sensorType, hardware, null, settings)
         { }
 
         public Sensor(string name, int index, SensorType sensorType,
           Hardware hardware, ParameterDescription[] parameterDescriptions,
-          ISettings settings) :
-          this(name, index, false, sensorType, hardware,
+          ISettings settings)
+          : this(name, index, false, sensorType, hardware,
             parameterDescriptions, settings)
         { }
 

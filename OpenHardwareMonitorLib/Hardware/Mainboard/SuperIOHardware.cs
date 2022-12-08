@@ -1613,16 +1613,16 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
             public readonly float Vf;
             public readonly bool Hidden;
 
-            public Voltage(string name, int index) :
-              this(name, index, false)
+            public Voltage(string name, int index)
+              : this(name, index, false)
             { }
 
-            public Voltage(string name, int index, bool hidden) :
-              this(name, index, 0, 1, 0, hidden)
+            public Voltage(string name, int index, bool hidden)
+              : this(name, index, 0, 1, 0, hidden)
             { }
 
-            public Voltage(string name, int index, float ri, float rf) :
-              this(name, index, ri, rf, 0, false)
+            public Voltage(string name, int index, float ri, float rf)
+              : this(name, index, ri, rf, 0, false)
             { }
 
             // float ri = 0, float rf = 1, float vf = 0, bool hidden = false) 

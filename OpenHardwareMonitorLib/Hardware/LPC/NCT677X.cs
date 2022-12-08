@@ -540,8 +540,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 if ((temperatureSourceMask & (1 << temperaturesSource[i])) > 0)
                     continue;
 
-                float? temperature = (sbyte)
-                  ReadByte(alternateTemperatureRegister[i].Value);
+                float? temperature = (sbyte)ReadByte(alternateTemperatureRegister[i].Value);
 
                 if (temperature > 125 || temperature < -55)
                     temperature = null;
