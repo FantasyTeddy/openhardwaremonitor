@@ -8,10 +8,19 @@
 	
 */
 
+using System;
+
 namespace OpenHardwareMonitor.Hardware
 {
+    public class HardwareEventArgs : EventArgs
+    {
+        public HardwareEventArgs(IHardware hardware)
+        {
+            Hardware = hardware;
+        }
 
-    public delegate void HardwareEventHandler(IHardware hardware);
+        public IHardware Hardware { get; }
+    }
 
     public interface IComputer : IElement
     {
@@ -28,7 +37,7 @@ namespace OpenHardwareMonitor.Hardware
 
         string GetReport();
 
-        event HardwareEventHandler HardwareAdded;
-        event HardwareEventHandler HardwareRemoved;
+        event EventHandler<HardwareEventArgs> HardwareAdded;
+        event EventHandler<HardwareEventArgs> HardwareRemoved;
     }
 }

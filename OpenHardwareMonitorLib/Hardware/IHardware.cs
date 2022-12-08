@@ -8,10 +8,19 @@
 	
 */
 
+using System;
+
 namespace OpenHardwareMonitor.Hardware
 {
+    public class SensorEventArgs : EventArgs
+    {
+        public SensorEventArgs(ISensor sensor)
+        {
+            Sensor = sensor;
+        }
 
-    public delegate void SensorEventHandler(ISensor sensor);
+        public ISensor Sensor { get; }
+    }
 
     public enum HardwareType
     {
@@ -44,7 +53,7 @@ namespace OpenHardwareMonitor.Hardware
 
         ISensor[] Sensors { get; }
 
-        event SensorEventHandler SensorAdded;
-        event SensorEventHandler SensorRemoved;
+        event EventHandler<SensorEventArgs> SensorAdded;
+        event EventHandler<SensorEventArgs> SensorRemoved;
     }
 }

@@ -38,8 +38,8 @@ namespace OpenHardwareMonitor.GUI
             foreach (ISensor sensor in hardware.Sensors)
                 SensorAdded(sensor);
 
-            hardware.SensorAdded += new SensorEventHandler(SensorAdded);
-            hardware.SensorRemoved += new SensorEventHandler(SensorRemoved);
+            hardware.SensorAdded += (_, e) => SensorAdded(e.Sensor);
+            hardware.SensorRemoved += (_, e) => SensorRemoved(e.Sensor);
 
             this.expandedIdentifier = new Identifier(hardware.Identifier, "expanded");
             base.IsExpanded =

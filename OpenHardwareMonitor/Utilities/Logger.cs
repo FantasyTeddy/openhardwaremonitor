@@ -35,8 +35,8 @@ namespace OpenHardwareMonitor.Utilities
         public Logger(IComputer computer)
         {
             this.computer = computer;
-            this.computer.HardwareAdded += HardwareAdded;
-            this.computer.HardwareRemoved += HardwareRemoved;
+            this.computer.HardwareAdded += (_, e) => HardwareAdded(e.Hardware);
+            this.computer.HardwareRemoved += (_, e) => HardwareRemoved(e.Hardware);
         }
 
         private void HardwareRemoved(IHardware hardware)
@@ -44,7 +44,7 @@ namespace OpenHardwareMonitor.Utilities
             hardware.SensorAdded -= SensorAdded;
             hardware.SensorRemoved -= SensorRemoved;
             foreach (ISensor sensor in hardware.Sensors)
-                SensorRemoved(sensor);
+                RemoveSensor(sensor);
             foreach (IHardware subHardware in hardware.SubHardware)
                 HardwareRemoved(subHardware);
         }
@@ -52,14 +52,19 @@ namespace OpenHardwareMonitor.Utilities
         private void HardwareAdded(IHardware hardware)
         {
             foreach (ISensor sensor in hardware.Sensors)
-                SensorAdded(sensor);
+                AddSensor(sensor);
             hardware.SensorAdded += SensorAdded;
             hardware.SensorRemoved += SensorRemoved;
             foreach (IHardware subHardware in hardware.SubHardware)
                 HardwareAdded(subHardware);
         }
 
-        private void SensorAdded(ISensor sensor)
+        private void SensorAdded(object sender, SensorEventArgs e)
+        {
+            AddSensor(e.Sensor);
+        }
+
+        private void AddSensor(ISensor sensor)
         {
             if (sensors == null)
                 return;
@@ -71,7 +76,12 @@ namespace OpenHardwareMonitor.Utilities
             }
         }
 
-        private void SensorRemoved(ISensor sensor)
+        private void SensorRemoved(object sender, SensorEventArgs e)
+        {
+            RemoveSensor(e.Sensor);
+        }
+
+        private void RemoveSensor(ISensor sensor)
         {
             if (sensors == null)
                 return;
@@ -118,12 +128,12 @@ namespace OpenHardwareMonitor.Utilities
             }
 
             sensors = new ISensor[identifiers.Length];
-            SensorVisitor visitor = new SensorVisitor(sensor =>
+            SensorVisitor visitor = new SensorVisitor((_, e) =>
             {
                 for (int i = 0; i < identifiers.Length; i++)
                 {
-                    if (sensor.Identifier.ToString() == identifiers[i])
-                        sensors[i] = sensor;
+                    if (e.Sensor.Identifier.ToString() == identifiers[i])
+                        sensors[i] = e.Sensor;
                 }
             });
             visitor.VisitComputer(computer);
@@ -133,9 +143,9 @@ namespace OpenHardwareMonitor.Utilities
         private void CreateNewLogFile()
         {
             IList<ISensor> list = new List<ISensor>();
-            SensorVisitor visitor = new SensorVisitor(sensor =>
+            SensorVisitor visitor = new SensorVisitor((_, e) =>
             {
-                list.Add(sensor);
+                list.Add(e.Sensor);
             });
             visitor.VisitComputer(computer);
             sensors = list.ToArray();

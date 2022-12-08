@@ -132,16 +132,24 @@ namespace OpenHardwareMonitor.GUI
                                 model.OnNodeRemoved(parent, index, this);
                         }
                     }
-                    IsVisibleChanged?.Invoke(this);
+                    IsVisibleChanged?.Invoke(this, new NodeEventArgs(this));
                 }
             }
         }
 
-        public delegate void NodeEventHandler(Node node);
+        public class NodeEventArgs : EventArgs
+        {
+            public NodeEventArgs(Node node)
+            {
+                Node = node;
+            }
 
-        public event NodeEventHandler IsVisibleChanged;
-        public event NodeEventHandler NodeAdded;
-        public event NodeEventHandler NodeRemoved;
+            public Node Node { get; }
+        }
+
+        public event EventHandler<NodeEventArgs> IsVisibleChanged;
+        public event EventHandler<NodeEventArgs> NodeAdded;
+        public event EventHandler<NodeEventArgs> NodeRemoved;
 
         private class NodeCollection : Collection<Node>
         {
@@ -171,7 +179,7 @@ namespace OpenHardwareMonitor.GUI
 
                     TreeModel model = owner.RootTreeModel();
                     model?.OnStructureChanged(owner);
-                    owner.NodeAdded?.Invoke(item);
+                    owner.NodeAdded?.Invoke(this, new NodeEventArgs(item));
                 }
             }
 
@@ -183,7 +191,7 @@ namespace OpenHardwareMonitor.GUI
 
                 TreeModel model = owner.RootTreeModel();
                 model?.OnStructureChanged(owner);
-                owner.NodeRemoved?.Invoke(item);
+                owner.NodeRemoved?.Invoke(this, new NodeEventArgs(item));
             }
 
             protected override void SetItem(int index, Node item)

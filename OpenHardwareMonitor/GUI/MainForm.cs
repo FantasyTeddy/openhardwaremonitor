@@ -187,8 +187,8 @@ namespace OpenHardwareMonitor.GUI
             plotColorPalette[11] = Color.Olive;
             plotColorPalette[12] = Color.Firebrick;
 
-            computer.HardwareAdded += new HardwareEventHandler(HardwareAdded);
-            computer.HardwareRemoved += new HardwareEventHandler(HardwareRemoved);
+            computer.HardwareAdded += (_, e) => HardwareAdded(e.Hardware);
+            computer.HardwareRemoved += (_, e) => HardwareRemoved(e.Hardware);
 
             computer.Open();
 
@@ -1029,10 +1029,10 @@ namespace OpenHardwareMonitor.GUI
 
         private void resetMinMaxMenuItem_Click(object sender, EventArgs e)
         {
-            computer.Accept(new SensorVisitor(delegate (ISensor sensor)
+            computer.Accept(new SensorVisitor((_, args) =>
             {
-                sensor.ResetMin();
-                sensor.ResetMax();
+                args.Sensor.ResetMin();
+                args.Sensor.ResetMax();
             }));
         }
 

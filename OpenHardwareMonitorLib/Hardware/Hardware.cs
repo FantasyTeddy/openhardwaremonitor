@@ -38,13 +38,13 @@ namespace OpenHardwareMonitor.Hardware
         protected virtual void ActivateSensor(ISensor sensor)
         {
             if (active.Add(sensor))
-                SensorAdded?.Invoke(sensor);
+                SensorAdded?.Invoke(this, new SensorEventArgs(sensor));
         }
 
         protected virtual void DeactivateSensor(ISensor sensor)
         {
             if (active.Remove(sensor))
-                SensorRemoved?.Invoke(sensor);
+                SensorRemoved?.Invoke(this, new SensorEventArgs(sensor));
         }
 
         public string Name
@@ -64,8 +64,8 @@ namespace OpenHardwareMonitor.Hardware
         public Identifier Identifier { get; }
 
 #pragma warning disable 67
-        public event SensorEventHandler SensorAdded;
-        public event SensorEventHandler SensorRemoved;
+        public event EventHandler<SensorEventArgs> SensorAdded;
+        public event EventHandler<SensorEventArgs> SensorRemoved;
 #pragma warning restore 67
 
 
@@ -78,11 +78,11 @@ namespace OpenHardwareMonitor.Hardware
 
         public abstract void Update();
 
-        public event HardwareEventHandler Closing;
+        public event EventHandler<HardwareEventArgs> Closing;
 
         public virtual void Close()
         {
-            Closing?.Invoke(this);
+            Closing?.Invoke(this, new HardwareEventArgs(this));
         }
 
         public void Accept(IVisitor visitor)

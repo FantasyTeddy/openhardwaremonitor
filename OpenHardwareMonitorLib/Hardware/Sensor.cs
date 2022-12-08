@@ -65,7 +65,7 @@ namespace OpenHardwareMonitor.Hardware
 
             GetSensorValuesFromSettings();
 
-            hardware.Closing += delegate (IHardware h)
+            hardware.Closing += (object sender, HardwareEventArgs e) =>
             {
                 SetSensorValuesToSettings();
             };

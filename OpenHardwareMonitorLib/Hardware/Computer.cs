@@ -54,7 +54,7 @@ namespace OpenHardwareMonitor.Hardware
             if (HardwareAdded != null)
             {
                 foreach (IHardware hardware in group.Hardware)
-                    HardwareAdded(hardware);
+                    HardwareAdded(this, new HardwareEventArgs(hardware));
             }
         }
 
@@ -68,7 +68,7 @@ namespace OpenHardwareMonitor.Hardware
             if (HardwareRemoved != null)
             {
                 foreach (IHardware hardware in group.Hardware)
-                    HardwareRemoved(hardware);
+                    HardwareRemoved(this, new HardwareEventArgs(hardware));
             }
 
             group.Close();
@@ -446,8 +446,8 @@ namespace OpenHardwareMonitor.Hardware
             }
         }
 
-        public event HardwareEventHandler HardwareAdded;
-        public event HardwareEventHandler HardwareRemoved;
+        public event EventHandler<HardwareEventArgs> HardwareAdded;
+        public event EventHandler<HardwareEventArgs> HardwareRemoved;
 
         public void Accept(IVisitor visitor)
         {

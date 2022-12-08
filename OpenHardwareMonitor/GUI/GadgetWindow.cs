@@ -16,6 +16,7 @@ using System.Drawing.Text;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static OpenHardwareMonitor.GUI.ShowDesktop;
 
 namespace OpenHardwareMonitor.GUI
 {
@@ -60,9 +61,9 @@ namespace OpenHardwareMonitor.GUI
             CreateBuffer();
         }
 
-        private void ShowDesktopChanged(bool showDesktop)
+        private void ShowDesktopChanged(object sender, ShowDesktopChangedEventArgs e)
         {
-            if (showDesktop)
+            if (e.ShowDesktop)
             {
                 MoveToTopMost(Handle);
             }
@@ -419,7 +420,7 @@ namespace OpenHardwareMonitor.GUI
 
         public ContextMenu ContextMenu { get; set; } = null;
 
-        public event HitTestEventHandler HitTest;
+        public event EventHandler<HitTestEventArgs> HitTest;
 
         public event MouseEventHandler MouseDoubleClick;
 
@@ -620,8 +621,6 @@ namespace OpenHardwareMonitor.GUI
         BottomRight = 17,
         Border = 18
     }
-
-    public delegate void HitTestEventHandler(object sender, HitTestEventArgs e);
 
     public class HitTestEventArgs : EventArgs
     {

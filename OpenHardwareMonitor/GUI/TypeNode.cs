@@ -83,8 +83,8 @@ namespace OpenHardwareMonitor.GUI
                     break;
             }
 
-            NodeAdded += new NodeEventHandler(TypeNode_NodeAdded);
-            NodeRemoved += new NodeEventHandler(TypeNode_NodeRemoved);
+            NodeAdded += (_, e) => TypeNode_NodeAdded(e.Node);
+            NodeRemoved += (_, e) => TypeNode_NodeRemoved(e.Node);
 
             this.expandedIdentifier = new Identifier(new Identifier(hardware.Identifier,
               sensorType.ToString().ToLowerInvariant()), "expanded");
@@ -94,17 +94,17 @@ namespace OpenHardwareMonitor.GUI
 
         private void TypeNode_NodeRemoved(Node node)
         {
-            node.IsVisibleChanged -= new NodeEventHandler(node_IsVisibleChanged);
-            node_IsVisibleChanged(null);
+            node.IsVisibleChanged -= node_IsVisibleChanged;
+            node_IsVisibleChanged(this, new NodeEventArgs(null));
         }
 
         private void TypeNode_NodeAdded(Node node)
         {
-            node.IsVisibleChanged += new NodeEventHandler(node_IsVisibleChanged);
-            node_IsVisibleChanged(null);
+            node.IsVisibleChanged += node_IsVisibleChanged;
+            node_IsVisibleChanged(this, new NodeEventArgs(null));
         }
 
-        private void node_IsVisibleChanged(Node node)
+        private void node_IsVisibleChanged(object sender, NodeEventArgs e)
         {
             foreach (Node n in Nodes)
             {

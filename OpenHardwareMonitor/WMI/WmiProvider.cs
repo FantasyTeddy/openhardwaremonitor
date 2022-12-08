@@ -36,8 +36,8 @@ namespace OpenHardwareMonitor.WMI
             foreach (IHardware hardware in computer.Hardware)
                 ComputerHardwareAdded(hardware);
 
-            computer.HardwareAdded += ComputerHardwareAdded;
-            computer.HardwareRemoved += ComputerHardwareRemoved;
+            computer.HardwareAdded += (_, e) => ComputerHardwareAdded(e.Hardware);
+            computer.HardwareRemoved += (_, e) => ComputerHardwareRemoved(e.Hardware);
         }
 
         public void Update()
@@ -53,7 +53,7 @@ namespace OpenHardwareMonitor.WMI
             if (!Exists(hardware.Identifier.ToString()))
             {
                 foreach (ISensor sensor in hardware.Sensors)
-                    HardwareSensorAdded(sensor);
+                    AddHardwareSensor(sensor);
 
                 hardware.SensorAdded += HardwareSensorAdded;
                 hardware.SensorRemoved += HardwareSensorRemoved;
@@ -72,7 +72,12 @@ namespace OpenHardwareMonitor.WMI
                 ComputerHardwareAdded(subHardware);
         }
 
-        private void HardwareSensorAdded(ISensor data)
+        private void HardwareSensorAdded(object sender, SensorEventArgs e)
+        {
+            AddHardwareSensor(e.Sensor);
+        }
+
+        private void AddHardwareSensor(ISensor data)
         {
             Sensor sensor = new Sensor(data);
             activeInstances.Add(sensor);
@@ -90,7 +95,7 @@ namespace OpenHardwareMonitor.WMI
             hardware.SensorRemoved -= HardwareSensorRemoved;
 
             foreach (ISensor sensor in hardware.Sensors)
-                HardwareSensorRemoved(sensor);
+                RemoveHardwareSensor(sensor);
 
             foreach (IHardware subHardware in hardware.SubHardware)
                 ComputerHardwareRemoved(subHardware);
@@ -98,7 +103,12 @@ namespace OpenHardwareMonitor.WMI
             RevokeInstance(hardware.Identifier.ToString());
         }
 
-        private void HardwareSensorRemoved(ISensor sensor)
+        private void HardwareSensorRemoved(object sender, SensorEventArgs e)
+        {
+            RemoveHardwareSensor(e.Sensor);
+        }
+
+        private void RemoveHardwareSensor(ISensor sensor)
         {
             RevokeInstance(sensor.Identifier.ToString());
         }

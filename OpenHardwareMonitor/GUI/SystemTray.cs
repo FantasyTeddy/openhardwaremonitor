@@ -31,8 +31,8 @@ namespace OpenHardwareMonitor.GUI
             this.computer = computer;
             this.settings = settings;
             this.unitManager = unitManager;
-            computer.HardwareAdded += new HardwareEventHandler(HardwareAdded);
-            computer.HardwareRemoved += new HardwareEventHandler(HardwareRemoved);
+            computer.HardwareAdded += (_, e) => HardwareAdded(e.Hardware);
+            computer.HardwareRemoved += (_, e) => HardwareRemoved(e.Hardware);
 
             this.mainIcon = new NotifyIconAdv();
 
@@ -61,10 +61,10 @@ namespace OpenHardwareMonitor.GUI
 
         private void HardwareRemoved(IHardware hardware)
         {
-            hardware.SensorAdded -= new SensorEventHandler(SensorAdded);
-            hardware.SensorRemoved -= new SensorEventHandler(SensorRemoved);
+            hardware.SensorAdded -= SensorAdded;
+            hardware.SensorRemoved -= SensorRemoved;
             foreach (ISensor sensor in hardware.Sensors)
-                SensorRemoved(sensor);
+                RemoveSensor(sensor);
             foreach (IHardware subHardware in hardware.SubHardware)
                 HardwareRemoved(subHardware);
         }
@@ -72,14 +72,19 @@ namespace OpenHardwareMonitor.GUI
         private void HardwareAdded(IHardware hardware)
         {
             foreach (ISensor sensor in hardware.Sensors)
-                SensorAdded(sensor);
-            hardware.SensorAdded += new SensorEventHandler(SensorAdded);
-            hardware.SensorRemoved += new SensorEventHandler(SensorRemoved);
+                AddSensor(sensor);
+            hardware.SensorAdded += SensorAdded;
+            hardware.SensorRemoved += SensorRemoved;
             foreach (IHardware subHardware in hardware.SubHardware)
                 HardwareAdded(subHardware);
         }
 
-        private void SensorAdded(ISensor sensor)
+        private void SensorAdded(object sender, SensorEventArgs e)
+        {
+            AddSensor(e.Sensor);
+        }
+
+        private void AddSensor(ISensor sensor)
         {
             if (settings.GetValue(new Identifier(sensor.Identifier,
               "tray").ToString(), false))
@@ -88,7 +93,12 @@ namespace OpenHardwareMonitor.GUI
             }
         }
 
-        private void SensorRemoved(ISensor sensor)
+        private void SensorRemoved(object sender, SensorEventArgs e)
+        {
+            RemoveSensor(e.Sensor);
+        }
+
+        private void RemoveSensor(ISensor sensor)
         {
             if (Contains(sensor))
                 Remove(sensor, false);

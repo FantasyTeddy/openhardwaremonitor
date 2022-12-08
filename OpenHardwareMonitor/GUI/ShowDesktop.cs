@@ -16,9 +16,17 @@ namespace OpenHardwareMonitor.GUI
 {
     public class ShowDesktop : IDisposable
     {
-        public delegate void ShowDesktopChangedEventHandler(bool showDesktop);
+        public class ShowDesktopChangedEventArgs : EventArgs
+        {
+            public ShowDesktopChangedEventArgs(bool showDesktop)
+            {
+                ShowDesktop = showDesktop;
+            }
 
-        private event ShowDesktopChangedEventHandler ShowDesktopChangedEvent;
+            public bool ShowDesktop { get; }
+        }
+
+        private event EventHandler<ShowDesktopChangedEventArgs> ShowDesktopChangedEvent;
 
         private readonly System.Threading.Timer timer;
         private bool showDesktop = false;
@@ -109,14 +117,14 @@ namespace OpenHardwareMonitor.GUI
             if (showDesktop != showDesktopDetected)
             {
                 showDesktop = showDesktopDetected;
-                ShowDesktopChangedEvent?.Invoke(showDesktop);
+                ShowDesktopChangedEvent?.Invoke(this, new ShowDesktopChangedEventArgs(showDesktop));
             }
         }
 
         public static ShowDesktop Instance { get; } = new ShowDesktop();
 
         // notify when the "show desktop" mode is changed
-        public event ShowDesktopChangedEventHandler ShowDesktopChanged
+        public event EventHandler<ShowDesktopChangedEventArgs> ShowDesktopChanged
         {
             add
             {

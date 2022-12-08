@@ -81,7 +81,7 @@ namespace OpenHardwareMonitor.GUI
             set => window.ContextMenu = value;
         }
 
-        public event HitTestEventHandler HitTest
+        public event EventHandler<HitTestEventArgs> HitTest
         {
             add => window.HitTest += value;
             remove => window.HitTest -= value;

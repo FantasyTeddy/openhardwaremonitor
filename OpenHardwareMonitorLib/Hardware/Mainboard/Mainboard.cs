@@ -138,8 +138,8 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
         public ISensor[] Sensors => new ISensor[0];
 
 #pragma warning disable 67
-        public event SensorEventHandler SensorAdded;
-        public event SensorEventHandler SensorRemoved;
+        public event EventHandler<SensorEventArgs> SensorAdded;
+        public event EventHandler<SensorEventArgs> SensorRemoved;
 #pragma warning restore 67
 
         public void Accept(IVisitor visitor)
