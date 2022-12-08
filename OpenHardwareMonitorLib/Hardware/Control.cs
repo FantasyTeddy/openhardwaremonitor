@@ -32,12 +32,11 @@ namespace OpenHardwareMonitor.Hardware {
               out this.softwareValue)) {
                 this.softwareValue = 0;
             }
-            int mode;
             if (!int.TryParse(settings.GetValue(
                 new Identifier(Identifier, "mode").ToString(),
                 ((int)ControlMode.Undefined).ToString(CultureInfo.InvariantCulture)),
               NumberStyles.Integer, CultureInfo.InvariantCulture,
-              out mode)) {
+              out int mode)) {
                 this.mode = ControlMode.Undefined;
             } else {
                 this.mode = (ControlMode)mode;

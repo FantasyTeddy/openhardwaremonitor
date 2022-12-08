@@ -65,12 +65,10 @@ namespace OpenHardwareMonitor.Hardware.ATI {
                         ADLAdapterInfo[] adapterInfo = new ADLAdapterInfo[numberOfAdapters];
                         if (ADL.ADL_Adapter_AdapterInfo_Get(adapterInfo) == ADLStatus.OK) {
                             for (int i = 0; i < numberOfAdapters; i++) {
-                                int isActive;
                                 ADL.ADL_Adapter_Active_Get(adapterInfo[i].AdapterIndex,
-                                  out isActive);
-                                int adapterID;
+                                  out int isActive);
                                 ADL.ADL_Adapter_ID_Get(adapterInfo[i].AdapterIndex,
-                                  out adapterID);
+                                  out int adapterID);
 
                                 report.Append("AdapterIndex: ");
                                 report.AppendLine(i.ToString(CultureInfo.InvariantCulture));

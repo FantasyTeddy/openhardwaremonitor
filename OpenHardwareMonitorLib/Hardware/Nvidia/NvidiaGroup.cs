@@ -26,8 +26,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             report.AppendLine("NVAPI");
             report.AppendLine();
 
-            string version;
-            if (NVAPI.NvAPI_GetInterfaceVersionString(out version) == NvStatus.OK) {
+            if (NVAPI.NvAPI_GetInterfaceVersionString(out string version) == NvStatus.OK) {
                 report.Append(" Version: ");
                 report.AppendLine(version);
             }
@@ -71,9 +70,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
                     if (status == NvStatus.OK) {
                         NvPhysicalGpuHandle[] handlesFromDisplay =
                           new NvPhysicalGpuHandle[NVAPI.MAX_PHYSICAL_GPUS];
-                        uint countFromDisplay;
                         if (NVAPI.NvAPI_GetPhysicalGPUsFromDisplay(displayHandle,
-                          handlesFromDisplay, out countFromDisplay) == NvStatus.OK) {
+                          handlesFromDisplay, out uint countFromDisplay) == NvStatus.OK) {
                             for (int j = 0; j < countFromDisplay; j++) {
                                 if (!displayHandles.ContainsKey(handlesFromDisplay[j]))
                                     displayHandles.Add(handlesFromDisplay[j], displayHandle);
@@ -87,8 +85,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             report.AppendLine(count.ToString(CultureInfo.InvariantCulture));
 
             for (int i = 0; i < count; i++) {
-                NvDisplayHandle displayHandle;
-                displayHandles.TryGetValue(handles[i], out displayHandle);
+                displayHandles.TryGetValue(handles[i], out NvDisplayHandle displayHandle);
                 hardware.Add(new NvidiaGPU(i, handles[i], displayHandle, settings));
             }
 

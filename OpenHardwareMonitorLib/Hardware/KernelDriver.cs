@@ -99,10 +99,9 @@ namespace OpenHardwareMonitor.Hardware {
             if (device == null)
                 return false;
 
-            uint bytesReturned;
             bool b = NativeMethods.DeviceIoControl(device, ioControlCode,
               inBuffer, inBuffer == null ? 0 : (uint)Marshal.SizeOf(inBuffer),
-              null, 0, out bytesReturned, IntPtr.Zero);
+              null, 0, out uint bytesReturned, IntPtr.Zero);
             return b;
         }
 
@@ -112,11 +111,10 @@ namespace OpenHardwareMonitor.Hardware {
                 return false;
 
             object boxedOutBuffer = outBuffer;
-            uint bytesReturned;
             bool b = NativeMethods.DeviceIoControl(device, ioControlCode,
               inBuffer, inBuffer == null ? 0 : (uint)Marshal.SizeOf(inBuffer),
               boxedOutBuffer, (uint)Marshal.SizeOf(boxedOutBuffer),
-              out bytesReturned, IntPtr.Zero);
+              out uint bytesReturned, IntPtr.Zero);
             outBuffer = (T)boxedOutBuffer;
             return b;
         }

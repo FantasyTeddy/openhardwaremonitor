@@ -223,9 +223,8 @@ namespace OpenHardwareMonitor.GUI {
             info.BitCount = 32;
             info.Planes = 1;
 
-            IntPtr ptr;
             IntPtr hBmp = NativeMethods.CreateDIBSection(handleBitmapDC, ref info, 0,
-              out ptr, IntPtr.Zero, 0);
+              out IntPtr ptr, IntPtr.Zero, 0);
             IntPtr hBmpOld = NativeMethods.SelectObject(handleBitmapDC, hBmp);
             NativeMethods.DeleteObject(hBmpOld);
 

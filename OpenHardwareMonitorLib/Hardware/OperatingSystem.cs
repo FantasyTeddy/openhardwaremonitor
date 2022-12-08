@@ -31,9 +31,8 @@ namespace OpenHardwareMonitor.Hardware {
                 return true;
 
             try {
-                bool wow64Process;
                 bool result = IsWow64Process(
-                  Process.GetCurrentProcess().Handle, out wow64Process);
+                  Process.GetCurrentProcess().Handle, out bool wow64Process);
 
                 return result && wow64Process;
             } catch (EntryPointNotFoundException) {

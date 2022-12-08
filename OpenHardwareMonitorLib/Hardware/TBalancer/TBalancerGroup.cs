@@ -52,8 +52,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                     continue;
                 }
 
-                FT_HANDLE handle;
-                FT_STATUS status = FTD2XX.FT_Open(i, out handle);
+                FT_STATUS status = FTD2XX.FT_Open(i, out FT_HANDLE handle);
                 if (status != FT_STATUS.FT_OK) {
                     report.AppendLine("Open Status: " + status);
                     continue;

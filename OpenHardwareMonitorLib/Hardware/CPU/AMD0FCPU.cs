@@ -106,10 +106,9 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                         if (Ring0.WritePciConfig(
                           miscellaneousControlAddress, THERMTRIP_STATUS_REGISTER,
                           i > 0 ? thermSenseCoreSelCPU1 : thermSenseCoreSelCPU0)) {
-                            uint value;
                             if (Ring0.ReadPciConfig(
                               miscellaneousControlAddress, THERMTRIP_STATUS_REGISTER,
-                              out value)) {
+                              out uint value)) {
                                 coreTemperatures[i].Value = ((value >> 16) & 0xFF) +
                                   coreTemperatures[i].Parameters[0].Value;
                                 ActivateSensor(coreTemperatures[i]);
@@ -129,8 +128,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
                 for (int i = 0; i < coreClocks.Length; i++) {
                     Thread.Sleep(1);
 
-                    uint eax, edx;
-                    if (Ring0.RdmsrTx(FIDVID_STATUS, out eax, out edx,
+                    if (Ring0.RdmsrTx(FIDVID_STATUS, out uint eax, out uint edx,
                       cpuid[i][0].Affinity)) {
                         // CurrFID can be found in eax bits 0-5, MaxFID in 16-21
                         // 8-13 hold StartFID, we don't use that here.

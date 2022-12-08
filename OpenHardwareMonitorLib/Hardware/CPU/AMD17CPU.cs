@@ -205,8 +205,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
 
             if (Ring0.WaitPciBusMutex(10)) {
 
-                uint value;
-                if (ReadSmnRegister(FAMILY_17H_M01H_THM_TCON_TEMP, out value)) {
+                if (ReadSmnRegister(FAMILY_17H_M01H_THM_TCON_TEMP, out uint value)) {
                     float temperature = ((value >> 21) & 0x7FF) / 8.0f;
                     if ((value & FAMILY_17H_M01H_THM_TCON_TEMP_RANGE_SEL) != 0)
                         temperature -= 49;

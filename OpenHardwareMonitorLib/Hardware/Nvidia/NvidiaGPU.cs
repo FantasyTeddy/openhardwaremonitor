@@ -113,8 +113,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
         }
 
         private static string GetName(NvPhysicalGpuHandle handle) {
-            string gpuName;
-            if (NVAPI.NvAPI_GPU_GetFullName(handle, out gpuName) == NvStatus.OK) {
+            if (NVAPI.NvAPI_GPU_GetFullName(handle, out string gpuName) == NvStatus.OK) {
                 return "NVIDIA " + gpuName.Trim();
             } else {
                 return "NVIDIA";
@@ -331,10 +330,9 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             r.AppendLine();
 
             if (NVAPI.NvAPI_GPU_GetPCIIdentifiers != null) {
-                uint deviceId, subSystemId, revisionId, extDeviceId;
 
                 NvStatus status = NVAPI.NvAPI_GPU_GetPCIIdentifiers(handle,
-                  out deviceId, out subSystemId, out revisionId, out extDeviceId);
+                  out uint deviceId, out uint subSystemId, out uint revisionId, out uint extDeviceId);
 
                 if (status == NvStatus.OK) {
                     r.Append("DeviceID: 0x");
@@ -405,8 +403,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
             }
 
             if (NVAPI.NvAPI_GPU_GetTachReading != null) {
-                int tachValue;
-                NvStatus status = NVAPI.NvAPI_GPU_GetTachReading(handle, out tachValue);
+                NvStatus status = NVAPI.NvAPI_GPU_GetTachReading(handle, out int tachValue);
 
                 r.AppendLine("Tachometer");
                 r.AppendLine();

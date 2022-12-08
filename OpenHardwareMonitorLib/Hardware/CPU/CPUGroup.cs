@@ -39,8 +39,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             SortedDictionary<uint, List<CPUID>> processors =
               new SortedDictionary<uint, List<CPUID>>();
             foreach (CPUID thread in threads) {
-                List<CPUID> list;
-                processors.TryGetValue(thread.ProcessorId, out list);
+                processors.TryGetValue(thread.ProcessorId, out List<CPUID> list);
                 if (list == null) {
                     list = new List<CPUID>();
                     processors.Add(thread.ProcessorId, list);
@@ -62,8 +61,7 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             SortedDictionary<uint, List<CPUID>> cores =
               new SortedDictionary<uint, List<CPUID>>();
             foreach (CPUID thread in threads) {
-                List<CPUID> coreList;
-                cores.TryGetValue(thread.CoreId, out coreList);
+                cores.TryGetValue(thread.CoreId, out List<CPUID> coreList);
                 if (coreList == null) {
                     coreList = new List<CPUID>();
                     cores.Add(thread.CoreId, coreList);

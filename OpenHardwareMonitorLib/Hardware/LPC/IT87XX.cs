@@ -172,8 +172,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             this.gpioAddress = gpioAddress;
 
             // Check vendor id
-            bool valid;
-            byte vendorId = ReadByte(VENDOR_ID_REGISTER, out valid);
+            byte vendorId = ReadByte(VENDOR_ID_REGISTER, out bool valid);
             if (!valid || vendorId != ITE_VENDOR_ID)
                 return;
 
@@ -308,8 +307,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 r.Append("  ");
                 for (int j = 0; j <= 0xF; j++) {
                     r.Append(" ");
-                    bool valid;
-                    byte value = ReadByte((byte)((i << 4) | j), out valid);
+                    byte value = ReadByte((byte)((i << 4) | j), out bool valid);
                     r.Append(
                       valid ? value.ToString("X2", CultureInfo.InvariantCulture) : "??");
                 }
@@ -337,10 +335,9 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 return;
 
             for (int i = 0; i < Voltages.Length; i++) {
-                bool valid;
 
                 float value =
-                  voltageGain * ReadByte((byte)(VOLTAGE_BASE_REG + i), out valid);
+                  voltageGain * ReadByte((byte)(VOLTAGE_BASE_REG + i), out bool valid);
 
                 if (!valid)
                     continue;
@@ -351,9 +348,8 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             }
 
             for (int i = 0; i < Temperatures.Length; i++) {
-                bool valid;
                 sbyte value = (sbyte)ReadByte(
-                  (byte)(TEMPERATURE_BASE_REG + i), out valid);
+                  (byte)(TEMPERATURE_BASE_REG + i), out bool valid);
                 if (!valid)
                     continue;
 
@@ -365,8 +361,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
 
             if (has16bitFanCounter) {
                 for (int i = 0; i < Fans.Length; i++) {
-                    bool valid;
-                    int value = ReadByte(FAN_TACHOMETER_REG[i], out valid);
+                    int value = ReadByte(FAN_TACHOMETER_REG[i], out bool valid);
                     if (!valid)
                         continue;
                     value |= ReadByte(FAN_TACHOMETER_EXT_REG[i], out valid) << 8;
@@ -381,8 +376,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
                 }
             } else {
                 for (int i = 0; i < Fans.Length; i++) {
-                    bool valid;
-                    int value = ReadByte(FAN_TACHOMETER_REG[i], out valid);
+                    int value = ReadByte(FAN_TACHOMETER_REG[i], out bool valid);
                     if (!valid)
                         continue;
 
@@ -403,8 +397,7 @@ namespace OpenHardwareMonitor.Hardware.LPC {
             }
 
             for (int i = 0; i < Controls.Length; i++) {
-                bool valid;
-                byte value = ReadByte(FAN_PWM_CTRL_REG[i], out valid);
+                byte value = ReadByte(FAN_PWM_CTRL_REG[i], out bool valid);
                 if (!valid)
                     continue;
 

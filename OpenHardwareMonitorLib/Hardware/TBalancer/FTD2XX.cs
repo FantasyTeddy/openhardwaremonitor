@@ -145,9 +145,8 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         private FTD2XX() { }
 
         public static FT_STATUS Write(FT_HANDLE handle, byte[] buffer) {
-            uint bytesWritten;
             FT_STATUS status = FT_Write(handle, buffer, (uint)buffer.Length,
-              out bytesWritten);
+              out uint bytesWritten);
             if (bytesWritten != buffer.Length)
                 return FT_STATUS.FT_FAILED_TO_WRITE_DEVICE;
             else
@@ -155,11 +154,8 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         }
 
         public static int BytesToRead(FT_HANDLE handle) {
-            uint amountInRxQueue;
-            uint amountInTxQueue;
-            uint eventStatus;
-            if (FT_GetStatus(handle, out amountInRxQueue, out amountInTxQueue,
-              out eventStatus) == FT_STATUS.FT_OK) {
+            if (FT_GetStatus(handle, out uint amountInRxQueue, out uint amountInTxQueue,
+              out uint eventStatus) == FT_STATUS.FT_OK) {
                 return (int)amountInRxQueue;
             } else {
                 return 0;
@@ -167,18 +163,15 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
         }
 
         public static byte ReadByte(FT_HANDLE handle) {
-            byte buffer;
-            uint bytesReturned;
-            FT_STATUS status = FT_ReadByte(handle, out buffer, 1, out bytesReturned);
+            FT_STATUS status = FT_ReadByte(handle, out byte buffer, 1, out uint bytesReturned);
             if (status != FT_STATUS.FT_OK || bytesReturned != 1)
                 throw new InvalidOperationException();
             return buffer;
         }
 
         public static void Read(FT_HANDLE handle, byte[] buffer) {
-            uint bytesReturned;
             FT_STATUS status =
-              FT_Read(handle, buffer, (uint)buffer.Length, out bytesReturned);
+              FT_Read(handle, buffer, (uint)buffer.Length, out uint bytesReturned);
             if (status != FT_STATUS.FT_OK || bytesReturned != buffer.Length)
                 throw new InvalidOperationException();
         }
@@ -197,8 +190,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer {
                 PreserveSig = true,
                 EntryPoint = entryPoint
             };
-            T newDelegate;
-            PInvokeDelegateFactory.CreateDelegate(attribute, out newDelegate);
+            PInvokeDelegateFactory.CreateDelegate(attribute, out T newDelegate);
             return newDelegate;
         }
     }

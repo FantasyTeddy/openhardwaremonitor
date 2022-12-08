@@ -71,9 +71,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             uint maxCpuid = 0;
             uint maxCpuidExt = 0;
 
-            uint eax, ebx, ecx, edx;
 
-            Opcode.Cpuid(CPUID_0, 0, out eax, out ebx, out ecx, out edx);
+            Opcode.Cpuid(CPUID_0, 0, out uint eax, out uint ebx, out uint ecx, out uint edx);
             if (eax > 0)
                 maxCpuid = eax;
             else

@@ -247,28 +247,24 @@ namespace OpenHardwareMonitor.Hardware.HDD {
         }
 
         public bool EnableSmart(IntPtr handle, int driveNumber) {
-            DriveCommandParameter parameter = new DriveCommandParameter();
-            DriveCommandResult result;
-            uint bytesReturned;
-
-            parameter.DriveNumber = (byte)driveNumber;
+            DriveCommandParameter parameter = new DriveCommandParameter {
+                DriveNumber = (byte)driveNumber
+            };
             parameter.Registers.Features = RegisterFeature.SmartEnableOperations;
             parameter.Registers.LBAMid = SMART_LBA_MID;
             parameter.Registers.LBAHigh = SMART_LBA_HI;
             parameter.Registers.Command = RegisterCommand.SmartCmd;
 
             return NativeMethods.DeviceIoControl(handle, DriveCommand.SendDriveCommand,
-              ref parameter, Marshal.SizeOf(typeof(DriveCommandParameter)), out result,
-              Marshal.SizeOf(typeof(DriveCommandResult)), out bytesReturned,
+              ref parameter, Marshal.SizeOf(typeof(DriveCommandParameter)), out DriveCommandResult result,
+              Marshal.SizeOf(typeof(DriveCommandResult)), out uint bytesReturned,
               IntPtr.Zero);
         }
 
         public DriveAttributeValue[] ReadSmartData(IntPtr handle, int driveNumber) {
-            DriveCommandParameter parameter = new DriveCommandParameter();
-            DriveSmartReadDataResult result;
-            uint bytesReturned;
-
-            parameter.DriveNumber = (byte)driveNumber;
+            DriveCommandParameter parameter = new DriveCommandParameter {
+                DriveNumber = (byte)driveNumber
+            };
             parameter.Registers.Features = RegisterFeature.SmartReadData;
             parameter.Registers.LBAMid = SMART_LBA_MID;
             parameter.Registers.LBAHigh = SMART_LBA_HI;
@@ -276,19 +272,17 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
             bool isValid = NativeMethods.DeviceIoControl(handle,
               DriveCommand.ReceiveDriveData, ref parameter, Marshal.SizeOf(parameter),
-              out result, Marshal.SizeOf(typeof(DriveSmartReadDataResult)),
-              out bytesReturned, IntPtr.Zero);
+              out DriveSmartReadDataResult result, Marshal.SizeOf(typeof(DriveSmartReadDataResult)),
+              out uint bytesReturned, IntPtr.Zero);
 
             return isValid ? result.Attributes : new DriveAttributeValue[0];
         }
 
         public DriveThresholdValue[] ReadSmartThresholds(IntPtr handle,
           int driveNumber) {
-            DriveCommandParameter parameter = new DriveCommandParameter();
-            DriveSmartReadThresholdsResult result;
-            uint bytesReturned = 0;
-
-            parameter.DriveNumber = (byte)driveNumber;
+            DriveCommandParameter parameter = new DriveCommandParameter {
+                DriveNumber = (byte)driveNumber
+            };
             parameter.Registers.Features = RegisterFeature.SmartReadThresholds;
             parameter.Registers.LBAMid = SMART_LBA_MID;
             parameter.Registers.LBAHigh = SMART_LBA_HI;
@@ -296,8 +290,8 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
             bool isValid = NativeMethods.DeviceIoControl(handle,
               DriveCommand.ReceiveDriveData, ref parameter, Marshal.SizeOf(parameter),
-              out result, Marshal.SizeOf(typeof(DriveSmartReadThresholdsResult)),
-              out bytesReturned, IntPtr.Zero);
+              out DriveSmartReadThresholdsResult result, Marshal.SizeOf(typeof(DriveSmartReadThresholdsResult)),
+              out uint bytesReturned, IntPtr.Zero);
 
             return isValid ? result.Thresholds : new DriveThresholdValue[0];
         }
@@ -313,17 +307,15 @@ namespace OpenHardwareMonitor.Hardware.HDD {
 
         public bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber,
           out string name, out string firmwareRevision) {
-            DriveCommandParameter parameter = new DriveCommandParameter();
-            DriveIdentifyResult result;
-            uint bytesReturned;
-
-            parameter.DriveNumber = (byte)driveNumber;
+            DriveCommandParameter parameter = new DriveCommandParameter {
+                DriveNumber = (byte)driveNumber
+            };
             parameter.Registers.Command = RegisterCommand.IdCmd;
 
             bool valid = NativeMethods.DeviceIoControl(handle,
               DriveCommand.ReceiveDriveData, ref parameter, Marshal.SizeOf(parameter),
-              out result, Marshal.SizeOf(typeof(DriveIdentifyResult)),
-              out bytesReturned, IntPtr.Zero);
+              out DriveIdentifyResult result, Marshal.SizeOf(typeof(DriveIdentifyResult)),
+              out uint bytesReturned, IntPtr.Zero);
 
             if (!valid) {
                 name = null;

@@ -50,10 +50,9 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             idle = null;
             total = null;
 
-            IntPtr returnLength;
             if (NativeMethods.NtQuerySystemInformation(
               SystemInformationClass.SystemProcessorPerformanceInformation,
-              informations, informations.Length * size, out returnLength) != 0) {
+              informations, informations.Length * size, out IntPtr returnLength) != 0) {
                 return false;
             }
 
@@ -96,10 +95,8 @@ namespace OpenHardwareMonitor.Hardware.CPU {
             if (this.idleTimes == null)
                 return;
 
-            long[] newIdleTimes;
-            long[] newTotalTimes;
 
-            if (!GetTimes(out newIdleTimes, out newTotalTimes))
+            if (!GetTimes(out long[] newIdleTimes, out long[] newTotalTimes))
                 return;
 
             for (int i = 0; i < Math.Min(newTotalTimes.Length, totalTimes.Length); i++) {

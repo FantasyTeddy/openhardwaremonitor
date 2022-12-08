@@ -494,10 +494,9 @@ namespace OpenHardwareMonitor.GUI {
 
         private void nodeTextBoxText_DrawText(object sender, DrawEventArgs e) {
             if (e.Node.Tag is Node node) {
-                Color color;
                 if (node.IsVisible) {
                     if (plotMenuItem.Checked && node is SensorNode sensorNode &&
-                      sensorPlotColors.TryGetValue(sensorNode.Sensor, out color)) {
+                      sensorPlotColors.TryGetValue(sensorNode.Sensor, out Color color)) {
                         e.TextColor = color;
                     }
                 } else {

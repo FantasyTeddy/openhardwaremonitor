@@ -77,8 +77,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
 
         protected int ReadInteger(int device, char field) {
             string s = ReadField(device, field);
-            int i;
-            if (int.TryParse(s, out i))
+            if (int.TryParse(s, out int i))
                 return i;
             else
                 return 0;
@@ -188,8 +187,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster {
         private void ProcessUpdateLine(string line) {
             Match match = Regex.Match(line, @">\[0:(\d+)\]([0-9:\|-]+)");
             if (match.Success) {
-                int device;
-                if (int.TryParse(match.Groups[1].Value, out device)) {
+                if (int.TryParse(match.Groups[1].Value, out int device)) {
                     foreach (string s in match.Groups[2].Value.Split('|')) {
                         string[] strings = s.Split(':');
                         int[] ints = new int[strings.Length];

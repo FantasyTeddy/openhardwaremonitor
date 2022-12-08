@@ -22,8 +22,7 @@ namespace OpenHardwareMonitor.GUI {
         public static HardwareTypeImage Instance { get; } = new HardwareTypeImage();
 
         public Image GetImage(HardwareType hardwareType) {
-            Image image;
-            if (images.TryGetValue(hardwareType, out image)) {
+            if (images.TryGetValue(hardwareType, out Image image)) {
                 return image;
             } else {
                 switch (hardwareType) {
