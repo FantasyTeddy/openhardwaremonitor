@@ -283,9 +283,18 @@ namespace OpenHardwareMonitor.GUI
             NativeMethods.DeleteDC(handleBitmapDC);
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            DisposeBuffer();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                DisposeBuffer();
+            }
         }
 
         public event PaintEventHandler Paint;

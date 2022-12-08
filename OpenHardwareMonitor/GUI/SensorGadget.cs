@@ -276,52 +276,54 @@ namespace OpenHardwareMonitor.GUI
             };
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-
-            largeFont.Dispose();
-            largeFont = null;
-
-            smallFont.Dispose();
-            smallFont = null;
-
-            darkWhite.Dispose();
-            darkWhite = null;
-
-            stringFormat.Dispose();
-            stringFormat = null;
-
-            trimStringFormat.Dispose();
-            trimStringFormat = null;
-
-            alignRightStringFormat.Dispose();
-            alignRightStringFormat = null;
-
-            back.Dispose();
-            back = null;
-
-            barFore.Dispose();
-            barFore = null;
-
-            barBack.Dispose();
-            barBack = null;
-
-            background.Dispose();
-            background = null;
-
-            if (image != null)
+            if (disposing)
             {
-                image.Dispose();
-                image = null;
+                largeFont.Dispose();
+                largeFont = null;
+
+                smallFont.Dispose();
+                smallFont = null;
+
+                darkWhite.Dispose();
+                darkWhite = null;
+
+                stringFormat.Dispose();
+                stringFormat = null;
+
+                trimStringFormat.Dispose();
+                trimStringFormat = null;
+
+                alignRightStringFormat.Dispose();
+                alignRightStringFormat = null;
+
+                back.Dispose();
+                back = null;
+
+                barFore.Dispose();
+                barFore = null;
+
+                barBack.Dispose();
+                barBack = null;
+
+                background.Dispose();
+                background = null;
+
+                if (image != null)
+                {
+                    image.Dispose();
+                    image = null;
+                }
+
+                if (fore != null)
+                {
+                    fore.Dispose();
+                    fore = null;
+                }
             }
 
-            if (fore != null)
-            {
-                fore.Dispose();
-                fore = null;
-            }
-
-            base.Dispose();
+            base.Dispose(disposing);
         }
 
         private void HardwareRemoved(IHardware hardware)

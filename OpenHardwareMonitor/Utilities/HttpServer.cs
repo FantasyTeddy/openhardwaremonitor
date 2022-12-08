@@ -450,7 +450,16 @@ namespace OpenHardwareMonitor.Utilities
 
         public void Dispose()
         {
-            ((IDisposable)listener)?.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ((IDisposable)listener)?.Dispose();
+            }
         }
     }
 }

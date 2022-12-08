@@ -160,18 +160,27 @@ namespace OpenHardwareMonitor.GUI
 
         public void Dispose()
         {
-            Icon icon = notifyIcon.Icon;
-            notifyIcon.Icon = null;
-            icon?.Dispose();
-            notifyIcon.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-            brush?.Dispose();
-            darkBrush?.Dispose();
-            pen.Dispose();
-            graphics.Dispose();
-            bitmap.Dispose();
-            font.Dispose();
-            smallFont.Dispose();
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Icon icon = notifyIcon.Icon;
+                notifyIcon.Icon = null;
+                icon?.Dispose();
+                notifyIcon.Dispose();
+
+                brush?.Dispose();
+                darkBrush?.Dispose();
+                pen.Dispose();
+                graphics.Dispose();
+                bitmap.Dispose();
+                font.Dispose();
+                smallFont.Dispose();
+            }
         }
 
         private string GetString()

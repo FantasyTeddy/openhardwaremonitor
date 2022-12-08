@@ -365,10 +365,19 @@ namespace OpenHardwareMonitor.GUI
 
         public void Dispose()
         {
-            if (genericNotifyIcon != null)
-                genericNotifyIcon.Dispose();
-            else
-                windowsNotifyIcon.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (genericNotifyIcon != null)
+                    genericNotifyIcon.Dispose();
+                else
+                    windowsNotifyIcon.Dispose();
+            }
         }
 
         public void ShowBalloonTip(int timeout)

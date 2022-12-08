@@ -106,9 +106,18 @@ namespace OpenHardwareMonitor.GUI
 
         public void Dispose()
         {
-            foreach (SensorNotifyIcon icon in list)
-                icon.Dispose();
-            mainIcon.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                foreach (SensorNotifyIcon icon in list)
+                    icon.Dispose();
+                mainIcon.Dispose();
+            }
         }
 
         public void Redraw()

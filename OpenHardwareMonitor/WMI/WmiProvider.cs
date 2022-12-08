@@ -144,15 +144,24 @@ namespace OpenHardwareMonitor.WMI
 
         public void Dispose()
         {
-            foreach (IWmiObject instance in activeInstances)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                try
+                foreach (IWmiObject instance in activeInstances)
                 {
-                    Instrumentation.Revoke(instance);
+                    try
+                    {
+                        Instrumentation.Revoke(instance);
+                    }
+                    catch (Exception) { }
                 }
-                catch (Exception) { }
+                activeInstances = null;
             }
-            activeInstances = null;
         }
     }
 }

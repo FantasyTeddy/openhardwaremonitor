@@ -28,9 +28,18 @@ namespace OpenHardwareMonitor.GUI
             };
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            window.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                window.Dispose();
+            }
         }
 
         public Point Location

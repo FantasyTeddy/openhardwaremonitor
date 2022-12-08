@@ -164,7 +164,16 @@ namespace OpenHardwareMonitor.GUI
 
         public void Dispose()
         {
-            timer?.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                timer?.Dispose();
+            }
         }
     }
 }
