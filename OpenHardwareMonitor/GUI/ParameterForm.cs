@@ -95,7 +95,7 @@ namespace OpenHardwareMonitor.GUI
             if (e.RowIndex >= 0 && e.RowIndex < parameters.Count)
                 descriptionLabel.Text = parameters[e.RowIndex].Description;
             else
-                descriptionLabel.Text = "";
+                descriptionLabel.Text = string.Empty;
         }
 
         private void dataGridView_CellValidating(object sender,
@@ -113,7 +113,7 @@ namespace OpenHardwareMonitor.GUI
         private void dataGridView_CellEndEdit(object sender,
           DataGridViewCellEventArgs e)
         {
-            dataGridView.Rows[e.RowIndex].Cells[0].ErrorText = "";
+            dataGridView.Rows[e.RowIndex].Cells[0].ErrorText = string.Empty;
         }
 
         private void okButton_Click(object sender, EventArgs e)

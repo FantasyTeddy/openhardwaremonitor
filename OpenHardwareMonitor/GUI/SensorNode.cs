@@ -68,7 +68,7 @@ namespace OpenHardwareMonitor.GUI
                 case SensorType.Data: fixedFormat = "{0:F1} GB"; break;
                 case SensorType.SmallData: fixedFormat = "{0:F1} MB"; break;
                 case SensorType.Factor: fixedFormat = "{0:F3}"; break;
-                default: fixedFormat = ""; break;
+                default: fixedFormat = string.Empty; break;
             }
 
             bool hidden = settings.GetValue(new Identifier(sensor.Identifier,

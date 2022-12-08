@@ -209,7 +209,7 @@ namespace OpenHardwareMonitor.Hardware
                         {
                             report.AppendLine("Status: Installing driver \"" +
                               fileName + "\" failed" +
-                              (File.Exists(fileName) ? " and file exists" : ""));
+                              (File.Exists(fileName) ? " and file exists" : string.Empty));
                             report.AppendLine("First Exception: " + errorFirstInstall);
                             report.AppendLine("Second Exception: " + errorSecondInstall);
                         }

@@ -61,7 +61,7 @@ namespace OpenHardwareMonitor.Hardware
         public ISensor Sensor { get; }
 
         public Identifier Identifier => new Identifier(Sensor.Identifier, "parameter",
-                  Name.Replace(" ", "").ToLowerInvariant());
+                  Name.Replace(" ", string.Empty).ToLowerInvariant());
 
         public string Name => description.Name;
 

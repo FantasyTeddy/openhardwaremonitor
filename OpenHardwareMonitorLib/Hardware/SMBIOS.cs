@@ -311,7 +311,7 @@ namespace OpenHardwareMonitor.Hardware
                 }
                 else
                 {
-                    return "";
+                    return string.Empty;
                 }
             }
 

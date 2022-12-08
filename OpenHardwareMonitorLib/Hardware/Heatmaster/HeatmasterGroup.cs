@@ -50,7 +50,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster
         private static string[] GetRegistryPortNames()
         {
             List<string> result = new List<string>();
-            string[] paths = { "", "&MI_00" };
+            string[] paths = { string.Empty, "&MI_00" };
             try
             {
                 foreach (string path in paths)

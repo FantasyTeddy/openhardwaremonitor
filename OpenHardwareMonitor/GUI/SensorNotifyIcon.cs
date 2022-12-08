@@ -314,7 +314,7 @@ namespace OpenHardwareMonitor.GUI
 
             icon?.Dispose();
 
-            string format = "";
+            string format = string.Empty;
             switch (Sensor.SensorType)
             {
                 case SensorType.Voltage: format = "\n{0}: {1:F2} V"; break;

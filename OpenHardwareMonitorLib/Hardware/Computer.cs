@@ -391,7 +391,7 @@ namespace OpenHardwareMonitor.Hardware
                 foreach (IGroup group in groups)
                 {
                     foreach (IHardware hardware in group.Hardware)
-                        ReportHardwareSensorTree(hardware, w, "");
+                        ReportHardwareSensorTree(hardware, w, string.Empty);
                 }
                 w.WriteLine();
 
@@ -401,7 +401,7 @@ namespace OpenHardwareMonitor.Hardware
                 foreach (IGroup group in groups)
                 {
                     foreach (IHardware hardware in group.Hardware)
-                        ReportHardwareParameterTree(hardware, w, "");
+                        ReportHardwareParameterTree(hardware, w, string.Empty);
                 }
                 w.WriteLine();
 

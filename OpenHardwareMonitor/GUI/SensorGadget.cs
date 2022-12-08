@@ -656,7 +656,7 @@ namespace OpenHardwareMonitor.GUI
 
                         if (sensor.Value.HasValue)
                         {
-                            string format = "";
+                            string format = string.Empty;
                             switch (sensor.SensorType)
                             {
                                 case SensorType.Voltage:

@@ -174,11 +174,11 @@ namespace OpenHardwareMonitor.GUI
             }
             catch (IOException)
             {
-                folder = root.CreateFolder("Open Hardware Monitor", "");
+                folder = root.CreateFolder("Open Hardware Monitor", string.Empty);
             }
             folder.RegisterTaskDefinition("Startup", definition,
               TaskCreation.CreateOrUpdate, null, null,
-              TaskLogonType.InteractiveToken, "");
+              TaskLogonType.InteractiveToken, string.Empty);
         }
 
         private void DeleteSchedulerTask()

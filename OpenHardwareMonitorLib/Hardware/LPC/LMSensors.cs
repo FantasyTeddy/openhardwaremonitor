@@ -26,7 +26,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
             string[] basePaths = Directory.GetDirectories("/sys/class/hwmon/");
             foreach (string basePath in basePaths)
             {
-                foreach (string devicePath in new[] { "/device", "" })
+                foreach (string devicePath in new[] { "/device", string.Empty })
                 {
                     string path = basePath + devicePath;
 

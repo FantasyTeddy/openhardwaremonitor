@@ -380,7 +380,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
                           " {0}{1}{2}{3}{4}{5}{6}{7}",
                           value.Identifier.ToString("X2").PadRight(3),
                           description.PadRight(35),
-                          raw.Replace("-", "").PadRight(13),
+                          raw.Replace("-", string.Empty).PadRight(13),
                           value.WorstValue.ToString(CultureInfo.InvariantCulture).PadRight(6),
                           value.AttrValue.ToString(CultureInfo.InvariantCulture).PadRight(6),
                           (threshold.HasValue ? threshold.Value.ToString(

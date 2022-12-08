@@ -33,7 +33,7 @@ namespace OpenHardwareMonitor.WMI
             HardwareType = hardware.HardwareType.ToString();
             Parent = (hardware.Parent != null)
               ? hardware.Parent.Identifier.ToString()
-              : "";
+              : string.Empty;
         }
 
         public void Update() { }

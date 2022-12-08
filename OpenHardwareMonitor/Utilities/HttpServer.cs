@@ -148,7 +148,7 @@ namespace OpenHardwareMonitor.Utilities
             if (requestedFile.Contains("images_icon"))
             {
                 ServeResourceImage(context.Response,
-                  requestedFile.Replace("images_icon/", ""));
+                  requestedFile.Replace("images_icon/", string.Empty));
                 return;
             }
 

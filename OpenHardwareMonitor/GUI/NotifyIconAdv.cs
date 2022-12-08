@@ -401,7 +401,7 @@ namespace OpenHardwareMonitor.GUI
 
             private readonly object syncObj = new object();
             private Icon icon;
-            private string text = "";
+            private string text = string.Empty;
             private readonly int id;
             private bool created;
             private NotifyIconNativeWindow window;
@@ -446,7 +446,7 @@ namespace OpenHardwareMonitor.GUI
                 set
                 {
                     if (value == null)
-                        value = "";
+                        value = string.Empty;
 
                     if (value.Length > 63)
                         throw new ArgumentOutOfRangeException(nameof(Text));
@@ -476,8 +476,8 @@ namespace OpenHardwareMonitor.GUI
 
             public NotifyIconWindowsImplementation()
             {
-                BalloonTipText = "";
-                BalloonTipTitle = "";
+                BalloonTipText = string.Empty;
+                BalloonTipTitle = string.Empty;
 
                 commandDispatch = typeof(Form).Assembly.
                   GetType("System.Windows.Forms.Command").GetMethod("DispatchID",
@@ -496,7 +496,7 @@ namespace OpenHardwareMonitor.GUI
                     if (window != null)
                     {
                         icon = null;
-                        text = "";
+                        text = string.Empty;
                         UpdateNotifyIcon(false);
                         window.DestroyHandle();
                         window = null;
