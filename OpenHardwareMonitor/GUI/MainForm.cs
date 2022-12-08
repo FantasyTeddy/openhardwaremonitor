@@ -70,7 +70,7 @@ namespace OpenHardwareMonitor.GUI
         private readonly UserRadioGroup loggingInterval;
         private readonly Logger logger;
 
-        private bool selectionDragging = false;
+        private bool selectionDragging;
 
         public MainForm()
         {
@@ -651,7 +651,7 @@ namespace OpenHardwareMonitor.GUI
             Close();
         }
 
-        private int delayCount = 0;
+        private int delayCount;
         private void timer_Tick(object sender, EventArgs e)
         {
             computer.Accept(updateVisitor);

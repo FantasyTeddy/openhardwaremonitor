@@ -17,7 +17,7 @@ namespace OpenHardwareMonitor.GUI
     public class SplitContainerAdv : SplitContainer
     {
 
-        private int delta = 0;
+        private int delta;
         private Border3DStyle border3DStyle = Border3DStyle.Raised;
         private Color color = SystemColors.Control;
 

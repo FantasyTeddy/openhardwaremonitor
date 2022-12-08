@@ -20,8 +20,8 @@ namespace OpenHardwareMonitor.GUI
         private readonly PersistentSettings settings;
         private readonly UnitManager unitManager;
         private readonly string fixedFormat;
-        private bool plot = false;
-        private Color? penColor = null;
+        private bool plot;
+        private Color? penColor;
 
         public string ValueToString(float? value)
         {

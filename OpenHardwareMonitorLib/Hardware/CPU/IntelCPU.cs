@@ -65,7 +65,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
       MSR_PP0_ENERY_STATUS, MSR_PP1_ENERY_STATUS, MSR_DRAM_ENERGY_STATUS };
         private readonly string[] powerSensorLabels =
           { "CPU Package", "CPU Cores", "CPU Graphics", "CPU DRAM" };
-        private readonly float energyUnitMultiplier = 0;
+        private readonly float energyUnitMultiplier;
         private readonly DateTime[] lastEnergyTime;
         private readonly uint[] lastEnergyConsumed;
 

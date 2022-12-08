@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.GUI
         private event EventHandler<ShowDesktopChangedEventArgs> ShowDesktopChangedEvent;
 
         private readonly System.Threading.Timer timer;
-        private bool showDesktop = false;
+        private bool showDesktop;
         private readonly NativeWindow referenceWindow;
         private readonly string referenceWindowCaption =
           "OpenHardwareMonitorShowDesktopReferenceWindow";

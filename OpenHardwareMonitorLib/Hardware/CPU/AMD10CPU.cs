@@ -49,7 +49,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         private const uint CLOCK_POWER_TIMING_CONTROL_0_REGISTER = 0xD4;
         private const uint SMU_REPORTED_TEMP_CONTROL_REGISTER = 0xD8200CA4;
 
-        private readonly bool hasSmuTemperatureRegister = false;
+        private readonly bool hasSmuTemperatureRegister;
 
         private readonly uint miscellaneousControlAddress;
         private readonly ushort miscellaneousControlDeviceId;

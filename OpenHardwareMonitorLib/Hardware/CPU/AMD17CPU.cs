@@ -42,7 +42,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         private const uint MSR_P_STATE_0 = 0xC0010064;
         private const uint MSR_FAMILY_17H_P_STATE = 0xc0010293;
 
-        private readonly float energyUnitMultiplier = 0;
+        private readonly float energyUnitMultiplier;
         private uint lastEnergyConsumed;
         private DateTime lastEnergyTime;
 
@@ -61,7 +61,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
       new TctlOffsetItem { Name = "AMD Ryzen Threadripper 19", Offset = 27.0f },
       new TctlOffsetItem { Name = "AMD Ryzen Threadripper 29", Offset = 27.0f }
     };
-        private readonly float tctlOffset = 0.0f;
+        private readonly float tctlOffset;
 
         public AMD17CPU(int processorIndex, CPUID[][] cpuid, ISettings settings)
           : base(processorIndex, cpuid, settings)
@@ -365,7 +365,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 }
             }
 
-            public float? Power { get; private set; } = null;
+            public float? Power { get; private set; }
 
             public void Update()
             {

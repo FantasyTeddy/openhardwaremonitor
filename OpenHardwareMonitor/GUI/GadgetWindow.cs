@@ -24,8 +24,8 @@ namespace OpenHardwareMonitor.GUI
     public class GadgetWindow : NativeWindow, IDisposable
     {
 
-        private bool visible = false;
-        private bool alwaysOnTop = false;
+        private bool visible;
+        private bool alwaysOnTop;
         private byte opacity = 255;
         private Point location = new Point(100, 100);
         private Size size = new Size(130, 84);
@@ -366,7 +366,7 @@ namespace OpenHardwareMonitor.GUI
         }
 
         // if locked, the window can not be moved or resized
-        public bool LockPositionAndSize { get; set; } = false;
+        public bool LockPositionAndSize { get; set; }
 
         public bool AlwaysOnTop
         {
@@ -427,7 +427,7 @@ namespace OpenHardwareMonitor.GUI
 
         public event EventHandler LocationChanged;
 
-        public ContextMenu ContextMenu { get; set; } = null;
+        public ContextMenu ContextMenu { get; set; }
 
         public event EventHandler<HitTestEventArgs> HitTest;
 

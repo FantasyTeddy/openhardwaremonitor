@@ -20,7 +20,7 @@ namespace OpenHardwareMonitor.GUI
     {
 
         private readonly Node root;
-        private bool forceVisible = false;
+        private bool forceVisible;
 
         public TreeModel()
         {

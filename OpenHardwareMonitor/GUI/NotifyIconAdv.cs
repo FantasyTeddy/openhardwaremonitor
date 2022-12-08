@@ -397,7 +397,7 @@ namespace OpenHardwareMonitor.GUI
         private class NotifyIconWindowsImplementation : Component
         {
 
-            private static int nextId = 0;
+            private static int nextId;
 
             private readonly object syncObj = new object();
             private Icon icon;

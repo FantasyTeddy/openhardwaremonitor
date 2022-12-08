@@ -25,8 +25,8 @@ namespace OpenHardwareMonitor.GUI
         private readonly UnitManager unitManager;
 
         private Image back = Utilities.EmbeddedResources.GetImage("gadget.png");
-        private Image image = null;
-        private Image fore = null;
+        private Image image;
+        private Image fore;
         private Image barBack = Utilities.EmbeddedResources.GetImage("barback.png");
         private Image barFore = Utilities.EmbeddedResources.GetImage("barblue.png");
         private const int topBorder = 6;
