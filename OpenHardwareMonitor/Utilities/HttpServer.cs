@@ -35,7 +35,7 @@ namespace OpenHardwareMonitor.Utilities
             root = node;
             ListenerPort = port;
 
-            //JSON node count. 
+            // JSON node count. 
             nodeCount = 0;
 
             try
@@ -333,7 +333,7 @@ namespace OpenHardwareMonitor.Utilities
         {
             context.Response.ContentType =
               GetcontentType(Path.GetExtension(filePath));
-            const int bufferSize = 1024 * 512; //512KB
+            const int bufferSize = 1024 * 512; // 512KB
             byte[] buffer = new byte[bufferSize];
             using (FileStream fs = File.OpenRead(filePath))
             {
