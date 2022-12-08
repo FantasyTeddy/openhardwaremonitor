@@ -427,7 +427,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
                       StringSplitOptions.RemoveEmptyEntries);
 
                     if (array.Length != 4 && array.Length != 5)
-                        throw new Exception();
+                        throw new ArgumentOutOfRangeException(nameof(value));
 
                     DriveAttributeValue v = new DriveAttributeValue
                     {

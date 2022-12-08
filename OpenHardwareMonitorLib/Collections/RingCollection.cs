@@ -115,7 +115,7 @@ namespace OpenHardwareMonitor.Collections
             get
             {
                 if (index < 0 || index >= Count)
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 int i = head + index;
                 if (i >= array.Length)
                     i -= array.Length;
@@ -124,7 +124,7 @@ namespace OpenHardwareMonitor.Collections
             set
             {
                 if (index < 0 || index >= Count)
-                    throw new IndexOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 int i = head + index;
                 if (i >= array.Length)
                     i -= array.Length;
