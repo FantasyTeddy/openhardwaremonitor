@@ -423,7 +423,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
             return new[] {
         MSR_PLATFORM_INFO,
-        IA32_PERF_STATUS ,
+        IA32_PERF_STATUS,
         IA32_THERM_STATUS_MSR,
         IA32_TEMPERATURE_TARGET,
         IA32_PACKAGE_THERM_STATUS,
