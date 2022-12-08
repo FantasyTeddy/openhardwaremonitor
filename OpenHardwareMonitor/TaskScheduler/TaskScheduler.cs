@@ -442,7 +442,9 @@ namespace OpenHardwareMonitor.TaskScheduler
         IRunningTask Run([In, MarshalAs(UnmanagedType.Struct)] object parameters);
         [return: MarshalAs(UnmanagedType.Interface)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(6)]
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix
         IRunningTask RunEx([In, MarshalAs(UnmanagedType.Struct)] object parameters, [In] int flags, [In] int sessionID, [In, MarshalAs(UnmanagedType.BStr)] string user);
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
         [return: MarshalAs(UnmanagedType.Interface)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(7)]
         IRunningTaskCollection GetInstances([In] int flags);
