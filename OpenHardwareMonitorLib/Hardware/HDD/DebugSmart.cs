@@ -162,7 +162,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
           F1 FF4300000000 100 100 0
           F2 264F00000000 100 100 0"),
 
-     new Drive("CORSAIR CMFSSD-128GBG2D", "VBM19C1Q", 16,
+      new Drive("CORSAIR CMFSSD-128GBG2D", "VBM19C1Q", 16,
        @"09 100900000000 99  99  0 
          0C 560200000000 99  99  0 
          AF 000000000000 100 100 10
@@ -217,7 +217,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
           1   000000000000 0   0           
           144 000000000000 0   34 "),
 
-        new Drive("M4-CT256M4SSD2", "0309", 16,
+      new Drive("M4-CT256M4SSD2", "0309", 16,
           @"01 000000000000 100 100 50     
             05 000000000000 100 100 10     
             09 AB0100000000 100 100 1      
@@ -242,7 +242,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
             CA 000000000000 100 100 1      
             CE 000000000000 100 100 1 "),
 
-        new Drive("C300-CTFDDAC256MAG", "0007", 16,
+      new Drive("C300-CTFDDAC256MAG", "0007", 16,
           @"01 000000000000 100 100 0  
             05 000000000000 100 100 0  
             09 4C0A00000000 100 100 0  
@@ -266,7 +266,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
             CA 000000000000 100 100 0  
             CE 000000000000 100 100 0"),
 
-        new Drive("M4-CT064M4SSD2", "0009", 16,
+      new Drive("M4-CT064M4SSD2", "0009", 16,
           @"01 000000000000 100 100 50
             05 000000000000 100 100 10
             09 260000000000 100 100 1 
@@ -291,7 +291,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
             CA 000000000000 100 100 1 
             CE 000000000000 100 100 1"),
 
-        new Drive("M4-CT128M4SSD2", "000F", 16,
+      new Drive("M4-CT128M4SSD2", "000F", 16,
           @"01 000000000000 100 100 50 
             05 000000000000 100 100 10 
             09 CA1400000000 100 100 1  
@@ -316,7 +316,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
             CA 010000000000 99  99  1  
             CE 000000000000 100 100 1 "),
 
-       new Drive("Samsung SSD 840 PRO Series", "DXM05B0Q", 16,
+      new Drive("Samsung SSD 840 PRO Series", "DXM05B0Q", 16,
           @"05 000000000000 100 100 10 
             09 541200000000 99  99  0  
             0C 820500000000 98  98  0  
@@ -332,7 +332,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
             EB 690000000000 99  99  0  
             F1 A56AA1F60200 99  99  0"),
 
-        new Drive("INTEL SSDSC2KW128G8", "LHF004C", 16,
+      new Drive("INTEL SSDSC2KW128G8", "LHF004C", 16,
           @"05 000000000000 100 100 0 
             09 F70100000000 100 100 0 
             0C 590100000000 100 100 0 

@@ -112,7 +112,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             {
                 ccdTemperatures[i] = new Sensor(
                 "CPU CCD #" + (i + 1), i + 4, SensorType.Temperature, this,
-                  new[] {
+                new[] {
             new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
                   }, this.settings);
             }

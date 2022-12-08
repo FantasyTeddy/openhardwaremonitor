@@ -46,7 +46,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
       new SmartAttribute(0xBE, SmartNames.Temperature,
         (byte[] r, byte v, IReadOnlyList<IParameter> p)
           => { return r[0] + (p == null ? 0 : p[0].Value); },
-          SensorType.Temperature, 0, SmartNames.Temperature, false,
+        SensorType.Temperature, 0, SmartNames.Temperature, false,
         new[] { new ParameterDescription("Offset [°C]",
                   "Temperature offset of the thermal sensor.\n" +
                   "Temperature = Value + Offset.", 0) }),
