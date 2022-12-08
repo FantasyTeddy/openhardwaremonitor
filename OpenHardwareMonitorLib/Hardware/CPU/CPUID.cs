@@ -30,7 +30,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         private static void AppendRegister(StringBuilder b, uint value)
         {
-            b.Append((char)((value) & 0xff));
+            b.Append((char)(value & 0xff));
             b.Append((char)((value >> 8) & 0xff));
             b.Append((char)((value >> 16) & 0xff));
             b.Append((char)((value >> 24) & 0xff));
