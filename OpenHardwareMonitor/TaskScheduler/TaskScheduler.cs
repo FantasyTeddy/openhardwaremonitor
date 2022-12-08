@@ -858,13 +858,13 @@ namespace OpenHardwareMonitor.TaskScheduler {
     [ComImport, TypeLibType((short)2), ClassInterface((short)0), Guid("F2A69DB7-DA2C-4352-9066-86FEE6DACAC9")]
     public class TaskHandlerPSClass : ITaskHandler, TaskHandlerPS {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void Pause();
+        public extern virtual void Pause();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void Resume();
+        public extern virtual void Resume();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void Start([In, MarshalAs(UnmanagedType.IUnknown)] object pHandlerServices, [In, MarshalAs(UnmanagedType.BStr)] string Data);
+        public extern virtual void Start([In, MarshalAs(UnmanagedType.IUnknown)] object pHandlerServices, [In, MarshalAs(UnmanagedType.BStr)] string Data);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void Stop([MarshalAs(UnmanagedType.Error)] out int pRetCode);
+        public extern virtual void Stop([MarshalAs(UnmanagedType.Error)] out int pRetCode);
     }
 
     [ComImport, Guid("EAEC7A8F-27A0-4DDC-8675-14726A01A38A"), CoClass(typeof(TaskHandlerStatusPSClass))]
@@ -875,16 +875,16 @@ namespace OpenHardwareMonitor.TaskScheduler {
     public class TaskHandlerStatusPSClass : ITaskHandlerStatus, TaskHandlerStatusPS, ITaskVariables {
         [return: MarshalAs(UnmanagedType.BStr)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern string GetContext();
+        public extern virtual string GetContext();
         [return: MarshalAs(UnmanagedType.BStr)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern string GetInput();
+        public extern virtual string GetInput();
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void SetOutput([In, MarshalAs(UnmanagedType.BStr)] string input);
+        public extern virtual void SetOutput([In, MarshalAs(UnmanagedType.BStr)] string input);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void TaskCompleted([In, MarshalAs(UnmanagedType.Error)] int taskErrCode);
+        public extern virtual void TaskCompleted([In, MarshalAs(UnmanagedType.Error)] int taskErrCode);
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
-        public virtual extern void UpdateStatus([In] short percentComplete, [In, MarshalAs(UnmanagedType.BStr)] string statusMessage);
+        public extern virtual void UpdateStatus([In] short percentComplete, [In, MarshalAs(UnmanagedType.BStr)] string statusMessage);
     }
 
     [ComImport, CoClass(typeof(TaskSchedulerClass)), Guid("2FABA4C7-4DA9-4013-9697-20CC3FD40F85")]
@@ -894,27 +894,27 @@ namespace OpenHardwareMonitor.TaskScheduler {
     [ComImport, ClassInterface((short)0), DefaultMember("TargetServer"), Guid("0F87369F-A4E5-4CFC-BD3E-73E6154572DD"), TypeLibType((short)2)]
     public class TaskSchedulerClass : ITaskService, TaskScheduler {
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(4)]
-        public virtual extern void Connect([In, Optional, MarshalAs(UnmanagedType.Struct)] object serverName, [In, Optional, MarshalAs(UnmanagedType.Struct)] object user, [In, Optional, MarshalAs(UnmanagedType.Struct)] object domain, [In, Optional, MarshalAs(UnmanagedType.Struct)] object password);
+        public extern virtual void Connect([In, Optional, MarshalAs(UnmanagedType.Struct)] object serverName, [In, Optional, MarshalAs(UnmanagedType.Struct)] object user, [In, Optional, MarshalAs(UnmanagedType.Struct)] object domain, [In, Optional, MarshalAs(UnmanagedType.Struct)] object password);
         [return: MarshalAs(UnmanagedType.Interface)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(1)]
-        public virtual extern ITaskFolder GetFolder([In, MarshalAs(UnmanagedType.BStr)] string Path);
+        public extern virtual ITaskFolder GetFolder([In, MarshalAs(UnmanagedType.BStr)] string Path);
         [return: MarshalAs(UnmanagedType.Interface)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(2)]
-        public virtual extern IRunningTaskCollection GetRunningTasks([In] int flags);
+        public extern virtual IRunningTaskCollection GetRunningTasks([In] int flags);
         [return: MarshalAs(UnmanagedType.Interface)]
         [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(3)]
-        public virtual extern ITaskDefinition NewTask([In] uint flags);
+        public extern virtual ITaskDefinition NewTask([In] uint flags);
 
         [DispId(5)]
-        public virtual extern bool Connected { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(5)] get; }
+        public extern virtual bool Connected { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(5)] get; }
         [DispId(7)]
-        public virtual extern string ConnectedDomain { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(7)] get; }
+        public extern virtual string ConnectedDomain { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(7)] get; }
         [DispId(6)]
-        public virtual extern string ConnectedUser { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(6)] get; }
+        public extern virtual string ConnectedUser { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(6)] get; }
         [DispId(8)]
-        public virtual extern uint HighestVersion { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(8)] get; }
+        public extern virtual uint HighestVersion { [MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(8)] get; }
         [DispId(0)]
-        public virtual extern string TargetServer { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0)] get; }
+        public extern virtual string TargetServer { [return: MarshalAs(UnmanagedType.BStr)][MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime), DispId(0)] get; }
     }
 }
 
