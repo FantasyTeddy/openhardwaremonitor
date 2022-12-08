@@ -452,7 +452,7 @@ namespace OpenHardwareMonitor.Hardware
         public void Accept(IVisitor visitor)
         {
             if (visitor == null)
-                throw new ArgumentNullException("visitor");
+                throw new ArgumentNullException(nameof(visitor));
             visitor.VisitComputer(this);
         }
 

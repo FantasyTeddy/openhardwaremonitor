@@ -516,7 +516,7 @@ namespace OpenHardwareMonitor.GUI
               ToolTipIcon tipIcon)
             {
                 if (timeout < 0)
-                    throw new ArgumentOutOfRangeException("timeout");
+                    throw new ArgumentOutOfRangeException(nameof(timeout));
 
                 if (string.IsNullOrEmpty(tipText))
                     throw new ArgumentException("tipText");

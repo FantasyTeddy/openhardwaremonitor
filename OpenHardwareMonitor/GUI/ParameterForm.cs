@@ -70,8 +70,8 @@ namespace OpenHardwareMonitor.GUI
                 {
                     this.isDefault = false;
                     this.value = value;
-                    NotifyPropertyChanged("Default");
-                    NotifyPropertyChanged("Value");
+                    NotifyPropertyChanged(nameof(Default));
+                    NotifyPropertyChanged(nameof(Value));
                 }
             }
 
@@ -83,8 +83,8 @@ namespace OpenHardwareMonitor.GUI
                     isDefault = value;
                     if (value)
                         this.value = parameter.DefaultValue;
-                    NotifyPropertyChanged("Default");
-                    NotifyPropertyChanged("Value");
+                    NotifyPropertyChanged(nameof(Default));
+                    NotifyPropertyChanged(nameof(Value));
                 }
             }
         }

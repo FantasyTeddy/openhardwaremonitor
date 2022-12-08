@@ -40,7 +40,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
         public GigabyteTAMG(byte[] table)
         {
-            this.table = table ?? throw new ArgumentNullException("table");
+            this.table = table ?? throw new ArgumentNullException(nameof(table));
 
             int index = IndexOf(table, Encoding.ASCII.GetBytes("$HEALTH$"), 0);
 
