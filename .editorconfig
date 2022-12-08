@@ -96,6 +96,9 @@ csharp_prefer_simple_using_statement = false:none
 csharp_prefer_simple_default_expression = true:suggestion
 csharp_style_deconstructed_variable_declaration = true
 csharp_style_inlined_variable_declaration = true:suggestion
+csharp_style_prefer_index_operator = false:none
+csharp_style_prefer_range_operator = false:none
+csharp_style_throw_expression = true:suggestion
 
 # New line preferences
 csharp_new_line_before_open_brace = none
@@ -127,12 +130,7 @@ csharp_using_directive_placement = outside_namespace:suggestion
 csharp_preserve_single_line_blocks = true:none
 csharp_preserve_single_line_statements = false:none
 
-# Null checking preferences
-csharp_style_throw_expression = true:suggestion
-
 # Other features
-csharp_style_prefer_index_operator = false:none
-csharp_style_prefer_range_operator = false:none
 csharp_style_pattern_local_over_anonymous_function = false:none
 
 # Space preferences
