@@ -16,7 +16,7 @@ using Microsoft.Win32.SafeHandles;
 
 namespace OpenHardwareMonitor.Hardware
 {
-    internal class KernelDriver
+    internal class KernelDriver : IDisposable
     {
 
         private readonly string id;
@@ -317,6 +317,11 @@ namespace OpenHardwareMonitor.Hardware
               FileAccess dwDesiredAccess, uint dwShareMode,
               IntPtr lpSecurityAttributes, CreationDisposition dwCreationDisposition,
               FileAttributes dwFlagsAndAttributes, IntPtr hTemplateFile);
+        }
+
+        public void Dispose()
+        {
+            device?.Dispose();
         }
     }
 }

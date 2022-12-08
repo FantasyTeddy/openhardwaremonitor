@@ -19,7 +19,7 @@ using System.Threading;
 namespace OpenHardwareMonitor.Hardware.CPU
 {
 
-    internal sealed class AMD10CPU : AMDCPU
+    internal sealed class AMD10CPU : AMDCPU, IDisposable
     {
 
         private readonly Sensor coreTemperature;
@@ -459,6 +459,11 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
             temperatureStream?.Close();
             base.Close();
+        }
+
+        public void Dispose()
+        {
+            temperatureStream?.Dispose();
         }
     }
 }

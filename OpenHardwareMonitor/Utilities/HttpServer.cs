@@ -23,7 +23,7 @@ using OpenHardwareMonitor.Hardware;
 namespace OpenHardwareMonitor.Utilities
 {
 
-    public class HttpServer
+    public class HttpServer : IDisposable
     {
         private readonly HttpListener listener;
         private int nodeCount;
@@ -446,6 +446,11 @@ namespace OpenHardwareMonitor.Utilities
 
             StopHTTPListener();
             listener.Abort();
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)listener)?.Dispose();
         }
     }
 }

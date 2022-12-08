@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace OpenHardwareMonitor.GUI
 {
-    public class ShowDesktop
+    public class ShowDesktop : IDisposable
     {
         public delegate void ShowDesktopChangedEventHandler(bool showDesktop);
 
@@ -152,6 +152,11 @@ namespace OpenHardwareMonitor.GUI
             [DllImport(USER, CallingConvention = CallingConvention.Winapi)]
             public static extern int GetWindowThreadProcessId(IntPtr hWnd,
               out int processId);
+        }
+
+        public void Dispose()
+        {
+            timer?.Dispose();
         }
     }
 }
