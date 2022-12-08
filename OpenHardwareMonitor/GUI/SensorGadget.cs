@@ -142,7 +142,7 @@ namespace OpenHardwareMonitor.GUI
             Location = new Point(
               settings.GetValue("sensorGadget.Location.X", 100),
               settings.GetValue("sensorGadget.Location.Y", 100));
-            LocationChanged += delegate (object sender, EventArgs e)
+            LocationChanged += (sender, e) =>
             {
                 settings.SetValue("sensorGadget.Location.X", Location.X);
                 settings.SetValue("sensorGadget.Location.Y", Location.Y);
@@ -177,7 +177,7 @@ namespace OpenHardwareMonitor.GUI
                 {
                     Checked = fontSize == size
                 };
-                item.Click += delegate (object sender, EventArgs e)
+                item.Click += (sender, e) =>
                 {
                     SetFontSize(size);
                     settings.SetValue("sensorGadget.FontSize", size);
@@ -201,7 +201,7 @@ namespace OpenHardwareMonitor.GUI
                 MenuItem item = new MenuItem((20 * (i + 1)).ToString() + " %");
                 byte o = (byte)(51 * (i + 1));
                 item.Checked = Opacity == o;
-                item.Click += delegate (object sender, EventArgs e)
+                item.Click += (sender, e) =>
                 {
                     Opacity = o;
                     settings.SetValue("sensorGadget.Opacity", Opacity);
@@ -214,25 +214,25 @@ namespace OpenHardwareMonitor.GUI
 
             hardwareNames = new UserOption("sensorGadget.Hardwarenames", true,
               hardwareNamesItem, settings);
-            hardwareNames.Changed += delegate (object sender, EventArgs e)
+            hardwareNames.Changed += (sender, e) =>
             {
                 Resize();
             };
 
             alwaysOnTop = new UserOption("sensorGadget.AlwaysOnTop", false,
               alwaysOnTopItem, settings);
-            alwaysOnTop.Changed += delegate (object sender, EventArgs e)
+            alwaysOnTop.Changed += (sender, e) =>
             {
                 AlwaysOnTop = alwaysOnTop.Value;
             };
             lockPositionAndSize = new UserOption("sensorGadget.LockPositionAndSize",
               false, lockItem, settings);
-            lockPositionAndSize.Changed += delegate (object sender, EventArgs e)
+            lockPositionAndSize.Changed += (sender, e) =>
             {
                 LockPositionAndSize = lockPositionAndSize.Value;
             };
 
-            HitTest += delegate (object sender, HitTestEventArgs e)
+            HitTest += (sender, e) =>
             {
                 if (lockPositionAndSize.Value)
                     return;
@@ -249,13 +249,13 @@ namespace OpenHardwareMonitor.GUI
                 }
             };
 
-            SizeChanged += delegate (object sender, EventArgs e)
+            SizeChanged += (sender, e) =>
             {
                 settings.SetValue("sensorGadget.Width", Size.Width);
                 Redraw();
             };
 
-            VisibleChanged += delegate (object sender, EventArgs e)
+            VisibleChanged += (sender, e) =>
             {
                 Rectangle bounds = new Rectangle(Location, Size);
                 Screen screen = Screen.FromRectangle(bounds);
@@ -270,7 +270,7 @@ namespace OpenHardwareMonitor.GUI
                 }
             };
 
-            MouseDoubleClick += delegate (object obj, MouseEventArgs args)
+            MouseDoubleClick += (obj, args) =>
             {
                 SendHideShowCommand();
             };

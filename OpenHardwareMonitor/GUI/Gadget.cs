@@ -22,7 +22,7 @@ namespace OpenHardwareMonitor.GUI
         public Gadget()
         {
             window = new GadgetWindow();
-            window.Paint += delegate (object sender, PaintEventArgs e)
+            window.Paint += (sender, e) =>
             {
                 OnPaint(e);
             };

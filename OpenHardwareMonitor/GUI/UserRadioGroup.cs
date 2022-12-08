@@ -38,7 +38,7 @@ namespace OpenHardwareMonitor.GUI
             {
                 this.menuItems[i].Checked = i == this.value;
                 int index = i;
-                this.menuItems[i].Click += delegate (object sender, EventArgs e)
+                this.menuItems[i].Click += (sender, e) =>
                 {
                     Value = index;
                 };

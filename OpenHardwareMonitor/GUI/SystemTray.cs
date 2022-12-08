@@ -38,20 +38,20 @@ namespace OpenHardwareMonitor.GUI
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem hideShowItem = new MenuItem("Hide/Show");
-            hideShowItem.Click += delegate (object obj, EventArgs args)
+            hideShowItem.Click += (obj, args) =>
             {
                 SendHideShowCommand();
             };
             contextMenu.MenuItems.Add(hideShowItem);
             contextMenu.MenuItems.Add(new MenuItem("-"));
             MenuItem exitItem = new MenuItem("Exit");
-            exitItem.Click += delegate (object obj, EventArgs args)
+            exitItem.Click += (obj, args) =>
             {
                 SendExitCommand();
             };
             contextMenu.MenuItems.Add(exitItem);
             mainIcon.ContextMenu = contextMenu;
-            mainIcon.DoubleClick += delegate (object obj, EventArgs args)
+            mainIcon.DoubleClick += (obj, args) =>
             {
                 SendHideShowCommand();
             };

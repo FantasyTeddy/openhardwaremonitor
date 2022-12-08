@@ -609,11 +609,10 @@ namespace OpenHardwareMonitor.Hardware.ATI
         private delegate IntPtr ADL_Main_Memory_AllocDelegate(int size);
 
         // create a Main_Memory_Alloc delegate and keep it alive
-        private static readonly ADL_Main_Memory_AllocDelegate Main_Memory_Alloc =
-          delegate (int size)
-          {
-              return Marshal.AllocHGlobal(size);
-          };
+        private static readonly ADL_Main_Memory_AllocDelegate Main_Memory_Alloc = size =>
+        {
+            return Marshal.AllocHGlobal(size);
+        };
 
         private static void Main_Memory_Free(IntPtr buffer)
         {

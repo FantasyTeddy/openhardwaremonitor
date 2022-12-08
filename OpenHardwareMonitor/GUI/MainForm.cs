@@ -198,26 +198,26 @@ namespace OpenHardwareMonitor.GUI
 
             showHiddenSensors = new UserOption("hiddenMenuItem", false,
               hiddenMenuItem, settings);
-            showHiddenSensors.Changed += delegate (object sender, EventArgs e)
+            showHiddenSensors.Changed += (sender, e) =>
             {
                 treeModel.ForceVisible = showHiddenSensors.Value;
             };
 
             showValue = new UserOption("valueMenuItem", true, valueMenuItem,
               settings);
-            showValue.Changed += delegate (object sender, EventArgs e)
+            showValue.Changed += (sender, e) =>
             {
                 treeView.Columns[1].IsVisible = showValue.Value;
             };
 
             showMin = new UserOption("minMenuItem", false, minMenuItem, settings);
-            showMin.Changed += delegate (object sender, EventArgs e)
+            showMin.Changed += (sender, e) =>
             {
                 treeView.Columns[2].IsVisible = showMin.Value;
             };
 
             showMax = new UserOption("maxMenuItem", true, maxMenuItem, settings);
-            showMax.Changed += delegate (object sender, EventArgs e)
+            showMax.Changed += (sender, e) =>
             {
                 treeView.Columns[3].IsVisible = showMax.Value;
             };
@@ -227,7 +227,7 @@ namespace OpenHardwareMonitor.GUI
 
             minimizeToTray = new UserOption("minTrayMenuItem", true,
               minTrayMenuItem, settings);
-            minimizeToTray.Changed += delegate (object sender, EventArgs e)
+            minimizeToTray.Changed += (sender, e) =>
             {
                 systemTray.IsMainIconEnabled = minimizeToTray.Value;
             };
@@ -237,7 +237,7 @@ namespace OpenHardwareMonitor.GUI
 
             autoStart = new UserOption(null, startupManager.Startup,
               startupMenuItem, settings);
-            autoStart.Changed += delegate (object sender, EventArgs e)
+            autoStart.Changed += (sender, e) =>
             {
                 try
                 {
@@ -253,49 +253,49 @@ namespace OpenHardwareMonitor.GUI
 
             readMainboardSensors = new UserOption("mainboardMenuItem", true,
               mainboardMenuItem, settings);
-            readMainboardSensors.Changed += delegate (object sender, EventArgs e)
+            readMainboardSensors.Changed += (sender, e) =>
             {
                 computer.MainboardEnabled = readMainboardSensors.Value;
             };
 
             readCpuSensors = new UserOption("cpuMenuItem", true,
               cpuMenuItem, settings);
-            readCpuSensors.Changed += delegate (object sender, EventArgs e)
+            readCpuSensors.Changed += (sender, e) =>
             {
                 computer.CPUEnabled = readCpuSensors.Value;
             };
 
             readRamSensors = new UserOption("ramMenuItem", true,
               ramMenuItem, settings);
-            readRamSensors.Changed += delegate (object sender, EventArgs e)
+            readRamSensors.Changed += (sender, e) =>
             {
                 computer.RAMEnabled = readRamSensors.Value;
             };
 
             readGpuSensors = new UserOption("gpuMenuItem", true,
               gpuMenuItem, settings);
-            readGpuSensors.Changed += delegate (object sender, EventArgs e)
+            readGpuSensors.Changed += (sender, e) =>
             {
                 computer.GPUEnabled = readGpuSensors.Value;
             };
 
             readFanControllersSensors = new UserOption("fanControllerMenuItem", true,
               fanControllerMenuItem, settings);
-            readFanControllersSensors.Changed += delegate (object sender, EventArgs e)
+            readFanControllersSensors.Changed += (sender, e) =>
             {
                 computer.FanControllerEnabled = readFanControllersSensors.Value;
             };
 
             readHddSensors = new UserOption("hddMenuItem", true, hddMenuItem,
               settings);
-            readHddSensors.Changed += delegate (object sender, EventArgs e)
+            readHddSensors.Changed += (sender, e) =>
             {
                 computer.HDDEnabled = readHddSensors.Value;
             };
 
             showGadget = new UserOption("gadgetMenuItem", false, gadgetMenuItem,
               settings);
-            showGadget.Changed += delegate (object sender, EventArgs e)
+            showGadget.Changed += (sender, e) =>
             {
                 if (gadget != null)
                     gadget.Visible = showGadget.Value;
@@ -314,7 +314,7 @@ namespace OpenHardwareMonitor.GUI
 
             runWebServer = new UserOption("runWebServerMenuItem", false,
               runWebServerMenuItem, settings);
-            runWebServer.Changed += delegate (object sender, EventArgs e)
+            runWebServer.Changed += (sender, e) =>
             {
                 if (runWebServer.Value)
                     Server.StartHTTPListener();
@@ -373,7 +373,7 @@ namespace OpenHardwareMonitor.GUI
             IntPtr handle = Handle;
 
             // Make sure the settings are saved when the user logs off
-            Microsoft.Win32.SystemEvents.SessionEnded += delegate
+            Microsoft.Win32.SystemEvents.SessionEnded += (sender, e) =>
             {
                 computer.Close();
                 SaveConfiguration();
@@ -414,7 +414,7 @@ namespace OpenHardwareMonitor.GUI
               new[] { plotWindowMenuItem, plotBottomMenuItem, plotRightMenuItem },
               settings);
 
-            showPlot.Changed += delegate (object sender, EventArgs e)
+            showPlot.Changed += (sender, e) =>
             {
                 if (plotLocation.Value == 0)
                 {
@@ -429,7 +429,7 @@ namespace OpenHardwareMonitor.GUI
                 }
                 treeView.Invalidate();
             };
-            plotLocation.Changed += delegate (object sender, EventArgs e)
+            plotLocation.Changed += (sender, e) =>
             {
                 switch (plotLocation.Value)
                 {
@@ -457,7 +457,7 @@ namespace OpenHardwareMonitor.GUI
                 }
             };
 
-            plotForm.FormClosing += delegate (object sender, FormClosingEventArgs e)
+            plotForm.FormClosing += (sender, e) =>
             {
                 if (e.CloseReason == CloseReason.UserClosing)
                 {
@@ -470,7 +470,7 @@ namespace OpenHardwareMonitor.GUI
                 }
             };
 
-            EventHandler moveOrResizePlotForm = delegate (object sender, EventArgs e)
+            EventHandler moveOrResizePlotForm = (sender, e) =>
             {
                 if (plotForm.WindowState != FormWindowState.Minimized)
                 {
@@ -483,7 +483,7 @@ namespace OpenHardwareMonitor.GUI
             plotForm.Move += moveOrResizePlotForm;
             plotForm.Resize += moveOrResizePlotForm;
 
-            plotForm.VisibleChanged += delegate (object sender, EventArgs e)
+            plotForm.VisibleChanged += (sender, e) =>
             {
                 Rectangle bounds = new Rectangle(plotForm.Location, plotForm.Size);
                 Screen screen = Screen.FromRectangle(bounds);
@@ -498,7 +498,7 @@ namespace OpenHardwareMonitor.GUI
                 }
             };
 
-            VisibleChanged += delegate (object sender, EventArgs e)
+            VisibleChanged += (sender, e) =>
             {
                 if (Visible && showPlot.Value && plotLocation.Value == 0)
                     plotForm.Show();
@@ -776,7 +776,7 @@ namespace OpenHardwareMonitor.GUI
                     if (node.Sensor.Parameters.Count > 0)
                     {
                         MenuItem item = new MenuItem("Parameters...");
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             ShowParameterForm(node.Sensor);
                         };
@@ -785,7 +785,7 @@ namespace OpenHardwareMonitor.GUI
                     if (nodeTextBoxText.EditEnabled)
                     {
                         MenuItem item = new MenuItem("Rename");
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             nodeTextBoxText.BeginEdit();
                         };
@@ -794,7 +794,7 @@ namespace OpenHardwareMonitor.GUI
                     if (node.IsVisible)
                     {
                         MenuItem item = new MenuItem("Hide");
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             node.IsVisible = false;
                         };
@@ -803,7 +803,7 @@ namespace OpenHardwareMonitor.GUI
                     else
                     {
                         MenuItem item = new MenuItem("Unhide");
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             node.IsVisible = true;
                         };
@@ -812,7 +812,7 @@ namespace OpenHardwareMonitor.GUI
                     treeContextMenu.MenuItems.Add(new MenuItem("-"));
                     {
                         MenuItem item = new MenuItem("Pen Color...");
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             ColorDialog dialog = new ColorDialog
                             {
@@ -825,7 +825,7 @@ namespace OpenHardwareMonitor.GUI
                     }
                     {
                         MenuItem item = new MenuItem("Reset Pen Color");
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             node.PenColor = null;
                         };
@@ -837,7 +837,7 @@ namespace OpenHardwareMonitor.GUI
                         {
                             Checked = systemTray.Contains(node.Sensor)
                         };
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             if (item.Checked)
                                 systemTray.Remove(node.Sensor);
@@ -852,7 +852,7 @@ namespace OpenHardwareMonitor.GUI
                         {
                             Checked = gadget.Contains(node.Sensor)
                         };
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             if (item.Checked)
                             {
@@ -875,7 +875,7 @@ namespace OpenHardwareMonitor.GUI
                             Checked = control.ControlMode == ControlMode.Default
                         };
                         controlItem.MenuItems.Add(defaultItem);
-                        defaultItem.Click += delegate (object obj, EventArgs args)
+                        defaultItem.Click += (obj, args) =>
                         {
                             control.SetDefault();
                         };
@@ -895,7 +895,7 @@ namespace OpenHardwareMonitor.GUI
                                 item.Checked = control.ControlMode == ControlMode.Software &&
                                   Math.Round(control.SoftwareValue) == i;
                                 int softwareValue = i;
-                                item.Click += delegate (object obj, EventArgs args)
+                                item.Click += (obj, args) =>
                                 {
                                     control.SetSoftware(softwareValue);
                                 };
@@ -914,7 +914,7 @@ namespace OpenHardwareMonitor.GUI
                     if (nodeTextBoxText.EditEnabled)
                     {
                         MenuItem item = new MenuItem("Rename");
-                        item.Click += delegate (object obj, EventArgs args)
+                        item.Click += (obj, args) =>
                         {
                             nodeTextBoxText.BeginEdit();
                         };

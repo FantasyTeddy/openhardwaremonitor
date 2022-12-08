@@ -56,20 +56,20 @@ namespace OpenHardwareMonitor.GUI
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem hideShowItem = new MenuItem("Hide/Show");
-            hideShowItem.Click += delegate (object obj, EventArgs args)
+            hideShowItem.Click += (obj, args) =>
             {
                 sensorSystemTray.SendHideShowCommand();
             };
             contextMenu.MenuItems.Add(hideShowItem);
             contextMenu.MenuItems.Add(new MenuItem("-"));
             MenuItem removeItem = new MenuItem("Remove Sensor");
-            removeItem.Click += delegate (object obj, EventArgs args)
+            removeItem.Click += (obj, args) =>
             {
                 sensorSystemTray.Remove(Sensor);
             };
             contextMenu.MenuItems.Add(removeItem);
             MenuItem colorItem = new MenuItem("Change Color...");
-            colorItem.Click += delegate (object obj, EventArgs args)
+            colorItem.Click += (obj, args) =>
             {
                 ColorDialog dialog = new ColorDialog
                 {
@@ -85,13 +85,13 @@ namespace OpenHardwareMonitor.GUI
             contextMenu.MenuItems.Add(colorItem);
             contextMenu.MenuItems.Add(new MenuItem("-"));
             MenuItem exitItem = new MenuItem("Exit");
-            exitItem.Click += delegate (object obj, EventArgs args)
+            exitItem.Click += (obj, args) =>
             {
                 sensorSystemTray.SendExitCommand();
             };
             contextMenu.MenuItems.Add(exitItem);
             notifyIcon.ContextMenu = contextMenu;
-            notifyIcon.DoubleClick += delegate (object obj, EventArgs args)
+            notifyIcon.DoubleClick += (obj, args) =>
             {
                 sensorSystemTray.SendHideShowCommand();
             };

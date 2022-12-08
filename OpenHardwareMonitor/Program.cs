@@ -41,7 +41,7 @@ namespace OpenHardwareMonitor
             Application.SetCompatibleTextRenderingDefault(false);
             using (GUI.MainForm form = new GUI.MainForm())
             {
-                form.FormClosed += delegate (object sender, FormClosedEventArgs e)
+                form.FormClosed += (sender, e) =>
                 {
                     Application.Exit();
                 };
