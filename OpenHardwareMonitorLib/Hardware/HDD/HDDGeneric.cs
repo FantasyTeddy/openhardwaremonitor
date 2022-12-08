@@ -11,7 +11,6 @@
 */
 
 using System.Collections.Generic;
-using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware.HDD
 {
@@ -83,21 +82,21 @@ namespace OpenHardwareMonitor.Hardware.HDD
       new SmartAttribute(0xFE, SmartNames.FreeFallProtection),
 
       new SmartAttribute(0xC2, SmartNames.Temperature,
-        (byte[] r, byte v, IReadOnlyArray<IParameter> p)
+        (byte[] r, byte v, IReadOnlyList<IParameter> p)
           => { return r[0] + (p == null ? 0 : p[0].Value); },
           SensorType.Temperature, 0, SmartNames.Temperature, false,
         new[] { new ParameterDescription("Offset [°C]",
                   "Temperature offset of the thermal sensor.\n" +
                   "Temperature = Value + Offset.", 0) }),
       new SmartAttribute(0xE7, SmartNames.Temperature,
-        (byte[] r, byte v, IReadOnlyArray<IParameter> p)
+        (byte[] r, byte v, IReadOnlyList<IParameter> p)
           => { return r[0] + (p == null ? 0 : p[0].Value); },
           SensorType.Temperature, 0, SmartNames.Temperature, false,
         new[] { new ParameterDescription("Offset [°C]",
                   "Temperature offset of the thermal sensor.\n" +
                   "Temperature = Value + Offset.", 0) }),
       new SmartAttribute(0xBE, SmartNames.TemperatureDifferenceFrom100,
-        (byte[] r, byte v, IReadOnlyArray<IParameter> p)
+        (byte[] r, byte v, IReadOnlyList<IParameter> p)
           => { return r[0] + (p == null ? 0 : p[0].Value); },
           SensorType.Temperature, 0, "Temperature", false,
         new[] { new ParameterDescription("Offset [°C]",

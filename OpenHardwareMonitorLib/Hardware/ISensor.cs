@@ -10,7 +10,6 @@
 
 using System;
 using System.Collections.Generic;
-using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware
 {
@@ -57,7 +56,7 @@ namespace OpenHardwareMonitor.Hardware
 
         bool IsDefaultHidden { get; }
 
-        IReadOnlyArray<IParameter> Parameters { get; }
+        IReadOnlyList<IParameter> Parameters { get; }
 
         float? Value { get; }
         float? Min { get; }

@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -24,7 +25,7 @@ namespace OpenHardwareMonitor.Hardware
         private readonly string defaultName;
         private string name;
         private readonly Hardware hardware;
-        private readonly ReadOnlyArray<IParameter> parameters;
+        private readonly ReadOnlyCollection<IParameter> parameters;
         private float? currentValue;
         private readonly RingCollection<SensorValue>
           values = new RingCollection<SensorValue>();
@@ -56,7 +57,7 @@ namespace OpenHardwareMonitor.Hardware
               0 : parameterDescriptions.Length];
             for (int i = 0; i < parameters.Length; i++)
                 parameters[i] = new Parameter(parameterDescriptions[i], this, settings);
-            this.parameters = parameters;
+            this.parameters = new ReadOnlyCollection<IParameter>(parameters);
 
             this.settings = settings;
             this.defaultName = name;
@@ -169,7 +170,7 @@ namespace OpenHardwareMonitor.Hardware
 
         public bool IsDefaultHidden { get; }
 
-        public IReadOnlyArray<IParameter> Parameters => parameters;
+        public IReadOnlyList<IParameter> Parameters => parameters;
 
         public float? Value
         {

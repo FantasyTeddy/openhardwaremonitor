@@ -9,7 +9,7 @@
 	
 */
 
-using OpenHardwareMonitor.Collections;
+using System.Collections.Generic;
 
 namespace OpenHardwareMonitor.Hardware.HDD
 {
@@ -91,7 +91,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
         public bool HasRawValueConversion => rawValueConversion != null;
 
         public float ConvertValue(DriveAttributeValue value,
-          IReadOnlyArray<IParameter> parameters)
+          IReadOnlyList<IParameter> parameters)
         {
             if (rawValueConversion == null)
             {
@@ -104,6 +104,6 @@ namespace OpenHardwareMonitor.Hardware.HDD
         }
 
         public delegate float RawValueConversion(byte[] rawValue, byte value,
-          IReadOnlyArray<IParameter> parameters);
+          IReadOnlyList<IParameter> parameters);
     }
 }

@@ -413,7 +413,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
         }
 
         protected static float RawToInt(byte[] raw, byte value,
-          IReadOnlyArray<IParameter> parameters)
+          IReadOnlyList<IParameter> parameters)
         {
             return (raw[3] << 24) | (raw[2] << 16) | (raw[1] << 8) | raw[0];
         }

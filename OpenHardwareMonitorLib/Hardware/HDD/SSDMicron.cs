@@ -9,7 +9,6 @@
 */
 
 using System.Collections.Generic;
-using OpenHardwareMonitor.Collections;
 
 namespace OpenHardwareMonitor.Hardware.HDD
 {
@@ -34,7 +33,7 @@ RequireSmart(0xCA), RequireSmart(0xCE)]
       new SmartAttribute(0xAE, SmartNames.UnexpectedPowerLossCount, RawToInt),
       new SmartAttribute(0xB4, SmartNames.UnusedReserveNANDBlocks, RawToInt),
       new SmartAttribute(0xB5, SmartNames.Non4kAlignedAccess,
-        (byte[] raw, byte value, IReadOnlyArray<IParameter> p)
+        (byte[] raw, byte value, IReadOnlyList<IParameter> p)
           => { return 6e4f * ((raw[5] << 8) | raw[4]); }),
       new SmartAttribute(0xB7, SmartNames.SataDownshiftErrorCount, RawToInt),
       new SmartAttribute(0xB8, SmartNames.ErrorCorrectionCount, RawToInt),
@@ -47,15 +46,15 @@ RequireSmart(0xCA), RequireSmart(0xCE)]
       new SmartAttribute(0xC6, SmartNames.OffLineUncorrectableErrorCount, RawToInt),
       new SmartAttribute(0xC7, SmartNames.UltraDmaCrcErrorCount, RawToInt),
       new SmartAttribute(0xCA, SmartNames.RemainingLife,
-        (byte[] raw, byte value, IReadOnlyArray<IParameter> p)
+        (byte[] raw, byte value, IReadOnlyList<IParameter> p)
           => { return 100 - RawToInt(raw, value, p); },
         SensorType.Level, 0, SmartNames.RemainingLife),
       new SmartAttribute(0xCE, SmartNames.WriteErrorRate,
-         (byte[] raw, byte value, IReadOnlyArray<IParameter> p)
+         (byte[] raw, byte value, IReadOnlyList<IParameter> p)
            => { return 6e4f * ((raw[1] << 8) | raw[0]); }),
       new SmartAttribute(0xD2, SmartNames.SuccessfulRAINRecoveryCount, RawToInt),
       new SmartAttribute(0xF6, SmartNames.TotalLbasWritten,
-        (byte[] r, byte v, IReadOnlyArray<IParameter> p) => {
+        (byte[] r, byte v, IReadOnlyList<IParameter> p) => {
           return (((long)r[5] << 40) | ((long)r[4] << 32) | ((long)r[3] << 24) |
             ((long)r[2] << 16) | ((long)r[1] << 8) | r[0]) *
             (512.0f / 1024 / 1024 / 1024);

@@ -10,9 +10,9 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
-using OpenHardwareMonitor.Collections;
 using OpenHardwareMonitor.Hardware;
 
 namespace OpenHardwareMonitor.GUI
@@ -20,7 +20,7 @@ namespace OpenHardwareMonitor.GUI
     public partial class ParameterForm : Form
     {
 
-        private IReadOnlyArray<IParameter> parameters;
+        private IReadOnlyList<IParameter> parameters;
         private BindingList<ParameterRow> parameterRows;
 
         public ParameterForm()
@@ -28,7 +28,7 @@ namespace OpenHardwareMonitor.GUI
             InitializeComponent();
         }
 
-        public IReadOnlyArray<IParameter> Parameters
+        public IReadOnlyList<IParameter> Parameters
         {
             get => parameters;
             set
@@ -92,7 +92,7 @@ namespace OpenHardwareMonitor.GUI
         private void dataGridView_RowEnter(object sender,
           DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < parameters.Length)
+            if (e.RowIndex >= 0 && e.RowIndex < parameters.Count)
                 descriptionLabel.Text = parameters[e.RowIndex].Description;
             else
                 descriptionLabel.Text = "";
