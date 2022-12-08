@@ -352,7 +352,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                       { 0x621, 0x100, 0x200, 0x300, 0x800, 0x900, 0x622 };
 
                     alternateTemperatureRegister = new ushort?[]
-                      {null, 0x491, 0x490, 0x492, 0x493, 0x494, 0x495 };
+                      { null, 0x491, 0x490, 0x492, 0x493, 0x494, 0x495 };
 
                     break;
                 case Chip.NCT610X:
@@ -388,7 +388,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     { 0x621, 0x100, 0x200, 0x300 };
 
                     alternateTemperatureRegister = new ushort?[]
-                    {null, 0x018, 0x019, 0x01A };
+                    { null, 0x018, 0x019, 0x01A };
 
                     break;
             }
