@@ -472,7 +472,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
 
         public string[] GetLogicalDrives(int driveIndex)
         {
-            return new string[0];
+            return Array.Empty<string>();
         }
     }
 

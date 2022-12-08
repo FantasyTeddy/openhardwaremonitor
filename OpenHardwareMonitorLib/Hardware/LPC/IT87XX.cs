@@ -310,10 +310,10 @@ namespace OpenHardwareMonitor.Hardware.LPC
         }
 
         public Chip Chip { get; }
-        public float?[] Voltages { get; } = new float?[0];
-        public float?[] Temperatures { get; } = new float?[0];
-        public float?[] Fans { get; } = new float?[0];
-        public float?[] Controls { get; } = new float?[0];
+        public float?[] Voltages { get; } = Array.Empty<float?>();
+        public float?[] Temperatures { get; } = Array.Empty<float?>();
+        public float?[] Fans { get; } = Array.Empty<float?>();
+        public float?[] Controls { get; } = Array.Empty<float?>();
 
         public string GetReport()
         {

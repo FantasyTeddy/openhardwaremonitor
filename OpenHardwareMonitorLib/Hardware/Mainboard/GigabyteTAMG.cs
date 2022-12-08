@@ -76,12 +76,12 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                             r.ReadInt64();
                         }
                     }
-                    catch (IOException) { sensors = new Sensor[0]; }
+                    catch (IOException) { sensors = Array.Empty<Sensor>(); }
                 }
             }
             else
             {
-                sensors = new Sensor[0];
+                sensors = Array.Empty<Sensor>();
             }
         }
 

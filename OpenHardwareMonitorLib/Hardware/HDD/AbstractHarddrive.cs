@@ -98,7 +98,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
 
             string name = null;
             string firmwareRevision = null;
-            DriveAttributeValue[] values = { };
+            DriveAttributeValue[] values = Array.Empty<DriveAttributeValue>();
 
             if (deviceHandle != smart.InvalidHandle)
             {

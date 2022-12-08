@@ -68,7 +68,7 @@ namespace OpenHardwareMonitor.Hardware
                 string biosVersion = ReadSysFS("/sys/class/dmi/id/bios_version");
                 BIOS = new BIOSInformation(biosVendor, biosVersion);
 
-                MemoryDevices = new MemoryDevice[0];
+                MemoryDevices = Array.Empty<MemoryDevice>();
             }
             else
             {

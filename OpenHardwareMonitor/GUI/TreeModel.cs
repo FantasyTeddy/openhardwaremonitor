@@ -120,7 +120,7 @@ namespace OpenHardwareMonitor.GUI
         public void OnStructureChanged(Node node)
         {
             StructureChanged?.Invoke(this,
-  new TreeModelEventArgs(GetPath(node), new object[0]));
+  new TreeModelEventArgs(GetPath(node), Array.Empty<object>()));
         }
 
         public void OnNodeInserted(Node parent, int index, Node node)

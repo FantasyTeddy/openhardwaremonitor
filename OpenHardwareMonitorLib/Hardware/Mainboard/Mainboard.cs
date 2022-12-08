@@ -135,7 +135,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
         public IHardware[] SubHardware => superIOHardware;
 
-        public ISensor[] Sensors => new ISensor[0];
+        public ISensor[] Sensors => Array.Empty<ISensor>();
 
 #pragma warning disable 67
         public event EventHandler<SensorEventArgs> SensorAdded;

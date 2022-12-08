@@ -72,7 +72,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             }
             else
             {
-                coreTemperatures = new Sensor[0];
+                coreTemperatures = System.Array.Empty<Sensor>();
             }
 
             miscellaneousControlAddress = GetPciAddress(

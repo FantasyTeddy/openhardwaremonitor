@@ -32,8 +32,8 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
 
         private FT_HANDLE handle;
         private readonly byte[] data = new byte[285];
-        private byte[] primaryData = new byte[0];
-        private byte[] alternativeData = new byte[0];
+        private byte[] primaryData = System.Array.Empty<byte>();
+        private byte[] alternativeData = System.Array.Empty<byte>();
 
         public const byte STARTFLAG = 100;
         public const byte ENDFLAG = 254;

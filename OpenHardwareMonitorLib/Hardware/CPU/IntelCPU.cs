@@ -337,7 +337,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             }
             else
             {
-                coreTemperatures = new Sensor[0];
+                coreTemperatures = Array.Empty<Sensor>();
             }
 
             // check if processor supports a digital thermal sensor at package level

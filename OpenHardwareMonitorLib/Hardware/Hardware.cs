@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.Hardware
               new Identifier(Identifier, "name").ToString(), name);
         }
 
-        public IHardware[] SubHardware => new IHardware[0];
+        public IHardware[] SubHardware => Array.Empty<IHardware>();
 
         public virtual IHardware Parent => null;
 

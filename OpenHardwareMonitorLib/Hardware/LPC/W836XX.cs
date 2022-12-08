@@ -19,9 +19,9 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
         private readonly ushort address;
         private readonly byte revision;
-        private readonly bool[] peciTemperature = new bool[0];
-        private readonly byte[] voltageRegister = new byte[0];
-        private readonly byte[] voltageBank = new byte[0];
+        private readonly bool[] peciTemperature = Array.Empty<bool>();
+        private readonly byte[] voltageRegister = Array.Empty<byte>();
+        private readonly byte[] voltageBank = Array.Empty<byte>();
         private readonly float voltageGain = 0.008f;
 
         // Consts 
@@ -176,10 +176,10 @@ namespace OpenHardwareMonitor.Hardware.LPC
         }
 
         public Chip Chip { get; }
-        public float?[] Voltages { get; } = new float?[0];
-        public float?[] Temperatures { get; } = new float?[0];
-        public float?[] Fans { get; } = new float?[0];
-        public float?[] Controls { get; } = new float?[0];
+        public float?[] Voltages { get; } = Array.Empty<float?>();
+        public float?[] Temperatures { get; } = Array.Empty<float?>();
+        public float?[] Fans { get; } = Array.Empty<float?>();
+        public float?[] Controls { get; } = Array.Empty<float?>();
 
         public void Update()
         {

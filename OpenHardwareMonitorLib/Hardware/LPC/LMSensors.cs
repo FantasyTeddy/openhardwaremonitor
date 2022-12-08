@@ -167,7 +167,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                       FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
 
-                Controls = new float?[0];
+                Controls = System.Array.Empty<float?>();
             }
 
             public byte? ReadGPIO(int index)

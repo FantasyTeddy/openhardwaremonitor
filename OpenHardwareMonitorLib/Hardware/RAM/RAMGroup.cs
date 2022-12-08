@@ -21,7 +21,7 @@ namespace OpenHardwareMonitor.Hardware.RAM
             // No implementation for RAM on Unix systems
             if (OperatingSystem.IsUnix)
             {
-                hardware = new Hardware[0];
+                hardware = System.Array.Empty<Hardware>();
                 return;
             }
 

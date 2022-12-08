@@ -62,7 +62,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                     default: name = "GPU"; break;
                 }
                 temperatures[i] = new Sensor(name, i, SensorType.Temperature, this,
-                  new ParameterDescription[0], settings);
+                  Array.Empty<ParameterDescription>(), settings);
                 ActivateSensor(temperatures[i]);
             }
 
