@@ -9,7 +9,8 @@
 */
 
 using System;
-using OpenHardwareMonitor.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenHardwareMonitor.Hardware
 {
@@ -18,7 +19,7 @@ namespace OpenHardwareMonitor.Hardware
         protected readonly string name;
         private string customName;
         protected readonly ISettings settings;
-        protected readonly ListSet<ISensor> active = new ListSet<ISensor>();
+        protected readonly HashSet<ISensor> active = new HashSet<ISensor>();
 
         public Hardware(string name, Identifier identifier, ISettings settings)
         {

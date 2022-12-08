@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using OpenHardwareMonitor.Collections;
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Utilities;
 using OxyPlot;
@@ -196,7 +195,7 @@ namespace OpenHardwareMonitor.GUI
         {
             this.model.Series.Clear();
 
-            ListSet<SensorType> types = new ListSet<SensorType>();
+            HashSet<SensorType> types = new HashSet<SensorType>();
 
             foreach (ISensor sensor in sensors)
             {
