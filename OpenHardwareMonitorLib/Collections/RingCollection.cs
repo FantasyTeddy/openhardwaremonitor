@@ -85,7 +85,7 @@ namespace OpenHardwareMonitor.Collections {
                 throw new InvalidOperationException();
 
             T result = array[head];
-            array[head] = default(T);
+            array[head] = default;
             head = head + 1 == array.Length ? 0 : head + 1;
             Count--;
 
