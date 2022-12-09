@@ -121,14 +121,14 @@ namespace OpenHardwareMonitor.Hardware
 
         private static readonly byte[] RDTSC_32 = new byte[] {
       0x0F, 0x31,                     // rdtsc
-      0xC3                            // ret
+      0xC3,                           // ret
     };
 
         private static readonly byte[] RDTSC_64 = new byte[] {
       0x0F, 0x31,                     // rdtsc
       0x48, 0xC1, 0xE2, 0x20,         // shl rdx, 20h
       0x48, 0x0B, 0xC2,               // or rax, rdx
-      0xC3                            // ret
+      0xC3,                           // ret
     };
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -179,7 +179,7 @@ namespace OpenHardwareMonitor.Hardware
       0x89, 0x08,                     // mov dword ptr [eax], ecx
       0x5B,                           // pop ebx
       0xC9,                           // leave
-      0xC2, 0x18, 0x00                // ret 18h
+      0xC2, 0x18, 0x00,               // ret 18h
     };
 
         private static readonly byte[] CPUID_64_WINDOWS = new byte[] {
@@ -194,7 +194,7 @@ namespace OpenHardwareMonitor.Hardware
       0x89, 0x08,                     // mov dword ptr [rax], ecx
       0x48, 0x8B, 0x44, 0x24, 0x30,   // mov rax, qword ptr [rsp+30h]
       0x89, 0x10,                     // mov dword ptr [rax], edx
-      0xC3                            // ret
+      0xC3,                           // ret
     };
 
         private static readonly byte[] CPUID_64_LINUX = new byte[] {

@@ -268,7 +268,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
                     }
 
                     float value;
-                    if ((data[136] & (1 << i)) == 0)  // pwm mode
+                    if ((data[136] & (1 << i)) == 0) // pwm mode
                         value = 0.02f * data[137 + i];
                     else // analog mode
                         value = 0.01f * data[141 + i];
@@ -289,7 +289,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
 
                 ReadminiNG(0);
 
-                if (data[66] == 253)  // miniNG #2
+                if (data[66] == 253) // miniNG #2
                     ReadminiNG(1);
             }
         }
