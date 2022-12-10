@@ -149,7 +149,6 @@ namespace OpenHardwareMonitor.GUI
                 treeView.RowHeight = Math.Max(treeView.RowHeight,
                   DpiHelper.LogicalToDeviceUnits(18));
                 splitContainer.BorderStyle = BorderStyle.None;
-                splitContainer.Border3DStyle = Border3DStyle.Adjust;
                 splitContainer.SplitterWidth = 4;
                 treeView.BorderStyle = BorderStyle.Fixed3D;
                 plotPanel.BorderStyle = BorderStyle.Fixed3D;
