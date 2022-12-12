@@ -22,6 +22,7 @@ using Aga.Controls.Tree;
 using Aga.Controls.Tree.NodeControls;
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Utilities;
+using OpenHardwareMonitor.WebServer;
 using OpenHardwareMonitor.WMI;
 
 namespace OpenHardwareMonitor.GUI
@@ -304,21 +305,16 @@ namespace OpenHardwareMonitor.GUI
               unitManager.TemperatureUnit == TemperatureUnit.Celsius;
             fahrenheitMenuItem.Checked = !celsiusMenuItem.Checked;
 
-            Server = new HttpServer(root, settings.GetValue("listenerPort", 8085));
-            if (Server.PlatformNotSupported)
-            {
-                webMenuItemSeparator.Visible = false;
-                webMenuItem.Visible = false;
-            }
+            Server = new RemoteWebServer(root, settings.GetValue("listenerPort", 8085));
 
             runWebServer = new UserOption("runWebServerMenuItem", false,
               runWebServerMenuItem, settings);
             runWebServer.Changed += (sender, e) =>
             {
                 if (runWebServer.Value)
-                    Server.StartHTTPListener();
+                    Server.Start();
                 else
-                    Server.StopHTTPListener();
+                    Server.Stop();
             };
 
             logSensors = new UserOption("logSensorsMenuItem", false, logSensorsMenuItem,
@@ -377,7 +373,7 @@ namespace OpenHardwareMonitor.GUI
                 computer.Close();
                 SaveConfiguration();
                 if (runWebServer.Value)
-                    Server.Quit();
+                    Server.Stop();
             };
         }
 
@@ -750,7 +746,7 @@ namespace OpenHardwareMonitor.GUI
             computer.Close();
             SaveConfiguration();
             if (runWebServer.Value)
-                Server.Quit();
+                Server.Stop();
             systemTray.Dispose();
         }
 
@@ -1078,7 +1074,6 @@ namespace OpenHardwareMonitor.GUI
             new PortForm(this).ShowDialog();
         }
 
-        public HttpServer Server { get; }
-
+        public RemoteWebServer Server { get; }
     }
 }
