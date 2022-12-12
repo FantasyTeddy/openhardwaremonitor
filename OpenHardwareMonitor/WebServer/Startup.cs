@@ -32,11 +32,11 @@ namespace OpenHardwareMonitor.WebServer
 
             app.UseDefaultFiles(new DefaultFilesOptions
             {
-                FileProvider = new EmbeddedFileProvider(typeof(Startup).Assembly, "OpenHardwareMonitor.Resources.Web"),
+                FileProvider = new EmbeddedFileProvider(typeof(Startup).Assembly, "OpenHardwareMonitor.WebServer.wwwroot"),
             });
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new EmbeddedFileProvider(typeof(Startup).Assembly, "OpenHardwareMonitor.Resources.Web"),
+                FileProvider = new EmbeddedFileProvider(typeof(Startup).Assembly, "OpenHardwareMonitor.WebServer.wwwroot"),
             });
             app.UseStaticFiles(new StaticFileOptions
             {
