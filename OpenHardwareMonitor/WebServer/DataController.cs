@@ -10,9 +10,6 @@
 */
 
 using System;
-using System.IO;
-using System.Net;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using OpenHardwareMonitor.GUI;
 using OpenHardwareMonitor.Hardware;
@@ -27,7 +24,8 @@ namespace OpenHardwareMonitor.WebServer
         private int nodeCount;
 
         [HttpGet]
-        public void Get()
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public IActionResult Get()
         {
             string json = "{\"id\": 0, \"Text\": \"Sensor\", \"Children\": [";
             nodeCount = 1;
@@ -39,23 +37,7 @@ namespace OpenHardwareMonitor.WebServer
             json += ", \"ImageURL\": \"\"";
             json += "}";
 
-            string responseContent = json;
-            byte[] buffer = Encoding.UTF8.GetBytes(responseContent);
-
-            Response.Headers.Add("Cache-Control", "no-cache");
-
-            Response.ContentLength = buffer.Length;
-            Response.ContentType = "application/json";
-
-            try
-            {
-                Stream output = Response.Body;
-                output.Write(buffer, 0, buffer.Length);
-                output.Close();
-            }
-            catch (HttpListenerException)
-            {
-            }
+            return Content(json, "application/json");
         }
 
         private string GenerateJSON(Node n)
