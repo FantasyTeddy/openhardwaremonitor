@@ -9,7 +9,7 @@
 
 */
 
-using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using OpenHardwareMonitor.GUI;
 using OpenHardwareMonitor.Hardware;
@@ -27,64 +27,65 @@ namespace OpenHardwareMonitor.WebServer
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public IActionResult Get()
         {
-            string json = "{\"id\": 0, \"Text\": \"Sensor\", \"Children\": [";
             nodeCount = 1;
-            json += GenerateJSON(Root);
-            json += "]";
-            json += ", \"Min\": \"Min\"";
-            json += ", \"Value\": \"Value\"";
-            json += ", \"Max\": \"Max\"";
-            json += ", \"ImageURL\": \"\"";
-            json += "}";
 
-            return Content(json, "application/json");
+            var data = new DataNode
+            {
+                Id = 0,
+                Text = "Sensor",
+                Children = new List<DataNode> { GenerateNode(Root) },
+                Min = "Min",
+                Value = "Value",
+                Max = "Max",
+                ImageURL = string.Empty,
+            };
+
+            return new JsonResult(data);
         }
 
-        private string GenerateJSON(Node n)
+        private DataNode GenerateNode(Node n)
         {
-            string json = "{\"id\": " + nodeCount + ", \"Text\": \"" + n.Text
-              + "\", \"Children\": [";
+            var node = new DataNode
+            {
+                Id = nodeCount,
+                Text = n.Text,
+                Children = new List<DataNode>(),
+            };
             nodeCount++;
 
             foreach (Node child in n.Nodes)
-                json += GenerateJSON(child) + ", ";
-            if (json.EndsWith(", ", StringComparison.Ordinal))
-                json = json.Remove(json.LastIndexOf(",", StringComparison.Ordinal));
-            json += "]";
+                node.Children.Add(GenerateNode(child));
 
-            if (n is SensorNode)
+            if (n is SensorNode sensor)
             {
-                json += ", \"Min\": \"" + ((SensorNode)n).Min + "\"";
-                json += ", \"Value\": \"" + ((SensorNode)n).Value + "\"";
-                json += ", \"Max\": \"" + ((SensorNode)n).Max + "\"";
-                json += ", \"ImageURL\": \"images/transparent.png\"";
+                node.Min = sensor.Min;
+                node.Value = sensor.Value;
+                node.Max = sensor.Max;
+                node.ImageURL = "images/transparent.png";
             }
-            else if (n is HardwareNode)
+            else if (n is HardwareNode hardware)
             {
-                json += ", \"Min\": \"\"";
-                json += ", \"Value\": \"\"";
-                json += ", \"Max\": \"\"";
-                json += ", \"ImageURL\": \"images_icon/" +
-                  GetHardwareImageFile((HardwareNode)n) + "\"";
+                node.Min = string.Empty;
+                node.Value = string.Empty;
+                node.Max = string.Empty;
+                node.ImageURL = "images_icon/" + GetHardwareImageFile(hardware);
             }
-            else if (n is TypeNode)
+            else if (n is TypeNode type)
             {
-                json += ", \"Min\": \"\"";
-                json += ", \"Value\": \"\"";
-                json += ", \"Max\": \"\"";
-                json += ", \"ImageURL\": \"images_icon/" +
-                  GetTypeImageFile((TypeNode)n) + "\"";
+                node.Min = string.Empty;
+                node.Value = string.Empty;
+                node.Max = string.Empty;
+                node.ImageURL = "images_icon/" + GetTypeImageFile(type);
             }
             else
             {
-                json += ", \"Min\": \"\"";
-                json += ", \"Value\": \"\"";
-                json += ", \"Max\": \"\"";
-                json += ", \"ImageURL\": \"images_icon/computer.png\"";
+                node.Min = string.Empty;
+                node.Value = string.Empty;
+                node.Max = string.Empty;
+                node.ImageURL = "images_icon/computer.png";
             }
 
-            json += "}";
-            return json;
+            return node;
         }
 
         private static string GetHardwareImageFile(HardwareNode hn)

@@ -20,7 +20,11 @@ namespace OpenHardwareMonitor.WebServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc()
+                .AddJsonOptions(options =>
+                {
+                    options.UseMemberCasing();
+                });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
