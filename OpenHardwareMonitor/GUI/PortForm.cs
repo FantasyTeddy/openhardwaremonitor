@@ -20,42 +20,27 @@ namespace OpenHardwareMonitor.GUI
     public partial class PortForm : Form
     {
         private readonly PersistentSettings settings;
-        private readonly string localIP;
+        private string localIP;
 
         public PortForm(PersistentSettings s)
         {
             InitializeComponent();
+
             settings = s;
+        }
 
+        private void PortForm_Load(object sender, EventArgs e)
+        {
             localIP = getLocalIP();
-        }
 
-        private void portTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private static string getLocalIP()
-        {
-            IPHostEntry host;
-            string localIP = "?";
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    localIP = ip.ToString();
-                }
-            }
-            return localIP;
+            portNumericUpDn.Value = settings.GetValue("listenerPort", 8085);
+            portNumericUpDn_ValueChanged(null, null);
         }
 
         private void portNumericUpDn_ValueChanged(object sender, EventArgs e)
         {
             string url = "http://" + localIP + ":" + portNumericUpDn.Value + "/";
             webServerLinkLabel.Text = url;
-            webServerLinkLabel.Links.Remove(webServerLinkLabel.Links[0]);
-            webServerLinkLabel.Links.Add(0, webServerLinkLabel.Text.Length, url);
         }
 
         private void portOKButton_Click(object sender, EventArgs e)
@@ -69,20 +54,29 @@ namespace OpenHardwareMonitor.GUI
             Close();
         }
 
-        private void PortForm_Load(object sender, EventArgs e)
-        {
-            portNumericUpDn.Value = settings.GetValue("listenerPort", 8085);
-            portNumericUpDn_ValueChanged(null, null);
-        }
-
         private void webServerLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                Process.Start(new ProcessStartInfo(e.Link.LinkData.ToString()));
+                Process.Start(((LinkLabel)sender).Text);
             }
-            catch { }
+            catch
+            {
+            }
         }
 
+        private static string getLocalIP()
+        {
+            string localIP = "?";
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    localIP = ip.ToString();
+                }
+            }
+            return localIP;
+        }
     }
 }
