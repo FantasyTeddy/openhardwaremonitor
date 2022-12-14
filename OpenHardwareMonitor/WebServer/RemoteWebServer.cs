@@ -20,20 +20,16 @@ namespace OpenHardwareMonitor.WebServer
     {
         private IWebHost host;
 
-        public RemoteWebServer(Node node, int port)
+        public RemoteWebServer(Node node)
         {
             DataController.Root = node;
-
-            ListenerPort = port;
         }
 
-        public int ListenerPort { get; set; }
-
-        public void Start()
+        public void Start(int port)
         {
             IWebHostBuilder builder = WebHost.CreateDefaultBuilder()
                 .UseStartup<Startup>()
-                .UseUrls($"http://*:{ListenerPort}");
+                .UseUrls($"http://*:{port}");
             host = builder.Build();
 
             host.Start();

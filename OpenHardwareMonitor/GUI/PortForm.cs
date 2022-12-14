@@ -13,17 +13,19 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
+using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI
 {
     public partial class PortForm : Form
     {
-        private readonly MainForm parent;
+        private readonly PersistentSettings settings;
         private readonly string localIP;
-        public PortForm(MainForm m)
+
+        public PortForm(PersistentSettings s)
         {
             InitializeComponent();
-            parent = m;
+            settings = s;
 
             localIP = getLocalIP();
         }
@@ -58,7 +60,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void portOKButton_Click(object sender, EventArgs e)
         {
-            parent.Server.ListenerPort = (int)portNumericUpDn.Value;
+            settings.SetValue("listenerPort", (int)portNumericUpDn.Value);
             Close();
         }
 
@@ -69,7 +71,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void PortForm_Load(object sender, EventArgs e)
         {
-            portNumericUpDn.Value = parent.Server.ListenerPort;
+            portNumericUpDn.Value = settings.GetValue("listenerPort", 8085);
             portNumericUpDn_ValueChanged(null, null);
         }
 

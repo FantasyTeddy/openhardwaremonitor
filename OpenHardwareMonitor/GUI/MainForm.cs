@@ -305,14 +305,14 @@ namespace OpenHardwareMonitor.GUI
               unitManager.TemperatureUnit == TemperatureUnit.Celsius;
             fahrenheitMenuItem.Checked = !celsiusMenuItem.Checked;
 
-            Server = new RemoteWebServer(root, settings.GetValue("listenerPort", 8085));
+            Server = new RemoteWebServer(root);
 
             runWebServer = new UserOption("runWebServerMenuItem", false,
               runWebServerMenuItem, settings);
             runWebServer.Changed += (sender, e) =>
             {
                 if (runWebServer.Value)
-                    Server.Start();
+                    Server.Start(settings.GetValue("listenerPort", 8085));
                 else
                     Server.Stop();
             };
@@ -679,11 +679,6 @@ namespace OpenHardwareMonitor.GUI
                     settings.SetValue("treeView.Columns." + column.Header + ".Width",
                       column.Width);
                 }
-            }
-
-            if (Server != null)
-            {
-                settings.SetValue("listenerPort", Server.ListenerPort);
             }
 
             string fileName = Path.ChangeExtension(
@@ -1071,7 +1066,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void serverPortMenuItem_Click(object sender, EventArgs e)
         {
-            new PortForm(this).ShowDialog();
+            new PortForm(settings).ShowDialog();
         }
 
         public RemoteWebServer Server { get; }
