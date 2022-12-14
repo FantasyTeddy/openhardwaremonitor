@@ -8,25 +8,15 @@
 
 */
 
-ko.bindingHandlers.treeTable = {
-  update: function(element, valueAccessor, allBindingsAccessor) {
-    var dependency = ko.utils.unwrapObservable(valueAccessor()),
-    options = ko.toJS(allBindingsAccessor().treeOptions || {});
-
-    setTimeout(function() { $(element).treeTable(options); }, 0);
-  } 
-};
-
 var node = function(config, parent) {
   this.parent = parent;
   var _this = this;
 
   var mappingOptions = {
-    Children : {
+    Children: {
       create: function(args) {
         return new node(args.data, _this);
-      }
-      ,
+      },
       key: function(data) {
         return ko.utils.unwrapObservable(data.id);
       }
@@ -36,7 +26,7 @@ var node = function(config, parent) {
   ko.mapping.fromJS(config, mappingOptions, this);
 }
 
-$(function(){
+$(function() {
   $.getJSON('data.json', function(data) {
     viewModel = new node(data, undefined);
 
@@ -54,7 +44,7 @@ $(function(){
         var result = []; //root node
 
         if (viewModel.Children) {
-          flattenChildren(viewModel.Children, result);   
+          flattenChildren(viewModel.Children, result);
         }
 
         return result;
@@ -88,13 +78,16 @@ $(function(){
     })();
 
     ko.applyBindings(viewModel);
-    $("#tree").treeTable({
+    $("#tree").treetable({
       initialState: "expanded",
+      expandable: true,
       clickableNodeNames: true
     });
   });
   $( "#refresh" ).button();
-  $( "#auto_refresh" ).button();
+  $( "#auto_refresh" ).checkboxradio({
+    icon: false
+  });
   $( "#slider" ).slider({
     value:3,
     min: 1,
@@ -112,5 +105,3 @@ $(function(){
   $( "#lbl" ).text( $( "#slider" ).slider( "value" ) + "s");
 
 });
-
-
