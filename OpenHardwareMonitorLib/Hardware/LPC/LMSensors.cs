@@ -19,7 +19,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
     internal class LMSensors
     {
 
-        private readonly List<LMChip> lmChips = new List<LMChip>();
+        private readonly List<LMChip> _lmChips = new List<LMChip>();
 
         public LMSensors()
         {
@@ -41,73 +41,73 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     switch (name)
                     {
                         case "atk0110":
-                            lmChips.Add(new LMChip(Chip.ATK0110, path)); break;
+                            _lmChips.Add(new LMChip(Chip.ATK0110, path)); break;
 
                         case "f71858fg":
-                            lmChips.Add(new LMChip(Chip.F71858, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71858, path)); break;
                         case "f71862fg":
-                            lmChips.Add(new LMChip(Chip.F71862, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71862, path)); break;
                         case "f71869":
-                            lmChips.Add(new LMChip(Chip.F71869, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71869, path)); break;
                         case "f71869a":
-                            lmChips.Add(new LMChip(Chip.F71869A, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71869A, path)); break;
                         case "f71882fg":
-                            lmChips.Add(new LMChip(Chip.F71882, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71882, path)); break;
                         case "f71889a":
-                            lmChips.Add(new LMChip(Chip.F71889AD, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71889AD, path)); break;
                         case "f71878ad":
-                            lmChips.Add(new LMChip(Chip.F71878AD, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71878AD, path)); break;
                         case "f71889ed":
-                            lmChips.Add(new LMChip(Chip.F71889ED, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71889ED, path)); break;
                         case "f71889fg":
-                            lmChips.Add(new LMChip(Chip.F71889F, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71889F, path)); break;
                         case "f71808e":
-                            lmChips.Add(new LMChip(Chip.F71808E, path)); break;
+                            _lmChips.Add(new LMChip(Chip.F71808E, path)); break;
 
                         case "it8705":
-                            lmChips.Add(new LMChip(Chip.IT8705F, path)); break;
+                            _lmChips.Add(new LMChip(Chip.IT8705F, path)); break;
                         case "it8712":
-                            lmChips.Add(new LMChip(Chip.IT8712F, path)); break;
+                            _lmChips.Add(new LMChip(Chip.IT8712F, path)); break;
                         case "it8716":
-                            lmChips.Add(new LMChip(Chip.IT8716F, path)); break;
+                            _lmChips.Add(new LMChip(Chip.IT8716F, path)); break;
                         case "it8718":
-                            lmChips.Add(new LMChip(Chip.IT8718F, path)); break;
+                            _lmChips.Add(new LMChip(Chip.IT8718F, path)); break;
                         case "it8720":
-                            lmChips.Add(new LMChip(Chip.IT8720F, path)); break;
+                            _lmChips.Add(new LMChip(Chip.IT8720F, path)); break;
 
                         case "nct6775":
-                            lmChips.Add(new LMChip(Chip.NCT6771F, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6771F, path)); break;
                         case "nct6776":
-                            lmChips.Add(new LMChip(Chip.NCT6776F, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6776F, path)); break;
                         case "nct6779":
-                            lmChips.Add(new LMChip(Chip.NCT6779D, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6779D, path)); break;
                         case "nct6791":
-                            lmChips.Add(new LMChip(Chip.NCT6791D, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6791D, path)); break;
                         case "nct6792":
-                            lmChips.Add(new LMChip(Chip.NCT6792D, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6792D, path)); break;
                         case "nct6793":
-                            lmChips.Add(new LMChip(Chip.NCT6793D, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6793D, path)); break;
                         case "nct6795":
-                            lmChips.Add(new LMChip(Chip.NCT6795D, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6795D, path)); break;
                         case "nct6796":
-                            lmChips.Add(new LMChip(Chip.NCT6796D, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6796D, path)); break;
                         case "nct6797":
-                            lmChips.Add(new LMChip(Chip.NCT6797D, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6797D, path)); break;
                         case "nct6798":
-                            lmChips.Add(new LMChip(Chip.NCT6798D, path)); break;
+                            _lmChips.Add(new LMChip(Chip.NCT6798D, path)); break;
 
                         case "w83627ehf":
-                            lmChips.Add(new LMChip(Chip.W83627EHF, path)); break;
+                            _lmChips.Add(new LMChip(Chip.W83627EHF, path)); break;
                         case "w83627dhg":
-                            lmChips.Add(new LMChip(Chip.W83627DHG, path)); break;
+                            _lmChips.Add(new LMChip(Chip.W83627DHG, path)); break;
                         case "w83667hg":
-                            lmChips.Add(new LMChip(Chip.W83667HG, path)); break;
+                            _lmChips.Add(new LMChip(Chip.W83667HG, path)); break;
                         case "w83627hf":
-                            lmChips.Add(new LMChip(Chip.W83627HF, path)); break;
+                            _lmChips.Add(new LMChip(Chip.W83627HF, path)); break;
                         case "w83627thf":
-                            lmChips.Add(new LMChip(Chip.W83627THF, path)); break;
+                            _lmChips.Add(new LMChip(Chip.W83627THF, path)); break;
                         case "w83687thf":
-                            lmChips.Add(new LMChip(Chip.W83687THF, path)); break;
+                            _lmChips.Add(new LMChip(Chip.W83687THF, path)); break;
                     }
                 }
             }
@@ -115,19 +115,19 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
         public void Close()
         {
-            foreach (LMChip lmChip in lmChips)
+            foreach (LMChip lmChip in _lmChips)
                 lmChip.Close();
         }
 
-        public ISuperIO[] SuperIO => lmChips.ToArray();
+        public ISuperIO[] SuperIO => _lmChips.ToArray();
 
         private class LMChip : ISuperIO
         {
 
-            private readonly string path;
-            private readonly FileStream[] voltageStreams;
-            private readonly FileStream[] temperatureStreams;
-            private readonly FileStream[] fanStreams;
+            private readonly string _path;
+            private readonly FileStream[] _voltageStreams;
+            private readonly FileStream[] _temperatureStreams;
+            private readonly FileStream[] _fanStreams;
 
             public Chip Chip { get; }
             public float?[] Voltages { get; }
@@ -137,33 +137,33 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             public LMChip(Chip chip, string path)
             {
-                this.path = path;
+                _path = path;
                 Chip = chip;
 
                 string[] voltagePaths = Directory.GetFiles(path, "in*_input");
                 Voltages = new float?[voltagePaths.Length];
-                voltageStreams = new FileStream[voltagePaths.Length];
+                _voltageStreams = new FileStream[voltagePaths.Length];
                 for (int i = 0; i < voltagePaths.Length; i++)
                 {
-                    voltageStreams[i] = new FileStream(voltagePaths[i],
+                    _voltageStreams[i] = new FileStream(voltagePaths[i],
                       FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
 
                 string[] temperaturePaths = Directory.GetFiles(path, "temp*_input");
                 Temperatures = new float?[temperaturePaths.Length];
-                temperatureStreams = new FileStream[temperaturePaths.Length];
+                _temperatureStreams = new FileStream[temperaturePaths.Length];
                 for (int i = 0; i < temperaturePaths.Length; i++)
                 {
-                    temperatureStreams[i] = new FileStream(temperaturePaths[i],
+                    _temperatureStreams[i] = new FileStream(temperaturePaths[i],
                       FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
 
                 string[] fanPaths = Directory.GetFiles(path, "fan*_input");
                 Fans = new float?[fanPaths.Length];
-                fanStreams = new FileStream[fanPaths.Length];
+                _fanStreams = new FileStream[fanPaths.Length];
                 for (int i = 0; i < fanPaths.Length; i++)
                 {
-                    fanStreams[i] = new FileStream(fanPaths[i],
+                    _fanStreams[i] = new FileStream(fanPaths[i],
                       FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 }
 
@@ -205,7 +205,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
             {
                 for (int i = 0; i < Voltages.Length; i++)
                 {
-                    string s = ReadFirstLine(voltageStreams[i]);
+                    string s = ReadFirstLine(_voltageStreams[i]);
                     try
                     {
                         Voltages[i] = 0.001f *
@@ -219,7 +219,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
                 for (int i = 0; i < Temperatures.Length; i++)
                 {
-                    string s = ReadFirstLine(temperatureStreams[i]);
+                    string s = ReadFirstLine(_temperatureStreams[i]);
                     try
                     {
                         Temperatures[i] = 0.001f *
@@ -233,7 +233,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
                 for (int i = 0; i < Fans.Length; i++)
                 {
-                    string s = ReadFirstLine(fanStreams[i]);
+                    string s = ReadFirstLine(_fanStreams[i]);
                     try
                     {
                         Fans[i] = long.Parse(s, CultureInfo.InvariantCulture);
@@ -247,11 +247,11 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             public void Close()
             {
-                foreach (FileStream stream in voltageStreams)
+                foreach (FileStream stream in _voltageStreams)
                     stream.Close();
-                foreach (FileStream stream in temperatureStreams)
+                foreach (FileStream stream in _temperatureStreams)
                     stream.Close();
-                foreach (FileStream stream in fanStreams)
+                foreach (FileStream stream in _fanStreams)
                     stream.Close();
             }
         }

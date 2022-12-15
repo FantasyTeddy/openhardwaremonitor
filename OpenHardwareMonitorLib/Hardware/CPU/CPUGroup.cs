@@ -18,9 +18,9 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
     internal class CPUGroup : IGroup
     {
-        private readonly List<GenericCPU> hardware = new List<GenericCPU>();
+        private readonly List<GenericCPU> _hardware = new List<GenericCPU>();
 
-        private readonly CPUID[][][] threads;
+        private readonly CPUID[][][] _threads;
 
         private static CPUID[][] GetProcessorThreads()
         {
@@ -97,7 +97,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
 
             CPUID[][] processorThreads = GetProcessorThreads();
-            threads = new CPUID[processorThreads.Length][][];
+            _threads = new CPUID[processorThreads.Length][][];
 
             int index = 0;
             foreach (CPUID[] threads in processorThreads)
@@ -107,18 +107,18 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
                 CPUID[][] coreThreads = GroupThreadsByCore(threads);
 
-                this.threads[index] = coreThreads;
+                _threads[index] = coreThreads;
 
                 switch (threads[0].Vendor)
                 {
                     case Vendor.Intel:
-                        hardware.Add(new IntelCPU(index, coreThreads, settings));
+                        _hardware.Add(new IntelCPU(index, coreThreads, settings));
                         break;
                     case Vendor.AMD:
                         switch (threads[0].Family)
                         {
                             case 0x0F:
-                                hardware.Add(new AMD0FCPU(index, coreThreads, settings));
+                                _hardware.Add(new AMD0FCPU(index, coreThreads, settings));
                                 break;
                             case 0x10:
                             case 0x11:
@@ -126,19 +126,19 @@ namespace OpenHardwareMonitor.Hardware.CPU
                             case 0x14:
                             case 0x15:
                             case 0x16:
-                                hardware.Add(new AMD10CPU(index, coreThreads, settings));
+                                _hardware.Add(new AMD10CPU(index, coreThreads, settings));
                                 break;
                             case 0x17:
                             case 0x19:
-                                hardware.Add(new AMD17CPU(index, coreThreads, settings));
+                                _hardware.Add(new AMD17CPU(index, coreThreads, settings));
                                 break;
                             default:
-                                hardware.Add(new GenericCPU(index, coreThreads, settings));
+                                _hardware.Add(new GenericCPU(index, coreThreads, settings));
                                 break;
                         }
                         break;
                     default:
-                        hardware.Add(new GenericCPU(index, coreThreads, settings));
+                        _hardware.Add(new GenericCPU(index, coreThreads, settings));
                         break;
                 }
 
@@ -146,7 +146,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
             }
         }
 
-        public IHardware[] Hardware => hardware.ToArray();
+        public IHardware[] Hardware => _hardware.ToArray();
 
         private static void AppendCpuidData(StringBuilder r, uint[,] data,
           uint offset)
@@ -166,7 +166,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         public string GetReport()
         {
-            if (threads == null)
+            if (_threads == null)
                 return null;
 
             StringBuilder r = new StringBuilder();
@@ -174,42 +174,42 @@ namespace OpenHardwareMonitor.Hardware.CPU
             r.AppendLine("CPUID");
             r.AppendLine();
 
-            for (int i = 0; i < threads.Length; i++)
+            for (int i = 0; i < _threads.Length; i++)
             {
 
                 r.AppendLine("Processor " + i);
                 r.AppendLine();
-                r.AppendFormat("Processor Vendor: {0}{1}", threads[i][0][0].Vendor,
+                r.AppendFormat("Processor Vendor: {0}{1}", _threads[i][0][0].Vendor,
                   Environment.NewLine);
-                r.AppendFormat("Processor Brand: {0}{1}", threads[i][0][0].BrandString,
+                r.AppendFormat("Processor Brand: {0}{1}", _threads[i][0][0].BrandString,
                   Environment.NewLine);
                 r.AppendFormat("Family: 0x{0}{1}",
-                  threads[i][0][0].Family.ToString("X", CultureInfo.InvariantCulture),
+                  _threads[i][0][0].Family.ToString("X", CultureInfo.InvariantCulture),
                   Environment.NewLine);
                 r.AppendFormat("Model: 0x{0}{1}",
-                  threads[i][0][0].Model.ToString("X", CultureInfo.InvariantCulture),
+                  _threads[i][0][0].Model.ToString("X", CultureInfo.InvariantCulture),
                   Environment.NewLine);
                 r.AppendFormat("Stepping: 0x{0}{1}",
-                  threads[i][0][0].Stepping.ToString("X", CultureInfo.InvariantCulture),
+                  _threads[i][0][0].Stepping.ToString("X", CultureInfo.InvariantCulture),
                   Environment.NewLine);
                 r.AppendLine();
 
                 r.AppendLine("CPUID Return Values");
                 r.AppendLine();
-                for (int j = 0; j < threads[i].Length; j++)
+                for (int j = 0; j < _threads[i].Length; j++)
                 {
-                    for (int k = 0; k < threads[i][j].Length; k++)
+                    for (int k = 0; k < _threads[i][j].Length; k++)
                     {
-                        r.AppendLine(" CPU Group: " + threads[i][j][k].Group);
-                        r.AppendLine(" CPU Thread: " + threads[i][j][k].Thread);
-                        r.AppendLine(" APIC ID: " + threads[i][j][k].ApicId);
-                        r.AppendLine(" Processor ID: " + threads[i][j][k].ProcessorId);
-                        r.AppendLine(" Core ID: " + threads[i][j][k].CoreId);
-                        r.AppendLine(" Thread ID: " + threads[i][j][k].ThreadId);
+                        r.AppendLine(" CPU Group: " + _threads[i][j][k].Group);
+                        r.AppendLine(" CPU Thread: " + _threads[i][j][k].Thread);
+                        r.AppendLine(" APIC ID: " + _threads[i][j][k].ApicId);
+                        r.AppendLine(" Processor ID: " + _threads[i][j][k].ProcessorId);
+                        r.AppendLine(" Core ID: " + _threads[i][j][k].CoreId);
+                        r.AppendLine(" Thread ID: " + _threads[i][j][k].ThreadId);
                         r.AppendLine();
                         r.AppendLine(" Function  EAX       EBX       ECX       EDX");
-                        AppendCpuidData(r, threads[i][j][k].Data, CPUID.CPUID_0);
-                        AppendCpuidData(r, threads[i][j][k].ExtData, CPUID.CPUID_EXT);
+                        AppendCpuidData(r, _threads[i][j][k].Data, CPUID.CPUID_0);
+                        AppendCpuidData(r, _threads[i][j][k].ExtData, CPUID.CPUID_EXT);
                         r.AppendLine();
                     }
                 }
@@ -219,7 +219,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         public void Close()
         {
-            foreach (GenericCPU cpu in hardware)
+            foreach (GenericCPU cpu in _hardware)
             {
                 cpu.Close();
             }

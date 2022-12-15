@@ -16,18 +16,18 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 {
     internal class Mainboard : IHardware
     {
-        private readonly SMBIOS smbios;
-        private readonly string name;
-        private string customName;
-        private readonly ISettings settings;
-        private readonly LPCIO lpcio;
-        private readonly LMSensors lmSensors;
-        private readonly Hardware[] superIOHardware;
+        private readonly SMBIOS _smbios;
+        private readonly string _name;
+        private string _customName;
+        private readonly ISettings _settings;
+        private readonly LPCIO _lpcio;
+        private readonly LMSensors _lmSensors;
+        private readonly Hardware[] _superIOHardware;
 
         public Mainboard(SMBIOS smbios, ISettings settings)
         {
-            this.settings = settings;
-            this.smbios = smbios;
+            _settings = settings;
+            _smbios = smbios;
 
             Manufacturer manufacturer = smbios.Board == null ? Manufacturer.Unknown :
               Identification.GetManufacturer(smbios.Board.ManufacturerName);
@@ -41,58 +41,58 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                 {
                     if (manufacturer == Manufacturer.Unknown)
                     {
-                        name = smbios.Board.ProductName;
+                        _name = smbios.Board.ProductName;
                     }
                     else
                     {
-                        name = manufacturer + " " +
+                        _name = manufacturer + " " +
                           smbios.Board.ProductName;
                     }
                 }
                 else
                 {
-                    name = manufacturer.ToString();
+                    _name = manufacturer.ToString();
                 }
             }
             else
             {
-                name = Manufacturer.Unknown.ToString();
+                _name = Manufacturer.Unknown.ToString();
             }
 
-            customName = settings.GetValue(
-              new Identifier(Identifier, "name").ToString(), name);
+            _customName = settings.GetValue(
+              new Identifier(Identifier, "name").ToString(), _name);
 
             ISuperIO[] superIO;
             if (OperatingSystem.IsUnix)
             {
-                lmSensors = new LMSensors();
-                superIO = lmSensors.SuperIO;
+                _lmSensors = new LMSensors();
+                superIO = _lmSensors.SuperIO;
             }
             else
             {
-                lpcio = new LPCIO();
-                superIO = lpcio.SuperIO;
+                _lpcio = new LPCIO();
+                superIO = _lpcio.SuperIO;
             }
 
-            superIOHardware = new Hardware[superIO.Length];
+            _superIOHardware = new Hardware[superIO.Length];
             for (int i = 0; i < superIO.Length; i++)
             {
-                superIOHardware[i] = new SuperIOHardware(this, superIO[i],
+                _superIOHardware[i] = new SuperIOHardware(this, superIO[i],
                   manufacturer, model, settings);
             }
         }
 
         public string Name
         {
-            get => customName;
+            get => _customName;
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    customName = value;
+                    _customName = value;
                 else
-                    customName = name;
-                settings.SetValue(new Identifier(Identifier, "name").ToString(),
-                  customName);
+                    _customName = _name;
+                _settings.SetValue(new Identifier(Identifier, "name").ToString(),
+                  _customName);
             }
         }
 
@@ -108,10 +108,10 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
             r.AppendLine("Mainboard");
             r.AppendLine();
-            r.Append(smbios.GetReport());
+            r.Append(_smbios.GetReport());
 
-            if (lpcio != null)
-                r.Append(lpcio.GetReport());
+            if (_lpcio != null)
+                r.Append(_lpcio.GetReport());
 
             byte[] table =
               FirmwareTable.GetTable(FirmwareTable.Provider.ACPI, "TAMG");
@@ -128,12 +128,12 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
         public void Close()
         {
-            lmSensors?.Close();
-            foreach (Hardware hardware in superIOHardware)
+            _lmSensors?.Close();
+            foreach (Hardware hardware in _superIOHardware)
                 hardware.Close();
         }
 
-        public IHardware[] SubHardware => superIOHardware;
+        public IHardware[] SubHardware => _superIOHardware;
 
         public ISensor[] Sensors => Array.Empty<ISensor>();
 
@@ -151,7 +151,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
         public void Traverse(IVisitor visitor)
         {
-            foreach (IHardware hardware in superIOHardware)
+            foreach (IHardware hardware in _superIOHardware)
                 hardware.Accept(visitor);
         }
     }

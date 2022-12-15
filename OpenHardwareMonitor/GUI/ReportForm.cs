@@ -21,7 +21,7 @@ namespace OpenHardwareMonitor.GUI
     public partial class ReportForm : Form
     {
 
-        private string report;
+        private string _report;
 
         public ReportForm()
         {
@@ -37,11 +37,11 @@ namespace OpenHardwareMonitor.GUI
 
         public string Report
         {
-            get => report;
+            get => _report;
             set
             {
-                report = value;
-                reportTextBox.Text = report;
+                _report = value;
+                reportTextBox.Text = _report;
             }
         }
 

@@ -16,7 +16,7 @@ namespace OpenHardwareMonitor.Hardware
 {
     public class Identifier : IComparable<Identifier>
     {
-        private readonly string identifier;
+        private readonly string _identifier;
 
         private const char Separator = '/';
 
@@ -39,7 +39,7 @@ namespace OpenHardwareMonitor.Hardware
                 s.Append(Separator);
                 s.Append(identifiers[i]);
             }
-            identifier = s.ToString();
+            _identifier = s.ToString();
         }
 
         public Identifier(Identifier identifier, params string[] extensions)
@@ -53,12 +53,12 @@ namespace OpenHardwareMonitor.Hardware
                 s.Append(Separator);
                 s.Append(extensions[i]);
             }
-            this.identifier = s.ToString();
+            _identifier = s.ToString();
         }
 
         public override string ToString()
         {
-            return identifier;
+            return _identifier;
         }
 
         public override bool Equals(object obj)
@@ -70,12 +70,12 @@ namespace OpenHardwareMonitor.Hardware
             if (id == null)
                 return false;
 
-            return identifier == id.identifier;
+            return _identifier == id._identifier;
         }
 
         public override int GetHashCode()
         {
-            return identifier.GetHashCode();
+            return _identifier.GetHashCode();
         }
 
         public int CompareTo(Identifier other)
@@ -86,7 +86,7 @@ namespace OpenHardwareMonitor.Hardware
             }
             else
             {
-                return string.Compare(identifier, other.identifier,
+                return string.Compare(_identifier, other._identifier,
                   StringComparison.Ordinal);
             }
         }

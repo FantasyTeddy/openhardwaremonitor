@@ -17,95 +17,95 @@ namespace OpenHardwareMonitor.Hardware.ATI
     internal sealed class ATIGPU : Hardware
     {
 
-        private readonly int adapterIndex;
-        private readonly Sensor temperatureCore;
-        private readonly Sensor temperatureMemory;
-        private readonly Sensor temperatureVrmCore;
-        private readonly Sensor temperatureVrmMemory;
-        private readonly Sensor temperatureVrmMemory0;
-        private readonly Sensor temperatureVrmMemory1;
-        private readonly Sensor temperatureLiquid;
-        private readonly Sensor temperaturePlx;
-        private readonly Sensor temperatureHotSpot;
-        private readonly Sensor temperatureVrmSoc;
-        private readonly Sensor powerCore;
-        private readonly Sensor powerPpt;
-        private readonly Sensor powerSocket;
-        private readonly Sensor powerTotal;
-        private readonly Sensor powerSoc;
-        private readonly Sensor fan;
-        private readonly Sensor coreClock;
-        private readonly Sensor memoryClock;
-        private readonly Sensor socClock;
-        private readonly Sensor coreVoltage;
-        private readonly Sensor memoryVoltage;
-        private readonly Sensor socVoltage;
-        private readonly Sensor coreLoad;
-        private readonly Sensor memoryLoad;
-        private readonly Sensor controlSensor;
-        private readonly Control fanControl;
+        private readonly int _adapterIndex;
+        private readonly Sensor _temperatureCore;
+        private readonly Sensor _temperatureMemory;
+        private readonly Sensor _temperatureVrmCore;
+        private readonly Sensor _temperatureVrmMemory;
+        private readonly Sensor _temperatureVrmMemory0;
+        private readonly Sensor _temperatureVrmMemory1;
+        private readonly Sensor _temperatureLiquid;
+        private readonly Sensor _temperaturePlx;
+        private readonly Sensor _temperatureHotSpot;
+        private readonly Sensor _temperatureVrmSoc;
+        private readonly Sensor _powerCore;
+        private readonly Sensor _powerPpt;
+        private readonly Sensor _powerSocket;
+        private readonly Sensor _powerTotal;
+        private readonly Sensor _powerSoc;
+        private readonly Sensor _fan;
+        private readonly Sensor _coreClock;
+        private readonly Sensor _memoryClock;
+        private readonly Sensor _socClock;
+        private readonly Sensor _coreVoltage;
+        private readonly Sensor _memoryVoltage;
+        private readonly Sensor _socVoltage;
+        private readonly Sensor _coreLoad;
+        private readonly Sensor _memoryLoad;
+        private readonly Sensor _controlSensor;
+        private readonly Control _fanControl;
 
-        private readonly IntPtr context;
-        private readonly int overdriveVersion;
+        private readonly IntPtr _context;
+        private readonly int _overdriveVersion;
 
         public ATIGPU(string name, int adapterIndex, int busNumber,
           int deviceNumber, IntPtr context, ISettings settings)
           : base(name, new Identifier("atigpu",
             adapterIndex.ToString(CultureInfo.InvariantCulture)), settings)
         {
-            this.adapterIndex = adapterIndex;
+            _adapterIndex = adapterIndex;
             BusNumber = busNumber;
             DeviceNumber = deviceNumber;
 
-            this.context = context;
+            _context = context;
 
             if (ADL.ADL_Overdrive_Caps(adapterIndex, out _, out _,
-              out overdriveVersion) != ADLStatus.OK)
+              out _overdriveVersion) != ADLStatus.OK)
             {
-                overdriveVersion = -1;
+                _overdriveVersion = -1;
             }
 
-            temperatureCore =
+            _temperatureCore =
               new Sensor("GPU Core", 0, SensorType.Temperature, this, settings);
-            temperatureMemory =
+            _temperatureMemory =
               new Sensor("GPU Memory", 1, SensorType.Temperature, this, settings);
-            temperatureVrmCore =
+            _temperatureVrmCore =
               new Sensor("GPU VRM Core", 2, SensorType.Temperature, this, settings);
-            temperatureVrmMemory =
+            _temperatureVrmMemory =
               new Sensor("GPU VRM Memory", 3, SensorType.Temperature, this, settings);
-            temperatureVrmMemory0 =
+            _temperatureVrmMemory0 =
               new Sensor("GPU VRM Memory #1", 4, SensorType.Temperature, this, settings);
-            temperatureVrmMemory1 =
+            _temperatureVrmMemory1 =
               new Sensor("GPU VRM Memory #2", 5, SensorType.Temperature, this, settings);
-            temperatureVrmSoc =
+            _temperatureVrmSoc =
               new Sensor("GPU VRM SOC", 6, SensorType.Temperature, this, settings);
-            temperatureLiquid =
+            _temperatureLiquid =
               new Sensor("GPU Liquid", 7, SensorType.Temperature, this, settings);
-            temperaturePlx =
+            _temperaturePlx =
               new Sensor("GPU PLX", 8, SensorType.Temperature, this, settings);
-            temperatureHotSpot =
+            _temperatureHotSpot =
               new Sensor("GPU Hot Spot", 9, SensorType.Temperature, this, settings);
 
-            powerTotal = new Sensor("GPU Total", 0, SensorType.Power, this, settings);
-            powerCore = new Sensor("GPU Core", 1, SensorType.Power, this, settings);
-            powerPpt = new Sensor("GPU PPT", 2, SensorType.Power, this, settings);
-            powerSocket = new Sensor("GPU Socket", 3, SensorType.Power, this, settings);
-            powerSoc = new Sensor("GPU SOC", 4, SensorType.Power, this, settings);
+            _powerTotal = new Sensor("GPU Total", 0, SensorType.Power, this, settings);
+            _powerCore = new Sensor("GPU Core", 1, SensorType.Power, this, settings);
+            _powerPpt = new Sensor("GPU PPT", 2, SensorType.Power, this, settings);
+            _powerSocket = new Sensor("GPU Socket", 3, SensorType.Power, this, settings);
+            _powerSoc = new Sensor("GPU SOC", 4, SensorType.Power, this, settings);
 
-            fan = new Sensor("GPU Fan", 0, SensorType.Fan, this, settings);
+            _fan = new Sensor("GPU Fan", 0, SensorType.Fan, this, settings);
 
-            coreClock = new Sensor("GPU Core", 0, SensorType.Clock, this, settings);
-            memoryClock = new Sensor("GPU Memory", 1, SensorType.Clock, this, settings);
-            socClock = new Sensor("GPU SOC", 2, SensorType.Clock, this, settings);
+            _coreClock = new Sensor("GPU Core", 0, SensorType.Clock, this, settings);
+            _memoryClock = new Sensor("GPU Memory", 1, SensorType.Clock, this, settings);
+            _socClock = new Sensor("GPU SOC", 2, SensorType.Clock, this, settings);
 
-            coreVoltage = new Sensor("GPU Core", 0, SensorType.Voltage, this, settings);
-            memoryVoltage = new Sensor("GPU Memory", 1, SensorType.Voltage, this, settings);
-            socVoltage = new Sensor("GPU SOC", 2, SensorType.Voltage, this, settings);
+            _coreVoltage = new Sensor("GPU Core", 0, SensorType.Voltage, this, settings);
+            _memoryVoltage = new Sensor("GPU Memory", 1, SensorType.Voltage, this, settings);
+            _socVoltage = new Sensor("GPU SOC", 2, SensorType.Voltage, this, settings);
 
-            coreLoad = new Sensor("GPU Core", 0, SensorType.Load, this, settings);
-            memoryLoad = new Sensor("GPU Memory", 1, SensorType.Load, this, settings);
+            _coreLoad = new Sensor("GPU Core", 0, SensorType.Load, this, settings);
+            _memoryLoad = new Sensor("GPU Memory", 1, SensorType.Load, this, settings);
 
-            controlSensor = new Sensor("GPU Fan", 0, SensorType.Control, this, settings);
+            _controlSensor = new Sensor("GPU Fan", 0, SensorType.Control, this, settings);
 
             ADLFanSpeedInfo afsi = default(ADLFanSpeedInfo);
             if (ADL.ADL_Overdrive5_FanSpeedInfo_Get(adapterIndex, 0, ref afsi)
@@ -115,13 +115,13 @@ namespace OpenHardwareMonitor.Hardware.ATI
                 afsi.MinPercent = 0;
             }
 
-            fanControl = new Control(controlSensor, settings, afsi.MinPercent,
+            _fanControl = new Control(_controlSensor, settings, afsi.MinPercent,
               afsi.MaxPercent);
-            fanControl.ControlModeChanged += ControlModeChanged;
-            fanControl.SoftwareControlValueChanged +=
+            _fanControl.ControlModeChanged += ControlModeChanged;
+            _fanControl.SoftwareControlValueChanged +=
               SoftwareControlValueChanged;
-            ControlModeChanged(fanControl);
-            controlSensor.Control = fanControl;
+            ControlModeChanged(_fanControl);
+            _controlSensor.Control = _fanControl;
             Update();
         }
 
@@ -135,7 +135,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
                     Flags = ADL.ADL_DL_FANCTRL_FLAG_USER_DEFINED_SPEED,
                     FanSpeed = (int)control.SoftwareValue
                 };
-                ADL.ADL_Overdrive5_FanSpeed_Set(adapterIndex, 0, ref adlf);
+                ADL.ADL_Overdrive5_FanSpeed_Set(_adapterIndex, 0, ref adlf);
             }
         }
 
@@ -158,7 +158,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
 
         private void SetDefaultFanSpeed()
         {
-            ADL.ADL_Overdrive5_FanSpeedToDefault_Set(adapterIndex, 0);
+            ADL.ADL_Overdrive5_FanSpeedToDefault_Set(_adapterIndex, 0);
         }
 
         public int BusNumber { get; }
@@ -171,7 +171,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
         private void GetODNTemperature(ADLODNTemperatureType type,
           Sensor sensor)
         {
-            if (ADL.ADL2_OverdriveN_Temperature_Get(context, adapterIndex,
+            if (ADL.ADL2_OverdriveN_Temperature_Get(_context, _adapterIndex,
               type, out int temperature) == ADLStatus.OK)
             {
                 sensor.Value = 0.001f * temperature;
@@ -185,7 +185,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
 
         private void GetOD6Power(ADLODNCurrentPowerType type, Sensor sensor)
         {
-            if (ADL.ADL2_Overdrive6_CurrentPower_Get(context, adapterIndex, type,
+            if (ADL.ADL2_Overdrive6_CurrentPower_Get(_context, _adapterIndex, type,
               out int power) == ADLStatus.OK)
             {
                 sensor.Value = power * (1.0f / 0xFF);
@@ -206,14 +206,14 @@ namespace OpenHardwareMonitor.Hardware.ATI
             r.AppendLine();
 
             r.Append("AdapterIndex: ");
-            r.AppendLine(adapterIndex.ToString(CultureInfo.InvariantCulture));
+            r.AppendLine(_adapterIndex.ToString(CultureInfo.InvariantCulture));
             r.AppendLine();
 
             r.AppendLine("Overdrive Caps");
             r.AppendLine();
             try
             {
-                ADLStatus status = ADL.ADL_Overdrive_Caps(adapterIndex,
+                ADLStatus status = ADL.ADL_Overdrive_Caps(_adapterIndex,
                   out int supported, out int enabled, out int version);
                 r.Append(" Status: ");
                 r.AppendLine(status.ToString());
@@ -235,7 +235,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
             try
             {
                 ADLStatus status = ADL.ADL_Overdrive5_ODParameters_Get(
-                  adapterIndex, out ADLODParameters p);
+                  _adapterIndex, out ADLODParameters p);
                 r.Append(" Status: ");
                 r.AppendLine(status.ToString());
                 r.AppendFormat(" NumberOfPerformanceLevels: {0}{1}",
@@ -274,7 +274,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
             try
             {
                 var adlt = default(ADLTemperature);
-                ADLStatus status = ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0,
+                ADLStatus status = ADL.ADL_Overdrive5_Temperature_Get(_adapterIndex, 0,
                   ref adlt);
                 r.Append(" Status: ");
                 r.AppendLine(status.ToString());
@@ -295,13 +295,13 @@ namespace OpenHardwareMonitor.Hardware.ATI
                 {
                     SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_RPM
                 };
-                ADLStatus status = ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf);
+                ADLStatus status = ADL.ADL_Overdrive5_FanSpeed_Get(_adapterIndex, 0, ref adlf);
                 r.Append(" Status RPM: ");
                 r.AppendLine(status.ToString());
                 r.AppendFormat(" Value RPM: {0}{1}",
                   adlf.FanSpeed, Environment.NewLine);
                 adlf.SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_PERCENT;
-                status = ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf);
+                status = ADL.ADL_Overdrive5_FanSpeed_Get(_adapterIndex, 0, ref adlf);
                 r.Append(" Status Percent: ");
                 r.AppendLine(status.ToString());
                 r.AppendFormat(" Value Percent: {0}{1}",
@@ -318,7 +318,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
             try
             {
                 var adlp = default(ADLPMActivity);
-                ADLStatus status = ADL.ADL_Overdrive5_CurrentActivity_Get(adapterIndex,
+                ADLStatus status = ADL.ADL_Overdrive5_CurrentActivity_Get(_adapterIndex,
                   ref adlp);
                 r.Append(" Status: ");
                 r.AppendLine(status.ToString());
@@ -345,7 +345,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
             }
             r.AppendLine();
 
-            if (context != IntPtr.Zero)
+            if (_context != IntPtr.Zero)
             {
                 r.AppendLine("Overdrive6 CurrentPower");
                 r.AppendLine();
@@ -355,7 +355,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
                     {
                         string pt = ((ADLODNCurrentPowerType)i).ToString();
                         ADLStatus status = ADL.ADL2_Overdrive6_CurrentPower_Get(
-                          context, adapterIndex, (ADLODNCurrentPowerType)i,
+                          _context, _adapterIndex, (ADLODNCurrentPowerType)i,
                           out int power);
                         if (status == ADLStatus.OK)
                         {
@@ -380,7 +380,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
                 r.AppendLine();
             }
 
-            if (context != IntPtr.Zero)
+            if (_context != IntPtr.Zero)
             {
                 r.AppendLine("OverdriveN Temperature");
                 r.AppendLine();
@@ -390,7 +390,7 @@ namespace OpenHardwareMonitor.Hardware.ATI
                     {
                         string tt = ((ADLODNTemperatureType)i).ToString();
                         ADLStatus status = ADL.ADL2_OverdriveN_Temperature_Get(
-                          context, adapterIndex, (ADLODNTemperatureType)i,
+                          _context, _adapterIndex, (ADLODNTemperatureType)i,
                           out int temperature);
                         if (status == ADLStatus.OK)
                         {
@@ -415,14 +415,14 @@ namespace OpenHardwareMonitor.Hardware.ATI
                 r.AppendLine();
             }
 
-            if (context != IntPtr.Zero)
+            if (_context != IntPtr.Zero)
             {
                 r.AppendLine("OverdriveN Performance Status");
                 r.AppendLine();
                 try
                 {
-                    ADLStatus status = ADL.ADL2_OverdriveN_PerformanceStatus_Get(context,
-                      adapterIndex, out ADLODNPerformanceStatus ps);
+                    ADLStatus status = ADL.ADL2_OverdriveN_PerformanceStatus_Get(_context,
+                      _adapterIndex, out ADLODNPerformanceStatus ps);
                     r.Append(" Status: ");
                     r.AppendLine(status.ToString());
                     r.AppendFormat(" CoreClock: {0}{1}",
@@ -473,13 +473,13 @@ namespace OpenHardwareMonitor.Hardware.ATI
                 r.AppendLine();
             }
 
-            if (context != IntPtr.Zero)
+            if (_context != IntPtr.Zero)
             {
                 r.AppendLine("Performance Metrics");
                 r.AppendLine();
                 try
                 {
-                    ADLStatus status = ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex,
+                    ADLStatus status = ADL.ADL2_New_QueryPMLogData_Get(_context, _adapterIndex,
                       out ADLPMLogDataOutput data);
                     if (status == ADLStatus.OK)
                     {
@@ -527,160 +527,160 @@ namespace OpenHardwareMonitor.Hardware.ATI
 
         public override void Update()
         {
-            if (context != IntPtr.Zero && overdriveVersion >= 8 &&
-              ADL.ADL2_New_QueryPMLogData_Get(context, adapterIndex,
+            if (_context != IntPtr.Zero && _overdriveVersion >= 8 &&
+              ADL.ADL2_New_QueryPMLogData_Get(_context, _adapterIndex,
               out ADLPMLogDataOutput data) == ADLStatus.OK)
             {
-                GetPMLog(data, ADLSensorType.TEMPERATURE_EDGE, temperatureCore);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_MEM, temperatureMemory);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_VRVDDC, temperatureVrmCore);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_VRMVDD, temperatureVrmMemory);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_VRMVDD0, temperatureVrmMemory0);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_VRMVDD1, temperatureVrmMemory1);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_VRSOC, temperatureVrmSoc);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_LIQUID, temperatureLiquid);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_PLX, temperaturePlx);
-                GetPMLog(data, ADLSensorType.TEMPERATURE_HOTSPOT, temperatureHotSpot);
-                GetPMLog(data, ADLSensorType.GFX_POWER, powerCore);
-                GetPMLog(data, ADLSensorType.ASIC_POWER, powerTotal);
-                GetPMLog(data, ADLSensorType.SOC_POWER, powerSoc);
-                GetPMLog(data, ADLSensorType.FAN_RPM, fan);
-                GetPMLog(data, ADLSensorType.CLK_GFXCLK, coreClock);
-                GetPMLog(data, ADLSensorType.CLK_MEMCLK, memoryClock);
-                GetPMLog(data, ADLSensorType.CLK_SOCCLK, socClock);
-                GetPMLog(data, ADLSensorType.GFX_VOLTAGE, coreVoltage, 0.001f);
-                GetPMLog(data, ADLSensorType.MEM_VOLTAGE, memoryVoltage, 0.001f);
-                GetPMLog(data, ADLSensorType.SOC_VOLTAGE, socVoltage, 0.001f);
-                GetPMLog(data, ADLSensorType.INFO_ACTIVITY_GFX, coreLoad);
-                GetPMLog(data, ADLSensorType.INFO_ACTIVITY_MEM, memoryLoad);
-                GetPMLog(data, ADLSensorType.FAN_PERCENTAGE, controlSensor);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_EDGE, _temperatureCore);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_MEM, _temperatureMemory);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_VRVDDC, _temperatureVrmCore);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_VRMVDD, _temperatureVrmMemory);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_VRMVDD0, _temperatureVrmMemory0);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_VRMVDD1, _temperatureVrmMemory1);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_VRSOC, _temperatureVrmSoc);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_LIQUID, _temperatureLiquid);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_PLX, _temperaturePlx);
+                GetPMLog(data, ADLSensorType.TEMPERATURE_HOTSPOT, _temperatureHotSpot);
+                GetPMLog(data, ADLSensorType.GFX_POWER, _powerCore);
+                GetPMLog(data, ADLSensorType.ASIC_POWER, _powerTotal);
+                GetPMLog(data, ADLSensorType.SOC_POWER, _powerSoc);
+                GetPMLog(data, ADLSensorType.FAN_RPM, _fan);
+                GetPMLog(data, ADLSensorType.CLK_GFXCLK, _coreClock);
+                GetPMLog(data, ADLSensorType.CLK_MEMCLK, _memoryClock);
+                GetPMLog(data, ADLSensorType.CLK_SOCCLK, _socClock);
+                GetPMLog(data, ADLSensorType.GFX_VOLTAGE, _coreVoltage, 0.001f);
+                GetPMLog(data, ADLSensorType.MEM_VOLTAGE, _memoryVoltage, 0.001f);
+                GetPMLog(data, ADLSensorType.SOC_VOLTAGE, _socVoltage, 0.001f);
+                GetPMLog(data, ADLSensorType.INFO_ACTIVITY_GFX, _coreLoad);
+                GetPMLog(data, ADLSensorType.INFO_ACTIVITY_MEM, _memoryLoad);
+                GetPMLog(data, ADLSensorType.FAN_PERCENTAGE, _controlSensor);
             }
             else
             {
-                if (context != IntPtr.Zero && overdriveVersion >= 7)
+                if (_context != IntPtr.Zero && _overdriveVersion >= 7)
                 {
-                    GetODNTemperature(ADLODNTemperatureType.CORE, temperatureCore);
-                    GetODNTemperature(ADLODNTemperatureType.MEMORY, temperatureMemory);
-                    GetODNTemperature(ADLODNTemperatureType.VRM_CORE, temperatureVrmCore);
-                    GetODNTemperature(ADLODNTemperatureType.VRM_MEMORY, temperatureVrmMemory);
-                    GetODNTemperature(ADLODNTemperatureType.LIQUID, temperatureLiquid);
-                    GetODNTemperature(ADLODNTemperatureType.PLX, temperaturePlx);
-                    GetODNTemperature(ADLODNTemperatureType.HOTSPOT, temperatureHotSpot);
+                    GetODNTemperature(ADLODNTemperatureType.CORE, _temperatureCore);
+                    GetODNTemperature(ADLODNTemperatureType.MEMORY, _temperatureMemory);
+                    GetODNTemperature(ADLODNTemperatureType.VRM_CORE, _temperatureVrmCore);
+                    GetODNTemperature(ADLODNTemperatureType.VRM_MEMORY, _temperatureVrmMemory);
+                    GetODNTemperature(ADLODNTemperatureType.LIQUID, _temperatureLiquid);
+                    GetODNTemperature(ADLODNTemperatureType.PLX, _temperaturePlx);
+                    GetODNTemperature(ADLODNTemperatureType.HOTSPOT, _temperatureHotSpot);
                 }
                 else
                 {
                     ADLTemperature adlt = default(ADLTemperature);
-                    if (ADL.ADL_Overdrive5_Temperature_Get(adapterIndex, 0, ref adlt)
+                    if (ADL.ADL_Overdrive5_Temperature_Get(_adapterIndex, 0, ref adlt)
                       == ADLStatus.OK)
                     {
-                        temperatureCore.Value = 0.001f * adlt.Temperature;
-                        ActivateSensor(temperatureCore);
+                        _temperatureCore.Value = 0.001f * adlt.Temperature;
+                        ActivateSensor(_temperatureCore);
                     }
                     else
                     {
-                        temperatureCore.Value = null;
+                        _temperatureCore.Value = null;
                     }
                 }
 
-                if (context != IntPtr.Zero && overdriveVersion >= 6)
+                if (_context != IntPtr.Zero && _overdriveVersion >= 6)
                 {
-                    GetOD6Power(ADLODNCurrentPowerType.TOTAL_POWER, powerTotal);
-                    GetOD6Power(ADLODNCurrentPowerType.CHIP_POWER, powerCore);
-                    GetOD6Power(ADLODNCurrentPowerType.PPT_POWER, powerPpt);
-                    GetOD6Power(ADLODNCurrentPowerType.SOCKET_POWER, powerSocket);
+                    GetOD6Power(ADLODNCurrentPowerType.TOTAL_POWER, _powerTotal);
+                    GetOD6Power(ADLODNCurrentPowerType.CHIP_POWER, _powerCore);
+                    GetOD6Power(ADLODNCurrentPowerType.PPT_POWER, _powerPpt);
+                    GetOD6Power(ADLODNCurrentPowerType.SOCKET_POWER, _powerSocket);
                 }
 
                 ADLFanSpeedValue adlf = new ADLFanSpeedValue
                 {
                     SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_RPM
                 };
-                if (ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf)
+                if (ADL.ADL_Overdrive5_FanSpeed_Get(_adapterIndex, 0, ref adlf)
                   == ADLStatus.OK)
                 {
-                    fan.Value = adlf.FanSpeed;
-                    ActivateSensor(fan);
+                    _fan.Value = adlf.FanSpeed;
+                    ActivateSensor(_fan);
                 }
                 else
                 {
-                    fan.Value = null;
+                    _fan.Value = null;
                 }
 
                 adlf = new ADLFanSpeedValue
                 {
                     SpeedType = ADL.ADL_DL_FANCTRL_SPEED_TYPE_PERCENT
                 };
-                if (ADL.ADL_Overdrive5_FanSpeed_Get(adapterIndex, 0, ref adlf)
+                if (ADL.ADL_Overdrive5_FanSpeed_Get(_adapterIndex, 0, ref adlf)
                   == ADLStatus.OK)
                 {
-                    controlSensor.Value = adlf.FanSpeed;
-                    ActivateSensor(controlSensor);
+                    _controlSensor.Value = adlf.FanSpeed;
+                    ActivateSensor(_controlSensor);
                 }
                 else
                 {
-                    controlSensor.Value = null;
+                    _controlSensor.Value = null;
                 }
 
                 ADLPMActivity adlp = default(ADLPMActivity);
-                if (ADL.ADL_Overdrive5_CurrentActivity_Get(adapterIndex, ref adlp)
+                if (ADL.ADL_Overdrive5_CurrentActivity_Get(_adapterIndex, ref adlp)
                   == ADLStatus.OK)
                 {
                     if (adlp.EngineClock > 0)
                     {
-                        coreClock.Value = 0.01f * adlp.EngineClock;
-                        ActivateSensor(coreClock);
+                        _coreClock.Value = 0.01f * adlp.EngineClock;
+                        ActivateSensor(_coreClock);
                     }
                     else
                     {
-                        coreClock.Value = null;
+                        _coreClock.Value = null;
                     }
 
                     if (adlp.MemoryClock > 0)
                     {
-                        memoryClock.Value = 0.01f * adlp.MemoryClock;
-                        ActivateSensor(memoryClock);
+                        _memoryClock.Value = 0.01f * adlp.MemoryClock;
+                        ActivateSensor(_memoryClock);
                     }
                     else
                     {
-                        memoryClock.Value = null;
+                        _memoryClock.Value = null;
                     }
 
                     if (adlp.Vddc > 0)
                     {
-                        coreVoltage.Value = 0.001f * adlp.Vddc;
-                        ActivateSensor(coreVoltage);
+                        _coreVoltage.Value = 0.001f * adlp.Vddc;
+                        ActivateSensor(_coreVoltage);
                     }
                     else
                     {
-                        coreVoltage.Value = null;
+                        _coreVoltage.Value = null;
                     }
 
                     if (adlp.ActivityPercent >= 0 && adlp.ActivityPercent <= 100)
                     {
-                        coreLoad.Value = adlp.ActivityPercent;
-                        ActivateSensor(coreLoad);
+                        _coreLoad.Value = adlp.ActivityPercent;
+                        ActivateSensor(_coreLoad);
                     }
                     else
                     {
-                        coreLoad.Value = null;
+                        _coreLoad.Value = null;
                     }
                 }
                 else
                 {
-                    coreClock.Value = null;
-                    memoryClock.Value = null;
-                    coreVoltage.Value = null;
-                    coreLoad.Value = null;
+                    _coreClock.Value = null;
+                    _memoryClock.Value = null;
+                    _coreVoltage.Value = null;
+                    _coreLoad.Value = null;
                 }
             }
         }
 
         public override void Close()
         {
-            fanControl.ControlModeChanged -= ControlModeChanged;
-            fanControl.SoftwareControlValueChanged -=
+            _fanControl.ControlModeChanged -= ControlModeChanged;
+            _fanControl.SoftwareControlValueChanged -=
               SoftwareControlValueChanged;
 
-            if (fanControl.ControlMode != ControlMode.Undefined)
+            if (_fanControl.ControlMode != ControlMode.Undefined)
                 SetDefaultFanSpeed();
             base.Close();
         }

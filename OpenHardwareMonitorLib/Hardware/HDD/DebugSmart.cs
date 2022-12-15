@@ -19,7 +19,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
     internal class DebugSmart : ISmart
     {
 
-        private readonly Drive[] drives = {
+        private readonly Drive[] _drives = {
       new Drive("KINGSTON SNV425S264GB", null, 16,
         @" 01 000000000000 100 100      
            02 000000000000 100 100      
@@ -362,7 +362,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
 
         public IntPtr OpenDrive(int driveNumber)
         {
-            if (driveNumber < drives.Length)
+            if (driveNumber < _drives.Length)
                 return (IntPtr)driveNumber;
             else
                 return InvalidHandle;
@@ -381,7 +381,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
             if (handle != (IntPtr)driveNumber)
                 throw new ArgumentOutOfRangeException(nameof(driveNumber));
 
-            return drives[driveNumber].DriveAttributeValues;
+            return _drives[driveNumber].DriveAttributeValues;
         }
 
         public DriveThresholdValue[] ReadSmartThresholds(IntPtr handle,
@@ -390,7 +390,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
             if (handle != (IntPtr)driveNumber)
                 throw new ArgumentOutOfRangeException(nameof(driveNumber));
 
-            return drives[driveNumber].DriveThresholdValues;
+            return _drives[driveNumber].DriveThresholdValues;
         }
 
         public bool ReadNameAndFirmwareRevision(IntPtr handle, int driveNumber,
@@ -399,8 +399,8 @@ namespace OpenHardwareMonitor.Hardware.HDD
             if (handle != (IntPtr)driveNumber)
                 throw new ArgumentOutOfRangeException(nameof(driveNumber));
 
-            name = drives[driveNumber].Name;
-            firmwareRevision = drives[driveNumber].FirmwareVersion;
+            name = _drives[driveNumber].Name;
+            firmwareRevision = _drives[driveNumber].FirmwareVersion;
             return true;
         }
 

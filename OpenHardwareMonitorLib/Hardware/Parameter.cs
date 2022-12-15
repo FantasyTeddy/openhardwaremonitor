@@ -33,27 +33,27 @@ namespace OpenHardwareMonitor.Hardware
 
     internal class Parameter : IParameter
     {
-        private readonly ParameterDescription description;
-        private float value;
-        private bool isDefault;
-        private readonly ISettings settings;
+        private readonly ParameterDescription _description;
+        private float _value;
+        private bool _isDefault;
+        private readonly ISettings _settings;
 
         public Parameter(ParameterDescription description, ISensor sensor,
           ISettings settings)
         {
             Sensor = sensor;
-            this.description = description;
-            this.settings = settings;
-            isDefault = !settings.Contains(Identifier.ToString());
-            value = description.DefaultValue;
-            if (!isDefault)
+            _description = description;
+            _settings = settings;
+            _isDefault = !settings.Contains(Identifier.ToString());
+            _value = description.DefaultValue;
+            if (!_isDefault)
             {
                 if (!float.TryParse(settings.GetValue(Identifier.ToString(), "0"),
                   NumberStyles.Float,
                   CultureInfo.InvariantCulture,
-                  out value))
+                  out _value))
                 {
-                    value = description.DefaultValue;
+                    _value = description.DefaultValue;
                 }
             }
         }
@@ -63,34 +63,34 @@ namespace OpenHardwareMonitor.Hardware
         public Identifier Identifier => new Identifier(Sensor.Identifier, "parameter",
                   Name.Replace(" ", string.Empty).ToLowerInvariant());
 
-        public string Name => description.Name;
+        public string Name => _description.Name;
 
-        public string Description => description.Description;
+        public string Description => _description.Description;
 
         public float Value
         {
-            get => value;
+            get => _value;
             set
             {
-                isDefault = false;
-                this.value = value;
-                settings.SetValue(Identifier.ToString(), value.ToString(
+                _isDefault = false;
+                _value = value;
+                _settings.SetValue(Identifier.ToString(), value.ToString(
                   CultureInfo.InvariantCulture));
             }
         }
 
-        public float DefaultValue => description.DefaultValue;
+        public float DefaultValue => _description.DefaultValue;
 
         public bool IsDefault
         {
-            get => isDefault;
+            get => _isDefault;
             set
             {
-                isDefault = value;
+                _isDefault = value;
                 if (value)
                 {
-                    this.value = description.DefaultValue;
-                    settings.Remove(Identifier.ToString());
+                    _value = _description.DefaultValue;
+                    _settings.Remove(Identifier.ToString());
                 }
             }
         }

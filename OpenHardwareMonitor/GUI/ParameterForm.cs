@@ -20,8 +20,8 @@ namespace OpenHardwareMonitor.GUI
     public partial class ParameterForm : Form
     {
 
-        private IReadOnlyList<IParameter> parameters;
-        private BindingList<ParameterRow> parameterRows;
+        private IReadOnlyList<IParameter> _parameters;
+        private BindingList<ParameterRow> _parameterRows;
 
         public ParameterForm()
         {
@@ -30,21 +30,21 @@ namespace OpenHardwareMonitor.GUI
 
         public IReadOnlyList<IParameter> Parameters
         {
-            get => parameters;
+            get => _parameters;
             set
             {
-                parameters = value;
-                parameterRows = new BindingList<ParameterRow>();
-                foreach (IParameter parameter in parameters)
-                    parameterRows.Add(new ParameterRow(parameter));
-                bindingSource.DataSource = parameterRows;
+                _parameters = value;
+                _parameterRows = new BindingList<ParameterRow>();
+                foreach (IParameter parameter in _parameters)
+                    _parameterRows.Add(new ParameterRow(parameter));
+                bindingSource.DataSource = _parameterRows;
             }
         }
 
         private class ParameterRow : INotifyPropertyChanged
         {
             public IParameter parameter;
-            private float value;
+            private float _value;
             public bool isDefault;
 
             public event PropertyChangedEventHandler PropertyChanged;
@@ -57,7 +57,7 @@ namespace OpenHardwareMonitor.GUI
             public ParameterRow(IParameter parameter)
             {
                 this.parameter = parameter;
-                value = parameter.Value;
+                _value = parameter.Value;
                 isDefault = parameter.IsDefault;
             }
 
@@ -65,11 +65,11 @@ namespace OpenHardwareMonitor.GUI
 
             public float Value
             {
-                get => value;
+                get => _value;
                 set
                 {
                     isDefault = false;
-                    this.value = value;
+                    _value = value;
                     NotifyPropertyChanged(nameof(Default));
                     NotifyPropertyChanged(nameof(Value));
                 }
@@ -82,7 +82,7 @@ namespace OpenHardwareMonitor.GUI
                 {
                     isDefault = value;
                     if (value)
-                        this.value = parameter.DefaultValue;
+                        _value = parameter.DefaultValue;
                     NotifyPropertyChanged(nameof(Default));
                     NotifyPropertyChanged(nameof(Value));
                 }
@@ -92,8 +92,8 @@ namespace OpenHardwareMonitor.GUI
         private void dataGridView_RowEnter(object sender,
           DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < parameters.Count)
-                descriptionLabel.Text = parameters[e.RowIndex].Description;
+            if (e.RowIndex >= 0 && e.RowIndex < _parameters.Count)
+                descriptionLabel.Text = _parameters[e.RowIndex].Description;
             else
                 descriptionLabel.Text = string.Empty;
         }
@@ -118,7 +118,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            foreach (ParameterRow row in parameterRows)
+            foreach (ParameterRow row in _parameterRows)
             {
                 if (row.Default)
                 {

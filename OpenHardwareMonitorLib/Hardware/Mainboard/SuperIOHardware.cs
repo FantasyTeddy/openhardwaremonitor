@@ -18,41 +18,41 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
     internal sealed class SuperIOHardware : Hardware
     {
 
-        private readonly Mainboard mainboard;
-        private readonly ISuperIO superIO;
+        private readonly Mainboard _mainboard;
+        private readonly ISuperIO _superIO;
 
-        private readonly List<Sensor> voltages = new List<Sensor>();
-        private readonly List<Sensor> temperatures = new List<Sensor>();
-        private readonly List<Sensor> fans = new List<Sensor>();
-        private readonly List<Sensor> controls = new List<Sensor>();
+        private readonly List<Sensor> _voltages = new List<Sensor>();
+        private readonly List<Sensor> _temperatures = new List<Sensor>();
+        private readonly List<Sensor> _fans = new List<Sensor>();
+        private readonly List<Sensor> _controls = new List<Sensor>();
 
         private delegate float? ReadValueDelegate(int index);
         private delegate void UpdateDelegate();
 
         // delegates for mainboard specific sensor reading code
-        private readonly ReadValueDelegate readVoltage;
-        private readonly ReadValueDelegate readTemperature;
-        private readonly ReadValueDelegate readFan;
-        private readonly ReadValueDelegate readControl;
+        private readonly ReadValueDelegate _readVoltage;
+        private readonly ReadValueDelegate _readTemperature;
+        private readonly ReadValueDelegate _readFan;
+        private readonly ReadValueDelegate _readControl;
 
         // delegate for post update mainboard specific code
-        private readonly UpdateDelegate postUpdate;
+        private readonly UpdateDelegate _postUpdate;
 
         // mainboard specific mutex
-        private readonly Mutex mutex;
+        private readonly Mutex _mutex;
 
         public SuperIOHardware(Mainboard mainboard, ISuperIO superIO,
           Manufacturer manufacturer, Model model, ISettings settings)
           : base(ChipName.GetName(superIO.Chip), new Identifier("lpc",
             superIO.Chip.ToString().ToLowerInvariant()), settings)
         {
-            this.mainboard = mainboard;
-            this.superIO = superIO;
+            _mainboard = mainboard;
+            _superIO = superIO;
 
             GetBoardSpecificConfiguration(superIO, manufacturer, model,
               out IList<Voltage> v, out IList<Temperature> t, out IList<Fan> f, out IList<Ctrl> c,
-              out readVoltage, out readTemperature, out readFan, out readControl,
-              out postUpdate, out mutex);
+              out _readVoltage, out _readTemperature, out _readFan, out _readControl,
+              out _postUpdate, out _mutex);
 
             CreateVoltageSensors(superIO, settings, v);
             CreateTemperatureSensors(superIO, settings, t);
@@ -108,7 +108,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                     }
 
                     sensor.Control = control;
-                    controls.Add(sensor);
+                    _controls.Add(sensor);
                     ActivateSensor(sensor);
                 }
             }
@@ -123,7 +123,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                 {
                     Sensor sensor = new Sensor(fan.Name, fan.Index, SensorType.Fan,
                       this, settings);
-                    fans.Add(sensor);
+                    _fans.Add(sensor);
                 }
             }
         }
@@ -139,7 +139,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                       SensorType.Temperature, this, new[] {
           new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
                   }, settings);
-                    temperatures.Add(sensor);
+                    _temperatures.Add(sensor);
                 }
             }
         }
@@ -161,7 +161,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
             new ParameterDescription("Vf [V]", "Reference voltage.\n" +
               formula, voltage.Vf)
                       }, settings);
-                    voltages.Add(sensor);
+                    _voltages.Add(sensor);
                 }
             }
         }
@@ -1542,21 +1542,21 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
         public override HardwareType HardwareType => HardwareType.SuperIO;
 
-        public override IHardware Parent => mainboard;
+        public override IHardware Parent => _mainboard;
 
 
         public override string GetReport()
         {
-            return superIO.GetReport();
+            return _superIO.GetReport();
         }
 
         public override void Update()
         {
-            superIO.Update();
+            _superIO.Update();
 
-            foreach (Sensor sensor in voltages)
+            foreach (Sensor sensor in _voltages)
             {
-                float? value = readVoltage(sensor.Index);
+                float? value = _readVoltage(sensor.Index);
                 if (value.HasValue)
                 {
                     sensor.Value = value + (value - sensor.Parameters[2].Value) *
@@ -1565,9 +1565,9 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                 }
             }
 
-            foreach (Sensor sensor in temperatures)
+            foreach (Sensor sensor in _temperatures)
             {
-                float? value = readTemperature(sensor.Index);
+                float? value = _readTemperature(sensor.Index);
                 if (value.HasValue)
                 {
                     sensor.Value = value + sensor.Parameters[0].Value;
@@ -1575,9 +1575,9 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                 }
             }
 
-            foreach (Sensor sensor in fans)
+            foreach (Sensor sensor in _fans)
             {
-                float? value = readFan(sensor.Index);
+                float? value = _readFan(sensor.Index);
                 if (value.HasValue)
                 {
                     sensor.Value = value;
@@ -1586,21 +1586,21 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                 }
             }
 
-            foreach (Sensor sensor in controls)
+            foreach (Sensor sensor in _controls)
             {
-                float? value = readControl(sensor.Index);
+                float? value = _readControl(sensor.Index);
                 sensor.Value = value;
             }
 
-            postUpdate();
+            _postUpdate();
         }
 
         public override void Close()
         {
-            foreach (Sensor sensor in controls)
+            foreach (Sensor sensor in _controls)
             {
                 // restore all controls back to default
-                superIO.SetControl(sensor.Index, null);
+                _superIO.SetControl(sensor.Index, null);
             }
             base.Close();
         }

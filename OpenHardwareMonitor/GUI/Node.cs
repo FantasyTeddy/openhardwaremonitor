@@ -17,13 +17,13 @@ namespace OpenHardwareMonitor.GUI
 {
     public class Node
     {
-        private Node parent;
-        private readonly NodeCollection nodes;
+        private Node _parent;
+        private readonly NodeCollection _nodes;
 
-        private string text;
-        private Image image;
-        private bool visible;
-        private bool expanded;
+        private string _text;
+        private Image _image;
+        private bool _visible;
+        private bool _expanded;
 
         private TreeModel RootTreeModel()
         {
@@ -32,7 +32,7 @@ namespace OpenHardwareMonitor.GUI
             {
                 if (node.Model != null)
                     return node.Model;
-                node = node.parent;
+                node = node._parent;
             }
             return null;
         }
@@ -42,80 +42,80 @@ namespace OpenHardwareMonitor.GUI
 
         public Node(string text)
         {
-            this.text = text;
-            nodes = new NodeCollection(this);
-            visible = true;
-            expanded = true;
+            _text = text;
+            _nodes = new NodeCollection(this);
+            _visible = true;
+            _expanded = true;
         }
 
         public TreeModel Model { get; set; }
 
         public Node Parent
         {
-            get => parent;
+            get => _parent;
             set
             {
-                if (value != parent)
+                if (value != _parent)
                 {
-                    parent?.nodes.Remove(this);
-                    value?.nodes.Add(this);
+                    _parent?._nodes.Remove(this);
+                    value?._nodes.Add(this);
                 }
             }
         }
 
-        public Collection<Node> Nodes => nodes;
+        public Collection<Node> Nodes => _nodes;
 
         public virtual string Text
         {
-            get => text;
+            get => _text;
             set
             {
-                if (text != value)
+                if (_text != value)
                 {
-                    text = value;
+                    _text = value;
                 }
             }
         }
 
         public Image Image
         {
-            get => image;
+            get => _image;
             set
             {
-                if (image != value)
+                if (_image != value)
                 {
-                    image = value;
+                    _image = value;
                 }
             }
         }
 
         public virtual bool IsExpanded
         {
-            get => expanded;
+            get => _expanded;
             set
             {
-                if (value != expanded)
+                if (value != _expanded)
                 {
-                    expanded = value;
+                    _expanded = value;
                 }
             }
         }
 
         public virtual bool IsVisible
         {
-            get => visible;
+            get => _visible;
             set
             {
-                if (value != visible)
+                if (value != _visible)
                 {
-                    visible = value;
+                    _visible = value;
                     TreeModel model = RootTreeModel();
-                    if (model != null && parent != null)
+                    if (model != null && _parent != null)
                     {
                         int index = 0;
-                        for (int i = 0; i < parent.nodes.Count; i++)
+                        for (int i = 0; i < _parent._nodes.Count; i++)
                         {
-                            Node node = parent.nodes[i];
+                            Node node = _parent._nodes[i];
                             if (node == this)
                                 break;
                             if (node.IsVisible || model.ForceVisible)
@@ -123,14 +123,14 @@ namespace OpenHardwareMonitor.GUI
                         }
                         if (model.ForceVisible)
                         {
-                            model.OnNodeChanged(parent, index, this);
+                            model.OnNodeChanged(_parent, index, this);
                         }
                         else
                         {
                             if (value)
-                                model.OnNodeInserted(parent, index, this);
+                                model.OnNodeInserted(_parent, index, this);
                             else
-                                model.OnNodeRemoved(parent, index, this);
+                                model.OnNodeRemoved(_parent, index, this);
                         }
                     }
                     IsVisibleChanged?.Invoke(this, new NodeEventArgs(this));
@@ -154,11 +154,11 @@ namespace OpenHardwareMonitor.GUI
 
         private class NodeCollection : Collection<Node>
         {
-            private readonly Node owner;
+            private readonly Node _owner;
 
             public NodeCollection(Node owner)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             protected override void ClearItems()
@@ -172,27 +172,27 @@ namespace OpenHardwareMonitor.GUI
                 if (item == null)
                     throw new ArgumentNullException(nameof(item));
 
-                if (item.parent != owner)
+                if (item._parent != _owner)
                 {
-                    item.parent?.nodes.Remove(item);
-                    item.parent = owner;
+                    item._parent?._nodes.Remove(item);
+                    item._parent = _owner;
                     base.InsertItem(index, item);
 
-                    TreeModel model = owner.RootTreeModel();
-                    model?.OnStructureChanged(owner);
-                    owner.NodeAdded?.Invoke(this, new NodeEventArgs(item));
+                    TreeModel model = _owner.RootTreeModel();
+                    model?.OnStructureChanged(_owner);
+                    _owner.NodeAdded?.Invoke(this, new NodeEventArgs(item));
                 }
             }
 
             protected override void RemoveItem(int index)
             {
                 Node item = this[index];
-                item.parent = null;
+                item._parent = null;
                 base.RemoveItem(index);
 
-                TreeModel model = owner.RootTreeModel();
-                model?.OnStructureChanged(owner);
-                owner.NodeRemoved?.Invoke(this, new NodeEventArgs(item));
+                TreeModel model = _owner.RootTreeModel();
+                model?.OnStructureChanged(_owner);
+                _owner.NodeRemoved?.Invoke(this, new NodeEventArgs(item));
             }
 
             protected override void SetItem(int index, Node item)

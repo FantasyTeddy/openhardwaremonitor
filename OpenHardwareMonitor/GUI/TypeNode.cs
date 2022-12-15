@@ -16,17 +16,17 @@ namespace OpenHardwareMonitor.GUI
     public class TypeNode : Node
     {
 
-        private readonly PersistentSettings settings;
-        private readonly IHardware hardware;
-        private readonly Identifier expandedIdentifier;
+        private readonly PersistentSettings _settings;
+        private readonly IHardware _hardware;
+        private readonly Identifier _expandedIdentifier;
 
         public TypeNode(SensorType sensorType, IHardware hardware,
           PersistentSettings settings)
             : base()
         {
-            this.settings = settings;
+            _settings = settings;
             SensorType = sensorType;
-            this.hardware = hardware;
+            _hardware = hardware;
 
             switch (sensorType)
             {
@@ -87,10 +87,10 @@ namespace OpenHardwareMonitor.GUI
             NodeAdded += (_, e) => TypeNode_NodeAdded(e.Node);
             NodeRemoved += (_, e) => TypeNode_NodeRemoved(e.Node);
 
-            expandedIdentifier = new Identifier(new Identifier(hardware.Identifier,
+            _expandedIdentifier = new Identifier(new Identifier(hardware.Identifier,
               sensorType.ToString().ToLowerInvariant()), "expanded");
             base.IsExpanded =
-              settings.GetValue(expandedIdentifier.ToString(), base.IsExpanded);
+              settings.GetValue(_expandedIdentifier.ToString(), base.IsExpanded);
         }
 
         private void TypeNode_NodeRemoved(Node node)
@@ -129,7 +129,7 @@ namespace OpenHardwareMonitor.GUI
                 if (base.IsExpanded != value)
                 {
                     base.IsExpanded = value;
-                    settings.SetValue(expandedIdentifier.ToString(), value);
+                    _settings.SetValue(_expandedIdentifier.ToString(), value);
                 }
             }
         }

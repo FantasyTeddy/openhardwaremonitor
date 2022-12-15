@@ -13,7 +13,7 @@ namespace OpenHardwareMonitor.Hardware.RAM
     internal class RAMGroup : IGroup
     {
 
-        private readonly Hardware[] hardware;
+        private readonly Hardware[] _hardware;
 
         public RAMGroup(SMBIOS smbios, ISettings settings)
         {
@@ -21,11 +21,11 @@ namespace OpenHardwareMonitor.Hardware.RAM
             // No implementation for RAM on Unix systems
             if (OperatingSystem.IsUnix)
             {
-                hardware = System.Array.Empty<Hardware>();
+                _hardware = System.Array.Empty<Hardware>();
                 return;
             }
 
-            hardware = new Hardware[] { new GenericRAM("Generic Memory", settings) };
+            _hardware = new Hardware[] { new GenericRAM("Generic Memory", settings) };
         }
 
         public string GetReport()
@@ -33,11 +33,11 @@ namespace OpenHardwareMonitor.Hardware.RAM
             return null;
         }
 
-        public IHardware[] Hardware => hardware;
+        public IHardware[] Hardware => _hardware;
 
         public void Close()
         {
-            foreach (Hardware ram in hardware)
+            foreach (Hardware ram in _hardware)
                 ram.Close();
         }
     }

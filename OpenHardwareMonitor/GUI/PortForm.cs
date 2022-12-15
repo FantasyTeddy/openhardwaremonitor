@@ -19,33 +19,33 @@ namespace OpenHardwareMonitor.GUI
 {
     public partial class PortForm : Form
     {
-        private readonly PersistentSettings settings;
-        private string localIP;
+        private readonly PersistentSettings _settings;
+        private string _localIP;
 
         public PortForm(PersistentSettings s)
         {
             InitializeComponent();
 
-            settings = s;
+            _settings = s;
         }
 
         private void PortForm_Load(object sender, EventArgs e)
         {
-            localIP = getLocalIP();
+            _localIP = getLocalIP();
 
-            portNumericUpDn.Value = settings.GetValue("listenerPort", 8085);
+            portNumericUpDn.Value = _settings.GetValue("listenerPort", 8085);
             portNumericUpDn_ValueChanged(null, null);
         }
 
         private void portNumericUpDn_ValueChanged(object sender, EventArgs e)
         {
-            string url = "http://" + localIP + ":" + portNumericUpDn.Value + "/";
+            string url = "http://" + _localIP + ":" + portNumericUpDn.Value + "/";
             webServerLinkLabel.Text = url;
         }
 
         private void portOKButton_Click(object sender, EventArgs e)
         {
-            settings.SetValue("listenerPort", (int)portNumericUpDn.Value);
+            _settings.SetValue("listenerPort", (int)portNumericUpDn.Value);
             Close();
         }
 

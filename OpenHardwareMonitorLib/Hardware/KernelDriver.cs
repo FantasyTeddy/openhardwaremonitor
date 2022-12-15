@@ -19,13 +19,13 @@ namespace OpenHardwareMonitor.Hardware
     internal class KernelDriver : IDisposable
     {
 
-        private readonly string id;
+        private readonly string _id;
 
-        private SafeFileHandle device;
+        private SafeFileHandle _device;
 
         public KernelDriver(string id)
         {
-            this.id = id;
+            _id = id;
         }
 
         public bool Install(string path, out string errorMessage)
@@ -39,7 +39,7 @@ namespace OpenHardwareMonitor.Hardware
                 return false;
             }
 
-            IntPtr service = NativeMethods.CreateService(manager, id, id,
+            IntPtr service = NativeMethods.CreateService(manager, _id, _id,
               ServiceAccessRights.SERVICE_ALL_ACCESS,
               ServiceType.SERVICE_KERNEL_DRIVER, StartType.SERVICE_DEMAND_START,
               ErrorControl.SERVICE_ERROR_NORMAL, path, null, null, null, null,
@@ -80,10 +80,10 @@ namespace OpenHardwareMonitor.Hardware
             {
                 // restrict the driver access to system (SY) and builtin admins (BA)
                 // TODO: replace with a call to IoCreateDeviceSecure in the driver
-                FileSecurity fileSecurity = File.GetAccessControl(@"\\.\" + id);
+                FileSecurity fileSecurity = File.GetAccessControl(@"\\.\" + _id);
                 fileSecurity.SetSecurityDescriptorSddlForm(
                   "O:BAG:SYD:(A;;FA;;;SY)(A;;FA;;;BA)");
-                File.SetAccessControl(@"\\.\" + id, fileSecurity);
+                File.SetAccessControl(@"\\.\" + _id, fileSecurity);
             }
             catch { }
 
@@ -93,29 +93,29 @@ namespace OpenHardwareMonitor.Hardware
 
         public bool Open()
         {
-            device = new SafeFileHandle(NativeMethods.CreateFile(@"\\.\" + id,
+            _device = new SafeFileHandle(NativeMethods.CreateFile(@"\\.\" + _id,
               FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE, 0, IntPtr.Zero,
               CreationDisposition.OPEN_EXISTING, FileAttributes.FILE_ATTRIBUTE_NORMAL,
               IntPtr.Zero), true);
 
-            if (device.IsInvalid)
+            if (_device.IsInvalid)
             {
-                device.Close();
-                device.Dispose();
-                device = null;
+                _device.Close();
+                _device.Dispose();
+                _device = null;
             }
 
-            return device != null;
+            return _device != null;
         }
 
-        public bool IsOpen => device != null;
+        public bool IsOpen => _device != null;
 
         public bool DeviceIOControl(IOControlCode ioControlCode, object inBuffer)
         {
-            if (device == null)
+            if (_device == null)
                 return false;
 
-            bool b = NativeMethods.DeviceIoControl(device, ioControlCode,
+            bool b = NativeMethods.DeviceIoControl(_device, ioControlCode,
               inBuffer, inBuffer == null ? 0 : (uint)Marshal.SizeOf(inBuffer),
               null, 0, out uint bytesReturned, IntPtr.Zero);
             return b;
@@ -124,11 +124,11 @@ namespace OpenHardwareMonitor.Hardware
         public bool DeviceIOControl<T>(IOControlCode ioControlCode, object inBuffer,
           ref T outBuffer)
         {
-            if (device == null)
+            if (_device == null)
                 return false;
 
             object boxedOutBuffer = outBuffer;
-            bool b = NativeMethods.DeviceIoControl(device, ioControlCode,
+            bool b = NativeMethods.DeviceIoControl(_device, ioControlCode,
               inBuffer, inBuffer == null ? 0 : (uint)Marshal.SizeOf(inBuffer),
               boxedOutBuffer, (uint)Marshal.SizeOf(boxedOutBuffer),
               out uint bytesReturned, IntPtr.Zero);
@@ -138,11 +138,11 @@ namespace OpenHardwareMonitor.Hardware
 
         public void Close()
         {
-            if (device != null)
+            if (_device != null)
             {
-                device.Close();
-                device.Dispose();
-                device = null;
+                _device.Close();
+                _device.Dispose();
+                _device = null;
             }
         }
 
@@ -154,7 +154,7 @@ namespace OpenHardwareMonitor.Hardware
             if (manager == IntPtr.Zero)
                 return false;
 
-            IntPtr service = NativeMethods.OpenService(manager, id,
+            IntPtr service = NativeMethods.OpenService(manager, _id,
               ServiceAccessRights.SERVICE_ALL_ACCESS);
 
             if (service == IntPtr.Zero)
@@ -320,7 +320,7 @@ namespace OpenHardwareMonitor.Hardware
 
         public void Dispose()
         {
-            device?.Dispose();
+            _device?.Dispose();
         }
     }
 }

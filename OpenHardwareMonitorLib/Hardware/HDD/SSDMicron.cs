@@ -68,19 +68,19 @@ namespace OpenHardwareMonitor.Hardware.HDD
       new SmartAttribute(0xF8, SmartNames.FTLProgramNANDPagesCount, RawToInt)
         };
 
-        private readonly Sensor temperature;
-        private readonly Sensor writeAmplification;
+        private readonly Sensor _temperature;
+        private readonly Sensor _writeAmplification;
 
         public SSDMicron(ISmart smart, string name, string firmwareRevision,
           int index, ISettings settings)
           : base(smart, name, firmwareRevision, index, smartAttributes, settings)
         {
-            temperature = new Sensor("Temperature", 0, false,
+            _temperature = new Sensor("Temperature", 0, false,
               SensorType.Temperature, this,
               new[] { new ParameterDescription("Offset [°C]",
           "Temperature offset of the thermal sensor.\n" +
           "Temperature = Value + Offset.", 0) }, settings);
-            writeAmplification = new Sensor("Write Amplification", 0,
+            _writeAmplification = new Sensor("Write Amplification", 0,
               SensorType.Factor, this, settings);
         }
 
@@ -98,26 +98,26 @@ namespace OpenHardwareMonitor.Hardware.HDD
 
                 if (value.Identifier == 0xC2)
                 {
-                    temperature.Value =
-                      value.RawValue[0] + temperature.Parameters[0].Value;
+                    _temperature.Value =
+                      value.RawValue[0] + _temperature.Parameters[0].Value;
                     if (value.RawValue[0] != 0)
-                        ActivateSensor(temperature);
+                        ActivateSensor(_temperature);
                 }
             }
             if (hostProgramPagesCount.HasValue && ftlProgramPagesCount.HasValue)
             {
                 if (hostProgramPagesCount.Value > 0)
                 {
-                    writeAmplification.Value =
+                    _writeAmplification.Value =
                       (hostProgramPagesCount.Value + ftlProgramPagesCount) /
                       hostProgramPagesCount.Value;
                 }
                 else
                 {
-                    writeAmplification.Value = 0;
+                    _writeAmplification.Value = 0;
                 }
 
-                ActivateSensor(writeAmplification);
+                ActivateSensor(_writeAmplification);
             }
         }
     }

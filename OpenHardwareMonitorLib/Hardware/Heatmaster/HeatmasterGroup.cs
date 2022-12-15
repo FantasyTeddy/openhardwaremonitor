@@ -22,8 +22,8 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster
     internal class HeatmasterGroup : IGroup
     {
 
-        private readonly List<Heatmaster> hardware = new List<Heatmaster>();
-        private readonly StringBuilder report = new StringBuilder();
+        private readonly List<Heatmaster> _hardware = new List<Heatmaster>();
+        private readonly StringBuilder _report = new StringBuilder();
 
         private static string ReadLine(SerialPort port, int timeout)
         {
@@ -93,8 +93,8 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster
                       new SerialPort(portNames[i], 38400, Parity.None, 8, StopBits.One))
                     {
                         serialPort.NewLine = ((char)0x0D).ToString();
-                        report.Append("Port Name: ");
-                        report.AppendLine(portNames[i]);
+                        _report.Append("Port Name: ");
+                        _report.AppendLine(portNames[i]);
 
                         try
                         {
@@ -102,7 +102,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster
                         }
                         catch (UnauthorizedAccessException)
                         {
-                            report.AppendLine("Exception: Access Denied");
+                            _report.AppendLine("Exception: Access Denied");
                         }
 
                         if (serialPort.IsOpen)
@@ -146,56 +146,56 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster
                                         isValid = revision == 770;
                                         if (!isValid)
                                         {
-                                            report.Append("Status: Wrong Hardware Revision " +
+                                            _report.Append("Status: Wrong Hardware Revision " +
                                               revision.ToString(CultureInfo.InvariantCulture));
                                         }
                                     }
                                     catch (TimeoutException)
                                     {
-                                        report.AppendLine("Status: Timeout Reading Revision");
+                                        _report.AppendLine("Status: Timeout Reading Revision");
                                     }
                                 }
                                 else
                                 {
-                                    report.AppendLine("Status: Wrong Startflag");
+                                    _report.AppendLine("Status: Wrong Startflag");
                                 }
                             }
                             else
                             {
-                                report.AppendLine("Status: No Response");
+                                _report.AppendLine("Status: No Response");
                             }
                             serialPort.DiscardInBuffer();
                         }
                         else
                         {
-                            report.AppendLine("Status: Port not Open");
+                            _report.AppendLine("Status: Port not Open");
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    report.AppendLine(e.ToString());
+                    _report.AppendLine(e.ToString());
                 }
 
                 if (isValid)
                 {
-                    report.AppendLine("Status: OK");
-                    hardware.Add(new Heatmaster(portNames[i], settings));
+                    _report.AppendLine("Status: OK");
+                    _hardware.Add(new Heatmaster(portNames[i], settings));
                 }
-                report.AppendLine();
+                _report.AppendLine();
             }
         }
 
-        public IHardware[] Hardware => hardware.ToArray();
+        public IHardware[] Hardware => _hardware.ToArray();
 
         public string GetReport()
         {
-            if (report.Length > 0)
+            if (_report.Length > 0)
             {
                 StringBuilder r = new StringBuilder();
                 r.AppendLine("Serial Port Heatmaster");
                 r.AppendLine();
-                r.Append(report);
+                r.Append(_report);
                 r.AppendLine();
                 return r.ToString();
             }
@@ -207,7 +207,7 @@ namespace OpenHardwareMonitor.Hardware.Heatmaster
 
         public void Close()
         {
-            foreach (Heatmaster heatmaster in hardware)
+            foreach (Heatmaster heatmaster in _hardware)
                 heatmaster.Close();
         }
     }

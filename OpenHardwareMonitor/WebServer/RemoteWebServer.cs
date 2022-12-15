@@ -18,7 +18,7 @@ namespace OpenHardwareMonitor.WebServer
 {
     public sealed class RemoteWebServer : IDisposable
     {
-        private IWebHost host;
+        private IWebHost _host;
 
         public RemoteWebServer(Node node)
         {
@@ -30,20 +30,20 @@ namespace OpenHardwareMonitor.WebServer
             IWebHostBuilder builder = WebHost.CreateDefaultBuilder()
                 .UseStartup<Startup>()
                 .UseUrls($"http://*:{port}");
-            host = builder.Build();
+            _host = builder.Build();
 
-            host.Start();
+            _host.Start();
         }
 
         public void Stop()
         {
-            host?.StopAsync().Wait();
-            host?.Dispose();
+            _host?.StopAsync().Wait();
+            _host?.Dispose();
         }
 
         public void Dispose()
         {
-            host?.Dispose();
+            _host?.Dispose();
 
             GC.SuppressFinalize(this);
         }

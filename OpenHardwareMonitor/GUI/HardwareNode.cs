@@ -18,23 +18,23 @@ namespace OpenHardwareMonitor.GUI
     public class HardwareNode : Node
     {
 
-        private readonly PersistentSettings settings;
-        private readonly UnitManager unitManager;
-        private readonly Identifier expandedIdentifier;
+        private readonly PersistentSettings _settings;
+        private readonly UnitManager _unitManager;
+        private readonly Identifier _expandedIdentifier;
 
-        private readonly List<TypeNode> typeNodes = new List<TypeNode>();
+        private readonly List<TypeNode> _typeNodes = new List<TypeNode>();
 
         public HardwareNode(IHardware hardware, PersistentSettings settings,
           UnitManager unitManager)
             : base()
         {
-            this.settings = settings;
-            this.unitManager = unitManager;
+            _settings = settings;
+            _unitManager = unitManager;
             Hardware = hardware;
             Image = HardwareTypeImage.Instance.GetImage(hardware.HardwareType);
 
             foreach (SensorType sensorType in Enum.GetValues(typeof(SensorType)))
-                typeNodes.Add(new TypeNode(sensorType, hardware, settings));
+                _typeNodes.Add(new TypeNode(sensorType, hardware, settings));
 
             foreach (ISensor sensor in hardware.Sensors)
                 SensorAdded(sensor);
@@ -42,9 +42,9 @@ namespace OpenHardwareMonitor.GUI
             hardware.SensorAdded += (_, e) => SensorAdded(e.Sensor);
             hardware.SensorRemoved += (_, e) => SensorRemoved(e.Sensor);
 
-            expandedIdentifier = new Identifier(hardware.Identifier, "expanded");
+            _expandedIdentifier = new Identifier(hardware.Identifier, "expanded");
             base.IsExpanded =
-              settings.GetValue(expandedIdentifier.ToString(), base.IsExpanded);
+              settings.GetValue(_expandedIdentifier.ToString(), base.IsExpanded);
         }
 
         public override string Text
@@ -63,7 +63,7 @@ namespace OpenHardwareMonitor.GUI
                 if (base.IsExpanded != value)
                 {
                     base.IsExpanded = value;
-                    settings.SetValue(expandedIdentifier.ToString(), value);
+                    _settings.SetValue(_expandedIdentifier.ToString(), value);
                 }
             }
         }
@@ -93,7 +93,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void SensorRemoved(ISensor sensor)
         {
-            foreach (TypeNode typeNode in typeNodes)
+            foreach (TypeNode typeNode in _typeNodes)
             {
                 if (typeNode.SensorType == sensor.SensorType)
                 {
@@ -124,7 +124,7 @@ namespace OpenHardwareMonitor.GUI
                 i++;
             }
 
-            SensorNode sensorNode = new SensorNode(sensor, settings, unitManager);
+            SensorNode sensorNode = new SensorNode(sensor, _settings, _unitManager);
             sensorNode.PlotSelectionChanged += SensorPlotSelectionChanged;
             node.Nodes.Insert(i, sensorNode);
         }
@@ -136,7 +136,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void SensorAdded(ISensor sensor)
         {
-            foreach (TypeNode typeNode in typeNodes)
+            foreach (TypeNode typeNode in _typeNodes)
             {
                 if (typeNode.SensorType == sensor.SensorType)
                 {

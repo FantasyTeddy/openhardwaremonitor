@@ -66,7 +66,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
     [StructLayout(LayoutKind.Sequential)]
     internal readonly struct FT_HANDLE
     {
-        private readonly uint handle;
+        private readonly uint _handle;
     }
 
     [StructLayout(LayoutKind.Sequential)]

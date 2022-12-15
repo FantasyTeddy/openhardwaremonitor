@@ -18,21 +18,21 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
     internal class NvidiaGroup : IGroup
     {
 
-        private readonly List<Hardware> hardware = new List<Hardware>();
-        private readonly StringBuilder report = new StringBuilder();
+        private readonly List<Hardware> _hardware = new List<Hardware>();
+        private readonly StringBuilder _report = new StringBuilder();
 
         public NvidiaGroup(ISettings settings)
         {
             if (!NVAPI.IsAvailable)
                 return;
 
-            report.AppendLine("NVAPI");
-            report.AppendLine();
+            _report.AppendLine("NVAPI");
+            _report.AppendLine();
 
             if (NVAPI.NvAPI_GetInterfaceVersionString(out string version) == NvStatus.OK)
             {
-                report.Append(" Version: ");
-                report.AppendLine(version);
+                _report.Append(" Version: ");
+                _report.AppendLine(version);
             }
 
             NvPhysicalGpuHandle[] handles =
@@ -40,8 +40,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             int count;
             if (NVAPI.NvAPI_EnumPhysicalGPUs == null)
             {
-                report.AppendLine(" Error: NvAPI_EnumPhysicalGPUs not available");
-                report.AppendLine();
+                _report.AppendLine(" Error: NvAPI_EnumPhysicalGPUs not available");
+                _report.AppendLine();
                 return;
             }
             else
@@ -49,19 +49,19 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 NvStatus status = NVAPI.NvAPI_EnumPhysicalGPUs(handles, out count);
                 if (status != NvStatus.OK)
                 {
-                    report.AppendLine(" Status: " + status);
-                    report.AppendLine();
+                    _report.AppendLine(" Status: " + status);
+                    _report.AppendLine();
                     return;
                 }
             }
 
             NVML.NvmlReturn result = NVML.NvmlInit();
 
-            report.AppendLine();
-            report.AppendLine("NVML");
-            report.AppendLine();
-            report.AppendLine(" Status: " + result);
-            report.AppendLine();
+            _report.AppendLine();
+            _report.AppendLine("NVML");
+            _report.AppendLine();
+            _report.AppendLine(" Status: " + result);
+            _report.AppendLine();
 
             IDictionary<NvPhysicalGpuHandle, NvDisplayHandle> displayHandles =
               new Dictionary<NvPhysicalGpuHandle, NvDisplayHandle>();
@@ -94,28 +94,28 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 }
             }
 
-            report.Append("Number of GPUs: ");
-            report.AppendLine(count.ToString(CultureInfo.InvariantCulture));
+            _report.Append("Number of GPUs: ");
+            _report.AppendLine(count.ToString(CultureInfo.InvariantCulture));
 
             for (int i = 0; i < count; i++)
             {
                 displayHandles.TryGetValue(handles[i], out NvDisplayHandle displayHandle);
-                hardware.Add(new NvidiaGPU(i, handles[i], displayHandle, settings));
+                _hardware.Add(new NvidiaGPU(i, handles[i], displayHandle, settings));
             }
 
-            report.AppendLine();
+            _report.AppendLine();
         }
 
-        public IHardware[] Hardware => hardware.ToArray();
+        public IHardware[] Hardware => _hardware.ToArray();
 
         public string GetReport()
         {
-            return report.ToString();
+            return _report.ToString();
         }
 
         public void Close()
         {
-            foreach (Hardware gpu in hardware)
+            foreach (Hardware gpu in _hardware)
                 gpu.Close();
 
             if (NVML.IsInitialized)

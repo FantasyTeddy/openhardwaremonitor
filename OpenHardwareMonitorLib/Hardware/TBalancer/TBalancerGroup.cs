@@ -19,8 +19,8 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
     internal class TBalancerGroup : IGroup
     {
 
-        private readonly List<TBalancer> hardware = new List<TBalancer>();
-        private readonly StringBuilder report = new StringBuilder();
+        private readonly List<TBalancer> _hardware = new List<TBalancer>();
+        private readonly StringBuilder _report = new StringBuilder();
 
         public TBalancerGroup(ISettings settings)
         {
@@ -30,7 +30,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
             {
                 if (FTD2XX.FT_CreateDeviceInfoList(out numDevices) != FT_STATUS.FT_OK)
                 {
-                    report.AppendLine("Status: FT_CreateDeviceInfoList failed");
+                    _report.AppendLine("Status: FT_CreateDeviceInfoList failed");
                     return;
                 }
             }
@@ -42,7 +42,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
             FT_DEVICE_INFO_NODE[] info = new FT_DEVICE_INFO_NODE[numDevices];
             if (FTD2XX.FT_GetDeviceInfoList(info, ref numDevices) != FT_STATUS.FT_OK)
             {
-                report.AppendLine("Status: FT_GetDeviceInfoList failed");
+                _report.AppendLine("Status: FT_GetDeviceInfoList failed");
                 return;
             }
 
@@ -52,22 +52,22 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
 
             for (int i = 0; i < numDevices; i++)
             {
-                report.Append("Device Index: ");
-                report.AppendLine(i.ToString(CultureInfo.InvariantCulture));
-                report.Append("Device Type: ");
-                report.AppendLine(info[i].Type.ToString());
+                _report.Append("Device Index: ");
+                _report.AppendLine(i.ToString(CultureInfo.InvariantCulture));
+                _report.Append("Device Type: ");
+                _report.AppendLine(info[i].Type.ToString());
 
                 // the T-Balancer always uses an FT232BM
                 if (info[i].Type != FT_DEVICE.FT_DEVICE_232BM)
                 {
-                    report.AppendLine("Status: Wrong device type");
+                    _report.AppendLine("Status: Wrong device type");
                     continue;
                 }
 
                 FT_STATUS status = FTD2XX.FT_Open(i, out FT_HANDLE handle);
                 if (status != FT_STATUS.FT_OK)
                 {
-                    report.AppendLine("Open Status: " + status);
+                    _report.AppendLine("Open Status: " + status);
                     continue;
                 }
 
@@ -81,7 +81,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
                 status = FTD2XX.Write(handle, new byte[] { 0x38 });
                 if (status != FT_STATUS.FT_OK)
                 {
-                    report.AppendLine("Write Status: " + status);
+                    _report.AppendLine("Write Status: " + status);
                     FTD2XX.FT_Close(handle);
                     continue;
                 }
@@ -117,24 +117,24 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
                             protocolVersion = data[274];
                             if (!isValid)
                             {
-                                report.Append("Status: Wrong Protocol Version: 0x");
-                                report.AppendLine(
+                                _report.Append("Status: Wrong Protocol Version: 0x");
+                                _report.AppendLine(
                                   protocolVersion.ToString("X", CultureInfo.InvariantCulture));
                             }
                         }
                         else
                         {
-                            report.AppendLine("Status: Wrong Message Length: " + length);
+                            _report.AppendLine("Status: Wrong Message Length: " + length);
                         }
                     }
                     else
                     {
-                        report.AppendLine("Status: Wrong Startflag");
+                        _report.AppendLine("Status: Wrong Startflag");
                     }
                 }
                 else
                 {
-                    report.AppendLine("Status: No Response");
+                    _report.AppendLine("Status: No Response");
                 }
 
                 FTD2XX.FT_Purge(handle, FT_PURGE.FT_PURGE_ALL);
@@ -142,25 +142,25 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
 
                 if (isValid)
                 {
-                    report.AppendLine("Status: OK");
-                    hardware.Add(new TBalancer(i, protocolVersion, settings));
+                    _report.AppendLine("Status: OK");
+                    _hardware.Add(new TBalancer(i, protocolVersion, settings));
                 }
 
                 if (i < numDevices - 1)
-                    report.AppendLine();
+                    _report.AppendLine();
             }
         }
 
-        public IHardware[] Hardware => hardware.ToArray();
+        public IHardware[] Hardware => _hardware.ToArray();
 
         public string GetReport()
         {
-            if (report.Length > 0)
+            if (_report.Length > 0)
             {
                 StringBuilder r = new StringBuilder();
                 r.AppendLine("FTD2XX");
                 r.AppendLine();
-                r.Append(report);
+                r.Append(_report);
                 r.AppendLine();
                 return r.ToString();
             }
@@ -172,7 +172,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
 
         public void Close()
         {
-            foreach (TBalancer tbalancer in hardware)
+            foreach (TBalancer tbalancer in _hardware)
                 tbalancer.Close();
         }
     }

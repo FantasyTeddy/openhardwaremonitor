@@ -16,25 +16,25 @@ namespace OpenHardwareMonitor.GUI
 {
     public class UserOption
     {
-        private readonly string name;
-        private bool value;
-        private readonly MenuItem menuItem;
+        private readonly string _name;
+        private bool _value;
+        private readonly MenuItem _menuItem;
         private event EventHandler changed;
-        private readonly PersistentSettings settings;
+        private readonly PersistentSettings _settings;
 
         public UserOption(string name, bool value,
           MenuItem menuItem, PersistentSettings settings)
         {
 
-            this.settings = settings;
-            this.name = name;
+            _settings = settings;
+            _name = name;
             if (name != null)
-                this.value = settings.GetValue(name, value);
+                _value = settings.GetValue(name, value);
             else
-                this.value = value;
-            this.menuItem = menuItem;
-            this.menuItem.Checked = this.value;
-            this.menuItem.Click += new EventHandler(menuItem_Click);
+                _value = value;
+            _menuItem = menuItem;
+            _menuItem.Checked = _value;
+            _menuItem.Click += new EventHandler(menuItem_Click);
         }
 
         private void menuItem_Click(object sender, EventArgs e)
@@ -44,15 +44,15 @@ namespace OpenHardwareMonitor.GUI
 
         public bool Value
         {
-            get => value;
+            get => _value;
             set
             {
-                if (this.value != value)
+                if (_value != value)
                 {
-                    this.value = value;
-                    if (name != null)
-                        settings.SetValue(name, value);
-                    menuItem.Checked = value;
+                    _value = value;
+                    if (_name != null)
+                        _settings.SetValue(_name, value);
+                    _menuItem.Checked = value;
                     changed?.Invoke(this, null);
                 }
             }

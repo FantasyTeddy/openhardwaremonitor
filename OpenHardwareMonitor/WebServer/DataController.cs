@@ -21,13 +21,13 @@ namespace OpenHardwareMonitor.WebServer
     public class DataController : ControllerBase
     {
         public static Node Root;
-        private int nodeCount;
+        private int _nodeCount;
 
         [HttpGet]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public IActionResult Get()
         {
-            nodeCount = 1;
+            _nodeCount = 1;
 
             var data = new DataNode
             {
@@ -47,11 +47,11 @@ namespace OpenHardwareMonitor.WebServer
         {
             var node = new DataNode
             {
-                Id = nodeCount,
+                Id = _nodeCount,
                 Text = n.Text,
                 Children = new List<DataNode>(),
             };
-            nodeCount++;
+            _nodeCount++;
 
             foreach (Node child in n.Nodes)
                 node.Children.Add(GenerateNode(child));

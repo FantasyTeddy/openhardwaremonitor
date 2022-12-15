@@ -23,8 +23,8 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
     internal class CPUID
     {
-        private readonly uint threadMaskWith;
-        private readonly uint coreMaskWith;
+        private readonly uint _threadMaskWith;
+        private readonly uint _coreMaskWith;
         public const uint CPUID_0 = 0;
         public const uint CPUID_EXT = 0x80000000;
 
@@ -209,15 +209,15 @@ namespace OpenHardwareMonitor.Hardware.CPU
                         maxCoreIdPerPackage = ((Data[4, 0] >> 26) & 0x3F) + 1;
                     else
                         maxCoreIdPerPackage = 1;
-                    threadMaskWith =
+                    _threadMaskWith =
                       NextLog2(maxCoreAndThreadIdPerPackage / maxCoreIdPerPackage);
-                    coreMaskWith = NextLog2(maxCoreIdPerPackage);
+                    _coreMaskWith = NextLog2(maxCoreIdPerPackage);
                     break;
                 case Vendor.AMD:
                     if (Family == 0x17 || Family == 0x19)
                     {
-                        coreMaskWith = (ExtData[8, 2] >> 12) & 0xF;
-                        threadMaskWith =
+                        _coreMaskWith = (ExtData[8, 2] >> 12) & 0xF;
+                        _threadMaskWith =
                           NextLog2(((ExtData[0x1E, 1] >> 8) & 0xFF) + 1);
                     }
                     else
@@ -227,22 +227,22 @@ namespace OpenHardwareMonitor.Hardware.CPU
                             corePerPackage = (ExtData[8, 2] & 0xFF) + 1;
                         else
                             corePerPackage = 1;
-                        coreMaskWith = NextLog2(corePerPackage);
-                        threadMaskWith = 0;
+                        _coreMaskWith = NextLog2(corePerPackage);
+                        _threadMaskWith = 0;
                     }
                     break;
                 default:
-                    threadMaskWith = 0;
-                    coreMaskWith = 0;
+                    _threadMaskWith = 0;
+                    _coreMaskWith = 0;
                     break;
             }
 
-            ProcessorId = ApicId >> (int)(coreMaskWith + threadMaskWith);
-            CoreId = (ApicId >> (int)threadMaskWith)
-              - (ProcessorId << (int)coreMaskWith);
+            ProcessorId = ApicId >> (int)(_coreMaskWith + _threadMaskWith);
+            CoreId = (ApicId >> (int)_threadMaskWith)
+              - (ProcessorId << (int)_coreMaskWith);
             ThreadId = ApicId
-              - (ProcessorId << (int)(coreMaskWith + threadMaskWith))
-              - (CoreId << (int)threadMaskWith);
+              - (ProcessorId << (int)(_coreMaskWith + _threadMaskWith))
+              - (CoreId << (int)_threadMaskWith);
         }
 
         public string Name { get; } = string.Empty;

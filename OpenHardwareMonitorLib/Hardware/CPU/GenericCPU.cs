@@ -26,17 +26,17 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         protected readonly int processorIndex;
         protected readonly int coreCount;
-        private readonly bool isInvariantTimeStampCounter;
-        private readonly double estimatedTimeStampCounterFrequency;
-        private readonly double estimatedTimeStampCounterFrequencyError;
+        private readonly bool _isInvariantTimeStampCounter;
+        private readonly double _estimatedTimeStampCounterFrequency;
+        private readonly double _estimatedTimeStampCounterFrequencyError;
 
-        private ulong lastTimeStampCount;
-        private long lastTime;
-        private readonly Vendor vendor;
+        private ulong _lastTimeStampCount;
+        private long _lastTime;
+        private readonly Vendor _vendor;
 
-        private readonly CPULoad cpuLoad;
-        private readonly Sensor totalLoad;
-        private readonly Sensor[] coreLoads;
+        private readonly CPULoad _cpuLoad;
+        private readonly Sensor _totalLoad;
+        private readonly Sensor[] _coreLoads;
 
         protected string CoreString(int i)
         {
@@ -52,7 +52,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
             this.cpuid = cpuid;
 
-            vendor = cpuid[0][0].Vendor;
+            _vendor = cpuid[0][0].Vendor;
 
             family = cpuid[0][0].Family;
             model = cpuid[0][0].Model;
@@ -87,31 +87,31 @@ namespace OpenHardwareMonitor.Hardware.CPU
             if (cpuid[0][0].ExtData.GetLength(0) > 7
               && (cpuid[0][0].ExtData[7, 3] & 0x100) != 0)
             {
-                isInvariantTimeStampCounter = true;
+                _isInvariantTimeStampCounter = true;
             }
             else
             {
-                isInvariantTimeStampCounter = false;
+                _isInvariantTimeStampCounter = false;
             }
 
             if (coreCount > 1)
-                totalLoad = new Sensor("CPU Total", 0, SensorType.Load, this, settings);
+                _totalLoad = new Sensor("CPU Total", 0, SensorType.Load, this, settings);
             else
-                totalLoad = null;
-            coreLoads = new Sensor[coreCount];
-            for (int i = 0; i < coreLoads.Length; i++)
+                _totalLoad = null;
+            _coreLoads = new Sensor[coreCount];
+            for (int i = 0; i < _coreLoads.Length; i++)
             {
-                coreLoads[i] = new Sensor(CoreString(i), i + 1,
+                _coreLoads[i] = new Sensor(CoreString(i), i + 1,
                   SensorType.Load, this, settings);
             }
 
-            cpuLoad = new CPULoad(cpuid);
-            if (cpuLoad.IsAvailable)
+            _cpuLoad = new CPULoad(cpuid);
+            if (_cpuLoad.IsAvailable)
             {
-                foreach (Sensor sensor in coreLoads)
+                foreach (Sensor sensor in _coreLoads)
                     ActivateSensor(sensor);
-                if (totalLoad != null)
-                    ActivateSensor(totalLoad);
+                if (_totalLoad != null)
+                    ActivateSensor(_totalLoad);
             }
 
             if (HasTimeStampCounter)
@@ -119,17 +119,17 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 GroupAffinity previousAffinity = ThreadAffinity.Set(cpuid[0][0].Affinity);
 
                 EstimateTimeStampCounterFrequency(
-                  out estimatedTimeStampCounterFrequency,
-                  out estimatedTimeStampCounterFrequencyError);
+                  out _estimatedTimeStampCounterFrequency,
+                  out _estimatedTimeStampCounterFrequencyError);
 
                 ThreadAffinity.Set(previousAffinity);
             }
             else
             {
-                estimatedTimeStampCounterFrequency = 0;
+                _estimatedTimeStampCounterFrequency = 0;
             }
 
-            TimeStampCounterFrequency = estimatedTimeStampCounterFrequency;
+            TimeStampCounterFrequency = _estimatedTimeStampCounterFrequency;
         }
 
         private static Identifier CreateIdentifier(Vendor vendor,
@@ -223,7 +223,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
         {
             StringBuilder r = new StringBuilder();
 
-            switch (vendor)
+            switch (_vendor)
             {
                 case Vendor.AMD: r.AppendLine("AMD CPU"); break;
                 case Vendor.Intel: r.AppendLine("Intel CPU"); break;
@@ -239,14 +239,14 @@ namespace OpenHardwareMonitor.Hardware.CPU
             r.AppendLine(string.Format(CultureInfo.InvariantCulture,
               "Timer Frequency: {0} MHz", Stopwatch.Frequency * 1e-6));
             r.AppendLine("Time Stamp Counter: " + (HasTimeStampCounter ? (
-              isInvariantTimeStampCounter ? "Invariant" : "Not Invariant") : "None"));
+              _isInvariantTimeStampCounter ? "Invariant" : "Not Invariant") : "None"));
             r.AppendLine(string.Format(CultureInfo.InvariantCulture,
               "Estimated Time Stamp Counter Frequency: {0} MHz",
-              Math.Round(estimatedTimeStampCounterFrequency * 100) * 0.01));
+              Math.Round(_estimatedTimeStampCounterFrequency * 100) * 0.01));
             r.AppendLine(string.Format(CultureInfo.InvariantCulture,
               "Estimated Time Stamp Counter Frequency Error: {0} Mhz",
-              Math.Round(estimatedTimeStampCounterFrequency *
-              estimatedTimeStampCounterFrequencyError * 1e5) * 1e-5));
+              Math.Round(_estimatedTimeStampCounterFrequency *
+              _estimatedTimeStampCounterFrequencyError * 1e5) * 1e-5));
             r.AppendLine(string.Format(CultureInfo.InvariantCulture,
               "Time Stamp Counter Frequency: {0} MHz",
               Math.Round(TimeStampCounterFrequency * 100) * 0.01));
@@ -279,7 +279,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         public override void Update()
         {
-            if (HasTimeStampCounter && isInvariantTimeStampCounter)
+            if (HasTimeStampCounter && _isInvariantTimeStampCounter)
             {
 
                 // make sure always the same thread is used
@@ -293,7 +293,7 @@ namespace OpenHardwareMonitor.Hardware.CPU
                 // restore the previous thread affinity mask
                 ThreadAffinity.Set(previousAffinity);
 
-                double delta = (double)(time - lastTime) / Stopwatch.Frequency;
+                double delta = (double)(time - _lastTime) / Stopwatch.Frequency;
                 double error = (double)(time - firstTime) / Stopwatch.Frequency;
 
                 // only use data if they are measured accuarte enough (max 0.1ms delay)
@@ -302,26 +302,26 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
                     // ignore the first reading because there are no initial values
                     // ignore readings with too large or too small time window
-                    if (lastTime != 0 && delta > 0.5 && delta < 2)
+                    if (_lastTime != 0 && delta > 0.5 && delta < 2)
                     {
 
                         // update the TSC frequency with the new value
                         TimeStampCounterFrequency =
-                          (timeStampCount - lastTimeStampCount) / (1e6 * delta);
+                          (timeStampCount - _lastTimeStampCount) / (1e6 * delta);
                     }
 
-                    lastTimeStampCount = timeStampCount;
-                    lastTime = time;
+                    _lastTimeStampCount = timeStampCount;
+                    _lastTime = time;
                 }
             }
 
-            if (cpuLoad.IsAvailable)
+            if (_cpuLoad.IsAvailable)
             {
-                cpuLoad.Update();
-                for (int i = 0; i < coreLoads.Length; i++)
-                    coreLoads[i].Value = cpuLoad.GetCoreLoad(i);
-                if (totalLoad != null)
-                    totalLoad.Value = cpuLoad.GetTotalLoad();
+                _cpuLoad.Update();
+                for (int i = 0; i < _coreLoads.Length; i++)
+                    _coreLoads[i].Value = _cpuLoad.GetCoreLoad(i);
+                if (_totalLoad != null)
+                    _totalLoad.Value = _cpuLoad.GetTotalLoad();
             }
         }
     }

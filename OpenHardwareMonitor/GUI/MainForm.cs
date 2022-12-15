@@ -30,48 +30,48 @@ namespace OpenHardwareMonitor.GUI
     public partial class MainForm : Form
     {
 
-        private readonly PersistentSettings settings;
-        private readonly UnitManager unitManager;
-        private readonly Computer computer;
-        private readonly Node root;
-        private readonly TreeModel treeModel;
-        private IDictionary<ISensor, Color> sensorPlotColors =
+        private readonly PersistentSettings _settings;
+        private readonly UnitManager _unitManager;
+        private readonly Computer _computer;
+        private readonly Node _root;
+        private readonly TreeModel _treeModel;
+        private IDictionary<ISensor, Color> _sensorPlotColors =
           new Dictionary<ISensor, Color>();
-        private readonly Color[] plotColorPalette;
-        private readonly SystemTray systemTray;
-        private readonly StartupManager startupManager = new StartupManager();
-        private readonly UpdateVisitor updateVisitor = new UpdateVisitor();
-        private readonly SensorGadget gadget;
-        private Form plotForm;
-        private readonly PlotPanel plotPanel;
+        private readonly Color[] _plotColorPalette;
+        private readonly SystemTray _systemTray;
+        private readonly StartupManager _startupManager = new StartupManager();
+        private readonly UpdateVisitor _updateVisitor = new UpdateVisitor();
+        private readonly SensorGadget _gadget;
+        private Form _plotForm;
+        private readonly PlotPanel _plotPanel;
 
-        private readonly UserOption showHiddenSensors;
-        private UserOption showPlot;
-        private readonly UserOption showValue;
-        private readonly UserOption showMin;
-        private readonly UserOption showMax;
-        private readonly UserOption startMinimized;
-        private readonly UserOption minimizeToTray;
-        private readonly UserOption minimizeOnClose;
-        private readonly UserOption autoStart;
+        private readonly UserOption _showHiddenSensors;
+        private UserOption _showPlot;
+        private readonly UserOption _showValue;
+        private readonly UserOption _showMin;
+        private readonly UserOption _showMax;
+        private readonly UserOption _startMinimized;
+        private readonly UserOption _minimizeToTray;
+        private readonly UserOption _minimizeOnClose;
+        private readonly UserOption _autoStart;
 
-        private readonly UserOption readMainboardSensors;
-        private readonly UserOption readCpuSensors;
-        private readonly UserOption readRamSensors;
-        private readonly UserOption readGpuSensors;
-        private readonly UserOption readFanControllersSensors;
-        private readonly UserOption readHddSensors;
+        private readonly UserOption _readMainboardSensors;
+        private readonly UserOption _readCpuSensors;
+        private readonly UserOption _readRamSensors;
+        private readonly UserOption _readGpuSensors;
+        private readonly UserOption _readFanControllersSensors;
+        private readonly UserOption _readHddSensors;
 
-        private readonly UserOption showGadget;
-        private UserRadioGroup plotLocation;
-        private readonly WmiProvider wmiProvider;
+        private readonly UserOption _showGadget;
+        private UserRadioGroup _plotLocation;
+        private readonly WmiProvider _wmiProvider;
 
-        private readonly UserOption runWebServer;
-        private readonly UserOption logSensors;
-        private readonly UserRadioGroup loggingInterval;
-        private readonly Logger logger;
+        private readonly UserOption _runWebServer;
+        private readonly UserOption _logSensors;
+        private readonly UserRadioGroup _loggingInterval;
+        private readonly Logger _logger;
 
-        private bool selectionDragging;
+        private bool _selectionDragging;
 
         public MainForm()
         {
@@ -87,11 +87,11 @@ namespace OpenHardwareMonitor.GUI
                 Environment.Exit(0);
             }
 
-            settings = new PersistentSettings();
-            settings.Load(Path.ChangeExtension(
+            _settings = new PersistentSettings();
+            _settings.Load(Path.ChangeExtension(
               Application.ExecutablePath, ".config"));
 
-            unitManager = new UnitManager(settings);
+            _unitManager = new UnitManager(_settings);
 
             // make sure the buffers used for double buffering are not disposed
             // after each draw call
@@ -104,7 +104,7 @@ namespace OpenHardwareMonitor.GUI
             Font = SystemFonts.MessageBoxFont;
             treeView.Font = SystemFonts.MessageBoxFont;
 
-            plotPanel = new PlotPanel(settings, unitManager)
+            _plotPanel = new PlotPanel(_settings, _unitManager)
             {
                 Font = SystemFonts.MessageBoxFont,
                 Dock = DockStyle.Fill
@@ -126,24 +126,24 @@ namespace OpenHardwareMonitor.GUI
             {
                 column.Width = Math.Max(DpiHelper.LogicalToDeviceUnits(20), Math.Min(
                   DpiHelper.LogicalToDeviceUnits(400),
-                  settings.GetValue("treeView.Columns." + column.Header + ".Width",
+                  _settings.GetValue("treeView.Columns." + column.Header + ".Width",
                   column.Width)));
             }
 
-            treeModel = new TreeModel();
-            root = new Node(System.Environment.MachineName)
+            _treeModel = new TreeModel();
+            _root = new Node(System.Environment.MachineName)
             {
                 Image = Utilities.EmbeddedResources.GetImage("computer.png")
             };
 
-            treeModel.Nodes.Add(root);
-            treeView.Model = treeModel;
+            _treeModel.Nodes.Add(_root);
+            treeView.Model = _treeModel;
 
-            computer = new Computer(settings);
+            _computer = new Computer(_settings);
 
-            systemTray = new SystemTray(computer, settings, unitManager);
-            systemTray.HideShowCommand += hideShowClick;
-            systemTray.ExitCommand += exitClick;
+            _systemTray = new SystemTray(_computer, _settings, _unitManager);
+            _systemTray.HideShowCommand += hideShowClick;
+            _systemTray.ExitCommand += exitClick;
 
             if (Hardware.OperatingSystem.IsUnix)
             { // Unix
@@ -152,7 +152,7 @@ namespace OpenHardwareMonitor.GUI
                 splitContainer.BorderStyle = BorderStyle.None;
                 splitContainer.SplitterWidth = 4;
                 treeView.BorderStyle = BorderStyle.Fixed3D;
-                plotPanel.BorderStyle = BorderStyle.Fixed3D;
+                _plotPanel.BorderStyle = BorderStyle.Fixed3D;
                 gadgetMenuItem.Visible = false;
                 minCloseMenuItem.Visible = false;
                 minTrayMenuItem.Visible = false;
@@ -164,192 +164,192 @@ namespace OpenHardwareMonitor.GUI
                   DpiHelper.LogicalToDeviceUnits(1),
                   DpiHelper.LogicalToDeviceUnits(18));
 
-                gadget = new SensorGadget(computer, settings, unitManager);
-                gadget.HideShowCommand += hideShowClick;
+                _gadget = new SensorGadget(_computer, _settings, _unitManager);
+                _gadget.HideShowCommand += hideShowClick;
 
-                wmiProvider = new WmiProvider(computer);
+                _wmiProvider = new WmiProvider(_computer);
             }
 
-            logger = new Logger(computer);
+            _logger = new Logger(_computer);
 
-            plotColorPalette = new Color[13];
-            plotColorPalette[0] = Color.Blue;
-            plotColorPalette[1] = Color.OrangeRed;
-            plotColorPalette[2] = Color.Green;
-            plotColorPalette[3] = Color.LightSeaGreen;
-            plotColorPalette[4] = Color.Goldenrod;
-            plotColorPalette[5] = Color.DarkViolet;
-            plotColorPalette[6] = Color.YellowGreen;
-            plotColorPalette[7] = Color.SaddleBrown;
-            plotColorPalette[8] = Color.RoyalBlue;
-            plotColorPalette[9] = Color.DeepPink;
-            plotColorPalette[10] = Color.MediumSeaGreen;
-            plotColorPalette[11] = Color.Olive;
-            plotColorPalette[12] = Color.Firebrick;
+            _plotColorPalette = new Color[13];
+            _plotColorPalette[0] = Color.Blue;
+            _plotColorPalette[1] = Color.OrangeRed;
+            _plotColorPalette[2] = Color.Green;
+            _plotColorPalette[3] = Color.LightSeaGreen;
+            _plotColorPalette[4] = Color.Goldenrod;
+            _plotColorPalette[5] = Color.DarkViolet;
+            _plotColorPalette[6] = Color.YellowGreen;
+            _plotColorPalette[7] = Color.SaddleBrown;
+            _plotColorPalette[8] = Color.RoyalBlue;
+            _plotColorPalette[9] = Color.DeepPink;
+            _plotColorPalette[10] = Color.MediumSeaGreen;
+            _plotColorPalette[11] = Color.Olive;
+            _plotColorPalette[12] = Color.Firebrick;
 
-            computer.HardwareAdded += (_, e) => HardwareAdded(e.Hardware);
-            computer.HardwareRemoved += (_, e) => HardwareRemoved(e.Hardware);
+            _computer.HardwareAdded += (_, e) => HardwareAdded(e.Hardware);
+            _computer.HardwareRemoved += (_, e) => HardwareRemoved(e.Hardware);
 
-            computer.Open();
+            _computer.Open();
 
             Microsoft.Win32.SystemEvents.PowerModeChanged += PowerModeChanged;
 
             timer.Enabled = true;
 
-            showHiddenSensors = new UserOption("hiddenMenuItem", false,
-              hiddenMenuItem, settings);
-            showHiddenSensors.Changed += (sender, e) =>
+            _showHiddenSensors = new UserOption("hiddenMenuItem", false,
+              hiddenMenuItem, _settings);
+            _showHiddenSensors.Changed += (sender, e) =>
             {
-                treeModel.ForceVisible = showHiddenSensors.Value;
+                _treeModel.ForceVisible = _showHiddenSensors.Value;
             };
 
-            showValue = new UserOption("valueMenuItem", true, valueMenuItem,
-              settings);
-            showValue.Changed += (sender, e) =>
+            _showValue = new UserOption("valueMenuItem", true, valueMenuItem,
+              _settings);
+            _showValue.Changed += (sender, e) =>
             {
-                treeView.Columns[1].IsVisible = showValue.Value;
+                treeView.Columns[1].IsVisible = _showValue.Value;
             };
 
-            showMin = new UserOption("minMenuItem", false, minMenuItem, settings);
-            showMin.Changed += (sender, e) =>
+            _showMin = new UserOption("minMenuItem", false, minMenuItem, _settings);
+            _showMin.Changed += (sender, e) =>
             {
-                treeView.Columns[2].IsVisible = showMin.Value;
+                treeView.Columns[2].IsVisible = _showMin.Value;
             };
 
-            showMax = new UserOption("maxMenuItem", true, maxMenuItem, settings);
-            showMax.Changed += (sender, e) =>
+            _showMax = new UserOption("maxMenuItem", true, maxMenuItem, _settings);
+            _showMax.Changed += (sender, e) =>
             {
-                treeView.Columns[3].IsVisible = showMax.Value;
+                treeView.Columns[3].IsVisible = _showMax.Value;
             };
 
-            startMinimized = new UserOption("startMinMenuItem", false,
-              startMinMenuItem, settings);
+            _startMinimized = new UserOption("startMinMenuItem", false,
+              startMinMenuItem, _settings);
 
-            minimizeToTray = new UserOption("minTrayMenuItem", true,
-              minTrayMenuItem, settings);
-            minimizeToTray.Changed += (sender, e) =>
+            _minimizeToTray = new UserOption("minTrayMenuItem", true,
+              minTrayMenuItem, _settings);
+            _minimizeToTray.Changed += (sender, e) =>
             {
-                systemTray.IsMainIconEnabled = minimizeToTray.Value;
+                _systemTray.IsMainIconEnabled = _minimizeToTray.Value;
             };
 
-            minimizeOnClose = new UserOption("minCloseMenuItem", false,
-              minCloseMenuItem, settings);
+            _minimizeOnClose = new UserOption("minCloseMenuItem", false,
+              minCloseMenuItem, _settings);
 
-            autoStart = new UserOption(null, startupManager.Startup,
-              startupMenuItem, settings);
-            autoStart.Changed += (sender, e) =>
+            _autoStart = new UserOption(null, _startupManager.Startup,
+              startupMenuItem, _settings);
+            _autoStart.Changed += (sender, e) =>
             {
                 try
                 {
-                    startupManager.Startup = autoStart.Value;
+                    _startupManager.Startup = _autoStart.Value;
                 }
                 catch (InvalidOperationException)
                 {
                     MessageBox.Show("Updating the auto-startup option failed.", "Error",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    autoStart.Value = startupManager.Startup;
+                    _autoStart.Value = _startupManager.Startup;
                 }
             };
 
-            readMainboardSensors = new UserOption("mainboardMenuItem", true,
-              mainboardMenuItem, settings);
-            readMainboardSensors.Changed += (sender, e) =>
+            _readMainboardSensors = new UserOption("mainboardMenuItem", true,
+              mainboardMenuItem, _settings);
+            _readMainboardSensors.Changed += (sender, e) =>
             {
-                computer.MainboardEnabled = readMainboardSensors.Value;
+                _computer.MainboardEnabled = _readMainboardSensors.Value;
             };
 
-            readCpuSensors = new UserOption("cpuMenuItem", true,
-              cpuMenuItem, settings);
-            readCpuSensors.Changed += (sender, e) =>
+            _readCpuSensors = new UserOption("cpuMenuItem", true,
+              cpuMenuItem, _settings);
+            _readCpuSensors.Changed += (sender, e) =>
             {
-                computer.CPUEnabled = readCpuSensors.Value;
+                _computer.CPUEnabled = _readCpuSensors.Value;
             };
 
-            readRamSensors = new UserOption("ramMenuItem", true,
-              ramMenuItem, settings);
-            readRamSensors.Changed += (sender, e) =>
+            _readRamSensors = new UserOption("ramMenuItem", true,
+              ramMenuItem, _settings);
+            _readRamSensors.Changed += (sender, e) =>
             {
-                computer.RAMEnabled = readRamSensors.Value;
+                _computer.RAMEnabled = _readRamSensors.Value;
             };
 
-            readGpuSensors = new UserOption("gpuMenuItem", true,
-              gpuMenuItem, settings);
-            readGpuSensors.Changed += (sender, e) =>
+            _readGpuSensors = new UserOption("gpuMenuItem", true,
+              gpuMenuItem, _settings);
+            _readGpuSensors.Changed += (sender, e) =>
             {
-                computer.GPUEnabled = readGpuSensors.Value;
+                _computer.GPUEnabled = _readGpuSensors.Value;
             };
 
-            readFanControllersSensors = new UserOption("fanControllerMenuItem", true,
-              fanControllerMenuItem, settings);
-            readFanControllersSensors.Changed += (sender, e) =>
+            _readFanControllersSensors = new UserOption("fanControllerMenuItem", true,
+              fanControllerMenuItem, _settings);
+            _readFanControllersSensors.Changed += (sender, e) =>
             {
-                computer.FanControllerEnabled = readFanControllersSensors.Value;
+                _computer.FanControllerEnabled = _readFanControllersSensors.Value;
             };
 
-            readHddSensors = new UserOption("hddMenuItem", true, hddMenuItem,
-              settings);
-            readHddSensors.Changed += (sender, e) =>
+            _readHddSensors = new UserOption("hddMenuItem", true, hddMenuItem,
+              _settings);
+            _readHddSensors.Changed += (sender, e) =>
             {
-                computer.HDDEnabled = readHddSensors.Value;
+                _computer.HDDEnabled = _readHddSensors.Value;
             };
 
-            showGadget = new UserOption("gadgetMenuItem", false, gadgetMenuItem,
-              settings);
-            showGadget.Changed += (sender, e) =>
+            _showGadget = new UserOption("gadgetMenuItem", false, gadgetMenuItem,
+              _settings);
+            _showGadget.Changed += (sender, e) =>
             {
-                if (gadget != null)
-                    gadget.Visible = showGadget.Value;
+                if (_gadget != null)
+                    _gadget.Visible = _showGadget.Value;
             };
 
             celsiusMenuItem.Checked =
-              unitManager.TemperatureUnit == TemperatureUnit.Celsius;
+              _unitManager.TemperatureUnit == TemperatureUnit.Celsius;
             fahrenheitMenuItem.Checked = !celsiusMenuItem.Checked;
 
-            Server = new RemoteWebServer(root);
+            Server = new RemoteWebServer(_root);
 
-            runWebServer = new UserOption("runWebServerMenuItem", false,
-              runWebServerMenuItem, settings);
-            runWebServer.Changed += (sender, e) =>
+            _runWebServer = new UserOption("runWebServerMenuItem", false,
+              runWebServerMenuItem, _settings);
+            _runWebServer.Changed += (sender, e) =>
             {
-                if (runWebServer.Value)
-                    Server.Start(settings.GetValue("listenerPort", 8085));
+                if (_runWebServer.Value)
+                    Server.Start(_settings.GetValue("listenerPort", 8085));
                 else
                     Server.Stop();
             };
 
-            logSensors = new UserOption("logSensorsMenuItem", false, logSensorsMenuItem,
-              settings);
+            _logSensors = new UserOption("logSensorsMenuItem", false, logSensorsMenuItem,
+              _settings);
 
-            loggingInterval = new UserRadioGroup("loggingInterval", 0,
+            _loggingInterval = new UserRadioGroup("loggingInterval", 0,
               new[] { log1sMenuItem, log2sMenuItem, log5sMenuItem, log10sMenuItem,
         log30sMenuItem, log1minMenuItem, log2minMenuItem, log5minMenuItem,
         log10minMenuItem, log30minMenuItem, log1hMenuItem, log2hMenuItem,
         log6hMenuItem
               },
-              settings);
-            loggingInterval.Changed += (sender, e) =>
+              _settings);
+            _loggingInterval.Changed += (sender, e) =>
             {
-                switch (loggingInterval.Value)
+                switch (_loggingInterval.Value)
                 {
-                    case 0: logger.LoggingInterval = new TimeSpan(0, 0, 1); break;
-                    case 1: logger.LoggingInterval = new TimeSpan(0, 0, 2); break;
-                    case 2: logger.LoggingInterval = new TimeSpan(0, 0, 5); break;
-                    case 3: logger.LoggingInterval = new TimeSpan(0, 0, 10); break;
-                    case 4: logger.LoggingInterval = new TimeSpan(0, 0, 30); break;
-                    case 5: logger.LoggingInterval = new TimeSpan(0, 1, 0); break;
-                    case 6: logger.LoggingInterval = new TimeSpan(0, 2, 0); break;
-                    case 7: logger.LoggingInterval = new TimeSpan(0, 5, 0); break;
-                    case 8: logger.LoggingInterval = new TimeSpan(0, 10, 0); break;
-                    case 9: logger.LoggingInterval = new TimeSpan(0, 30, 0); break;
-                    case 10: logger.LoggingInterval = new TimeSpan(1, 0, 0); break;
-                    case 11: logger.LoggingInterval = new TimeSpan(2, 0, 0); break;
-                    case 12: logger.LoggingInterval = new TimeSpan(6, 0, 0); break;
+                    case 0: _logger.LoggingInterval = new TimeSpan(0, 0, 1); break;
+                    case 1: _logger.LoggingInterval = new TimeSpan(0, 0, 2); break;
+                    case 2: _logger.LoggingInterval = new TimeSpan(0, 0, 5); break;
+                    case 3: _logger.LoggingInterval = new TimeSpan(0, 0, 10); break;
+                    case 4: _logger.LoggingInterval = new TimeSpan(0, 0, 30); break;
+                    case 5: _logger.LoggingInterval = new TimeSpan(0, 1, 0); break;
+                    case 6: _logger.LoggingInterval = new TimeSpan(0, 2, 0); break;
+                    case 7: _logger.LoggingInterval = new TimeSpan(0, 5, 0); break;
+                    case 8: _logger.LoggingInterval = new TimeSpan(0, 10, 0); break;
+                    case 9: _logger.LoggingInterval = new TimeSpan(0, 30, 0); break;
+                    case 10: _logger.LoggingInterval = new TimeSpan(1, 0, 0); break;
+                    case 11: _logger.LoggingInterval = new TimeSpan(2, 0, 0); break;
+                    case 12: _logger.LoggingInterval = new TimeSpan(6, 0, 0); break;
                 }
             };
 
             InitializePlotForm();
 
-            startupMenuItem.Visible = startupManager.IsAvailable;
+            startupMenuItem.Visible = _startupManager.IsAvailable;
 
             if (startMinMenuItem.Checked)
             {
@@ -370,9 +370,9 @@ namespace OpenHardwareMonitor.GUI
             // Make sure the settings are saved when the user logs off
             Microsoft.Win32.SystemEvents.SessionEnded += (sender, e) =>
             {
-                computer.Close();
+                _computer.Close();
                 SaveConfiguration();
-                if (runWebServer.Value)
+                if (_runWebServer.Value)
                     Server.Stop();
             };
         }
@@ -383,83 +383,83 @@ namespace OpenHardwareMonitor.GUI
 
             if (e.Mode == Microsoft.Win32.PowerModes.Resume)
             {
-                computer.Reset();
+                _computer.Reset();
             }
         }
 
         private void InitializePlotForm()
         {
-            plotForm = new Form
+            _plotForm = new Form
             {
                 FormBorderStyle = FormBorderStyle.SizableToolWindow,
                 ShowInTaskbar = false,
                 StartPosition = FormStartPosition.Manual
             };
-            AddOwnedForm(plotForm);
-            plotForm.Bounds = new Rectangle
+            AddOwnedForm(_plotForm);
+            _plotForm.Bounds = new Rectangle
             {
-                X = settings.GetValue("plotForm.Location.X", -100000),
-                Y = settings.GetValue("plotForm.Location.Y", 100),
-                Width = settings.GetValue("plotForm.Width", 600),
-                Height = settings.GetValue("plotForm.Height", 400)
+                X = _settings.GetValue("plotForm.Location.X", -100000),
+                Y = _settings.GetValue("plotForm.Location.Y", 100),
+                Width = _settings.GetValue("plotForm.Width", 600),
+                Height = _settings.GetValue("plotForm.Height", 400)
             };
 
-            showPlot = new UserOption("plotMenuItem", false, plotMenuItem, settings);
-            plotLocation = new UserRadioGroup("plotLocation", 0,
+            _showPlot = new UserOption("plotMenuItem", false, plotMenuItem, _settings);
+            _plotLocation = new UserRadioGroup("plotLocation", 0,
               new[] { plotWindowMenuItem, plotBottomMenuItem, plotRightMenuItem },
-              settings);
+              _settings);
 
-            showPlot.Changed += (sender, e) =>
+            _showPlot.Changed += (sender, e) =>
             {
-                if (plotLocation.Value == 0)
+                if (_plotLocation.Value == 0)
                 {
-                    if (showPlot.Value && Visible)
-                        plotForm.Show();
+                    if (_showPlot.Value && Visible)
+                        _plotForm.Show();
                     else
-                        plotForm.Hide();
+                        _plotForm.Hide();
                 }
                 else
                 {
-                    splitContainer.Panel2Collapsed = !showPlot.Value;
+                    splitContainer.Panel2Collapsed = !_showPlot.Value;
                 }
                 treeView.Invalidate();
             };
-            plotLocation.Changed += (sender, e) =>
+            _plotLocation.Changed += (sender, e) =>
             {
-                switch (plotLocation.Value)
+                switch (_plotLocation.Value)
                 {
                     case 0:
                         splitContainer.Panel2.Controls.Clear();
                         splitContainer.Panel2Collapsed = true;
-                        plotForm.Controls.Add(plotPanel);
-                        if (showPlot.Value && Visible)
-                            plotForm.Show();
+                        _plotForm.Controls.Add(_plotPanel);
+                        if (_showPlot.Value && Visible)
+                            _plotForm.Show();
                         break;
                     case 1:
-                        plotForm.Controls.Clear();
-                        plotForm.Hide();
+                        _plotForm.Controls.Clear();
+                        _plotForm.Hide();
                         splitContainer.Orientation = Orientation.Horizontal;
-                        splitContainer.Panel2.Controls.Add(plotPanel);
-                        splitContainer.Panel2Collapsed = !showPlot.Value;
+                        splitContainer.Panel2.Controls.Add(_plotPanel);
+                        splitContainer.Panel2Collapsed = !_showPlot.Value;
                         break;
                     case 2:
-                        plotForm.Controls.Clear();
-                        plotForm.Hide();
+                        _plotForm.Controls.Clear();
+                        _plotForm.Hide();
                         splitContainer.Orientation = Orientation.Vertical;
-                        splitContainer.Panel2.Controls.Add(plotPanel);
-                        splitContainer.Panel2Collapsed = !showPlot.Value;
+                        splitContainer.Panel2.Controls.Add(_plotPanel);
+                        splitContainer.Panel2Collapsed = !_showPlot.Value;
                         break;
                 }
             };
 
-            plotForm.FormClosing += (sender, e) =>
+            _plotForm.FormClosing += (sender, e) =>
             {
                 if (e.CloseReason == CloseReason.UserClosing)
                 {
                     // just switch off the plotting when the user closes the form
-                    if (plotLocation.Value == 0)
+                    if (_plotLocation.Value == 0)
                     {
-                        showPlot.Value = false;
+                        _showPlot.Value = false;
                     }
                     e.Cancel = true;
                 }
@@ -467,27 +467,27 @@ namespace OpenHardwareMonitor.GUI
 
             EventHandler moveOrResizePlotForm = (sender, e) =>
             {
-                if (plotForm.WindowState != FormWindowState.Minimized)
+                if (_plotForm.WindowState != FormWindowState.Minimized)
                 {
-                    settings.SetValue("plotForm.Location.X", plotForm.Bounds.X);
-                    settings.SetValue("plotForm.Location.Y", plotForm.Bounds.Y);
-                    settings.SetValue("plotForm.Width", plotForm.Bounds.Width);
-                    settings.SetValue("plotForm.Height", plotForm.Bounds.Height);
+                    _settings.SetValue("plotForm.Location.X", _plotForm.Bounds.X);
+                    _settings.SetValue("plotForm.Location.Y", _plotForm.Bounds.Y);
+                    _settings.SetValue("plotForm.Width", _plotForm.Bounds.Width);
+                    _settings.SetValue("plotForm.Height", _plotForm.Bounds.Height);
                 }
             };
-            plotForm.Move += moveOrResizePlotForm;
-            plotForm.Resize += moveOrResizePlotForm;
+            _plotForm.Move += moveOrResizePlotForm;
+            _plotForm.Resize += moveOrResizePlotForm;
 
-            plotForm.VisibleChanged += (sender, e) =>
+            _plotForm.VisibleChanged += (sender, e) =>
             {
-                Rectangle bounds = new Rectangle(plotForm.Location, plotForm.Size);
+                Rectangle bounds = new Rectangle(_plotForm.Location, _plotForm.Size);
                 Screen screen = Screen.FromRectangle(bounds);
                 Rectangle intersection =
                   Rectangle.Intersect(screen.WorkingArea, bounds);
                 if (intersection.Width < Math.Min(16, bounds.Width) ||
                     intersection.Height < Math.Min(16, bounds.Height))
                 {
-                    plotForm.Location = new Point(
+                    _plotForm.Location = new Point(
                       screen.WorkingArea.Width / 2 - bounds.Width / 2,
                       screen.WorkingArea.Height / 2 - bounds.Height / 2);
                 }
@@ -495,10 +495,10 @@ namespace OpenHardwareMonitor.GUI
 
             VisibleChanged += (sender, e) =>
             {
-                if (Visible && showPlot.Value && plotLocation.Value == 0)
-                    plotForm.Show();
+                if (Visible && _showPlot.Value && _plotLocation.Value == 0)
+                    _plotForm.Show();
                 else
-                    plotForm.Hide();
+                    _plotForm.Hide();
             };
         }
 
@@ -518,7 +518,7 @@ namespace OpenHardwareMonitor.GUI
         private void SubHardwareAdded(IHardware hardware, Node node)
         {
             HardwareNode hardwareNode =
-              new HardwareNode(hardware, settings, unitManager);
+              new HardwareNode(hardware, _settings, _unitManager);
             hardwareNode.PlotSelectionChanged += PlotSelectionChanged;
 
             InsertSorted(node.Nodes, hardwareNode);
@@ -529,21 +529,21 @@ namespace OpenHardwareMonitor.GUI
 
         private void HardwareAdded(IHardware hardware)
         {
-            SubHardwareAdded(hardware, root);
+            SubHardwareAdded(hardware, _root);
             PlotSelectionChanged(this, null);
         }
 
         private void HardwareRemoved(IHardware hardware)
         {
             List<HardwareNode> nodesToRemove = new List<HardwareNode>();
-            foreach (Node node in root.Nodes)
+            foreach (Node node in _root.Nodes)
             {
                 if (node is HardwareNode hardwareNode && hardwareNode.Hardware == hardware)
                     nodesToRemove.Add(hardwareNode);
             }
             foreach (HardwareNode hardwareNode in nodesToRemove)
             {
-                root.Nodes.Remove(hardwareNode);
+                _root.Nodes.Remove(hardwareNode);
                 hardwareNode.PlotSelectionChanged -= PlotSelectionChanged;
             }
             PlotSelectionChanged(this, null);
@@ -556,7 +556,7 @@ namespace OpenHardwareMonitor.GUI
                 if (node.IsVisible)
                 {
                     if (plotMenuItem.Checked && node is SensorNode sensorNode &&
-                      sensorPlotColors.TryGetValue(sensorNode.Sensor, out Color color))
+                      _sensorPlotColors.TryGetValue(sensorNode.Sensor, out Color color))
                     {
                         e.TextColor = color;
                     }
@@ -582,7 +582,7 @@ namespace OpenHardwareMonitor.GUI
                         if (!sensorNode.PenColor.HasValue)
                         {
                             colors.Add(sensorNode.Sensor,
-                              plotColorPalette[colorIndex % plotColorPalette.Length]);
+                              _plotColorPalette[colorIndex % _plotColorPalette.Length]);
                         }
                         selected.Add(sensorNode.Sensor);
                     }
@@ -602,7 +602,7 @@ namespace OpenHardwareMonitor.GUI
                 Color curColor = colors[curSelectedSensor];
                 if (usedColors.Contains(curColor))
                 {
-                    foreach (Color potentialNewColor in plotColorPalette)
+                    foreach (Color potentialNewColor in _plotColorPalette)
                     {
                         if (!colors.Values.Contains(potentialNewColor))
                         {
@@ -624,8 +624,8 @@ namespace OpenHardwareMonitor.GUI
                     colors.Add(sensorNode.Sensor, sensorNode.PenColor.Value);
             }
 
-            sensorPlotColors = colors;
-            plotPanel.SetSensors(selected, colors);
+            _sensorPlotColors = colors;
+            _plotPanel.SetSensors(selected, colors);
         }
 
         private void nodeTextBoxText_EditorShowing(object sender,
@@ -647,36 +647,36 @@ namespace OpenHardwareMonitor.GUI
             Close();
         }
 
-        private int delayCount;
+        private int _delayCount;
         private void timer_Tick(object sender, EventArgs e)
         {
-            computer.Accept(updateVisitor);
+            _computer.Accept(_updateVisitor);
             treeView.Invalidate();
-            plotPanel.InvalidatePlot();
-            systemTray.Redraw();
-            gadget?.Redraw();
+            _plotPanel.InvalidatePlot();
+            _systemTray.Redraw();
+            _gadget?.Redraw();
 
-            wmiProvider?.Update();
+            _wmiProvider?.Update();
 
 
-            if (logSensors != null && logSensors.Value && delayCount >= 4)
-                logger.Log();
+            if (_logSensors != null && _logSensors.Value && _delayCount >= 4)
+                _logger.Log();
 
-            if (delayCount < 4)
-                delayCount++;
+            if (_delayCount < 4)
+                _delayCount++;
         }
 
         private void SaveConfiguration()
         {
-            if (settings == null)
+            if (_settings == null)
                 return;
 
-            if (plotPanel != null)
+            if (_plotPanel != null)
             {
-                plotPanel.SetCurrentSettings();
+                _plotPanel.SetCurrentSettings();
                 foreach (TreeColumn column in treeView.Columns)
                 {
-                    settings.SetValue("treeView.Columns." + column.Header + ".Width",
+                    _settings.SetValue("treeView.Columns." + column.Header + ".Width",
                       column.Width);
                 }
             }
@@ -685,7 +685,7 @@ namespace OpenHardwareMonitor.GUI
                 System.Windows.Forms.Application.ExecutablePath, ".config");
             try
             {
-                settings.Save(fileName);
+                _settings.Save(fileName);
             }
             catch (UnauthorizedAccessException)
             {
@@ -705,11 +705,11 @@ namespace OpenHardwareMonitor.GUI
         {
             Rectangle newBounds = new Rectangle
             {
-                X = settings.GetValue("mainForm.Location.X", Location.X),
-                Y = settings.GetValue("mainForm.Location.Y", Location.Y),
-                Width = settings.GetValue("mainForm.Width",
+                X = _settings.GetValue("mainForm.Location.X", Location.X),
+                Y = _settings.GetValue("mainForm.Location.Y", Location.Y),
+                Width = _settings.GetValue("mainForm.Width",
                 DpiHelper.LogicalToDeviceUnits(470)),
-                Height = settings.GetValue("mainForm.Height",
+                Height = _settings.GetValue("mainForm.Height",
                 DpiHelper.LogicalToDeviceUnits(640))
             };
 
@@ -721,7 +721,7 @@ namespace OpenHardwareMonitor.GUI
 
             Rectangle intersection = Rectangle.Intersect(fullWorkingArea, newBounds);
             if (intersection.Width < 20 || intersection.Height < 20 ||
-              !settings.Contains("mainForm.Location.X"))
+              !_settings.Contains("mainForm.Location.X"))
             {
                 newBounds.X = Screen.PrimaryScreen.WorkingArea.Width / 2 -
                               newBounds.Width / 2;
@@ -736,13 +736,13 @@ namespace OpenHardwareMonitor.GUI
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Visible = false;
-            systemTray.IsMainIconEnabled = false;
+            _systemTray.IsMainIconEnabled = false;
             timer.Enabled = false;
-            computer.Close();
+            _computer.Close();
             SaveConfiguration();
-            if (runWebServer.Value)
+            if (_runWebServer.Value)
                 Server.Stop();
-            systemTray.Dispose();
+            _systemTray.Dispose();
         }
 
         private void aboutMenuItem_Click(object sender, EventArgs e)
@@ -825,32 +825,32 @@ namespace OpenHardwareMonitor.GUI
                     {
                         MenuItem item = new MenuItem("Show in Tray")
                         {
-                            Checked = systemTray.Contains(node.Sensor)
+                            Checked = _systemTray.Contains(node.Sensor)
                         };
                         item.Click += (obj, args) =>
                         {
                             if (item.Checked)
-                                systemTray.Remove(node.Sensor);
+                                _systemTray.Remove(node.Sensor);
                             else
-                                systemTray.Add(node.Sensor, true);
+                                _systemTray.Add(node.Sensor, true);
                         };
                         treeContextMenu.MenuItems.Add(item);
                     }
-                    if (gadget != null)
+                    if (_gadget != null)
                     {
                         MenuItem item = new MenuItem("Show in Gadget")
                         {
-                            Checked = gadget.Contains(node.Sensor)
+                            Checked = _gadget.Contains(node.Sensor)
                         };
                         item.Click += (obj, args) =>
                         {
                             if (item.Checked)
                             {
-                                gadget.Remove(node.Sensor);
+                                _gadget.Remove(node.Sensor);
                             }
                             else
                             {
-                                gadget.Add(node.Sensor);
+                                _gadget.Add(node.Sensor);
                             }
                         };
                         treeContextMenu.MenuItems.Add(item);
@@ -918,7 +918,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void saveReportMenuItem_Click(object sender, EventArgs e)
         {
-            string report = computer.GetReport();
+            string report = _computer.GetReport();
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 using (TextWriter w = new StreamWriter(saveFileDialog.FileName))
@@ -941,12 +941,12 @@ namespace OpenHardwareMonitor.GUI
             const int SC_MINIMIZE = 0xF020;
             const int SC_CLOSE = 0xF060;
 
-            if (minimizeToTray.Value &&
+            if (_minimizeToTray.Value &&
               m.Msg == WM_SYSCOMMAND && m.WParam.ToInt64() == SC_MINIMIZE)
             {
                 SysTrayHideShow();
             }
-            else if (minimizeOnClose.Value &&
+            else if (_minimizeOnClose.Value &&
               m.Msg == WM_SYSCOMMAND && m.WParam.ToInt64() == SC_CLOSE)
             {
                 /*
@@ -957,7 +957,7 @@ namespace OpenHardwareMonitor.GUI
                  * but since the code here is so simple,
                  * that would just be a waste of time.
                  */
-                if (minimizeToTray.Value)
+                if (_minimizeToTray.Value)
                     SysTrayHideShow();
                 else
                     WindowState = FormWindowState.Minimized;
@@ -997,28 +997,28 @@ namespace OpenHardwareMonitor.GUI
         {
             celsiusMenuItem.Checked = true;
             fahrenheitMenuItem.Checked = false;
-            unitManager.TemperatureUnit = TemperatureUnit.Celsius;
+            _unitManager.TemperatureUnit = TemperatureUnit.Celsius;
         }
 
         private void fahrenheitMenuItem_Click(object sender, EventArgs e)
         {
             celsiusMenuItem.Checked = false;
             fahrenheitMenuItem.Checked = true;
-            unitManager.TemperatureUnit = TemperatureUnit.Fahrenheit;
+            _unitManager.TemperatureUnit = TemperatureUnit.Fahrenheit;
         }
 
         private void sumbitReportMenuItem_Click(object sender, EventArgs e)
         {
             ReportForm form = new ReportForm
             {
-                Report = computer.GetReport()
+                Report = _computer.GetReport()
             };
             form.ShowDialog();
         }
 
         private void resetMinMaxMenuItem_Click(object sender, EventArgs e)
         {
-            computer.Accept(new SensorVisitor((_, args) =>
+            _computer.Accept(new SensorVisitor((_, args) =>
             {
                 args.Sensor.ResetMin();
                 args.Sensor.ResetMax();
@@ -1029,10 +1029,10 @@ namespace OpenHardwareMonitor.GUI
         {
             if (WindowState != FormWindowState.Minimized)
             {
-                settings.SetValue("mainForm.Location.X", Bounds.X);
-                settings.SetValue("mainForm.Location.Y", Bounds.Y);
-                settings.SetValue("mainForm.Width", Bounds.Width);
-                settings.SetValue("mainForm.Height", Bounds.Height);
+                _settings.SetValue("mainForm.Location.X", Bounds.X);
+                _settings.SetValue("mainForm.Location.Y", Bounds.Y);
+                _settings.SetValue("mainForm.Width", Bounds.Width);
+                _settings.SetValue("mainForm.Height", Bounds.Height);
             }
         }
 
@@ -1040,33 +1040,33 @@ namespace OpenHardwareMonitor.GUI
         {
             // disable the fallback MainIcon during reset, otherwise icon visibility
             // might be lost
-            systemTray.IsMainIconEnabled = false;
-            computer.Reset();
+            _systemTray.IsMainIconEnabled = false;
+            _computer.Reset();
             // restore the MainIcon setting
-            systemTray.IsMainIconEnabled = minimizeToTray.Value;
+            _systemTray.IsMainIconEnabled = _minimizeToTray.Value;
         }
 
         private void treeView_MouseMove(object sender, MouseEventArgs e)
         {
-            selectionDragging &= (e.Button & (MouseButtons.Left | MouseButtons.Right)) > 0;
+            _selectionDragging &= (e.Button & (MouseButtons.Left | MouseButtons.Right)) > 0;
 
-            if (selectionDragging)
+            if (_selectionDragging)
                 treeView.SelectedNode = treeView.GetNodeAt(e.Location);
         }
 
         private void treeView_MouseDown(object sender, MouseEventArgs e)
         {
-            selectionDragging = true;
+            _selectionDragging = true;
         }
 
         private void treeView_MouseUp(object sender, MouseEventArgs e)
         {
-            selectionDragging = false;
+            _selectionDragging = false;
         }
 
         private void serverPortMenuItem_Click(object sender, EventArgs e)
         {
-            new PortForm(settings).ShowDialog();
+            new PortForm(_settings).ShowDialog();
         }
 
         public RemoteWebServer Server { get; }

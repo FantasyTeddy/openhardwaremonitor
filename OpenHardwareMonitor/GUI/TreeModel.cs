@@ -19,12 +19,12 @@ namespace OpenHardwareMonitor.GUI
     public class TreeModel : ITreeModel
     {
 
-        private readonly Node root;
-        private bool forceVisible;
+        private readonly Node _root;
+        private bool _forceVisible;
 
         public TreeModel()
         {
-            root = new Node
+            _root = new Node
             {
                 Model = this
             };
@@ -32,14 +32,14 @@ namespace OpenHardwareMonitor.GUI
 
         public TreePath GetPath(Node node)
         {
-            if (node == root)
+            if (node == _root)
             {
                 return TreePath.Empty;
             }
             else
             {
                 Stack<object> stack = new Stack<object>();
-                while (node != root)
+                while (node != _root)
                 {
                     stack.Push(node);
                     node = node.Parent;
@@ -48,11 +48,11 @@ namespace OpenHardwareMonitor.GUI
             }
         }
 
-        public Collection<Node> Nodes => root.Nodes;
+        public Collection<Node> Nodes => _root.Nodes;
 
         private Node GetNode(TreePath treePath)
         {
-            Node parent = root;
+            Node parent = _root;
             foreach (object obj in treePath.FullPath)
             {
                 if (!(obj is Node node) || node.Parent != parent)
@@ -69,7 +69,7 @@ namespace OpenHardwareMonitor.GUI
             {
                 foreach (Node n in node.Nodes)
                 {
-                    if (forceVisible || n.IsVisible)
+                    if (_forceVisible || n.IsVisible)
                         yield return n;
                 }
             }
@@ -86,13 +86,13 @@ namespace OpenHardwareMonitor.GUI
 
         public bool ForceVisible
         {
-            get => forceVisible;
+            get => _forceVisible;
             set
             {
-                if (value != forceVisible)
+                if (value != _forceVisible)
                 {
-                    forceVisible = value;
-                    OnStructureChanged(root);
+                    _forceVisible = value;
+                    OnStructureChanged(_root);
                 }
             }
         }

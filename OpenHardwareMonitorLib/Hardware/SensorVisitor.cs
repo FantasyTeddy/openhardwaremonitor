@@ -15,11 +15,11 @@ namespace OpenHardwareMonitor.Hardware
 
     public class SensorVisitor : IVisitor
     {
-        private readonly EventHandler<SensorEventArgs> handler;
+        private readonly EventHandler<SensorEventArgs> _handler;
 
         public SensorVisitor(EventHandler<SensorEventArgs> handler)
         {
-            this.handler = handler ?? throw new ArgumentNullException(nameof(handler));
+            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
         }
 
         public void VisitComputer(IComputer computer)
@@ -38,7 +38,7 @@ namespace OpenHardwareMonitor.Hardware
 
         public void VisitSensor(ISensor sensor)
         {
-            handler(this, new SensorEventArgs(sensor));
+            _handler(this, new SensorEventArgs(sensor));
         }
 
         public void VisitParameter(IParameter parameter) { }

@@ -18,11 +18,11 @@ namespace OpenHardwareMonitor.Hardware.LPC
     internal class NCT677X : ISuperIO
     {
 
-        private readonly ushort port;
-        private readonly byte revision;
-        private readonly LPCPort lpcPort;
+        private readonly ushort _port;
+        private readonly byte _revision;
+        private readonly LPCPort _lpcPort;
 
-        private readonly bool isNuvotonVendor;
+        private readonly bool _isNuvotonVendor;
 
         // Hardware Monitor
         private const uint ADDRESS_REGISTER_OFFSET = 0x05;
@@ -33,56 +33,56 @@ namespace OpenHardwareMonitor.Hardware.LPC
         {
             byte bank = (byte)(address >> 8);
             byte register = (byte)(address & 0xFF);
-            Ring0.WriteIoPort(port + ADDRESS_REGISTER_OFFSET, BANK_SELECT_REGISTER);
-            Ring0.WriteIoPort(port + DATA_REGISTER_OFFSET, bank);
-            Ring0.WriteIoPort(port + ADDRESS_REGISTER_OFFSET, register);
-            return Ring0.ReadIoPort(port + DATA_REGISTER_OFFSET);
+            Ring0.WriteIoPort(_port + ADDRESS_REGISTER_OFFSET, BANK_SELECT_REGISTER);
+            Ring0.WriteIoPort(_port + DATA_REGISTER_OFFSET, bank);
+            Ring0.WriteIoPort(_port + ADDRESS_REGISTER_OFFSET, register);
+            return Ring0.ReadIoPort(_port + DATA_REGISTER_OFFSET);
         }
 
         private void WriteByte(ushort address, byte value)
         {
             byte bank = (byte)(address >> 8);
             byte register = (byte)(address & 0xFF);
-            Ring0.WriteIoPort(port + ADDRESS_REGISTER_OFFSET, BANK_SELECT_REGISTER);
-            Ring0.WriteIoPort(port + DATA_REGISTER_OFFSET, bank);
-            Ring0.WriteIoPort(port + ADDRESS_REGISTER_OFFSET, register);
-            Ring0.WriteIoPort(port + DATA_REGISTER_OFFSET, value);
+            Ring0.WriteIoPort(_port + ADDRESS_REGISTER_OFFSET, BANK_SELECT_REGISTER);
+            Ring0.WriteIoPort(_port + DATA_REGISTER_OFFSET, bank);
+            Ring0.WriteIoPort(_port + ADDRESS_REGISTER_OFFSET, register);
+            Ring0.WriteIoPort(_port + DATA_REGISTER_OFFSET, value);
         }
 
         // Consts
         private const ushort NUVOTON_VENDOR_ID = 0x5CA3;
 
         // Hardware Monitor Registers
-        private readonly ushort VENDOR_ID_HIGH_REGISTER;
-        private readonly ushort VENDOR_ID_LOW_REGISTER;
+        private readonly ushort _VENDOR_ID_HIGH_REGISTER;
+        private readonly ushort _VENDOR_ID_LOW_REGISTER;
 
-        private readonly ushort[] FAN_PWM_OUT_REG;
-        private readonly ushort[] FAN_PWM_COMMAND_REG;
-        private readonly ushort[] FAN_CONTROL_MODE_REG;
+        private readonly ushort[] _FAN_PWM_OUT_REG;
+        private readonly ushort[] _FAN_PWM_COMMAND_REG;
+        private readonly ushort[] _FAN_CONTROL_MODE_REG;
 
-        private readonly ushort[] fanRpmBaseRegister;
-        private readonly int minFanRPM;
+        private readonly ushort[] _fanRpmBaseRegister;
+        private readonly int _minFanRPM;
 
-        private readonly ushort[] fanCountRegister;
-        private readonly int maxFanCount;
-        private readonly int minFanCount;
+        private readonly ushort[] _fanCountRegister;
+        private readonly int _maxFanCount;
+        private readonly int _minFanCount;
 
-        private readonly bool[] restoreDefaultFanControlRequired = new bool[7];
-        private readonly byte[] initialFanControlMode = new byte[7];
-        private readonly byte[] initialFanPwmCommand = new byte[7];
+        private readonly bool[] _restoreDefaultFanControlRequired = new bool[7];
+        private readonly byte[] _initialFanControlMode = new byte[7];
+        private readonly byte[] _initialFanPwmCommand = new byte[7];
 
-        private readonly ushort[] voltageRegisters;
-        private readonly ushort voltageVBatRegister;
-        private readonly ushort vBatMonitorControlRegister;
+        private readonly ushort[] _voltageRegisters;
+        private readonly ushort _voltageVBatRegister;
+        private readonly ushort _vBatMonitorControlRegister;
 
-        private readonly byte[] temperaturesSource;
+        private readonly byte[] _temperaturesSource;
 
-        private readonly ushort[] temperatureRegister;
-        private readonly ushort[] temperatureHalfRegister;
-        private readonly int[] temperatureHalfBit;
-        private readonly ushort[] temperatureSourceRegister;
+        private readonly ushort[] _temperatureRegister;
+        private readonly ushort[] _temperatureHalfRegister;
+        private readonly int[] _temperatureHalfBit;
+        private readonly ushort[] _temperatureSourceRegister;
 
-        private readonly ushort?[] alternateTemperatureRegister;
+        private readonly ushort?[] _alternateTemperatureRegister;
 
         private enum SourceNCT6771F : byte
         {
@@ -192,39 +192,39 @@ namespace OpenHardwareMonitor.Hardware.LPC
         public NCT677X(Chip chip, byte revision, ushort port, LPCPort lpcPort)
         {
             Chip = chip;
-            this.revision = revision;
-            this.port = port;
-            this.lpcPort = lpcPort;
+            _revision = revision;
+            _port = port;
+            _lpcPort = lpcPort;
 
             if (chip == LPC.Chip.NCT610X)
             {
-                VENDOR_ID_HIGH_REGISTER = 0x80FE;
-                VENDOR_ID_LOW_REGISTER = 0x00FE;
+                _VENDOR_ID_HIGH_REGISTER = 0x80FE;
+                _VENDOR_ID_LOW_REGISTER = 0x00FE;
 
-                FAN_PWM_OUT_REG = new ushort[] { 0x04A, 0x04B, 0x04C };
-                FAN_PWM_COMMAND_REG = new ushort[] { 0x119, 0x129, 0x139 };
-                FAN_CONTROL_MODE_REG = new ushort[] { 0x113, 0x123, 0x133 };
+                _FAN_PWM_OUT_REG = new ushort[] { 0x04A, 0x04B, 0x04C };
+                _FAN_PWM_COMMAND_REG = new ushort[] { 0x119, 0x129, 0x139 };
+                _FAN_CONTROL_MODE_REG = new ushort[] { 0x113, 0x123, 0x133 };
 
-                vBatMonitorControlRegister = 0x0318;
+                _vBatMonitorControlRegister = 0x0318;
             }
             else
             {
-                VENDOR_ID_HIGH_REGISTER = 0x804F;
-                VENDOR_ID_LOW_REGISTER = 0x004F;
+                _VENDOR_ID_HIGH_REGISTER = 0x804F;
+                _VENDOR_ID_LOW_REGISTER = 0x004F;
 
-                FAN_PWM_OUT_REG = new ushort[] {
+                _FAN_PWM_OUT_REG = new ushort[] {
           0x001, 0x003, 0x011, 0x013, 0x015, 0x017, 0x029 };
-                FAN_PWM_COMMAND_REG = new ushort[] {
+                _FAN_PWM_COMMAND_REG = new ushort[] {
           0x109, 0x209, 0x309, 0x809, 0x909, 0xA09, 0xB09 };
-                FAN_CONTROL_MODE_REG = new ushort[] {
+                _FAN_CONTROL_MODE_REG = new ushort[] {
           0x102, 0x202, 0x302, 0x802, 0x902, 0xA02, 0xB02 };
 
-                vBatMonitorControlRegister = 0x005D;
+                _vBatMonitorControlRegister = 0x005D;
             }
 
-            isNuvotonVendor = IsNuvotonVendor();
+            _isNuvotonVendor = IsNuvotonVendor();
 
-            if (!isNuvotonVendor)
+            if (!_isNuvotonVendor)
                 return;
 
             switch (chip)
@@ -236,9 +236,9 @@ namespace OpenHardwareMonitor.Hardware.LPC
                         Fans = new float?[4];
 
                         // min RPM value with 16-bit fan counter
-                        minFanRPM = (int)(1.35e6 / 0xFFFF);
+                        _minFanRPM = (int)(1.35e6 / 0xFFFF);
 
-                        temperaturesSource = new byte[] {
+                        _temperaturesSource = new byte[] {
               (byte)SourceNCT6771F.PECI_0,
               (byte)SourceNCT6771F.CPUTIN,
               (byte)SourceNCT6771F.AUXTIN,
@@ -250,36 +250,36 @@ namespace OpenHardwareMonitor.Hardware.LPC
                         Fans = new float?[5];
 
                         // min RPM value with 13-bit fan counter
-                        minFanRPM = (int)(1.35e6 / 0x1FFF);
+                        _minFanRPM = (int)(1.35e6 / 0x1FFF);
 
-                        temperaturesSource = new byte[] {
+                        _temperaturesSource = new byte[] {
               (byte)SourceNCT6776F.PECI_0,
               (byte)SourceNCT6776F.CPUTIN,
               (byte)SourceNCT6776F.AUXTIN,
               (byte)SourceNCT6776F.SYSTIN
             };
                     }
-                    fanRpmBaseRegister = new ushort[]
+                    _fanRpmBaseRegister = new ushort[]
                       { 0x656, 0x658, 0x65A, 0x65C, 0x65E };
 
                     Controls = new float?[3];
 
                     Voltages = new float?[9];
-                    voltageRegisters = new ushort[]
+                    _voltageRegisters = new ushort[]
                       { 0x020, 0x021, 0x022, 0x023, 0x024, 0x025, 0x026, 0x550, 0x551 };
-                    voltageVBatRegister = 0x551;
+                    _voltageVBatRegister = 0x551;
 
                     Temperatures = new float?[4];
-                    temperatureRegister = new ushort[]
+                    _temperatureRegister = new ushort[]
                       { 0x027, 0x073, 0x075, 0x077, 0x150, 0x250, 0x62B, 0x62C, 0x62D };
-                    temperatureHalfRegister = new ushort[]
+                    _temperatureHalfRegister = new ushort[]
                       { 0, 0x074, 0x076, 0x078, 0x151, 0x251, 0x62E, 0x62E, 0x62E };
-                    temperatureHalfBit = new int[]
+                    _temperatureHalfBit = new int[]
                       { -1, 7, 7, 7, 7, 7, 0, 1, 2 };
-                    temperatureSourceRegister = new ushort[]
+                    _temperatureSourceRegister = new ushort[]
                       { 0x621, 0x100, 0x200, 0x300, 0x622, 0x623, 0x624, 0x625, 0x626 };
 
-                    alternateTemperatureRegister = new ushort?[]
+                    _alternateTemperatureRegister = new ushort?[]
                       { null, null, null, null };
                     break;
 
@@ -316,23 +316,23 @@ namespace OpenHardwareMonitor.Hardware.LPC
                             break;
                     }
 
-                    fanCountRegister = new ushort[]
+                    _fanCountRegister = new ushort[]
                       { 0x4B0, 0x4B2, 0x4B4, 0x4B6, 0x4B8, 0x4BA, 0x4CC };
 
                     // max value for 13-bit fan counter
-                    maxFanCount = 0x1FFF;
+                    _maxFanCount = 0x1FFF;
 
                     // min value that could be transfered to 16-bit RPM registers
-                    minFanCount = 0x15;
+                    _minFanCount = 0x15;
 
                     Voltages = new float?[15];
-                    voltageRegisters = new ushort[]
+                    _voltageRegisters = new ushort[]
                       { 0x480, 0x481, 0x482, 0x483, 0x484, 0x485, 0x486, 0x487, 0x488,
               0x489, 0x48A, 0x48B, 0x48C, 0x48D, 0x48E };
-                    voltageVBatRegister = 0x488;
+                    _voltageVBatRegister = 0x488;
 
                     Temperatures = new float?[7];
-                    temperaturesSource = new byte[] {
+                    _temperaturesSource = new byte[] {
             (byte)SourceNCT67XXD.PECI_0,
             (byte)SourceNCT67XXD.CPUTIN,
             (byte)SourceNCT67XXD.SYSTIN,
@@ -342,16 +342,16 @@ namespace OpenHardwareMonitor.Hardware.LPC
             (byte)SourceNCT67XXD.AUXTIN3
           };
 
-                    temperatureRegister = new ushort[]
+                    _temperatureRegister = new ushort[]
                       { 0x027, 0x073, 0x075, 0x077, 0x079, 0x07B, 0x150 };
-                    temperatureHalfRegister = new ushort[]
+                    _temperatureHalfRegister = new ushort[]
                       { 0, 0x074, 0x076, 0x078, 0x07A, 0x07C, 0x151 };
-                    temperatureHalfBit = new int[]
+                    _temperatureHalfBit = new int[]
                       { -1, 7, 7, 7, 7, 7, 7 };
-                    temperatureSourceRegister = new ushort[]
+                    _temperatureSourceRegister = new ushort[]
                       { 0x621, 0x100, 0x200, 0x300, 0x800, 0x900, 0x622 };
 
-                    alternateTemperatureRegister = new ushort?[]
+                    _alternateTemperatureRegister = new ushort?[]
                       { null, 0x491, 0x490, 0x492, 0x493, 0x494, 0x495 };
 
                     break;
@@ -360,34 +360,34 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     Fans = new float?[3];
                     Controls = new float?[3];
 
-                    fanRpmBaseRegister = new ushort[] { 0x030, 0x032, 0x034 };
+                    _fanRpmBaseRegister = new ushort[] { 0x030, 0x032, 0x034 };
 
                     // min value RPM value with 13-bit fan counter
-                    minFanRPM = (int)(1.35e6 / 0x1FFF);
+                    _minFanRPM = (int)(1.35e6 / 0x1FFF);
 
                     Voltages = new float?[9];
-                    voltageRegisters = new ushort[]
+                    _voltageRegisters = new ushort[]
                       { 0x300, 0x301, 0x302, 0x303, 0x304, 0x305, 0x307, 0x308, 0x309 };
-                    voltageVBatRegister = 0x308;
+                    _voltageVBatRegister = 0x308;
 
                     Temperatures = new float?[4];
-                    temperaturesSource = new byte[] {
+                    _temperaturesSource = new byte[] {
             (byte)SourceNCT610X.PECI_0,
             (byte)SourceNCT610X.SYSTIN,
             (byte)SourceNCT610X.CPUTIN,
             (byte)SourceNCT610X.AUXTIN
         };
 
-                    temperatureRegister = new ushort[]
+                    _temperatureRegister = new ushort[]
                     { 0x027, 0x018, 0x019, 0x01A };
-                    temperatureHalfRegister = new ushort[]
+                    _temperatureHalfRegister = new ushort[]
                     { 0, 0x01B, 0x11B, 0x21B };
-                    temperatureHalfBit = new int[]
+                    _temperatureHalfBit = new int[]
                     { -1, 7, 7, 7 };
-                    temperatureSourceRegister = new ushort[]
+                    _temperatureSourceRegister = new ushort[]
                     { 0x621, 0x100, 0x200, 0x300 };
 
-                    alternateTemperatureRegister = new ushort?[]
+                    _alternateTemperatureRegister = new ushort?[]
                     { null, 0x018, 0x019, 0x01A };
 
                     break;
@@ -396,8 +396,8 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
         private bool IsNuvotonVendor()
         {
-            return ((ReadByte(VENDOR_ID_HIGH_REGISTER) << 8) |
-              ReadByte(VENDOR_ID_LOW_REGISTER)) == NUVOTON_VENDOR_ID;
+            return ((ReadByte(_VENDOR_ID_HIGH_REGISTER) << 8) |
+              ReadByte(_VENDOR_ID_LOW_REGISTER)) == NUVOTON_VENDOR_ID;
         }
 
         public byte? ReadGPIO(int index)
@@ -410,27 +410,27 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
         private void SaveDefaultFanControl(int index)
         {
-            if (!restoreDefaultFanControlRequired[index])
+            if (!_restoreDefaultFanControlRequired[index])
             {
-                initialFanControlMode[index] = ReadByte(FAN_CONTROL_MODE_REG[index]);
-                initialFanPwmCommand[index] = ReadByte(FAN_PWM_COMMAND_REG[index]);
-                restoreDefaultFanControlRequired[index] = true;
+                _initialFanControlMode[index] = ReadByte(_FAN_CONTROL_MODE_REG[index]);
+                _initialFanPwmCommand[index] = ReadByte(_FAN_PWM_COMMAND_REG[index]);
+                _restoreDefaultFanControlRequired[index] = true;
             }
         }
 
         private void RestoreDefaultFanControl(int index)
         {
-            if (restoreDefaultFanControlRequired[index])
+            if (_restoreDefaultFanControlRequired[index])
             {
-                WriteByte(FAN_CONTROL_MODE_REG[index], initialFanControlMode[index]);
-                WriteByte(FAN_PWM_COMMAND_REG[index], initialFanPwmCommand[index]);
-                restoreDefaultFanControlRequired[index] = false;
+                WriteByte(_FAN_CONTROL_MODE_REG[index], _initialFanControlMode[index]);
+                WriteByte(_FAN_PWM_COMMAND_REG[index], _initialFanPwmCommand[index]);
+                _restoreDefaultFanControlRequired[index] = false;
             }
         }
 
         public void SetControl(int index, byte? value)
         {
-            if (!isNuvotonVendor)
+            if (!_isNuvotonVendor)
                 return;
 
             if (index < 0 || index >= Controls.Length)
@@ -444,10 +444,10 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 SaveDefaultFanControl(index);
 
                 // set manual mode
-                WriteByte(FAN_CONTROL_MODE_REG[index], 0);
+                WriteByte(_FAN_CONTROL_MODE_REG[index], 0);
 
                 // set output value
-                WriteByte(FAN_PWM_COMMAND_REG[index], value.Value);
+                WriteByte(_FAN_PWM_COMMAND_REG[index], value.Value);
             }
             else
             {
@@ -482,14 +482,14 @@ namespace OpenHardwareMonitor.Hardware.LPC
             if (IsNuvotonVendor())
                 return;
 
-            lpcPort.WinbondNuvotonFintekEnter();
-            lpcPort.NuvotonDisableIOSpaceLock();
-            lpcPort.WinbondNuvotonFintekExit();
+            _lpcPort.WinbondNuvotonFintekEnter();
+            _lpcPort.NuvotonDisableIOSpaceLock();
+            _lpcPort.WinbondNuvotonFintekExit();
         }
 
         public void Update()
         {
-            if (!isNuvotonVendor)
+            if (!_isNuvotonVendor)
                 return;
 
             if (!Ring0.WaitIsaBusMutex(10))
@@ -499,27 +499,27 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             for (int i = 0; i < Voltages.Length; i++)
             {
-                float value = 0.008f * ReadByte(voltageRegisters[i]);
+                float value = 0.008f * ReadByte(_voltageRegisters[i]);
                 bool valid = value > 0;
 
                 // check if battery voltage monitor is enabled
-                if (valid && voltageRegisters[i] == voltageVBatRegister)
-                    valid = (ReadByte(vBatMonitorControlRegister) & 0x01) > 0;
+                if (valid && _voltageRegisters[i] == _voltageVBatRegister)
+                    valid = (ReadByte(_vBatMonitorControlRegister) & 0x01) > 0;
 
                 Voltages[i] = valid ? value : (float?)null;
             }
 
             int temperatureSourceMask = 0;
-            for (int i = temperatureRegister.Length - 1; i >= 0; i--)
+            for (int i = _temperatureRegister.Length - 1; i >= 0; i--)
             {
-                int value = ((sbyte)ReadByte(temperatureRegister[i])) << 1;
-                if (temperatureHalfBit[i] > 0)
+                int value = ((sbyte)ReadByte(_temperatureRegister[i])) << 1;
+                if (_temperatureHalfBit[i] > 0)
                 {
-                    value |= (ReadByte(temperatureHalfRegister[i]) >>
-                      temperatureHalfBit[i]) & 0x1;
+                    value |= (ReadByte(_temperatureHalfRegister[i]) >>
+                      _temperatureHalfBit[i]) & 0x1;
                 }
 
-                byte source = ReadByte(temperatureSourceRegister[i]);
+                byte source = ReadByte(_temperatureSourceRegister[i]);
                 temperatureSourceMask |= 1 << source;
 
                 float? temperature = 0.5f * value;
@@ -528,19 +528,19 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
                 for (int j = 0; j < Temperatures.Length; j++)
                 {
-                    if (temperaturesSource[j] == source)
+                    if (_temperaturesSource[j] == source)
                         Temperatures[j] = temperature;
                 }
             }
-            for (int i = 0; i < alternateTemperatureRegister.Length; i++)
+            for (int i = 0; i < _alternateTemperatureRegister.Length; i++)
             {
-                if (!alternateTemperatureRegister[i].HasValue)
+                if (!_alternateTemperatureRegister[i].HasValue)
                     continue;
 
-                if ((temperatureSourceMask & (1 << temperaturesSource[i])) > 0)
+                if ((temperatureSourceMask & (1 << _temperaturesSource[i])) > 0)
                     continue;
 
-                float? temperature = (sbyte)ReadByte(alternateTemperatureRegister[i].Value);
+                float? temperature = (sbyte)ReadByte(_alternateTemperatureRegister[i].Value);
 
                 if (temperature > 125 || temperature < -55)
                     temperature = null;
@@ -550,14 +550,14 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             for (int i = 0; i < Fans.Length; i++)
             {
-                if (fanCountRegister != null)
+                if (_fanCountRegister != null)
                 {
-                    byte high = ReadByte(fanCountRegister[i]);
-                    byte low = ReadByte((ushort)(fanCountRegister[i] + 1));
+                    byte high = ReadByte(_fanCountRegister[i]);
+                    byte low = ReadByte((ushort)(_fanCountRegister[i] + 1));
                     int count = (high << 5) | (low & 0x1F);
-                    if (count < maxFanCount)
+                    if (count < _maxFanCount)
                     {
-                        if (count >= minFanCount)
+                        if (count >= _minFanCount)
                         {
                             Fans[i] = 1.35e6f / count;
                         }
@@ -573,17 +573,17 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 }
                 else
                 {
-                    byte high = ReadByte(fanRpmBaseRegister[i]);
-                    byte low = ReadByte((ushort)(fanRpmBaseRegister[i] + 1));
+                    byte high = ReadByte(_fanRpmBaseRegister[i]);
+                    byte low = ReadByte((ushort)(_fanRpmBaseRegister[i] + 1));
                     int value = (high << 8) | low;
 
-                    Fans[i] = value > minFanRPM ? value : 0;
+                    Fans[i] = value > _minFanRPM ? value : 0;
                 }
             }
 
             for (int i = 0; i < Controls.Length; i++)
             {
-                int value = ReadByte(FAN_PWM_OUT_REG[i]);
+                int value = ReadByte(_FAN_PWM_OUT_REG[i]);
                 Controls[i] = value / 2.55f;
             }
 
@@ -599,9 +599,9 @@ namespace OpenHardwareMonitor.Hardware.LPC
             r.Append("Chip ID: 0x");
             r.AppendLine(Chip.ToString("X"));
             r.Append("Chip revision: 0x");
-            r.AppendLine(revision.ToString("X", CultureInfo.InvariantCulture));
+            r.AppendLine(_revision.ToString("X", CultureInfo.InvariantCulture));
             r.Append("Base Adress: 0x");
-            r.AppendLine(port.ToString("X4", CultureInfo.InvariantCulture));
+            r.AppendLine(_port.ToString("X4", CultureInfo.InvariantCulture));
             r.AppendLine();
 
             if (!Ring0.WaitIsaBusMutex(100))

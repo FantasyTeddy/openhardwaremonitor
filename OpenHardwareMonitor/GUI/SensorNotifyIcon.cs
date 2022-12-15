@@ -23,24 +23,24 @@ namespace OpenHardwareMonitor.GUI
     public class SensorNotifyIcon : IDisposable
     {
 
-        private readonly UnitManager unitManager;
-        private readonly NotifyIconAdv notifyIcon;
-        private readonly Bitmap bitmap;
-        private readonly Graphics graphics;
-        private Color color;
-        private Color darkColor;
-        private Brush brush;
-        private Brush darkBrush;
-        private readonly Pen pen;
-        private readonly Font font;
-        private readonly Font smallFont;
+        private readonly UnitManager _unitManager;
+        private readonly NotifyIconAdv _notifyIcon;
+        private readonly Bitmap _bitmap;
+        private readonly Graphics _graphics;
+        private Color _color;
+        private Color _darkColor;
+        private Brush _brush;
+        private Brush _darkBrush;
+        private readonly Pen _pen;
+        private readonly Font _font;
+        private readonly Font _smallFont;
 
         public SensorNotifyIcon(SystemTray sensorSystemTray, ISensor sensor,
           bool balloonTip, PersistentSettings settings, UnitManager unitManager)
         {
-            this.unitManager = unitManager;
+            _unitManager = unitManager;
             Sensor = sensor;
-            notifyIcon = new NotifyIconAdv();
+            _notifyIcon = new NotifyIconAdv();
 
             Color defaultColor = Color.Black;
             if (sensor.SensorType == SensorType.Load ||
@@ -52,7 +52,7 @@ namespace OpenHardwareMonitor.GUI
             Color = settings.GetValue(new Identifier(sensor.Identifier,
               "traycolor").ToString(), defaultColor);
 
-            pen = new Pen(Color.FromArgb(96, Color.Black));
+            _pen = new Pen(Color.FromArgb(96, Color.Black));
 
             ContextMenu contextMenu = new ContextMenu();
             MenuItem hideShowItem = new MenuItem("Hide/Show");
@@ -90,8 +90,8 @@ namespace OpenHardwareMonitor.GUI
                 sensorSystemTray.SendExitCommand();
             };
             contextMenu.MenuItems.Add(exitItem);
-            notifyIcon.ContextMenu = contextMenu;
-            notifyIcon.DoubleClick += (obj, args) =>
+            _notifyIcon.ContextMenu = contextMenu;
+            _notifyIcon.DoubleClick += (obj, args) =>
             {
                 sensorSystemTray.SendHideShowCommand();
             };
@@ -122,18 +122,18 @@ namespace OpenHardwareMonitor.GUI
                 default: baseSize = 12; break;
             }
 
-            font = new Font(family,
+            _font = new Font(family,
               baseSize * width / 16.0f, GraphicsUnit.Pixel);
-            smallFont = new Font(family,
+            _smallFont = new Font(family,
               0.75f * baseSize * width / 16.0f, GraphicsUnit.Pixel);
 
-            bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-            graphics = Graphics.FromImage(bitmap);
+            _bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            _graphics = Graphics.FromImage(_bitmap);
 
             if (Environment.OSVersion.Version.Major > 5)
             {
-                graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                _graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+                _graphics.SmoothingMode = SmoothingMode.HighQuality;
             }
         }
 
@@ -141,19 +141,19 @@ namespace OpenHardwareMonitor.GUI
 
         public Color Color
         {
-            get => color;
+            get => _color;
             set
             {
-                color = value;
-                darkColor = Color.FromArgb(255,
-                  color.R / 3,
-                  color.G / 3,
-                  color.B / 3);
-                Brush brush = this.brush;
-                this.brush = new SolidBrush(color);
+                _color = value;
+                _darkColor = Color.FromArgb(255,
+                  _color.R / 3,
+                  _color.G / 3,
+                  _color.B / 3);
+                Brush brush = _brush;
+                _brush = new SolidBrush(_color);
                 brush?.Dispose();
-                Brush darkBrush = this.darkBrush;
-                this.darkBrush = new SolidBrush(darkColor);
+                Brush darkBrush = _darkBrush;
+                _darkBrush = new SolidBrush(_darkColor);
                 darkBrush?.Dispose();
             }
         }
@@ -168,18 +168,18 @@ namespace OpenHardwareMonitor.GUI
         {
             if (disposing)
             {
-                Icon icon = notifyIcon.Icon;
-                notifyIcon.Icon = null;
+                Icon icon = _notifyIcon.Icon;
+                _notifyIcon.Icon = null;
                 icon?.Dispose();
-                notifyIcon.Dispose();
+                _notifyIcon.Dispose();
 
-                brush?.Dispose();
-                darkBrush?.Dispose();
-                pen.Dispose();
-                graphics.Dispose();
-                bitmap.Dispose();
-                font.Dispose();
-                smallFont.Dispose();
+                _brush?.Dispose();
+                _darkBrush?.Dispose();
+                _pen.Dispose();
+                _graphics.Dispose();
+                _bitmap.Dispose();
+                _font.Dispose();
+                _smallFont.Dispose();
             }
         }
 
@@ -197,7 +197,7 @@ namespace OpenHardwareMonitor.GUI
                 case SensorType.Load:
                     return string.Format("{0:F0}", Sensor.Value);
                 case SensorType.Temperature:
-                    if (unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
+                    if (_unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
                     {
                         return string.Format("{0:F0}",
                           UnitManager.CelsiusToFahrenheit(Sensor.Value));
@@ -237,20 +237,20 @@ namespace OpenHardwareMonitor.GUI
 
             bool small = count > 2;
 
-            graphics.Clear(Color.Black);
-            TextRenderer.DrawText(graphics, text, small ? smallFont : font,
+            _graphics.Clear(Color.Black);
+            TextRenderer.DrawText(_graphics, text, small ? _smallFont : _font,
               new Point(-2, small ? 1 : 0), Color.White, Color.Black);
 
-            BitmapData data = bitmap.LockBits(
-              new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+            BitmapData data = _bitmap.LockBits(
+              new Rectangle(0, 0, _bitmap.Width, _bitmap.Height),
               ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
             IntPtr Scan0 = data.Scan0;
 
-            int numBytes = bitmap.Width * bitmap.Height * 4;
+            int numBytes = _bitmap.Width * _bitmap.Height * 4;
             byte[] bytes = new byte[numBytes];
             Marshal.Copy(Scan0, bytes, 0, numBytes);
-            bitmap.UnlockBits(data);
+            _bitmap.UnlockBits(data);
 
             byte red, green, blue;
             for (int i = 0; i < bytes.Length; i += 4)
@@ -259,13 +259,13 @@ namespace OpenHardwareMonitor.GUI
                 green = bytes[i + 1];
                 red = bytes[i + 2];
 
-                bytes[i] = color.B;
-                bytes[i + 1] = color.G;
-                bytes[i + 2] = color.R;
+                bytes[i] = _color.B;
+                bytes[i + 1] = _color.G;
+                bytes[i + 2] = _color.R;
                 bytes[i + 3] = (byte)(0.3 * red + 0.59 * green + 0.11 * blue);
             }
 
-            return IconFactory.Create(bytes, bitmap.Width, bitmap.Height,
+            return IconFactory.Create(bytes, _bitmap.Width, _bitmap.Height,
               PixelFormat.Format32bppArgb);
         }
 
@@ -273,42 +273,42 @@ namespace OpenHardwareMonitor.GUI
         {
             try
             {
-                graphics.Clear(Color.Transparent);
+                _graphics.Clear(Color.Transparent);
             }
             catch (ArgumentException)
             {
-                graphics.Clear(Color.Black);
+                _graphics.Clear(Color.Black);
             }
-            graphics.FillRectangle(darkBrush, 0.5f, -0.5f, bitmap.Width - 2, bitmap.Height);
+            _graphics.FillRectangle(_darkBrush, 0.5f, -0.5f, _bitmap.Width - 2, _bitmap.Height);
             float value = Sensor.Value.GetValueOrDefault();
             float y = 0.16f * (100 - value);
-            graphics.FillRectangle(brush, 0.5f, -0.5f + y, bitmap.Width - 2, bitmap.Height - y);
-            graphics.DrawRectangle(pen, 1, 0, bitmap.Width - 3, bitmap.Height - 1);
+            _graphics.FillRectangle(_brush, 0.5f, -0.5f + y, _bitmap.Width - 2, _bitmap.Height - y);
+            _graphics.DrawRectangle(_pen, 1, 0, _bitmap.Width - 3, _bitmap.Height - 1);
 
-            BitmapData data = bitmap.LockBits(
-              new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+            BitmapData data = _bitmap.LockBits(
+              new Rectangle(0, 0, _bitmap.Width, _bitmap.Height),
               ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-            byte[] bytes = new byte[bitmap.Width * bitmap.Height * 4];
+            byte[] bytes = new byte[_bitmap.Width * _bitmap.Height * 4];
             Marshal.Copy(data.Scan0, bytes, 0, bytes.Length);
-            bitmap.UnlockBits(data);
+            _bitmap.UnlockBits(data);
 
-            return IconFactory.Create(bytes, bitmap.Width, bitmap.Height,
+            return IconFactory.Create(bytes, _bitmap.Width, _bitmap.Height,
               PixelFormat.Format32bppArgb);
         }
 
         public void Update()
         {
-            Icon icon = notifyIcon.Icon;
+            Icon icon = _notifyIcon.Icon;
 
             switch (Sensor.SensorType)
             {
                 case SensorType.Load:
                 case SensorType.Control:
                 case SensorType.Level:
-                    notifyIcon.Icon = CreatePercentageIcon();
+                    _notifyIcon.Icon = CreatePercentageIcon();
                     break;
                 default:
-                    notifyIcon.Icon = CreateTransparentIcon();
+                    _notifyIcon.Icon = CreateTransparentIcon();
                     break;
             }
 
@@ -332,7 +332,7 @@ namespace OpenHardwareMonitor.GUI
             string formattedValue = string.Format(format, Sensor.Name, Sensor.Value);
 
             if (Sensor.SensorType == SensorType.Temperature &&
-              unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
+              _unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
             {
                 format = "\n{0}: {1:F1} °F";
                 formattedValue = string.Format(format, Sensor.Name,
@@ -346,8 +346,8 @@ namespace OpenHardwareMonitor.GUI
             if (text.Length > 63)
                 text = null;
 
-            notifyIcon.Text = text;
-            notifyIcon.Visible = true;
+            _notifyIcon.Text = text;
+            _notifyIcon.Visible = true;
         }
     }
 }

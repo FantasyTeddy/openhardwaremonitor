@@ -24,8 +24,8 @@ namespace OpenHardwareMonitor.GUI
     public class StartupManager
     {
 
-        private readonly TaskService taskService;
-        private bool startup;
+        private readonly TaskService _taskService;
+        private bool _startup;
         private const string REGISTRY_RUN =
           @"Software\Microsoft\Windows\CurrentVersion\Run";
 
@@ -47,7 +47,7 @@ namespace OpenHardwareMonitor.GUI
         {
             if (Hardware.OperatingSystem.IsUnix)
             {
-                taskService = null;
+                _taskService = null;
                 IsAvailable = false;
                 return;
             }
@@ -56,29 +56,29 @@ namespace OpenHardwareMonitor.GUI
             {
                 try
                 {
-                    taskService = new TaskService();
+                    _taskService = new TaskService();
                 }
                 catch
                 {
-                    taskService = null;
+                    _taskService = null;
                 }
 
-                if (taskService != null)
+                if (_taskService != null)
                 {
                     try
                     {
                         try
                         {
                             // check if the taskscheduler is running
-                            RunningTaskCollection collection = taskService.GetRunningTasks(false);
+                            RunningTaskCollection collection = _taskService.GetRunningTasks(false);
                         }
                         catch (ArgumentException) { }
 
-                        TaskFolder folder = taskService.GetFolder("\\Open Hardware Monitor");
+                        TaskFolder folder = _taskService.GetFolder("\\Open Hardware Monitor");
                         if (folder != null)
                         {
                             Task task = folder.Tasks["Startup"];
-                            startup = (task != null) &&
+                            _startup = (task != null) &&
                               (task.Definition.Triggers.Count > 0) &&
                               (task.Definition.Triggers[1].TriggerType ==
                                 TaskTriggerType.Logon) &&
@@ -91,46 +91,46 @@ namespace OpenHardwareMonitor.GUI
                         }
                         else
                         {
-                            startup = false;
+                            _startup = false;
                         }
 
                     }
                     catch (IOException)
                     {
-                        startup = false;
+                        _startup = false;
                     }
                     catch (UnauthorizedAccessException)
                     {
-                        taskService = null;
+                        _taskService = null;
                     }
                     catch (COMException)
                     {
-                        taskService = null;
+                        _taskService = null;
                     }
                     catch (NotImplementedException)
                     {
-                        taskService = null;
+                        _taskService = null;
                     }
                 }
             }
             else
             {
-                taskService = null;
+                _taskService = null;
             }
 
-            if (taskService == null)
+            if (_taskService == null)
             {
                 try
                 {
                     using (RegistryKey key =
                       Registry.CurrentUser.OpenSubKey(REGISTRY_RUN))
                     {
-                        startup = false;
+                        _startup = false;
                         if (key != null)
                         {
                             string value = (string)key.GetValue("OpenHardwareMonitor");
                             if (value != null)
-                                startup = value == Application.ExecutablePath;
+                                _startup = value == Application.ExecutablePath;
                         }
                     }
                     IsAvailable = true;
@@ -148,7 +148,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void CreateSchedulerTask()
         {
-            TaskDefinition definition = taskService.NewTask();
+            TaskDefinition definition = _taskService.NewTask();
             definition.RegistrationInfo.Description =
               "This task starts the Open Hardware Monitor on Windows startup.";
             definition.Principal.RunLevel =
@@ -166,7 +166,7 @@ namespace OpenHardwareMonitor.GUI
             action.WorkingDirectory =
               Path.GetDirectoryName(Application.ExecutablePath);
 
-            TaskFolder root = taskService.GetFolder("\\");
+            TaskFolder root = _taskService.GetFolder("\\");
             TaskFolder folder;
             try
             {
@@ -183,7 +183,7 @@ namespace OpenHardwareMonitor.GUI
 
         private void DeleteSchedulerTask()
         {
-            TaskFolder root = taskService.GetFolder("\\");
+            TaskFolder root = _taskService.GetFolder("\\");
             try
             {
                 TaskFolder folder = root.SubFolders["Open Hardware Monitor"];
@@ -213,20 +213,20 @@ namespace OpenHardwareMonitor.GUI
 
         public bool Startup
         {
-            get => startup;
+            get => _startup;
             set
             {
-                if (startup != value)
+                if (_startup != value)
                 {
                     if (IsAvailable)
                     {
-                        if (taskService != null)
+                        if (_taskService != null)
                         {
                             if (value)
                                 CreateSchedulerTask();
                             else
                                 DeleteSchedulerTask();
-                            startup = value;
+                            _startup = value;
                         }
                         else
                         {
@@ -236,7 +236,7 @@ namespace OpenHardwareMonitor.GUI
                                     CreateRegistryRun();
                                 else
                                     DeleteRegistryRun();
-                                startup = value;
+                                _startup = value;
                             }
                             catch (UnauthorizedAccessException)
                             {

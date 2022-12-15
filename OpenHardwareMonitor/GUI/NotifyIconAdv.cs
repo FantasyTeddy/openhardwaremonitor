@@ -22,18 +22,18 @@ namespace OpenHardwareMonitor.GUI
     public class NotifyIconAdv : IDisposable
     {
 
-        private readonly NotifyIcon genericNotifyIcon;
-        private readonly NotifyIconWindowsImplementation windowsNotifyIcon;
+        private readonly NotifyIcon _genericNotifyIcon;
+        private readonly NotifyIconWindowsImplementation _windowsNotifyIcon;
 
         public NotifyIconAdv()
         {
             if (Hardware.OperatingSystem.IsUnix)
             { // Unix
-                genericNotifyIcon = new NotifyIcon();
+                _genericNotifyIcon = new NotifyIcon();
             }
             else
             { // Windows
-                windowsNotifyIcon = new NotifyIconWindowsImplementation();
+                _windowsNotifyIcon = new NotifyIconWindowsImplementation();
             }
         }
 
@@ -41,17 +41,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipClicked += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipClicked += value;
                 else
-                    windowsNotifyIcon.BalloonTipClicked += value;
+                    _windowsNotifyIcon.BalloonTipClicked += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipClicked -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipClicked -= value;
                 else
-                    windowsNotifyIcon.BalloonTipClicked -= value;
+                    _windowsNotifyIcon.BalloonTipClicked -= value;
             }
         }
 
@@ -59,17 +59,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipClosed += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipClosed += value;
                 else
-                    windowsNotifyIcon.BalloonTipClosed += value;
+                    _windowsNotifyIcon.BalloonTipClosed += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipClosed -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipClosed -= value;
                 else
-                    windowsNotifyIcon.BalloonTipClosed -= value;
+                    _windowsNotifyIcon.BalloonTipClosed -= value;
             }
         }
 
@@ -77,17 +77,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipShown += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipShown += value;
                 else
-                    windowsNotifyIcon.BalloonTipShown += value;
+                    _windowsNotifyIcon.BalloonTipShown += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipShown -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipShown -= value;
                 else
-                    windowsNotifyIcon.BalloonTipShown -= value;
+                    _windowsNotifyIcon.BalloonTipShown -= value;
             }
         }
 
@@ -95,17 +95,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.Click += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.Click += value;
                 else
-                    windowsNotifyIcon.Click += value;
+                    _windowsNotifyIcon.Click += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.Click -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.Click -= value;
                 else
-                    windowsNotifyIcon.Click -= value;
+                    _windowsNotifyIcon.Click -= value;
             }
         }
 
@@ -113,17 +113,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.DoubleClick += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.DoubleClick += value;
                 else
-                    windowsNotifyIcon.DoubleClick += value;
+                    _windowsNotifyIcon.DoubleClick += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.DoubleClick -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.DoubleClick -= value;
                 else
-                    windowsNotifyIcon.DoubleClick -= value;
+                    _windowsNotifyIcon.DoubleClick -= value;
             }
         }
 
@@ -131,17 +131,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseClick += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseClick += value;
                 else
-                    windowsNotifyIcon.MouseClick += value;
+                    _windowsNotifyIcon.MouseClick += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseClick -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseClick -= value;
                 else
-                    windowsNotifyIcon.MouseClick -= value;
+                    _windowsNotifyIcon.MouseClick -= value;
             }
         }
 
@@ -149,17 +149,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseDoubleClick += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseDoubleClick += value;
                 else
-                    windowsNotifyIcon.MouseDoubleClick += value;
+                    _windowsNotifyIcon.MouseDoubleClick += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseDoubleClick -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseDoubleClick -= value;
                 else
-                    windowsNotifyIcon.MouseDoubleClick -= value;
+                    _windowsNotifyIcon.MouseDoubleClick -= value;
             }
         }
 
@@ -167,17 +167,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseDown += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseDown += value;
                 else
-                    windowsNotifyIcon.MouseDown += value;
+                    _windowsNotifyIcon.MouseDown += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseDown -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseDown -= value;
                 else
-                    windowsNotifyIcon.MouseDown -= value;
+                    _windowsNotifyIcon.MouseDown -= value;
             }
         }
 
@@ -185,17 +185,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseMove += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseMove += value;
                 else
-                    windowsNotifyIcon.MouseMove += value;
+                    _windowsNotifyIcon.MouseMove += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseMove -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseMove -= value;
                 else
-                    windowsNotifyIcon.MouseMove -= value;
+                    _windowsNotifyIcon.MouseMove -= value;
             }
         }
 
@@ -203,17 +203,17 @@ namespace OpenHardwareMonitor.GUI
         {
             add
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseUp += value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseUp += value;
                 else
-                    windowsNotifyIcon.MouseUp += value;
+                    _windowsNotifyIcon.MouseUp += value;
             }
             remove
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.MouseUp -= value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.MouseUp -= value;
                 else
-                    windowsNotifyIcon.MouseUp -= value;
+                    _windowsNotifyIcon.MouseUp -= value;
             }
         }
 
@@ -221,17 +221,17 @@ namespace OpenHardwareMonitor.GUI
         {
             get
             {
-                if (genericNotifyIcon != null)
-                    return genericNotifyIcon.BalloonTipText;
+                if (_genericNotifyIcon != null)
+                    return _genericNotifyIcon.BalloonTipText;
                 else
-                    return windowsNotifyIcon.BalloonTipText;
+                    return _windowsNotifyIcon.BalloonTipText;
             }
             set
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipText = value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipText = value;
                 else
-                    windowsNotifyIcon.BalloonTipText = value;
+                    _windowsNotifyIcon.BalloonTipText = value;
             }
         }
 
@@ -239,17 +239,17 @@ namespace OpenHardwareMonitor.GUI
         {
             get
             {
-                if (genericNotifyIcon != null)
-                    return genericNotifyIcon.BalloonTipIcon;
+                if (_genericNotifyIcon != null)
+                    return _genericNotifyIcon.BalloonTipIcon;
                 else
-                    return windowsNotifyIcon.BalloonTipIcon;
+                    return _windowsNotifyIcon.BalloonTipIcon;
             }
             set
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipIcon = value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipIcon = value;
                 else
-                    windowsNotifyIcon.BalloonTipIcon = value;
+                    _windowsNotifyIcon.BalloonTipIcon = value;
             }
         }
 
@@ -257,17 +257,17 @@ namespace OpenHardwareMonitor.GUI
         {
             get
             {
-                if (genericNotifyIcon != null)
-                    return genericNotifyIcon.BalloonTipTitle;
+                if (_genericNotifyIcon != null)
+                    return _genericNotifyIcon.BalloonTipTitle;
                 else
-                    return windowsNotifyIcon.BalloonTipTitle;
+                    return _windowsNotifyIcon.BalloonTipTitle;
             }
             set
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.BalloonTipTitle = value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.BalloonTipTitle = value;
                 else
-                    windowsNotifyIcon.BalloonTipTitle = value;
+                    _windowsNotifyIcon.BalloonTipTitle = value;
             }
         }
 
@@ -275,17 +275,17 @@ namespace OpenHardwareMonitor.GUI
         {
             get
             {
-                if (genericNotifyIcon != null)
-                    return genericNotifyIcon.ContextMenu;
+                if (_genericNotifyIcon != null)
+                    return _genericNotifyIcon.ContextMenu;
                 else
-                    return windowsNotifyIcon.ContextMenu;
+                    return _windowsNotifyIcon.ContextMenu;
             }
             set
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.ContextMenu = value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.ContextMenu = value;
                 else
-                    windowsNotifyIcon.ContextMenu = value;
+                    _windowsNotifyIcon.ContextMenu = value;
             }
         }
 
@@ -293,17 +293,17 @@ namespace OpenHardwareMonitor.GUI
         {
             get
             {
-                if (genericNotifyIcon != null)
-                    return genericNotifyIcon.ContextMenuStrip;
+                if (_genericNotifyIcon != null)
+                    return _genericNotifyIcon.ContextMenuStrip;
                 else
-                    return windowsNotifyIcon.ContextMenuStrip;
+                    return _windowsNotifyIcon.ContextMenuStrip;
             }
             set
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.ContextMenuStrip = value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.ContextMenuStrip = value;
                 else
-                    windowsNotifyIcon.ContextMenuStrip = value;
+                    _windowsNotifyIcon.ContextMenuStrip = value;
             }
         }
 
@@ -313,17 +313,17 @@ namespace OpenHardwareMonitor.GUI
         {
             get
             {
-                if (genericNotifyIcon != null)
-                    return genericNotifyIcon.Icon;
+                if (_genericNotifyIcon != null)
+                    return _genericNotifyIcon.Icon;
                 else
-                    return windowsNotifyIcon.Icon;
+                    return _windowsNotifyIcon.Icon;
             }
             set
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.Icon = value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.Icon = value;
                 else
-                    windowsNotifyIcon.Icon = value;
+                    _windowsNotifyIcon.Icon = value;
             }
         }
 
@@ -331,17 +331,17 @@ namespace OpenHardwareMonitor.GUI
         {
             get
             {
-                if (genericNotifyIcon != null)
-                    return genericNotifyIcon.Text;
+                if (_genericNotifyIcon != null)
+                    return _genericNotifyIcon.Text;
                 else
-                    return windowsNotifyIcon.Text;
+                    return _windowsNotifyIcon.Text;
             }
             set
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.Text = value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.Text = value;
                 else
-                    windowsNotifyIcon.Text = value;
+                    _windowsNotifyIcon.Text = value;
             }
         }
 
@@ -349,17 +349,17 @@ namespace OpenHardwareMonitor.GUI
         {
             get
             {
-                if (genericNotifyIcon != null)
-                    return genericNotifyIcon.Visible;
+                if (_genericNotifyIcon != null)
+                    return _genericNotifyIcon.Visible;
                 else
-                    return windowsNotifyIcon.Visible;
+                    return _windowsNotifyIcon.Visible;
             }
             set
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.Visible = value;
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.Visible = value;
                 else
-                    windowsNotifyIcon.Visible = value;
+                    _windowsNotifyIcon.Visible = value;
             }
         }
 
@@ -373,10 +373,10 @@ namespace OpenHardwareMonitor.GUI
         {
             if (disposing)
             {
-                if (genericNotifyIcon != null)
-                    genericNotifyIcon.Dispose();
+                if (_genericNotifyIcon != null)
+                    _genericNotifyIcon.Dispose();
                 else
-                    windowsNotifyIcon.Dispose();
+                    _windowsNotifyIcon.Dispose();
             }
         }
 
@@ -388,10 +388,10 @@ namespace OpenHardwareMonitor.GUI
         public void ShowBalloonTip(int timeout, string tipTitle, string tipText,
           ToolTipIcon tipIcon)
         {
-            if (genericNotifyIcon != null)
-                genericNotifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
+            if (_genericNotifyIcon != null)
+                _genericNotifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
             else
-                windowsNotifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
+                _windowsNotifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
         }
 
         private class NotifyIconWindowsImplementation : Component
@@ -399,15 +399,15 @@ namespace OpenHardwareMonitor.GUI
 
             private static int nextId;
 
-            private readonly object syncObj = new object();
-            private Icon icon;
-            private string text = string.Empty;
-            private readonly int id;
-            private bool created;
-            private NotifyIconNativeWindow window;
-            private bool doubleClickDown;
-            private bool visible;
-            private readonly MethodInfo commandDispatch;
+            private readonly object _syncObj = new object();
+            private Icon _icon;
+            private string _text = string.Empty;
+            private readonly int _id;
+            private bool _created;
+            private NotifyIconNativeWindow _window;
+            private bool _doubleClickDown;
+            private bool _visible;
+            private readonly MethodInfo _commandDispatch;
 
             public event EventHandler BalloonTipClicked;
             public event EventHandler BalloonTipClosed;
@@ -429,20 +429,20 @@ namespace OpenHardwareMonitor.GUI
 
             public Icon Icon
             {
-                get => icon;
+                get => _icon;
                 set
                 {
-                    if (icon != value)
+                    if (_icon != value)
                     {
-                        icon = value;
-                        UpdateNotifyIcon(visible);
+                        _icon = value;
+                        UpdateNotifyIcon(_visible);
                     }
                 }
             }
 
             public string Text
             {
-                get => text;
+                get => _text;
                 set
                 {
                     if (value == null)
@@ -451,25 +451,25 @@ namespace OpenHardwareMonitor.GUI
                     if (value.Length > 63)
                         throw new ArgumentOutOfRangeException(nameof(Text));
 
-                    if (!value.Equals(text, StringComparison.Ordinal))
+                    if (!value.Equals(_text, StringComparison.Ordinal))
                     {
-                        text = value;
+                        _text = value;
 
-                        if (visible)
-                            UpdateNotifyIcon(visible);
+                        if (_visible)
+                            UpdateNotifyIcon(_visible);
                     }
                 }
             }
 
             public bool Visible
             {
-                get => visible;
+                get => _visible;
                 set
                 {
-                    if (visible != value)
+                    if (_visible != value)
                     {
-                        visible = value;
-                        UpdateNotifyIcon(visible);
+                        _visible = value;
+                        UpdateNotifyIcon(_visible);
                     }
                 }
             }
@@ -479,38 +479,38 @@ namespace OpenHardwareMonitor.GUI
                 BalloonTipText = string.Empty;
                 BalloonTipTitle = string.Empty;
 
-                commandDispatch = typeof(Form).Assembly.
+                _commandDispatch = typeof(Form).Assembly.
                   GetType("System.Windows.Forms.Command").GetMethod("DispatchID",
                   BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
                   null, new Type[] { typeof(int) }, null);
 
-                id = ++NotifyIconWindowsImplementation.nextId;
-                window = new NotifyIconNativeWindow(this);
-                UpdateNotifyIcon(visible);
+                _id = ++NotifyIconWindowsImplementation.nextId;
+                _window = new NotifyIconNativeWindow(this);
+                UpdateNotifyIcon(_visible);
             }
 
             protected override void Dispose(bool disposing)
             {
                 if (disposing)
                 {
-                    if (window != null)
+                    if (_window != null)
                     {
-                        icon = null;
-                        text = string.Empty;
+                        _icon = null;
+                        _text = string.Empty;
                         UpdateNotifyIcon(false);
-                        window.DestroyHandle();
-                        window = null;
+                        _window.DestroyHandle();
+                        _window = null;
                         ContextMenu = null;
                         ContextMenuStrip = null;
                     }
                 }
                 else
                 {
-                    if (window != null && window.Handle != IntPtr.Zero)
+                    if (_window != null && _window.Handle != IntPtr.Zero)
                     {
                         NativeMethods.PostMessage(
-                          new HandleRef(window, window.Handle), WM_CLOSE, 0, 0);
-                        window.ReleaseHandle();
+                          new HandleRef(_window, _window.Handle), WM_CLOSE, 0, 0);
+                        _window.ReleaseHandle();
                     }
                 }
                 base.Dispose(disposing);
@@ -533,14 +533,14 @@ namespace OpenHardwareMonitor.GUI
                 if (DesignMode)
                     return;
 
-                if (created)
+                if (_created)
                 {
                     NativeMethods.NotifyIconData data = new NativeMethods.NotifyIconData();
-                    if (window.Handle == IntPtr.Zero)
-                        window.CreateHandle(new CreateParams());
+                    if (_window.Handle == IntPtr.Zero)
+                        _window.CreateHandle(new CreateParams());
 
-                    data.Window = window.Handle;
-                    data.ID = id;
+                    data.Window = _window.Handle;
+                    data.ID = _id;
                     data.Flags = NativeMethods.NotifyIconDataFlags.Info;
                     data.TimeoutOrVersion = timeout;
                     data.InfoTitle = tipTitle;
@@ -559,7 +559,7 @@ namespace OpenHardwareMonitor.GUI
                 NativeMethods.Point p = default(NativeMethods.Point);
                 NativeMethods.GetCursorPos(ref p);
                 NativeMethods.SetForegroundWindow(
-                  new HandleRef(window, window.Handle));
+                  new HandleRef(_window, _window.Handle));
 
                 if (ContextMenu != null)
                 {
@@ -571,11 +571,11 @@ namespace OpenHardwareMonitor.GUI
 
                     NativeMethods.TrackPopupMenuEx(
                       new HandleRef(ContextMenu, ContextMenu.Handle), 72,
-                      p.x, p.y, new HandleRef(window, window.Handle),
+                      p.x, p.y, new HandleRef(_window, _window.Handle),
                       IntPtr.Zero);
 
                     NativeMethods.PostMessage(
-                      new HandleRef(window, window.Handle), WM_NULL, 0, 0);
+                      new HandleRef(_window, _window.Handle), WM_NULL, 0, 0);
                     return;
                 }
 
@@ -591,9 +591,9 @@ namespace OpenHardwareMonitor.GUI
                 if (DesignMode)
                     return;
 
-                lock (syncObj)
+                lock (_syncObj)
                 {
-                    window.LockReference(showNotifyIcon);
+                    _window.LockReference(showNotifyIcon);
 
                     NativeMethods.NotifyIconData data = new NativeMethods.NotifyIconData
                     {
@@ -601,42 +601,42 @@ namespace OpenHardwareMonitor.GUI
                         Flags = NativeMethods.NotifyIconDataFlags.Message
                     };
 
-                    if (showNotifyIcon && window.Handle == IntPtr.Zero)
-                        window.CreateHandle(new CreateParams());
+                    if (showNotifyIcon && _window.Handle == IntPtr.Zero)
+                        _window.CreateHandle(new CreateParams());
 
-                    data.Window = window.Handle;
-                    data.ID = id;
+                    data.Window = _window.Handle;
+                    data.ID = _id;
 
-                    if (icon != null)
+                    if (_icon != null)
                     {
                         data.Flags |= NativeMethods.NotifyIconDataFlags.Icon;
-                        data.Icon = icon.Handle;
+                        data.Icon = _icon.Handle;
                     }
 
                     data.Flags |= NativeMethods.NotifyIconDataFlags.Tip;
-                    data.Tip = text;
+                    data.Tip = _text;
 
-                    if (showNotifyIcon && icon != null)
+                    if (showNotifyIcon && _icon != null)
                     {
-                        if (!created)
+                        if (!_created)
                         {
                             // try to modify the icon in case it still exists (after WM_TASKBARCREATED)
                             if (NativeMethods.Shell_NotifyIcon(NotifyIconMessage.Modify, data))
                             {
-                                created = true;
+                                _created = true;
                             }
                             else
                             { // modification failed, try to add a new icon
                                 int i = 0;
                                 do
                                 {
-                                    created = NativeMethods.Shell_NotifyIcon(NotifyIconMessage.Add, data);
-                                    if (!created)
+                                    _created = NativeMethods.Shell_NotifyIcon(NotifyIconMessage.Add, data);
+                                    if (!_created)
                                     {
                                         System.Threading.Thread.Sleep(200);
                                         i++;
                                     }
-                                } while (!created && i < 40);
+                                } while (!_created && i < 40);
                             }
                         }
                         else
@@ -646,7 +646,7 @@ namespace OpenHardwareMonitor.GUI
                     }
                     else
                     {
-                        if (created)
+                        if (_created)
                         {
                             int i = 0;
                             bool deleted;
@@ -659,7 +659,7 @@ namespace OpenHardwareMonitor.GUI
                                     i++;
                                 }
                             } while (!deleted && i < 40);
-                            created = false;
+                            _created = false;
                         }
                     }
                 }
@@ -674,7 +674,7 @@ namespace OpenHardwareMonitor.GUI
 
                     MouseDoubleClick?.Invoke(this, new MouseEventArgs(button, 2, 0, 0, 0));
 
-                    doubleClickDown = true;
+                    _doubleClickDown = true;
                 }
 
                 MouseDown?.Invoke(this,
@@ -685,13 +685,13 @@ namespace OpenHardwareMonitor.GUI
             {
                 MouseUp?.Invoke(this, new MouseEventArgs(button, 0, 0, 0, 0));
 
-                if (!doubleClickDown)
+                if (!_doubleClickDown)
                 {
                     Click?.Invoke(this, new MouseEventArgs(button, 0, 0, 0, 0));
 
                     MouseClick?.Invoke(this, new MouseEventArgs(button, 0, 0, 0, 0));
                 }
-                doubleClickDown = false;
+                _doubleClickDown = false;
             }
 
             private void ProcessInitMenuPopup(ref Message message)
@@ -705,7 +705,7 @@ namespace OpenHardwareMonitor.GUI
                 {
                     return;
                 }
-                window.DefWndProc(ref message);
+                _window.DefWndProc(ref message);
             }
 
             private void WndProc(ref Message message)
@@ -718,10 +718,10 @@ namespace OpenHardwareMonitor.GUI
                     case WM_COMMAND:
                         if (message.LParam != IntPtr.Zero)
                         {
-                            window.DefWndProc(ref message);
+                            _window.DefWndProc(ref message);
                             return;
                         }
-                        commandDispatch.Invoke(null, new object[] {
+                        _commandDispatch.Invoke(null, new object[] {
             message.WParam.ToInt32() & 0xFFFF });
                         return;
                     case WM_INITMENUPOPUP:
@@ -780,24 +780,24 @@ namespace OpenHardwareMonitor.GUI
 
                 if (message.Msg == WM_TASKBARCREATED)
                 {
-                    lock (syncObj)
+                    lock (_syncObj)
                     {
-                        created = false;
+                        _created = false;
                     }
-                    UpdateNotifyIcon(visible);
+                    UpdateNotifyIcon(_visible);
                 }
 
-                window.DefWndProc(ref message);
+                _window.DefWndProc(ref message);
             }
 
             private class NotifyIconNativeWindow : NativeWindow
             {
-                private readonly NotifyIconWindowsImplementation reference;
-                private GCHandle referenceHandle;
+                private readonly NotifyIconWindowsImplementation _reference;
+                private GCHandle _referenceHandle;
 
                 internal NotifyIconNativeWindow(NotifyIconWindowsImplementation component)
                 {
-                    reference = component;
+                    _reference = component;
                 }
 
                 ~NotifyIconNativeWindow()
@@ -813,16 +813,16 @@ namespace OpenHardwareMonitor.GUI
                 {
                     if (locked)
                     {
-                        if (!referenceHandle.IsAllocated)
+                        if (!_referenceHandle.IsAllocated)
                         {
-                            referenceHandle = GCHandle.Alloc(reference, GCHandleType.Normal);
+                            _referenceHandle = GCHandle.Alloc(_reference, GCHandleType.Normal);
                             return;
                         }
                     }
                     else
                     {
-                        if (referenceHandle.IsAllocated)
-                            referenceHandle.Free();
+                        if (_referenceHandle.IsAllocated)
+                            _referenceHandle.Free();
                     }
                 }
 
@@ -833,7 +833,7 @@ namespace OpenHardwareMonitor.GUI
 
                 protected override void WndProc(ref Message m)
                 {
-                    reference.WndProc(ref m);
+                    _reference.WndProc(ref m);
                 }
             }
 

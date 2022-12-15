@@ -17,16 +17,16 @@ namespace OpenHardwareMonitor.Hardware.LPC
     internal class IT87XX : ISuperIO
     {
 
-        private readonly ushort address;
-        private readonly byte version;
+        private readonly ushort _address;
+        private readonly byte _version;
 
-        private readonly ushort gpioAddress;
-        private readonly int gpioCount;
+        private readonly ushort _gpioAddress;
+        private readonly int _gpioCount;
 
-        private readonly ushort addressReg;
-        private readonly ushort dataReg;
-        private readonly float voltageGain;
-        private readonly bool has16bitFanCounter;
+        private readonly ushort _addressReg;
+        private readonly ushort _dataReg;
+        private readonly float _voltageGain;
+        private readonly bool _has16bitFanCounter;
 
         // Consts
         private const byte ITE_VENDOR_ID = 0x90;
@@ -40,64 +40,64 @@ namespace OpenHardwareMonitor.Hardware.LPC
         private const byte TEMPERATURE_BASE_REG = 0x29;
         private const byte VENDOR_ID_REGISTER = 0x58;
         private const byte FAN_TACHOMETER_DIVISOR_REGISTER = 0x0B;
-        private readonly byte[] FAN_TACHOMETER_REG =
+        private readonly byte[] _FAN_TACHOMETER_REG =
           { 0x0d, 0x0e, 0x0f, 0x80, 0x82 };
-        private readonly byte[] FAN_TACHOMETER_EXT_REG =
+        private readonly byte[] _FAN_TACHOMETER_EXT_REG =
           { 0x18, 0x19, 0x1a, 0x81, 0x83 };
         private const byte VOLTAGE_BASE_REG = 0x20;
         private const byte FAN_MAIN_CTRL_REG = 0x13;
-        private readonly byte[] FAN_PWM_CTRL_REG;
-        private readonly byte[] FAN_PWM_CTRL_EXT_REG =
+        private readonly byte[] _FAN_PWM_CTRL_REG;
+        private readonly byte[] _FAN_PWM_CTRL_EXT_REG =
           { 0x63, 0x6b, 0x73, 0x7b, 0xa3 };
 
-        private readonly bool[] restoreDefaultFanPwmControlRequired = new bool[5];
-        private readonly bool[] initialFanOutputModeEnabled = new bool[3];
-        private readonly byte[] initialFanPwmControl = new byte[5];
-        private readonly byte[] initialFanPwmControlExt = new byte[5];
+        private readonly bool[] _restoreDefaultFanPwmControlRequired = new bool[5];
+        private readonly bool[] _initialFanOutputModeEnabled = new bool[3];
+        private readonly byte[] _initialFanPwmControl = new byte[5];
+        private readonly byte[] _initialFanPwmControlExt = new byte[5];
 
         private byte ReadByte(byte register, out bool valid)
         {
-            Ring0.WriteIoPort(addressReg, register);
-            byte value = Ring0.ReadIoPort(dataReg);
+            Ring0.WriteIoPort(_addressReg, register);
+            byte value = Ring0.ReadIoPort(_dataReg);
             if (Chip == Chip.IT8688E)
                 valid = true;
             else
-                valid = register == Ring0.ReadIoPort(addressReg);
+                valid = register == Ring0.ReadIoPort(_addressReg);
             return value;
         }
 
         private bool WriteByte(byte register, byte value)
         {
-            Ring0.WriteIoPort(addressReg, register);
-            Ring0.WriteIoPort(dataReg, value);
-            return register == Ring0.ReadIoPort(addressReg);
+            Ring0.WriteIoPort(_addressReg, register);
+            Ring0.WriteIoPort(_dataReg, value);
+            return register == Ring0.ReadIoPort(_addressReg);
         }
 
         public byte? ReadGPIO(int index)
         {
-            if (index >= gpioCount)
+            if (index >= _gpioCount)
                 return null;
 
-            return Ring0.ReadIoPort((ushort)(gpioAddress + index));
+            return Ring0.ReadIoPort((ushort)(_gpioAddress + index));
         }
 
         public void WriteGPIO(int index, byte value)
         {
-            if (index >= gpioCount)
+            if (index >= _gpioCount)
                 return;
 
-            Ring0.WriteIoPort((ushort)(gpioAddress + index), value);
+            Ring0.WriteIoPort((ushort)(_gpioAddress + index), value);
         }
 
         private void SaveDefaultFanPwmControl(int index)
         {
-            if (!restoreDefaultFanPwmControlRequired[index])
+            if (!_restoreDefaultFanPwmControlRequired[index])
             {
-                initialFanPwmControl[index] = ReadByte(FAN_PWM_CTRL_REG[index], out _);
+                _initialFanPwmControl[index] = ReadByte(_FAN_PWM_CTRL_REG[index], out _);
 
                 if (index < 3)
                 {
-                    initialFanOutputModeEnabled[index] =
+                    _initialFanOutputModeEnabled[index] =
                       (ReadByte(FAN_MAIN_CTRL_REG, out _) & (1 << index)) > 0;
                 }
 
@@ -107,24 +107,24 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     Chip == Chip.IT8688E ||
                     Chip == Chip.IT879XE)
                 {
-                    initialFanPwmControlExt[index] =
-                      ReadByte(FAN_PWM_CTRL_EXT_REG[index], out _);
+                    _initialFanPwmControlExt[index] =
+                      ReadByte(_FAN_PWM_CTRL_EXT_REG[index], out _);
                 }
-                restoreDefaultFanPwmControlRequired[index] = true;
+                _restoreDefaultFanPwmControlRequired[index] = true;
             }
         }
 
         private void RestoreDefaultFanPwmControl(int index)
         {
-            if (restoreDefaultFanPwmControlRequired[index])
+            if (_restoreDefaultFanPwmControlRequired[index])
             {
-                WriteByte(FAN_PWM_CTRL_REG[index], initialFanPwmControl[index]);
+                WriteByte(_FAN_PWM_CTRL_REG[index], _initialFanPwmControl[index]);
 
                 if (index < 3)
                 {
                     byte value = ReadByte(FAN_MAIN_CTRL_REG, out _);
 
-                    if (((value & (1 << index)) > 0) != initialFanOutputModeEnabled[index])
+                    if (((value & (1 << index)) > 0) != _initialFanOutputModeEnabled[index])
                     {
                         WriteByte(FAN_MAIN_CTRL_REG, (byte)(value ^ (1 << index)));
                     }
@@ -136,9 +136,9 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     Chip == Chip.IT8688E ||
                     Chip == Chip.IT879XE)
                 {
-                    WriteByte(FAN_PWM_CTRL_EXT_REG[index], initialFanPwmControlExt[index]);
+                    WriteByte(_FAN_PWM_CTRL_EXT_REG[index], _initialFanPwmControlExt[index]);
                 }
-                restoreDefaultFanPwmControlRequired[index] = false;
+                _restoreDefaultFanPwmControlRequired[index] = false;
             }
         }
 
@@ -156,7 +156,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
                 if (index < 3)
                 {
-                    if (!initialFanOutputModeEnabled[index])
+                    if (!_initialFanOutputModeEnabled[index])
                     {
                         WriteByte(FAN_MAIN_CTRL_REG,
                           (byte)(ReadByte(FAN_MAIN_CTRL_REG, out _) | (1 << index)));
@@ -169,13 +169,13 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     Chip == Chip.IT8688E ||
                     Chip == Chip.IT879XE)
                 {
-                    WriteByte(FAN_PWM_CTRL_REG[index],
-                      (byte)(initialFanPwmControl[index] & 0x7F));
-                    WriteByte(FAN_PWM_CTRL_EXT_REG[index], value.Value);
+                    WriteByte(_FAN_PWM_CTRL_REG[index],
+                      (byte)(_initialFanPwmControl[index] & 0x7F));
+                    WriteByte(_FAN_PWM_CTRL_EXT_REG[index], value.Value);
                 }
                 else
                 {
-                    WriteByte(FAN_PWM_CTRL_REG[index], (byte)(value.Value >> 1));
+                    WriteByte(_FAN_PWM_CTRL_REG[index], (byte)(value.Value >> 1));
                 }
             }
             else
@@ -189,12 +189,12 @@ namespace OpenHardwareMonitor.Hardware.LPC
         public IT87XX(Chip chip, ushort address, ushort gpioAddress, byte version)
         {
 
-            this.address = address;
+            _address = address;
             Chip = chip;
-            this.version = version;
-            addressReg = (ushort)(address + ADDRESS_REGISTER_OFFSET);
-            dataReg = (ushort)(address + DATA_REGISTER_OFFSET);
-            this.gpioAddress = gpioAddress;
+            _version = version;
+            _addressReg = (ushort)(address + ADDRESS_REGISTER_OFFSET);
+            _dataReg = (ushort)(address + DATA_REGISTER_OFFSET);
+            _gpioAddress = gpioAddress;
 
             // Check vendor id
             byte vendorId = ReadByte(VENDOR_ID_REGISTER, out bool valid);
@@ -214,11 +214,11 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             if (chip == Chip.IT8665E)
             {
-                FAN_PWM_CTRL_REG = new byte[] { 0x15, 0x16, 0x17, 0x1e, 0x1f };
+                _FAN_PWM_CTRL_REG = new byte[] { 0x15, 0x16, 0x17, 0x1e, 0x1f };
             }
             else
             {
-                FAN_PWM_CTRL_REG = new byte[] { 0x15, 0x16, 0x17, 0x7f, 0xa7 };
+                _FAN_PWM_CTRL_REG = new byte[] { 0x15, 0x16, 0x17, 0x7f, 0xa7 };
             }
 
             switch (chip)
@@ -267,15 +267,15 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 case Chip.IT8728F:
                 case Chip.IT8771E:
                 case Chip.IT8772E:
-                    voltageGain = 0.012f;
+                    _voltageGain = 0.012f;
                     break;
                 case Chip.IT8655E:
                 case Chip.IT8665E:
                 case Chip.IT879XE:
-                    voltageGain = 0.011f;
+                    _voltageGain = 0.011f;
                     break;
                 default:
-                    voltageGain = 0.016f;
+                    _voltageGain = 0.016f;
                     break;
             }
 
@@ -283,11 +283,11 @@ namespace OpenHardwareMonitor.Hardware.LPC
             if ((chip == Chip.IT8705F && version < 3) ||
                 (chip == Chip.IT8712F && version < 8))
             {
-                has16bitFanCounter = false;
+                _has16bitFanCounter = false;
             }
             else
             {
-                has16bitFanCounter = true;
+                _has16bitFanCounter = true;
             }
 
             // Set the number of GPIO sets
@@ -297,14 +297,14 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 case Chip.IT8716F:
                 case Chip.IT8718F:
                 case Chip.IT8726F:
-                    gpioCount = 5;
+                    _gpioCount = 5;
                     break;
                 case Chip.IT8720F:
                 case Chip.IT8721F:
-                    gpioCount = 8;
+                    _gpioCount = 8;
                     break;
                 default:
-                    gpioCount = 0;
+                    _gpioCount = 0;
                     break;
             }
         }
@@ -324,11 +324,11 @@ namespace OpenHardwareMonitor.Hardware.LPC
             r.Append("Chip ID: 0x");
             r.AppendLine(Chip.ToString("X"));
             r.Append("Chip Version: 0x");
-            r.AppendLine(version.ToString("X", CultureInfo.InvariantCulture));
+            r.AppendLine(_version.ToString("X", CultureInfo.InvariantCulture));
             r.Append("Base Address: 0x");
-            r.AppendLine(address.ToString("X4", CultureInfo.InvariantCulture));
+            r.AppendLine(_address.ToString("X4", CultureInfo.InvariantCulture));
             r.Append("GPIO Address: 0x");
-            r.AppendLine(gpioAddress.ToString("X4", CultureInfo.InvariantCulture));
+            r.AppendLine(_gpioAddress.ToString("X4", CultureInfo.InvariantCulture));
             r.AppendLine();
 
             if (!Ring0.WaitIsaBusMutex(100))
@@ -356,7 +356,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             r.AppendLine("GPIO Registers");
             r.AppendLine();
-            for (int i = 0; i < gpioCount; i++)
+            for (int i = 0; i < _gpioCount; i++)
             {
                 r.Append(' ');
                 r.Append(ReadGPIO(i).Value.ToString("X2",
@@ -379,7 +379,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
             {
 
                 float value =
-                  voltageGain * ReadByte((byte)(VOLTAGE_BASE_REG + i), out bool valid);
+                  _voltageGain * ReadByte((byte)(VOLTAGE_BASE_REG + i), out bool valid);
 
                 if (!valid)
                     continue;
@@ -402,14 +402,14 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     Temperatures[i] = null;
             }
 
-            if (has16bitFanCounter)
+            if (_has16bitFanCounter)
             {
                 for (int i = 0; i < Fans.Length; i++)
                 {
-                    int value = ReadByte(FAN_TACHOMETER_REG[i], out bool valid);
+                    int value = ReadByte(_FAN_TACHOMETER_REG[i], out bool valid);
                     if (!valid)
                         continue;
-                    value |= ReadByte(FAN_TACHOMETER_EXT_REG[i], out valid) << 8;
+                    value |= ReadByte(_FAN_TACHOMETER_EXT_REG[i], out valid) << 8;
                     if (!valid)
                         continue;
 
@@ -427,7 +427,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
             {
                 for (int i = 0; i < Fans.Length; i++)
                 {
-                    int value = ReadByte(FAN_TACHOMETER_REG[i], out bool valid);
+                    int value = ReadByte(_FAN_TACHOMETER_REG[i], out bool valid);
                     if (!valid)
                         continue;
 
@@ -453,7 +453,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             for (int i = 0; i < Controls.Length; i++)
             {
-                byte value = ReadByte(FAN_PWM_CTRL_REG[i], out bool valid);
+                byte value = ReadByte(_FAN_PWM_CTRL_REG[i], out bool valid);
                 if (!valid)
                     continue;
 
@@ -471,7 +471,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                         Chip == Chip.IT8688E ||
                         Chip == Chip.IT879XE)
                     {
-                        value = ReadByte(FAN_PWM_CTRL_EXT_REG[i], out valid);
+                        value = ReadByte(_FAN_PWM_CTRL_EXT_REG[i], out valid);
                         if (valid)
                             Controls[i] = (float)Math.Round(value * 100.0f / 0xFF);
                     }

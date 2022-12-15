@@ -22,16 +22,16 @@ namespace OpenHardwareMonitor.Hardware
     internal class Sensor : ISensor
     {
 
-        private readonly string defaultName;
-        private string name;
-        private readonly Hardware hardware;
-        private readonly ReadOnlyCollection<IParameter> parameters;
-        private float? currentValue;
+        private readonly string _defaultName;
+        private string _name;
+        private readonly Hardware _hardware;
+        private readonly ReadOnlyCollection<IParameter> _parameters;
+        private float? _currentValue;
         private readonly RingCollection<SensorValue>
-          values = new RingCollection<SensorValue>();
-        private readonly ISettings settings;
-        private float sum;
-        private int count;
+          _values = new RingCollection<SensorValue>();
+        private readonly ISettings _settings;
+        private float _sum;
+        private int _count;
 
         public Sensor(string name, int index, SensorType sensorType,
           Hardware hardware, ISettings settings)
@@ -52,16 +52,16 @@ namespace OpenHardwareMonitor.Hardware
             Index = index;
             IsDefaultHidden = defaultHidden;
             SensorType = sensorType;
-            this.hardware = hardware;
+            _hardware = hardware;
             Parameter[] parameters = new Parameter[parameterDescriptions == null ?
               0 : parameterDescriptions.Length];
             for (int i = 0; i < parameters.Length; i++)
                 parameters[i] = new Parameter(parameterDescriptions[i], this, settings);
-            this.parameters = new ReadOnlyCollection<IParameter>(parameters);
+            _parameters = new ReadOnlyCollection<IParameter>(parameters);
 
-            this.settings = settings;
-            defaultName = name;
-            this.name = settings.GetValue(
+            _settings = settings;
+            _defaultName = name;
+            _name = settings.GetValue(
               new Identifier(Identifier, "name").ToString(), name);
 
             GetSensorValuesFromSettings();
@@ -81,7 +81,7 @@ namespace OpenHardwareMonitor.Hardware
                 using (BinaryWriter writer = new BinaryWriter(b))
                 {
                     long t = 0;
-                    foreach (SensorValue sensorValue in values)
+                    foreach (SensorValue sensorValue in _values)
                     {
                         long v = sensorValue.Time.ToBinary();
                         writer.Write(v - t);
@@ -90,7 +90,7 @@ namespace OpenHardwareMonitor.Hardware
                     }
                     writer.Flush();
                 }
-                settings.SetValue(new Identifier(Identifier, "values").ToString(),
+                _settings.SetValue(new Identifier(Identifier, "values").ToString(),
                   Convert.ToBase64String(m.ToArray()));
             }
         }
@@ -98,7 +98,7 @@ namespace OpenHardwareMonitor.Hardware
         private void GetSensorValuesFromSettings()
         {
             string name = new Identifier(Identifier, "values").ToString();
-            string s = settings.GetValue(name, null);
+            string s = _settings.GetValue(name, null);
 
             try
             {
@@ -126,43 +126,43 @@ namespace OpenHardwareMonitor.Hardware
                 }
             }
             catch { }
-            if (values.Count > 0)
+            if (_values.Count > 0)
                 AppendValue(float.NaN, DateTime.UtcNow);
 
             // remove the value string from the settings to reduce memory usage
-            settings.Remove(name);
+            _settings.Remove(name);
         }
 
         private void AppendValue(float value, DateTime time)
         {
-            if (values.Count >= 2 && values.Last.Value == value &&
-              values[values.Count - 2].Value == value)
+            if (_values.Count >= 2 && _values.Last.Value == value &&
+              _values[_values.Count - 2].Value == value)
             {
-                values.Last = new SensorValue(value, time);
+                _values.Last = new SensorValue(value, time);
                 return;
             }
 
-            values.Append(new SensorValue(value, time));
+            _values.Append(new SensorValue(value, time));
         }
 
-        public IHardware Hardware => hardware;
+        public IHardware Hardware => _hardware;
 
         public SensorType SensorType { get; }
 
-        public Identifier Identifier => new Identifier(hardware.Identifier,
+        public Identifier Identifier => new Identifier(_hardware.Identifier,
                   SensorType.ToString().ToLowerInvariant(),
                   Index.ToString(CultureInfo.InvariantCulture));
 
         public string Name
         {
-            get => name;
+            get => _name;
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    name = value;
+                    _name = value;
                 else
-                    name = defaultName;
-                settings.SetValue(new Identifier(Identifier, "name").ToString(), name);
+                    _name = _defaultName;
+                _settings.SetValue(new Identifier(Identifier, "name").ToString(), _name);
             }
         }
 
@@ -170,30 +170,30 @@ namespace OpenHardwareMonitor.Hardware
 
         public bool IsDefaultHidden { get; }
 
-        public IReadOnlyList<IParameter> Parameters => parameters;
+        public IReadOnlyList<IParameter> Parameters => _parameters;
 
         public float? Value
         {
-            get => currentValue;
+            get => _currentValue;
             set
             {
                 DateTime now = DateTime.UtcNow;
-                while (values.Count > 0 && (now - values.First.Time).TotalDays > 1)
-                    values.Remove();
+                while (_values.Count > 0 && (now - _values.First.Time).TotalDays > 1)
+                    _values.Remove();
 
                 if (value.HasValue)
                 {
-                    sum += value.Value;
-                    count++;
-                    if (count == 4)
+                    _sum += value.Value;
+                    _count++;
+                    if (_count == 4)
                     {
-                        AppendValue(sum / count, now);
-                        sum = 0;
-                        count = 0;
+                        AppendValue(_sum / _count, now);
+                        _sum = 0;
+                        _count = 0;
                     }
                 }
 
-                currentValue = value;
+                _currentValue = value;
                 if (Min > value || !Min.HasValue)
                     Min = value;
                 if (Max < value || !Max.HasValue)
@@ -214,7 +214,7 @@ namespace OpenHardwareMonitor.Hardware
             Max = null;
         }
 
-        public IEnumerable<SensorValue> Values => values;
+        public IEnumerable<SensorValue> Values => _values;
 
         public void Accept(IVisitor visitor)
         {
@@ -225,7 +225,7 @@ namespace OpenHardwareMonitor.Hardware
 
         public void Traverse(IVisitor visitor)
         {
-            foreach (IParameter parameter in parameters)
+            foreach (IParameter parameter in _parameters)
                 parameter.Accept(visitor);
         }
 

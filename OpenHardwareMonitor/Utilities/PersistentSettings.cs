@@ -21,7 +21,7 @@ namespace OpenHardwareMonitor.Utilities
     public class PersistentSettings : ISettings
     {
 
-        private readonly IDictionary<string, string> settings =
+        private readonly IDictionary<string, string> _settings =
           new Dictionary<string, string>();
 
         public void Load(string fileName)
@@ -73,7 +73,7 @@ namespace OpenHardwareMonitor.Utilities
                             if (keyAttribute != null && valueAttribute != null &&
                               keyAttribute.Value != null)
                             {
-                                settings.Add(keyAttribute.Value, valueAttribute.Value);
+                                _settings.Add(keyAttribute.Value, valueAttribute.Value);
                             }
                         }
                     }
@@ -90,7 +90,7 @@ namespace OpenHardwareMonitor.Utilities
             doc.AppendChild(configuration);
             XmlElement appSettings = doc.CreateElement("appSettings");
             configuration.AppendChild(appSettings);
-            foreach (KeyValuePair<string, string> keyValuePair in settings)
+            foreach (KeyValuePair<string, string> keyValuePair in _settings)
             {
                 XmlElement add = doc.CreateElement("add");
                 add.SetAttribute("key", keyValuePair.Key);
@@ -138,17 +138,17 @@ namespace OpenHardwareMonitor.Utilities
 
         public bool Contains(string name)
         {
-            return settings.ContainsKey(name);
+            return _settings.ContainsKey(name);
         }
 
         public void SetValue(string name, string value)
         {
-            settings[name] = value;
+            _settings[name] = value;
         }
 
         public string GetValue(string name, string value)
         {
-            if (settings.TryGetValue(name, out string result))
+            if (_settings.TryGetValue(name, out string result))
                 return result;
             else
                 return value;
@@ -156,17 +156,17 @@ namespace OpenHardwareMonitor.Utilities
 
         public void Remove(string name)
         {
-            settings.Remove(name);
+            _settings.Remove(name);
         }
 
         public void SetValue(string name, int value)
         {
-            settings[name] = value.ToString();
+            _settings[name] = value.ToString();
         }
 
         public int GetValue(string name, int value)
         {
-            if (settings.TryGetValue(name, out string str))
+            if (_settings.TryGetValue(name, out string str))
             {
                 if (int.TryParse(str, out int parsedValue))
                     return parsedValue;
@@ -181,12 +181,12 @@ namespace OpenHardwareMonitor.Utilities
 
         public void SetValue(string name, float value)
         {
-            settings[name] = value.ToString(CultureInfo.InvariantCulture);
+            _settings[name] = value.ToString(CultureInfo.InvariantCulture);
         }
 
         public float GetValue(string name, float value)
         {
-            if (settings.TryGetValue(name, out string str))
+            if (_settings.TryGetValue(name, out string str))
             {
                 if (float.TryParse(str, NumberStyles.Float,
                   CultureInfo.InvariantCulture, out float parsedValue))
@@ -206,12 +206,12 @@ namespace OpenHardwareMonitor.Utilities
 
         public void SetValue(string name, bool value)
         {
-            settings[name] = value ? "true" : "false";
+            _settings[name] = value ? "true" : "false";
         }
 
         public bool GetValue(string name, bool value)
         {
-            if (settings.TryGetValue(name, out string str))
+            if (_settings.TryGetValue(name, out string str))
             {
                 return str == "true";
             }
@@ -223,12 +223,12 @@ namespace OpenHardwareMonitor.Utilities
 
         public void SetValue(string name, Color color)
         {
-            settings[name] = color.ToArgb().ToString("X8");
+            _settings[name] = color.ToArgb().ToString("X8");
         }
 
         public Color GetValue(string name, Color value)
         {
-            if (settings.TryGetValue(name, out string str))
+            if (_settings.TryGetValue(name, out string str))
             {
                 if (int.TryParse(str, NumberStyles.HexNumber,
                   CultureInfo.InvariantCulture, out int parsedValue))

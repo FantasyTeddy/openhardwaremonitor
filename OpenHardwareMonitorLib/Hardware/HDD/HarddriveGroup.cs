@@ -19,7 +19,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
 
         private const int MAX_DRIVES = 32;
 
-        private readonly List<AbstractHarddrive> hardware =
+        private readonly List<AbstractHarddrive> _hardware =
           new List<AbstractHarddrive>();
 
         public HarddriveGroup(ISettings settings)
@@ -35,12 +35,12 @@ namespace OpenHardwareMonitor.Hardware.HDD
                   AbstractHarddrive.CreateInstance(smart, drive, settings);
                 if (instance != null)
                 {
-                    hardware.Add(instance);
+                    _hardware.Add(instance);
                 }
             }
         }
 
-        public IHardware[] Hardware => hardware.ToArray();
+        public IHardware[] Hardware => _hardware.ToArray();
 
         public string GetReport()
         {
@@ -49,7 +49,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
 
         public void Close()
         {
-            foreach (AbstractHarddrive hdd in hardware)
+            foreach (AbstractHarddrive hdd in _hardware)
                 hdd.Close();
         }
     }

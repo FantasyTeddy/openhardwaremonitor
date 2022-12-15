@@ -17,7 +17,7 @@ namespace OpenHardwareMonitor.Hardware
     internal abstract class Hardware : IHardware
     {
         protected readonly string name;
-        private string customName;
+        private string _customName;
         protected readonly ISettings settings;
         protected readonly HashSet<ISensor> active = new HashSet<ISensor>();
 
@@ -26,7 +26,7 @@ namespace OpenHardwareMonitor.Hardware
             this.settings = settings;
             Identifier = identifier;
             this.name = name;
-            customName = settings.GetValue(
+            _customName = settings.GetValue(
               new Identifier(Identifier, "name").ToString(), name);
         }
 
@@ -50,15 +50,15 @@ namespace OpenHardwareMonitor.Hardware
 
         public string Name
         {
-            get => customName;
+            get => _customName;
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    customName = value;
+                    _customName = value;
                 else
-                    customName = name;
+                    _customName = name;
                 settings.SetValue(new Identifier(Identifier, "name").ToString(),
-                  customName);
+                  _customName);
             }
         }
 

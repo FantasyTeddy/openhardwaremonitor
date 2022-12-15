@@ -17,13 +17,13 @@ namespace OpenHardwareMonitor.Collections
     public class RingCollection<T> : IEnumerable<T>
     {
 
-        private T[] array;
+        private T[] _array;
 
         // first item of collection
-        private int head;
+        private int _head;
 
         // index after the last item of the collection
-        private int tail;
+        private int _tail;
 
         public RingCollection()
             : this(0) { }
@@ -32,33 +32,33 @@ namespace OpenHardwareMonitor.Collections
         {
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
-            array = new T[capacity];
-            head = 0;
-            tail = 0;
+            _array = new T[capacity];
+            _head = 0;
+            _tail = 0;
             Count = 0;
         }
 
         public int Capacity
         {
-            get => array.Length;
+            get => _array.Length;
             set
             {
                 T[] newArray = new T[value];
                 if (Count > 0)
                 {
-                    if (head < tail)
+                    if (_head < _tail)
                     {
-                        Array.Copy(array, head, newArray, 0, Count);
+                        Array.Copy(_array, _head, newArray, 0, Count);
                     }
                     else
                     {
-                        Array.Copy(array, head, newArray, 0, array.Length - head);
-                        Array.Copy(array, 0, newArray, array.Length - head, tail);
+                        Array.Copy(_array, _head, newArray, 0, _array.Length - _head);
+                        Array.Copy(_array, 0, newArray, _array.Length - _head, _tail);
                     }
                 }
-                array = newArray;
-                head = 0;
-                tail = Count == value ? 0 : Count;
+                _array = newArray;
+                _head = 0;
+                _tail = Count == value ? 0 : Count;
             }
         }
 
@@ -66,33 +66,33 @@ namespace OpenHardwareMonitor.Collections
         {
 
             // remove potential references
-            if (head < tail)
+            if (_head < _tail)
             {
-                Array.Clear(array, head, Count);
+                Array.Clear(_array, _head, Count);
             }
             else
             {
-                Array.Clear(array, 0, tail);
-                Array.Clear(array, head, array.Length - head);
+                Array.Clear(_array, 0, _tail);
+                Array.Clear(_array, _head, _array.Length - _head);
             }
 
-            head = 0;
-            tail = 0;
+            _head = 0;
+            _tail = 0;
             Count = 0;
         }
 
         public void Append(T item)
         {
-            if (Count == array.Length)
+            if (Count == _array.Length)
             {
-                int newCapacity = array.Length * 3 / 2;
-                if (newCapacity < array.Length + 8)
-                    newCapacity = array.Length + 8;
+                int newCapacity = _array.Length * 3 / 2;
+                if (newCapacity < _array.Length + 8)
+                    newCapacity = _array.Length + 8;
                 Capacity = newCapacity;
             }
 
-            array[tail] = item;
-            tail = tail + 1 == array.Length ? 0 : tail + 1;
+            _array[_tail] = item;
+            _tail = _tail + 1 == _array.Length ? 0 : _tail + 1;
             Count++;
         }
 
@@ -101,9 +101,9 @@ namespace OpenHardwareMonitor.Collections
             if (Count == 0)
                 throw new InvalidOperationException();
 
-            T result = array[head];
-            array[head] = default;
-            head = head + 1 == array.Length ? 0 : head + 1;
+            T result = _array[_head];
+            _array[_head] = default;
+            _head = _head + 1 == _array.Length ? 0 : _head + 1;
             Count--;
 
             return result;
@@ -117,19 +117,19 @@ namespace OpenHardwareMonitor.Collections
             {
                 if (index < 0 || index >= Count)
                     throw new ArgumentOutOfRangeException(nameof(index));
-                int i = head + index;
-                if (i >= array.Length)
-                    i -= array.Length;
-                return array[i];
+                int i = _head + index;
+                if (i >= _array.Length)
+                    i -= _array.Length;
+                return _array[i];
             }
             set
             {
                 if (index < 0 || index >= Count)
                     throw new ArgumentOutOfRangeException(nameof(index));
-                int i = head + index;
-                if (i >= array.Length)
-                    i -= array.Length;
-                array[i] = value;
+                int i = _head + index;
+                if (i >= _array.Length)
+                    i -= _array.Length;
+                _array[i] = value;
             }
         }
 
@@ -139,13 +139,13 @@ namespace OpenHardwareMonitor.Collections
             {
                 if (Count == 0)
                     throw new InvalidOperationException();
-                return array[head];
+                return _array[_head];
             }
             set
             {
                 if (Count == 0)
                     throw new InvalidOperationException();
-                array[head] = value;
+                _array[_head] = value;
             }
         }
 
@@ -155,13 +155,13 @@ namespace OpenHardwareMonitor.Collections
             {
                 if (Count == 0)
                     throw new InvalidOperationException();
-                return array[tail == 0 ? array.Length - 1 : tail - 1];
+                return _array[_tail == 0 ? _array.Length - 1 : _tail - 1];
             }
             set
             {
                 if (Count == 0)
                     throw new InvalidOperationException();
-                array[tail == 0 ? array.Length - 1 : tail - 1] = value;
+                _array[_tail == 0 ? _array.Length - 1 : _tail - 1] = value;
             }
         }
 
@@ -178,32 +178,32 @@ namespace OpenHardwareMonitor.Collections
         private struct Enumerator : IEnumerator<T>, IEnumerator
         {
 
-            private readonly RingCollection<T> collection;
-            private int index;
+            private readonly RingCollection<T> _collection;
+            private int _index;
 
             public Enumerator(RingCollection<T> collection)
             {
-                this.collection = collection;
-                index = -1;
+                _collection = collection;
+                _index = -1;
             }
 
             public void Dispose()
             {
-                index = -2;
+                _index = -2;
             }
 
             public void Reset()
             {
-                index = -1;
+                _index = -1;
             }
 
             public T Current
             {
                 get
                 {
-                    if (index < 0)
+                    if (_index < 0)
                         throw new InvalidOperationException();
-                    return collection[index];
+                    return _collection[_index];
                 }
             }
 
@@ -211,22 +211,22 @@ namespace OpenHardwareMonitor.Collections
             {
                 get
                 {
-                    if (index < 0)
+                    if (_index < 0)
                         throw new InvalidOperationException();
-                    return collection[index];
+                    return _collection[_index];
                 }
             }
 
             public bool MoveNext()
             {
-                if (index == -2)
+                if (_index == -2)
                     return false;
 
-                index++;
+                _index++;
 
-                if (index == collection.Count)
+                if (_index == _collection.Count)
                 {
-                    index = -2;
+                    _index = -2;
                     return false;
                 }
 

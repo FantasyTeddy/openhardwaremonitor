@@ -18,9 +18,9 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
     internal class GigabyteTAMG
     {
-        private readonly byte[] table;
+        private readonly byte[] _table;
 
-        private readonly Sensor[] sensors;
+        private readonly Sensor[] _sensors;
 
         private struct Sensor
         {
@@ -40,7 +40,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
 
         public GigabyteTAMG(byte[] table)
         {
-            this.table = table ?? throw new ArgumentNullException(nameof(table));
+            _table = table ?? throw new ArgumentNullException(nameof(table));
 
             int index = IndexOf(table, Encoding.ASCII.GetBytes("$HEALTH$"), 0);
 
@@ -57,31 +57,31 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                         int count = r.ReadInt32();
                         r.ReadInt64();
                         r.ReadInt32();
-                        sensors = new Sensor[count];
-                        for (int i = 0; i < sensors.Length; i++)
+                        _sensors = new Sensor[count];
+                        for (int i = 0; i < _sensors.Length; i++)
                         {
-                            sensors[i].Name = new string(r.ReadChars(32)).TrimEnd('\0');
-                            sensors[i].Type = (SensorType)r.ReadByte();
-                            sensors[i].Channel = r.ReadInt16();
-                            sensors[i].Channel |= r.ReadByte() << 24;
+                            _sensors[i].Name = new string(r.ReadChars(32)).TrimEnd('\0');
+                            _sensors[i].Type = (SensorType)r.ReadByte();
+                            _sensors[i].Channel = r.ReadInt16();
+                            _sensors[i].Channel |= r.ReadByte() << 24;
                             r.ReadInt64();
                             int value = r.ReadInt32();
-                            switch (sensors[i].Type)
+                            switch (_sensors[i].Type)
                             {
                                 case SensorType.Voltage:
-                                    sensors[i].Value = 1e-3f * value; break;
+                                    _sensors[i].Value = 1e-3f * value; break;
                                 default:
-                                    sensors[i].Value = value; break;
+                                    _sensors[i].Value = value; break;
                             }
                             r.ReadInt64();
                         }
                     }
-                    catch (IOException) { sensors = Array.Empty<Sensor>(); }
+                    catch (IOException) { _sensors = Array.Empty<Sensor>(); }
                 }
             }
             else
             {
-                sensors = Array.Empty<Sensor>();
+                _sensors = Array.Empty<Sensor>();
             }
         }
 
@@ -114,7 +114,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
             {
                 using (GZipStream c = new GZipStream(m, CompressionMode.Compress))
                 {
-                    c.Write(table, 0, table.Length);
+                    c.Write(_table, 0, _table.Length);
                 }
                 base64 = Convert.ToBase64String(m.ToArray());
             }
@@ -141,12 +141,12 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
         {
             StringBuilder r = new StringBuilder();
 
-            if (sensors.Length > 0)
+            if (_sensors.Length > 0)
             {
                 r.AppendLine("Gigabyte TAMG Sensors");
                 r.AppendLine();
 
-                foreach (Sensor sensor in sensors)
+                foreach (Sensor sensor in _sensors)
                 {
                     r.AppendFormat(" {0,-10}: {1,8:G6} ({2})", sensor.Name, sensor.Value,
                       sensor.Type);
@@ -155,7 +155,7 @@ namespace OpenHardwareMonitor.Hardware.Mainboard
                 r.AppendLine();
             }
 
-            if (table.Length > 0)
+            if (_table.Length > 0)
             {
                 r.AppendLine("Gigabyte TAMG Table");
                 r.AppendLine();

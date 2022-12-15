@@ -117,7 +117,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
         [StructLayout(LayoutKind.Sequential)]
         internal readonly struct NvmlDevice
         {
-            private readonly IntPtr ptr;
+            private readonly IntPtr _ptr;
         }
 
         internal enum NvmlPcieUtilCounter

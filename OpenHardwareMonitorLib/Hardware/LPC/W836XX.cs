@@ -17,12 +17,12 @@ namespace OpenHardwareMonitor.Hardware.LPC
     internal class W836XX : ISuperIO
     {
 
-        private readonly ushort address;
-        private readonly byte revision;
-        private readonly bool[] peciTemperature = Array.Empty<bool>();
-        private readonly byte[] voltageRegister = Array.Empty<byte>();
-        private readonly byte[] voltageBank = Array.Empty<byte>();
-        private readonly float voltageGain = 0.008f;
+        private readonly ushort _address;
+        private readonly byte _revision;
+        private readonly bool[] _peciTemperature = Array.Empty<bool>();
+        private readonly byte[] _voltageRegister = Array.Empty<byte>();
+        private readonly byte[] _voltageBank = Array.Empty<byte>();
+        private readonly float _voltageGain = 0.008f;
 
         // Consts
         private const ushort WINBOND_VENDOR_ID = 0x5CA3;
@@ -38,41 +38,41 @@ namespace OpenHardwareMonitor.Hardware.LPC
         private const byte VENDOR_ID_REGISTER = 0x4F;
         private const byte TEMPERATURE_SOURCE_SELECT_REG = 0x49;
 
-        private readonly byte[] TEMPERATURE_REG = new byte[] { 0x50, 0x50, 0x27 };
-        private readonly byte[] TEMPERATURE_BANK = new byte[] { 1, 2, 0 };
+        private readonly byte[] _TEMPERATURE_REG = new byte[] { 0x50, 0x50, 0x27 };
+        private readonly byte[] _TEMPERATURE_BANK = new byte[] { 1, 2, 0 };
 
-        private readonly byte[] FAN_TACHO_REG =
+        private readonly byte[] _FAN_TACHO_REG =
           new byte[] { 0x28, 0x29, 0x2A, 0x3F, 0x53 };
-        private readonly byte[] FAN_TACHO_BANK =
+        private readonly byte[] _FAN_TACHO_BANK =
           new byte[] { 0, 0, 0, 0, 5 };
-        private readonly byte[] FAN_BIT_REG =
+        private readonly byte[] _FAN_BIT_REG =
           new byte[] { 0x47, 0x4B, 0x4C, 0x59, 0x5D };
-        private readonly byte[] FAN_DIV_BIT0 = new byte[] { 36, 38, 30, 8, 10 };
-        private readonly byte[] FAN_DIV_BIT1 = new byte[] { 37, 39, 31, 9, 11 };
-        private readonly byte[] FAN_DIV_BIT2 = new byte[] { 5, 6, 7, 23, 15 };
+        private readonly byte[] _FAN_DIV_BIT0 = new byte[] { 36, 38, 30, 8, 10 };
+        private readonly byte[] _FAN_DIV_BIT1 = new byte[] { 37, 39, 31, 9, 11 };
+        private readonly byte[] _FAN_DIV_BIT2 = new byte[] { 5, 6, 7, 23, 15 };
 
         private byte ReadByte(byte bank, byte register)
         {
             Ring0.WriteIoPort(
-               (ushort)(address + ADDRESS_REGISTER_OFFSET), BANK_SELECT_REGISTER);
+               (ushort)(_address + ADDRESS_REGISTER_OFFSET), BANK_SELECT_REGISTER);
             Ring0.WriteIoPort(
-               (ushort)(address + DATA_REGISTER_OFFSET), bank);
+               (ushort)(_address + DATA_REGISTER_OFFSET), bank);
             Ring0.WriteIoPort(
-               (ushort)(address + ADDRESS_REGISTER_OFFSET), register);
+               (ushort)(_address + ADDRESS_REGISTER_OFFSET), register);
             return Ring0.ReadIoPort(
-              (ushort)(address + DATA_REGISTER_OFFSET));
+              (ushort)(_address + DATA_REGISTER_OFFSET));
         }
 
         private void WriteByte(byte bank, byte register, byte value)
         {
             Ring0.WriteIoPort(
-               (ushort)(address + ADDRESS_REGISTER_OFFSET), BANK_SELECT_REGISTER);
+               (ushort)(_address + ADDRESS_REGISTER_OFFSET), BANK_SELECT_REGISTER);
             Ring0.WriteIoPort(
-               (ushort)(address + DATA_REGISTER_OFFSET), bank);
+               (ushort)(_address + DATA_REGISTER_OFFSET), bank);
             Ring0.WriteIoPort(
-               (ushort)(address + ADDRESS_REGISTER_OFFSET), register);
+               (ushort)(_address + ADDRESS_REGISTER_OFFSET), register);
             Ring0.WriteIoPort(
-               (ushort)(address + DATA_REGISTER_OFFSET), value);
+               (ushort)(_address + DATA_REGISTER_OFFSET), value);
         }
 
         public byte? ReadGPIO(int index)
@@ -86,38 +86,38 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
         public W836XX(Chip chip, byte revision, ushort address)
         {
-            this.address = address;
-            this.revision = revision;
+            _address = address;
+            _revision = revision;
             Chip = chip;
 
             if (!IsWinbondVendor())
                 return;
 
             Temperatures = new float?[3];
-            peciTemperature = new bool[3];
+            _peciTemperature = new bool[3];
             switch (chip)
             {
                 case Chip.W83667HG:
                 case Chip.W83667HGB:
                     // note temperature sensor registers that read PECI
                     byte flag = ReadByte(0, TEMPERATURE_SOURCE_SELECT_REG);
-                    peciTemperature[0] = (flag & 0x04) != 0;
-                    peciTemperature[1] = (flag & 0x40) != 0;
-                    peciTemperature[2] = false;
+                    _peciTemperature[0] = (flag & 0x04) != 0;
+                    _peciTemperature[1] = (flag & 0x40) != 0;
+                    _peciTemperature[2] = false;
                     break;
                 case Chip.W83627DHG:
                 case Chip.W83627DHGP:
                     // note temperature sensor registers that read PECI
                     byte sel = ReadByte(0, TEMPERATURE_SOURCE_SELECT_REG);
-                    peciTemperature[0] = (sel & 0x07) != 0;
-                    peciTemperature[1] = (sel & 0x70) != 0;
-                    peciTemperature[2] = false;
+                    _peciTemperature[0] = (sel & 0x07) != 0;
+                    _peciTemperature[1] = (sel & 0x70) != 0;
+                    _peciTemperature[2] = false;
                     break;
                 default:
                     // no PECI support
-                    peciTemperature[0] = false;
-                    peciTemperature[1] = false;
-                    peciTemperature[2] = false;
+                    _peciTemperature[0] = false;
+                    _peciTemperature[1] = false;
+                    _peciTemperature[2] = false;
                     break;
             }
 
@@ -125,10 +125,10 @@ namespace OpenHardwareMonitor.Hardware.LPC
             {
                 case Chip.W83627EHF:
                     Voltages = new float?[10];
-                    voltageRegister = new byte[] {
+                    _voltageRegister = new byte[] {
             0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x50, 0x51, 0x52 };
-                    voltageBank = new byte[] { 0, 0, 0, 0, 0, 0, 0, 5, 5, 5 };
-                    voltageGain = 0.008f;
+                    _voltageBank = new byte[] { 0, 0, 0, 0, 0, 0, 0, 5, 5, 5 };
+                    _voltageGain = 0.008f;
                     Fans = new float?[5];
                     break;
                 case Chip.W83627DHG:
@@ -136,20 +136,20 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 case Chip.W83667HG:
                 case Chip.W83667HGB:
                     Voltages = new float?[9];
-                    voltageRegister = new byte[] {
+                    _voltageRegister = new byte[] {
             0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x50, 0x51 };
-                    voltageBank = new byte[] { 0, 0, 0, 0, 0, 0, 0, 5, 5 };
-                    voltageGain = 0.008f;
+                    _voltageBank = new byte[] { 0, 0, 0, 0, 0, 0, 0, 5, 5 };
+                    _voltageGain = 0.008f;
                     Fans = new float?[5];
                     break;
                 case Chip.W83627HF:
                 case Chip.W83627THF:
                 case Chip.W83687THF:
                     Voltages = new float?[7];
-                    voltageRegister = new byte[] {
+                    _voltageRegister = new byte[] {
             0x20, 0x21, 0x22, 0x23, 0x24, 0x50, 0x51 };
-                    voltageBank = new byte[] { 0, 0, 0, 0, 0, 5, 5 };
-                    voltageGain = 0.016f;
+                    _voltageBank = new byte[] { 0, 0, 0, 0, 0, 5, 5 };
+                    _voltageGain = 0.016f;
                     Fans = new float?[3];
                     break;
             }
@@ -188,7 +188,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             for (int i = 0; i < Voltages.Length; i++)
             {
-                if (voltageRegister[i] != VOLTAGE_VBAT_REG)
+                if (_voltageRegister[i] != VOLTAGE_VBAT_REG)
                 {
                     // two special VCore measurement modes for W83627THF
                     float fvalue;
@@ -196,7 +196,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                       Chip == Chip.W83687THF) && i == 0)
                     {
                         byte vrmConfiguration = ReadByte(0, 0x18);
-                        int value = ReadByte(voltageBank[i], voltageRegister[i]);
+                        int value = ReadByte(_voltageBank[i], _voltageRegister[i]);
                         if ((vrmConfiguration & 0x01) == 0)
                             fvalue = 0.016f * value; // VRM8 formula
                         else
@@ -204,8 +204,8 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     }
                     else
                     {
-                        int value = ReadByte(voltageBank[i], voltageRegister[i]);
-                        fvalue = voltageGain * value;
+                        int value = ReadByte(_voltageBank[i], _voltageRegister[i]);
+                        fvalue = _voltageGain * value;
                     }
                     if (fvalue > 0)
                         Voltages[i] = fvalue;
@@ -218,7 +218,7 @@ namespace OpenHardwareMonitor.Hardware.LPC
                     bool valid = (ReadByte(0, 0x5D) & 0x01) > 0;
                     if (valid)
                     {
-                        Voltages[i] = voltageGain * ReadByte(5, VOLTAGE_VBAT_REG);
+                        Voltages[i] = _voltageGain * ReadByte(5, VOLTAGE_VBAT_REG);
                     }
                     else
                     {
@@ -229,16 +229,16 @@ namespace OpenHardwareMonitor.Hardware.LPC
 
             for (int i = 0; i < Temperatures.Length; i++)
             {
-                int value = ((sbyte)ReadByte(TEMPERATURE_BANK[i],
-                  TEMPERATURE_REG[i])) << 1;
-                if (TEMPERATURE_BANK[i] > 0)
+                int value = ((sbyte)ReadByte(_TEMPERATURE_BANK[i],
+                  _TEMPERATURE_REG[i])) << 1;
+                if (_TEMPERATURE_BANK[i] > 0)
                 {
-                    value |= ReadByte(TEMPERATURE_BANK[i],
-                      (byte)(TEMPERATURE_REG[i] + 1)) >> 7;
+                    value |= ReadByte(_TEMPERATURE_BANK[i],
+                      (byte)(_TEMPERATURE_REG[i] + 1)) >> 7;
                 }
 
                 float temperature = value / 2.0f;
-                if (temperature <= 125 && temperature >= -55 && !peciTemperature[i])
+                if (temperature <= 125 && temperature >= -55 && !_peciTemperature[i])
                 {
                     Temperatures[i] = temperature;
                 }
@@ -249,18 +249,18 @@ namespace OpenHardwareMonitor.Hardware.LPC
             }
 
             ulong bits = 0;
-            for (int i = 0; i < FAN_BIT_REG.Length; i++)
-                bits = (bits << 8) | ReadByte(0, FAN_BIT_REG[i]);
+            for (int i = 0; i < _FAN_BIT_REG.Length; i++)
+                bits = (bits << 8) | ReadByte(0, _FAN_BIT_REG[i]);
             ulong newBits = bits;
             for (int i = 0; i < Fans.Length; i++)
             {
-                int count = ReadByte(FAN_TACHO_BANK[i], FAN_TACHO_REG[i]);
+                int count = ReadByte(_FAN_TACHO_BANK[i], _FAN_TACHO_REG[i]);
 
                 // assemble fan divisor
                 int divisorBits = (int)(
-                  (((bits >> FAN_DIV_BIT2[i]) & 1) << 2) |
-                  (((bits >> FAN_DIV_BIT1[i]) & 1) << 1) |
-                   ((bits >> FAN_DIV_BIT0[i]) & 1));
+                  (((bits >> _FAN_DIV_BIT2[i]) & 1) << 2) |
+                  (((bits >> _FAN_DIV_BIT1[i]) & 1) << 1) |
+                   ((bits >> _FAN_DIV_BIT0[i]) & 1));
                 int divisor = 1 << divisorBits;
 
                 float value = (count < 0xff) ? 1.35e6f / (count * divisor) : 0;
@@ -272,20 +272,20 @@ namespace OpenHardwareMonitor.Hardware.LPC
                 if (count < 96 && divisorBits > 0)
                     divisorBits--;
 
-                newBits = SetBit(newBits, FAN_DIV_BIT2[i], (divisorBits >> 2) & 1);
-                newBits = SetBit(newBits, FAN_DIV_BIT1[i], (divisorBits >> 1) & 1);
-                newBits = SetBit(newBits, FAN_DIV_BIT0[i], divisorBits & 1);
+                newBits = SetBit(newBits, _FAN_DIV_BIT2[i], (divisorBits >> 2) & 1);
+                newBits = SetBit(newBits, _FAN_DIV_BIT1[i], (divisorBits >> 1) & 1);
+                newBits = SetBit(newBits, _FAN_DIV_BIT0[i], divisorBits & 1);
             }
 
             // write new fan divisors
-            for (int i = FAN_BIT_REG.Length - 1; i >= 0; i--)
+            for (int i = _FAN_BIT_REG.Length - 1; i >= 0; i--)
             {
                 byte oldByte = (byte)(bits & 0xFF);
                 byte newByte = (byte)(newBits & 0xFF);
                 bits >>= 8;
                 newBits >>= 8;
                 if (oldByte != newByte)
-                    WriteByte(0, FAN_BIT_REG[i], newByte);
+                    WriteByte(0, _FAN_BIT_REG[i], newByte);
             }
 
             Ring0.ReleaseIsaBusMutex();
@@ -300,9 +300,9 @@ namespace OpenHardwareMonitor.Hardware.LPC
             r.Append("Chip ID: 0x");
             r.AppendLine(Chip.ToString("X"));
             r.Append("Chip revision: 0x");
-            r.AppendLine(revision.ToString("X", CultureInfo.InvariantCulture));
+            r.AppendLine(_revision.ToString("X", CultureInfo.InvariantCulture));
             r.Append("Base Adress: 0x");
-            r.AppendLine(address.ToString("X4", CultureInfo.InvariantCulture));
+            r.AppendLine(_address.ToString("X4", CultureInfo.InvariantCulture));
             r.AppendLine();
 
             if (!Ring0.WaitIsaBusMutex(100))

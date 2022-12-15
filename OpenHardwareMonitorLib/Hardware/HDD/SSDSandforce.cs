@@ -54,13 +54,13 @@ namespace OpenHardwareMonitor.Hardware.HDD
         SensorType.Data, 2, SmartNames.HostReads)
         };
 
-        private readonly Sensor writeAmplification;
+        private readonly Sensor _writeAmplification;
 
         public SSDSandforce(ISmart smart, string name, string firmwareRevision,
           int index, ISettings settings)
           : base(smart, name, firmwareRevision, index, smartAttributes, settings)
         {
-            writeAmplification = new Sensor("Write Amplification", 1,
+            _writeAmplification = new Sensor("Write Amplification", 1,
               SensorType.Factor, this, settings);
         }
 
@@ -80,15 +80,15 @@ namespace OpenHardwareMonitor.Hardware.HDD
             {
                 if (hostWritesToController.Value > 0)
                 {
-                    writeAmplification.Value =
+                    _writeAmplification.Value =
                       controllerWritesToNAND.Value / hostWritesToController.Value;
                 }
                 else
                 {
-                    writeAmplification.Value = 0;
+                    _writeAmplification.Value = 0;
                 }
 
-                ActivateSensor(writeAmplification);
+                ActivateSensor(_writeAmplification);
             }
         }
     }

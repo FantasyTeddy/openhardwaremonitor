@@ -16,7 +16,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
     internal class SmartAttribute
     {
 
-        private readonly RawValueConversion rawValueConversion;
+        private readonly RawValueConversion _rawValueConversion;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartAttribute"/> class.
@@ -63,7 +63,7 @@ namespace OpenHardwareMonitor.Hardware.HDD
         {
             Identifier = identifier;
             Name = name;
-            this.rawValueConversion = rawValueConversion;
+            _rawValueConversion = rawValueConversion;
             SensorType = sensorType;
             SensorChannel = sensorChannel;
             SensorName = sensorName;
@@ -88,18 +88,18 @@ namespace OpenHardwareMonitor.Hardware.HDD
 
         public ParameterDescription[] ParameterDescriptions { get; private set; }
 
-        public bool HasRawValueConversion => rawValueConversion != null;
+        public bool HasRawValueConversion => _rawValueConversion != null;
 
         public float ConvertValue(DriveAttributeValue value,
           IReadOnlyList<IParameter> parameters)
         {
-            if (rawValueConversion == null)
+            if (_rawValueConversion == null)
             {
                 return value.AttrValue;
             }
             else
             {
-                return rawValueConversion(value.RawValue, value.AttrValue, parameters);
+                return _rawValueConversion(value.RawValue, value.AttrValue, parameters);
             }
         }
 

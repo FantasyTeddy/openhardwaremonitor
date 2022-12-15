@@ -20,10 +20,10 @@ namespace OpenHardwareMonitor.Hardware
     internal class SMBIOS
     {
 
-        private readonly byte[] raw;
-        private readonly Structure[] table;
+        private readonly byte[] _raw;
+        private readonly Structure[] _table;
 
-        private readonly Version version;
+        private readonly Version _version;
 
         private static string ReadSysFS(string path)
         {
@@ -49,8 +49,8 @@ namespace OpenHardwareMonitor.Hardware
         {
             if (OperatingSystem.IsUnix)
             {
-                raw = null;
-                table = null;
+                _raw = null;
+                _table = null;
 
                 string boardVendor = ReadSysFS("/sys/class/dmi/id/board_vendor");
                 string boardName = ReadSysFS("/sys/class/dmi/id/board_name");
@@ -75,7 +75,7 @@ namespace OpenHardwareMonitor.Hardware
                 List<Structure> structureList = new List<Structure>();
                 List<MemoryDevice> memoryDeviceList = new List<MemoryDevice>();
 
-                raw = null;
+                _raw = null;
                 byte majorVersion = 0;
                 byte minorVersion = 0;
                 try
@@ -90,7 +90,7 @@ namespace OpenHardwareMonitor.Hardware
 
                     foreach (ManagementObject mo in collection)
                     {
-                        raw = (byte[])mo["SMBiosData"];
+                        _raw = (byte[])mo["SMBiosData"];
                         majorVersion = (byte)mo["SmbiosMajorVersion"];
                         minorVersion = (byte)mo["SmbiosMinorVersion"];
                         break;
@@ -99,35 +99,35 @@ namespace OpenHardwareMonitor.Hardware
                 catch { }
 
                 if (majorVersion > 0 || minorVersion > 0)
-                    version = new Version(majorVersion, minorVersion);
+                    _version = new Version(majorVersion, minorVersion);
 
-                if (raw != null && raw.Length > 0)
+                if (_raw != null && _raw.Length > 0)
                 {
                     int offset = 0;
-                    byte type = raw[offset];
-                    while (offset + 4 < raw.Length && type != 127)
+                    byte type = _raw[offset];
+                    while (offset + 4 < _raw.Length && type != 127)
                     {
 
-                        type = raw[offset];
-                        int length = raw[offset + 1];
-                        ushort handle = (ushort)((raw[offset + 2] << 8) | raw[offset + 3]);
+                        type = _raw[offset];
+                        int length = _raw[offset + 1];
+                        ushort handle = (ushort)((_raw[offset + 2] << 8) | _raw[offset + 3]);
 
-                        if (offset + length > raw.Length)
+                        if (offset + length > _raw.Length)
                             break;
                         byte[] data = new byte[length];
-                        Array.Copy(raw, offset, data, 0, length);
+                        Array.Copy(_raw, offset, data, 0, length);
                         offset += length;
 
                         List<string> stringsList = new List<string>();
-                        if (offset < raw.Length && raw[offset] == 0)
+                        if (offset < _raw.Length && _raw[offset] == 0)
                             offset++;
 
-                        while (offset < raw.Length && raw[offset] != 0)
+                        while (offset < _raw.Length && _raw[offset] != 0)
                         {
                             StringBuilder sb = new StringBuilder();
-                            while (offset < raw.Length && raw[offset] != 0)
+                            while (offset < _raw.Length && _raw[offset] != 0)
                             {
-                                sb.Append((char)raw[offset]);
+                                sb.Append((char)_raw[offset]);
                                 offset++;
                             }
                             offset++;
@@ -165,7 +165,7 @@ namespace OpenHardwareMonitor.Hardware
                 }
 
                 MemoryDevices = memoryDeviceList.ToArray();
-                table = structureList.ToArray();
+                _table = structureList.ToArray();
             }
         }
 
@@ -173,10 +173,10 @@ namespace OpenHardwareMonitor.Hardware
         {
             StringBuilder r = new StringBuilder();
 
-            if (version != null)
+            if (_version != null)
             {
                 r.Append("SMBIOS Version: ");
-                r.AppendLine(version.ToString(2));
+                r.AppendLine(_version.ToString(2));
                 r.AppendLine();
             }
 
@@ -245,9 +245,9 @@ namespace OpenHardwareMonitor.Hardware
                 r.AppendLine();
             }
 
-            if (raw != null)
+            if (_raw != null)
             {
-                string base64 = Convert.ToBase64String(raw);
+                string base64 = Convert.ToBase64String(_raw);
                 r.AppendLine("SMBIOS Table");
                 r.AppendLine();
 
@@ -283,31 +283,31 @@ namespace OpenHardwareMonitor.Hardware
 
         public class Structure
         {
-            private readonly byte[] data;
-            private readonly string[] strings;
+            private readonly byte[] _data;
+            private readonly string[] _strings;
 
             protected int GetByte(int offset)
             {
-                if (offset < data.Length && offset >= 0)
-                    return data[offset];
+                if (offset < _data.Length && offset >= 0)
+                    return _data[offset];
                 else
                     return 0;
             }
 
             protected int GetWord(int offset)
             {
-                if (offset + 1 < data.Length && offset >= 0)
-                    return (data[offset + 1] << 8) | data[offset];
+                if (offset + 1 < _data.Length && offset >= 0)
+                    return (_data[offset + 1] << 8) | _data[offset];
                 else
                     return 0;
             }
 
             protected string GetString(int offset)
             {
-                if (offset < data.Length && data[offset] > 0 &&
-                 data[offset] <= strings.Length)
+                if (offset < _data.Length && _data[offset] > 0 &&
+                 _data[offset] <= _strings.Length)
                 {
-                    return strings[data[offset] - 1];
+                    return _strings[_data[offset] - 1];
                 }
                 else
                 {
@@ -319,8 +319,8 @@ namespace OpenHardwareMonitor.Hardware
             {
                 Type = type;
                 Handle = handle;
-                this.data = data;
-                this.strings = strings;
+                _data = data;
+                _strings = strings;
             }
 
             public byte Type { get; }

@@ -17,98 +17,98 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
     internal class TBalancer : Hardware
     {
 
-        private readonly int portIndex;
-        private readonly byte protocolVersion;
-        private readonly Sensor[] digitalTemperatures = new Sensor[8];
-        private readonly Sensor[] analogTemperatures = new Sensor[4];
-        private readonly Sensor[] sensorhubTemperatures = new Sensor[6];
-        private readonly Sensor[] sensorhubFlows = new Sensor[2];
-        private readonly Sensor[] fans = new Sensor[4];
-        private readonly Sensor[] controls = new Sensor[4];
-        private readonly Sensor[] miniNGTemperatures = new Sensor[4];
-        private readonly Sensor[] miniNGFans = new Sensor[4];
-        private readonly Sensor[] miniNGControls = new Sensor[4];
-        private readonly List<ISensor> deactivating = new List<ISensor>();
+        private readonly int _portIndex;
+        private readonly byte _protocolVersion;
+        private readonly Sensor[] _digitalTemperatures = new Sensor[8];
+        private readonly Sensor[] _analogTemperatures = new Sensor[4];
+        private readonly Sensor[] _sensorhubTemperatures = new Sensor[6];
+        private readonly Sensor[] _sensorhubFlows = new Sensor[2];
+        private readonly Sensor[] _fans = new Sensor[4];
+        private readonly Sensor[] _controls = new Sensor[4];
+        private readonly Sensor[] _miniNGTemperatures = new Sensor[4];
+        private readonly Sensor[] _miniNGFans = new Sensor[4];
+        private readonly Sensor[] _miniNGControls = new Sensor[4];
+        private readonly List<ISensor> _deactivating = new List<ISensor>();
 
-        private FT_HANDLE handle;
-        private readonly byte[] data = new byte[285];
-        private byte[] primaryData = System.Array.Empty<byte>();
-        private byte[] alternativeData = System.Array.Empty<byte>();
+        private FT_HANDLE _handle;
+        private readonly byte[] _data = new byte[285];
+        private byte[] _primaryData = System.Array.Empty<byte>();
+        private byte[] _alternativeData = System.Array.Empty<byte>();
 
         public const byte STARTFLAG = 100;
         public const byte ENDFLAG = 254;
 
         private delegate void MethodDelegate();
-        private readonly MethodDelegate alternativeRequest;
+        private readonly MethodDelegate _alternativeRequest;
 
         public TBalancer(int portIndex, byte protocolVersion, ISettings settings)
           : base("T-Balancer bigNG", new Identifier("bigng",
             portIndex.ToString(CultureInfo.InvariantCulture)), settings)
         {
 
-            this.portIndex = portIndex;
-            this.protocolVersion = protocolVersion;
+            _portIndex = portIndex;
+            _protocolVersion = protocolVersion;
 
             ParameterDescription[] parameter = new[] {
         new ParameterDescription("Offset [°C]", "Temperature offset.", 0)
       };
             int offset = 0;
-            for (int i = 0; i < digitalTemperatures.Length; i++)
+            for (int i = 0; i < _digitalTemperatures.Length; i++)
             {
-                digitalTemperatures[i] = new Sensor("Digital Sensor " + i,
+                _digitalTemperatures[i] = new Sensor("Digital Sensor " + i,
                   offset + i, SensorType.Temperature, this, parameter, settings);
             }
 
-            offset += digitalTemperatures.Length;
+            offset += _digitalTemperatures.Length;
 
-            for (int i = 0; i < analogTemperatures.Length; i++)
+            for (int i = 0; i < _analogTemperatures.Length; i++)
             {
-                analogTemperatures[i] = new Sensor("Analog Sensor " + (i + 1),
+                _analogTemperatures[i] = new Sensor("Analog Sensor " + (i + 1),
                   offset + i, SensorType.Temperature, this, parameter, settings);
             }
 
-            offset += analogTemperatures.Length;
+            offset += _analogTemperatures.Length;
 
-            for (int i = 0; i < sensorhubTemperatures.Length; i++)
+            for (int i = 0; i < _sensorhubTemperatures.Length; i++)
             {
-                sensorhubTemperatures[i] = new Sensor("Sensorhub Sensor " + i,
+                _sensorhubTemperatures[i] = new Sensor("Sensorhub Sensor " + i,
                   offset + i, SensorType.Temperature, this, parameter, settings);
             }
 
-            offset += sensorhubTemperatures.Length;
+            offset += _sensorhubTemperatures.Length;
 
-            for (int i = 0; i < miniNGTemperatures.Length; i++)
+            for (int i = 0; i < _miniNGTemperatures.Length; i++)
             {
-                miniNGTemperatures[i] = new Sensor("miniNG #" + (i / 2 + 1) +
+                _miniNGTemperatures[i] = new Sensor("miniNG #" + (i / 2 + 1) +
                   " Sensor " + (i % 2 + 1), offset + i, SensorType.Temperature,
                   this, parameter, settings);
             }
 
-            offset += miniNGTemperatures.Length;
+            offset += _miniNGTemperatures.Length;
 
-            for (int i = 0; i < sensorhubFlows.Length; i++)
+            for (int i = 0; i < _sensorhubFlows.Length; i++)
             {
-                sensorhubFlows[i] = new Sensor("Flowmeter " + (i + 1),
+                _sensorhubFlows[i] = new Sensor("Flowmeter " + (i + 1),
                   i, SensorType.Flow, this, new[] {
             new ParameterDescription("Impulse Rate",
               "The impulse rate of the flowmeter in pulses/L", 509)
                   }, settings);
             }
 
-            for (int i = 0; i < controls.Length; i++)
+            for (int i = 0; i < _controls.Length; i++)
             {
-                controls[i] = new Sensor("Fan Channel " + i, i, SensorType.Control,
+                _controls[i] = new Sensor("Fan Channel " + i, i, SensorType.Control,
                   this, settings);
             }
 
-            for (int i = 0; i < miniNGControls.Length; i++)
+            for (int i = 0; i < _miniNGControls.Length; i++)
             {
-                miniNGControls[i] = new Sensor("miniNG #" + (i / 2 + 1) +
+                _miniNGControls[i] = new Sensor("miniNG #" + (i / 2 + 1) +
                   " Fan Channel " + (i % 2 + 1), 4 + i, SensorType.Control, this,
                   settings);
             }
 
-            alternativeRequest = new MethodDelegate(DelayedAlternativeRequest);
+            _alternativeRequest = new MethodDelegate(DelayedAlternativeRequest);
 
             Open();
             Update();
@@ -116,20 +116,20 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
 
         protected override void ActivateSensor(ISensor sensor)
         {
-            deactivating.Remove(sensor);
+            _deactivating.Remove(sensor);
             base.ActivateSensor(sensor);
         }
 
         protected override void DeactivateSensor(ISensor sensor)
         {
-            if (deactivating.Contains(sensor))
+            if (_deactivating.Contains(sensor))
             {
-                deactivating.Remove(sensor);
+                _deactivating.Remove(sensor);
                 base.DeactivateSensor(sensor);
             }
             else if (active.Contains(sensor))
             {
-                deactivating.Add(sensor);
+                _deactivating.Add(sensor);
             }
         }
 
@@ -137,15 +137,15 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
         {
             int offset = 1 + number * 65;
 
-            if (data[offset + 61] != ENDFLAG)
+            if (_data[offset + 61] != ENDFLAG)
                 return;
 
             for (int i = 0; i < 2; i++)
             {
-                Sensor sensor = miniNGTemperatures[number * 2 + i];
-                if (data[offset + 7 + i] > 0)
+                Sensor sensor = _miniNGTemperatures[number * 2 + i];
+                if (_data[offset + 7 + i] > 0)
                 {
-                    sensor.Value = 0.5f * data[offset + 7 + i] +
+                    sensor.Value = 0.5f * _data[offset + 7 + i] +
                       sensor.Parameters[0].Value;
                     ActivateSensor(sensor);
                 }
@@ -157,139 +157,139 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
 
             for (int i = 0; i < 2; i++)
             {
-                if (miniNGFans[number * 2 + i] == null)
+                if (_miniNGFans[number * 2 + i] == null)
                 {
-                    miniNGFans[number * 2 + i] =
+                    _miniNGFans[number * 2 + i] =
                       new Sensor("miniNG #" + (number + 1) + " Fan Channel " + (i + 1),
                       4 + number * 2 + i, SensorType.Fan, this, settings);
                 }
 
-                Sensor sensor = miniNGFans[number * 2 + i];
+                Sensor sensor = _miniNGFans[number * 2 + i];
 
-                sensor.Value = 20.0f * data[offset + 43 + 2 * i];
+                sensor.Value = 20.0f * _data[offset + 43 + 2 * i];
                 ActivateSensor(sensor);
             }
 
             for (int i = 0; i < 2; i++)
             {
-                Sensor sensor = miniNGControls[number * 2 + i];
-                sensor.Value = data[offset + 15 + i];
+                Sensor sensor = _miniNGControls[number * 2 + i];
+                sensor.Value = _data[offset + 15 + i];
                 ActivateSensor(sensor);
             }
         }
 
         private void ReadData()
         {
-            FTD2XX.Read(handle, data);
+            FTD2XX.Read(_handle, _data);
 
-            if (data[0] != STARTFLAG)
+            if (_data[0] != STARTFLAG)
             {
-                FTD2XX.FT_Purge(handle, FT_PURGE.FT_PURGE_RX);
+                FTD2XX.FT_Purge(_handle, FT_PURGE.FT_PURGE_RX);
                 return;
             }
 
-            if (data[1] == 255 || data[1] == 88)
+            if (_data[1] == 255 || _data[1] == 88)
             { // bigNG
 
-                if (data[274] != protocolVersion)
+                if (_data[274] != _protocolVersion)
                     return;
 
-                if (primaryData.Length == 0)
-                    primaryData = new byte[data.Length];
-                data.CopyTo(primaryData, 0);
+                if (_primaryData.Length == 0)
+                    _primaryData = new byte[_data.Length];
+                _data.CopyTo(_primaryData, 0);
 
-                for (int i = 0; i < digitalTemperatures.Length; i++)
+                for (int i = 0; i < _digitalTemperatures.Length; i++)
                 {
-                    if (data[238 + i] > 0)
+                    if (_data[238 + i] > 0)
                     {
-                        digitalTemperatures[i].Value = 0.5f * data[238 + i] +
-                          digitalTemperatures[i].Parameters[0].Value;
-                        ActivateSensor(digitalTemperatures[i]);
+                        _digitalTemperatures[i].Value = 0.5f * _data[238 + i] +
+                          _digitalTemperatures[i].Parameters[0].Value;
+                        ActivateSensor(_digitalTemperatures[i]);
                     }
                     else
                     {
-                        DeactivateSensor(digitalTemperatures[i]);
+                        DeactivateSensor(_digitalTemperatures[i]);
                     }
                 }
 
-                for (int i = 0; i < analogTemperatures.Length; i++)
+                for (int i = 0; i < _analogTemperatures.Length; i++)
                 {
-                    if (data[260 + i] > 0)
+                    if (_data[260 + i] > 0)
                     {
-                        analogTemperatures[i].Value = 0.5f * data[260 + i] +
-                          analogTemperatures[i].Parameters[0].Value;
-                        ActivateSensor(analogTemperatures[i]);
+                        _analogTemperatures[i].Value = 0.5f * _data[260 + i] +
+                          _analogTemperatures[i].Parameters[0].Value;
+                        ActivateSensor(_analogTemperatures[i]);
                     }
                     else
                     {
-                        DeactivateSensor(analogTemperatures[i]);
+                        DeactivateSensor(_analogTemperatures[i]);
                     }
                 }
 
-                for (int i = 0; i < sensorhubTemperatures.Length; i++)
+                for (int i = 0; i < _sensorhubTemperatures.Length; i++)
                 {
-                    if (data[246 + i] > 0)
+                    if (_data[246 + i] > 0)
                     {
-                        sensorhubTemperatures[i].Value = 0.5f * data[246 + i] +
-                          sensorhubTemperatures[i].Parameters[0].Value;
-                        ActivateSensor(sensorhubTemperatures[i]);
+                        _sensorhubTemperatures[i].Value = 0.5f * _data[246 + i] +
+                          _sensorhubTemperatures[i].Parameters[0].Value;
+                        ActivateSensor(_sensorhubTemperatures[i]);
                     }
                     else
                     {
-                        DeactivateSensor(sensorhubTemperatures[i]);
+                        DeactivateSensor(_sensorhubTemperatures[i]);
                     }
                 }
 
-                for (int i = 0; i < sensorhubFlows.Length; i++)
+                for (int i = 0; i < _sensorhubFlows.Length; i++)
                 {
-                    if (data[231 + i] > 0 && data[234] > 0)
+                    if (_data[231 + i] > 0 && _data[234] > 0)
                     {
-                        float pulsesPerSecond = data[231 + i] * 4.0f / data[234];
-                        float pulsesPerLiter = sensorhubFlows[i].Parameters[0].Value;
-                        sensorhubFlows[i].Value = pulsesPerSecond * 3600 / pulsesPerLiter;
-                        ActivateSensor(sensorhubFlows[i]);
+                        float pulsesPerSecond = _data[231 + i] * 4.0f / _data[234];
+                        float pulsesPerLiter = _sensorhubFlows[i].Parameters[0].Value;
+                        _sensorhubFlows[i].Value = pulsesPerSecond * 3600 / pulsesPerLiter;
+                        ActivateSensor(_sensorhubFlows[i]);
                     }
                     else
                     {
-                        DeactivateSensor(sensorhubFlows[i]);
+                        DeactivateSensor(_sensorhubFlows[i]);
                     }
                 }
 
-                for (int i = 0; i < fans.Length; i++)
+                for (int i = 0; i < _fans.Length; i++)
                 {
-                    float maxRPM = 11.5f * ((data[149 + 2 * i] << 8) | data[148 + 2 * i]);
+                    float maxRPM = 11.5f * ((_data[149 + 2 * i] << 8) | _data[148 + 2 * i]);
 
-                    if (fans[i] == null)
+                    if (_fans[i] == null)
                     {
-                        fans[i] = new Sensor("Fan Channel " + i, i, SensorType.Fan,
+                        _fans[i] = new Sensor("Fan Channel " + i, i, SensorType.Fan,
                           this, new[] { new ParameterDescription("MaxRPM",
                   "Maximum revolutions per minute (RPM) of the fan.", maxRPM)
                           }, settings);
                     }
 
                     float value;
-                    if ((data[136] & (1 << i)) == 0) // pwm mode
-                        value = 0.02f * data[137 + i];
+                    if ((_data[136] & (1 << i)) == 0) // pwm mode
+                        value = 0.02f * _data[137 + i];
                     else // analog mode
-                        value = 0.01f * data[141 + i];
+                        value = 0.01f * _data[141 + i];
 
-                    fans[i].Value = fans[i].Parameters[0].Value * value;
-                    ActivateSensor(fans[i]);
+                    _fans[i].Value = _fans[i].Parameters[0].Value * value;
+                    ActivateSensor(_fans[i]);
 
-                    controls[i].Value = 100 * value;
-                    ActivateSensor(controls[i]);
+                    _controls[i].Value = 100 * value;
+                    ActivateSensor(_controls[i]);
                 }
 
             }
-            else if (data[1] == 253)
+            else if (_data[1] == 253)
             { // miniNG #1
-                if (alternativeData.Length == 0)
-                    alternativeData = new byte[data.Length];
-                data.CopyTo(alternativeData, 0);
+                if (_alternativeData.Length == 0)
+                    _alternativeData = new byte[_data.Length];
+                _data.CopyTo(_alternativeData, 0);
 
                 ReadminiNG(0);
 
-                if (data[66] == 253) // miniNG #2
+                if (_data[66] == 253) // miniNG #2
                     ReadminiNG(1);
             }
         }
@@ -303,7 +303,7 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
             r.AppendLine("T-Balancer bigNG");
             r.AppendLine();
             r.Append("Port Index: ");
-            r.AppendLine(portIndex.ToString(CultureInfo.InvariantCulture));
+            r.AppendLine(_portIndex.ToString(CultureInfo.InvariantCulture));
             r.AppendLine();
 
             r.AppendLine("Primary System Information Answer");
@@ -318,17 +318,17 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
                 for (int j = 0; j <= 0xF; j++)
                 {
                     int index = (i << 4) | j;
-                    if (index < primaryData.Length)
+                    if (index < _primaryData.Length)
                     {
                         r.Append(' ');
-                        r.Append(primaryData[index].ToString("X2", CultureInfo.InvariantCulture));
+                        r.Append(_primaryData[index].ToString("X2", CultureInfo.InvariantCulture));
                     }
                 }
                 r.AppendLine();
             }
             r.AppendLine();
 
-            if (alternativeData.Length > 0)
+            if (_alternativeData.Length > 0)
             {
                 r.AppendLine("Alternative System Information Answer");
                 r.AppendLine();
@@ -342,10 +342,10 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
                     for (int j = 0; j <= 0xF; j++)
                     {
                         int index = (i << 4) | j;
-                        if (index < alternativeData.Length)
+                        if (index < _alternativeData.Length)
                         {
                             r.Append(' ');
-                            r.Append(alternativeData[index].ToString("X2", CultureInfo.InvariantCulture));
+                            r.Append(_alternativeData[index].ToString("X2", CultureInfo.InvariantCulture));
                         }
                     }
                     r.AppendLine();
@@ -359,34 +359,34 @@ namespace OpenHardwareMonitor.Hardware.TBalancer
         private void DelayedAlternativeRequest()
         {
             System.Threading.Thread.Sleep(500);
-            FTD2XX.Write(handle, new byte[] { 0x37 });
+            FTD2XX.Write(_handle, new byte[] { 0x37 });
         }
 
         public void Open()
         {
-            FTD2XX.FT_Open(portIndex, out handle);
-            FTD2XX.FT_SetBaudRate(handle, 19200);
-            FTD2XX.FT_SetDataCharacteristics(handle, 8, 1, 0);
-            FTD2XX.FT_SetFlowControl(handle, FT_FLOW_CONTROL.FT_FLOW_RTS_CTS, 0x11,
+            FTD2XX.FT_Open(_portIndex, out _handle);
+            FTD2XX.FT_SetBaudRate(_handle, 19200);
+            FTD2XX.FT_SetDataCharacteristics(_handle, 8, 1, 0);
+            FTD2XX.FT_SetFlowControl(_handle, FT_FLOW_CONTROL.FT_FLOW_RTS_CTS, 0x11,
               0x13);
-            FTD2XX.FT_SetTimeouts(handle, 1000, 1000);
-            FTD2XX.FT_Purge(handle, FT_PURGE.FT_PURGE_ALL);
+            FTD2XX.FT_SetTimeouts(_handle, 1000, 1000);
+            FTD2XX.FT_Purge(_handle, FT_PURGE.FT_PURGE_ALL);
         }
 
         public override void Update()
         {
-            while (FTD2XX.BytesToRead(handle) >= 285)
+            while (FTD2XX.BytesToRead(_handle) >= 285)
                 ReadData();
-            if (FTD2XX.BytesToRead(handle) == 1)
-                FTD2XX.ReadByte(handle);
+            if (FTD2XX.BytesToRead(_handle) == 1)
+                FTD2XX.ReadByte(_handle);
 
-            FTD2XX.Write(handle, new byte[] { 0x38 });
-            alternativeRequest.BeginInvoke(null, null);
+            FTD2XX.Write(_handle, new byte[] { 0x38 });
+            _alternativeRequest.BeginInvoke(null, null);
         }
 
         public override void Close()
         {
-            FTD2XX.FT_Close(handle);
+            FTD2XX.FT_Close(_handle);
             base.Close();
         }
 

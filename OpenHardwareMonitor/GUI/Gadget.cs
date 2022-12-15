@@ -17,12 +17,12 @@ namespace OpenHardwareMonitor.GUI
     public abstract class Gadget : IDisposable
     {
 
-        private readonly GadgetWindow window;
+        private readonly GadgetWindow _window;
 
         public Gadget()
         {
-            window = new GadgetWindow();
-            window.Paint += (sender, e) =>
+            _window = new GadgetWindow();
+            _window.Paint += (sender, e) =>
             {
                 OnPaint(e);
             };
@@ -38,78 +38,78 @@ namespace OpenHardwareMonitor.GUI
         {
             if (disposing)
             {
-                window.Dispose();
+                _window.Dispose();
             }
         }
 
         public Point Location
         {
-            get => window.Location;
-            set => window.Location = value;
+            get => _window.Location;
+            set => _window.Location = value;
         }
 
         public event EventHandler LocationChanged
         {
-            add => window.LocationChanged += value;
-            remove => window.LocationChanged -= value;
+            add => _window.LocationChanged += value;
+            remove => _window.LocationChanged -= value;
         }
 
         public virtual Size Size
         {
-            get => window.Size;
-            set => window.Size = value;
+            get => _window.Size;
+            set => _window.Size = value;
         }
 
         public event EventHandler SizeChanged
         {
-            add => window.SizeChanged += value;
-            remove => window.SizeChanged -= value;
+            add => _window.SizeChanged += value;
+            remove => _window.SizeChanged -= value;
         }
 
         public byte Opacity
         {
-            get => window.Opacity;
-            set => window.Opacity = value;
+            get => _window.Opacity;
+            set => _window.Opacity = value;
         }
 
         public bool LockPositionAndSize
         {
-            get => window.LockPositionAndSize;
-            set => window.LockPositionAndSize = value;
+            get => _window.LockPositionAndSize;
+            set => _window.LockPositionAndSize = value;
         }
 
         public bool AlwaysOnTop
         {
-            get => window.AlwaysOnTop;
-            set => window.AlwaysOnTop = value;
+            get => _window.AlwaysOnTop;
+            set => _window.AlwaysOnTop = value;
         }
 
         public ContextMenu ContextMenu
         {
-            get => window.ContextMenu;
-            set => window.ContextMenu = value;
+            get => _window.ContextMenu;
+            set => _window.ContextMenu = value;
         }
 
         public event EventHandler<HitTestEventArgs> HitTest
         {
-            add => window.HitTest += value;
-            remove => window.HitTest -= value;
+            add => _window.HitTest += value;
+            remove => _window.HitTest -= value;
         }
 
         public event MouseEventHandler MouseDoubleClick
         {
-            add => window.MouseDoubleClick += value;
-            remove => window.MouseDoubleClick -= value;
+            add => _window.MouseDoubleClick += value;
+            remove => _window.MouseDoubleClick -= value;
         }
 
         public bool Visible
         {
-            get => window.Visible;
+            get => _window.Visible;
             set
             {
-                if (value != window.Visible)
+                if (value != _window.Visible)
                 {
-                    window.Visible = value;
+                    _window.Visible = value;
                     VisibleChanged?.Invoke(this, EventArgs.Empty);
                     if (value)
                         Redraw();
@@ -121,7 +121,7 @@ namespace OpenHardwareMonitor.GUI
 
         public void Redraw()
         {
-            window.Redraw();
+            _window.Redraw();
         }
 
         protected abstract void OnPaint(PaintEventArgs e);

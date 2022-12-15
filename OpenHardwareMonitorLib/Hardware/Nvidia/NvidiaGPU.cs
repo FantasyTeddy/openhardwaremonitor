@@ -18,37 +18,37 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
     internal class NvidiaGPU : Hardware
     {
 
-        private readonly int adapterIndex;
-        private readonly NvPhysicalGpuHandle handle;
-        private readonly NvDisplayHandle? displayHandle;
-        private readonly NVML.NvmlDevice? device;
+        private readonly int _adapterIndex;
+        private readonly NvPhysicalGpuHandle _handle;
+        private readonly NvDisplayHandle? _displayHandle;
+        private readonly NVML.NvmlDevice? _device;
 
-        private readonly Sensor[] temperatures;
-        private readonly Sensor fan;
-        private readonly Sensor[] clocks;
-        private readonly Sensor[] loads;
-        private readonly Sensor control;
-        private readonly Sensor memoryLoad;
-        private readonly Sensor memoryUsed;
-        private readonly Sensor memoryFree;
-        private readonly Sensor memoryAvail;
-        private readonly Sensor power;
-        private readonly Sensor pcieThroughputRx;
-        private readonly Sensor pcieThroughputTx;
-        private readonly Control fanControl;
+        private readonly Sensor[] _temperatures;
+        private readonly Sensor _fan;
+        private readonly Sensor[] _clocks;
+        private readonly Sensor[] _loads;
+        private readonly Sensor _control;
+        private readonly Sensor _memoryLoad;
+        private readonly Sensor _memoryUsed;
+        private readonly Sensor _memoryFree;
+        private readonly Sensor _memoryAvail;
+        private readonly Sensor _power;
+        private readonly Sensor _pcieThroughputRx;
+        private readonly Sensor _pcieThroughputTx;
+        private readonly Control _fanControl;
 
         public NvidiaGPU(int adapterIndex, NvPhysicalGpuHandle handle,
           NvDisplayHandle? displayHandle, ISettings settings)
           : base(GetName(handle), new Identifier("nvidiagpu",
               adapterIndex.ToString(CultureInfo.InvariantCulture)), settings)
         {
-            this.adapterIndex = adapterIndex;
-            this.handle = handle;
-            this.displayHandle = displayHandle;
+            _adapterIndex = adapterIndex;
+            _handle = handle;
+            _displayHandle = displayHandle;
 
             NvGPUThermalSettings thermalSettings = GetThermalSettings();
-            temperatures = new Sensor[thermalSettings.Count];
-            for (int i = 0; i < temperatures.Length; i++)
+            _temperatures = new Sensor[thermalSettings.Count];
+            for (int i = 0; i < _temperatures.Length; i++)
             {
                 NvSensor sensor = thermalSettings.Sensor[i];
                 string name;
@@ -61,41 +61,41 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                     case NvThermalTarget.UNKNOWN: name = "GPU Unknown"; break;
                     default: name = "GPU"; break;
                 }
-                temperatures[i] = new Sensor(name, i, SensorType.Temperature, this,
+                _temperatures[i] = new Sensor(name, i, SensorType.Temperature, this,
                   Array.Empty<ParameterDescription>(), settings);
-                ActivateSensor(temperatures[i]);
+                ActivateSensor(_temperatures[i]);
             }
 
-            fan = new Sensor("GPU", 0, SensorType.Fan, this, settings);
+            _fan = new Sensor("GPU", 0, SensorType.Fan, this, settings);
 
-            clocks = new Sensor[3];
-            clocks[0] = new Sensor("GPU Core", 0, SensorType.Clock, this, settings);
-            clocks[1] = new Sensor("GPU Memory", 1, SensorType.Clock, this, settings);
-            clocks[2] = new Sensor("GPU Shader", 2, SensorType.Clock, this, settings);
-            for (int i = 0; i < clocks.Length; i++)
-                ActivateSensor(clocks[i]);
+            _clocks = new Sensor[3];
+            _clocks[0] = new Sensor("GPU Core", 0, SensorType.Clock, this, settings);
+            _clocks[1] = new Sensor("GPU Memory", 1, SensorType.Clock, this, settings);
+            _clocks[2] = new Sensor("GPU Shader", 2, SensorType.Clock, this, settings);
+            for (int i = 0; i < _clocks.Length; i++)
+                ActivateSensor(_clocks[i]);
 
-            loads = new Sensor[4];
-            loads[0] = new Sensor("GPU Core", 0, SensorType.Load, this, settings);
-            loads[1] = new Sensor("GPU Frame Buffer", 1, SensorType.Load, this, settings);
-            loads[2] = new Sensor("GPU Video Engine", 2, SensorType.Load, this, settings);
-            loads[3] = new Sensor("GPU Bus Interface", 3, SensorType.Load, this, settings);
-            memoryLoad = new Sensor("GPU Memory", 4, SensorType.Load, this, settings);
-            memoryFree = new Sensor("GPU Memory Free", 1, SensorType.SmallData, this, settings);
-            memoryUsed = new Sensor("GPU Memory Used", 2, SensorType.SmallData, this, settings);
-            memoryAvail = new Sensor("GPU Memory Total", 3, SensorType.SmallData, this, settings);
-            control = new Sensor("GPU Fan", 0, SensorType.Control, this, settings);
+            _loads = new Sensor[4];
+            _loads[0] = new Sensor("GPU Core", 0, SensorType.Load, this, settings);
+            _loads[1] = new Sensor("GPU Frame Buffer", 1, SensorType.Load, this, settings);
+            _loads[2] = new Sensor("GPU Video Engine", 2, SensorType.Load, this, settings);
+            _loads[3] = new Sensor("GPU Bus Interface", 3, SensorType.Load, this, settings);
+            _memoryLoad = new Sensor("GPU Memory", 4, SensorType.Load, this, settings);
+            _memoryFree = new Sensor("GPU Memory Free", 1, SensorType.SmallData, this, settings);
+            _memoryUsed = new Sensor("GPU Memory Used", 2, SensorType.SmallData, this, settings);
+            _memoryAvail = new Sensor("GPU Memory Total", 3, SensorType.SmallData, this, settings);
+            _control = new Sensor("GPU Fan", 0, SensorType.Control, this, settings);
 
             NvGPUCoolerSettings coolerSettings = GetCoolerSettings();
             if (coolerSettings.Count > 0)
             {
-                fanControl = new Control(control, settings,
+                _fanControl = new Control(_control, settings,
                   coolerSettings.Cooler[0].DefaultMin,
                   coolerSettings.Cooler[0].DefaultMax);
-                fanControl.ControlModeChanged += ControlModeChanged;
-                fanControl.SoftwareControlValueChanged += SoftwareControlValueChanged;
-                ControlModeChanged(fanControl);
-                control.Control = fanControl;
+                _fanControl.ControlModeChanged += ControlModeChanged;
+                _fanControl.SoftwareControlValueChanged += SoftwareControlValueChanged;
+                ControlModeChanged(_fanControl);
+                _control.Control = _fanControl;
             }
 
             if (NVML.IsInitialized)
@@ -108,11 +108,11 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                       "0000:" + busId.ToString("X2") + ":00.0", out NVML.NvmlDevice result)
                       == NVML.NvmlReturn.Success)
                     {
-                        device = result;
-                        power = new Sensor("GPU Power", 0, SensorType.Power, this, settings);
-                        pcieThroughputRx = new Sensor("GPU PCIE Rx", 0,
+                        _device = result;
+                        _power = new Sensor("GPU Power", 0, SensorType.Power, this, settings);
+                        _pcieThroughputRx = new Sensor("GPU PCIE Rx", 0,
                           SensorType.Throughput, this, settings);
-                        pcieThroughputTx = new Sensor("GPU PCIE Tx", 1,
+                        _pcieThroughputTx = new Sensor("GPU PCIE Tx", 1,
                           SensorType.Throughput, this, settings);
                     }
                 }
@@ -144,7 +144,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 Sensor = new NvSensor[NVAPI.MAX_THERMAL_SENSORS_PER_GPU]
             };
             if (!(NVAPI.NvAPI_GPU_GetThermalSettings != null &&
-              NVAPI.NvAPI_GPU_GetThermalSettings(handle, (int)NvThermalTarget.ALL,
+              NVAPI.NvAPI_GPU_GetThermalSettings(_handle, (int)NvThermalTarget.ALL,
                 ref settings) == NvStatus.OK))
             {
                 settings.Count = 0;
@@ -160,7 +160,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 Cooler = new NvCooler[NVAPI.MAX_COOLER_PER_GPU]
             };
             if (!(NVAPI.NvAPI_GPU_GetCoolerSettings != null &&
-              NVAPI.NvAPI_GPU_GetCoolerSettings(handle, 0,
+              NVAPI.NvAPI_GPU_GetCoolerSettings(_handle, 0,
                 ref settings) == NvStatus.OK))
             {
                 settings.Count = 0;
@@ -178,7 +178,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             };
 
             if (!(NVAPI.NvAPI_GPU_ClientFanCoolersGetStatus != null &&
-               NVAPI.NvAPI_GPU_ClientFanCoolersGetStatus(handle, ref coolers)
+               NVAPI.NvAPI_GPU_ClientFanCoolersGetStatus(_handle, ref coolers)
                == NvStatus.OK))
             {
                 coolers.Count = 0;
@@ -194,7 +194,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 Clock = new uint[NVAPI.MAX_CLOCKS_PER_GPU]
             };
             if (NVAPI.NvAPI_GPU_GetAllClocks != null &&
-              NVAPI.NvAPI_GPU_GetAllClocks(handle, ref allClocks) == NvStatus.OK)
+              NVAPI.NvAPI_GPU_GetAllClocks(_handle, ref allClocks) == NvStatus.OK)
             {
                 return allClocks.Clock;
             }
@@ -204,31 +204,31 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
         public override void Update()
         {
             NvGPUThermalSettings settings = GetThermalSettings();
-            foreach (Sensor sensor in temperatures)
+            foreach (Sensor sensor in _temperatures)
                 sensor.Value = settings.Sensor[sensor.Index].CurrentTemp;
 
             bool tachReadingOk = false;
             if (NVAPI.NvAPI_GPU_GetTachReading != null &&
-              NVAPI.NvAPI_GPU_GetTachReading(handle, out int fanValue) == NvStatus.OK)
+              NVAPI.NvAPI_GPU_GetTachReading(_handle, out int fanValue) == NvStatus.OK)
             {
-                fan.Value = fanValue;
-                ActivateSensor(fan);
+                _fan.Value = fanValue;
+                ActivateSensor(_fan);
                 tachReadingOk = true;
             }
 
             uint[] values = GetClocks();
             if (values != null)
             {
-                clocks[1].Value = 0.001f * values[8];
+                _clocks[1].Value = 0.001f * values[8];
                 if (values[30] != 0)
                 {
-                    clocks[0].Value = 0.0005f * values[30];
-                    clocks[2].Value = 0.001f * values[30];
+                    _clocks[0].Value = 0.0005f * values[30];
+                    _clocks[2].Value = 0.001f * values[30];
                 }
                 else
                 {
-                    clocks[0].Value = 0.001f * values[0];
-                    clocks[2].Value = 0.001f * values[14];
+                    _clocks[0].Value = 0.001f * values[0];
+                    _clocks[2].Value = 0.001f * values[14];
                 }
             }
 
@@ -239,14 +239,14 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
               new NvUtilizationDomainEx[NVAPI.NVAPI_MAX_GPU_UTILIZATIONS]
             };
             if (NVAPI.NvAPI_GPU_GetDynamicPstatesInfoEx != null &&
-              NVAPI.NvAPI_GPU_GetDynamicPstatesInfoEx(handle, ref infoEx) == NvStatus.OK)
+              NVAPI.NvAPI_GPU_GetDynamicPstatesInfoEx(_handle, ref infoEx) == NvStatus.OK)
             {
-                for (int i = 0; i < loads.Length; i++)
+                for (int i = 0; i < _loads.Length; i++)
                 {
                     if (infoEx.UtilizationDomains[i].Present)
                     {
-                        loads[i].Value = infoEx.UtilizationDomains[i].Percentage;
-                        ActivateSensor(loads[i]);
+                        _loads[i].Value = infoEx.UtilizationDomains[i].Percentage;
+                        ActivateSensor(_loads[i]);
                     }
                 }
             }
@@ -259,14 +259,14 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                   new NvUtilizationDomain[NVAPI.NVAPI_MAX_GPU_UTILIZATIONS]
                 };
                 if (NVAPI.NvAPI_GPU_GetDynamicPstatesInfo != null &&
-                  NVAPI.NvAPI_GPU_GetDynamicPstatesInfo(handle, ref info) == NvStatus.OK)
+                  NVAPI.NvAPI_GPU_GetDynamicPstatesInfo(_handle, ref info) == NvStatus.OK)
                 {
-                    for (int i = 0; i < loads.Length; i++)
+                    for (int i = 0; i < _loads.Length; i++)
                     {
                         if (info.UtilizationDomains[i].Present)
                         {
-                            loads[i].Value = info.UtilizationDomains[i].Percentage;
-                            ActivateSensor(loads[i]);
+                            _loads[i].Value = info.UtilizationDomains[i].Percentage;
+                            ActivateSensor(_loads[i]);
                         }
                     }
                 }
@@ -276,8 +276,8 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             bool coolerSettingsOk = false;
             if (coolerSettings.Count > 0)
             {
-                control.Value = coolerSettings.Cooler[0].CurrentLevel;
-                ActivateSensor(control);
+                _control.Value = coolerSettings.Cooler[0].CurrentLevel;
+                ActivateSensor(_control);
                 coolerSettingsOk = true;
             }
 
@@ -288,14 +288,14 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 {
                     if (!coolerSettingsOk)
                     {
-                        control.Value = coolersStatus.Items[0].CurrentLevel;
-                        ActivateSensor(control);
+                        _control.Value = coolersStatus.Items[0].CurrentLevel;
+                        ActivateSensor(_control);
                         coolerSettingsOk = true;
                     }
                     if (!tachReadingOk)
                     {
-                        fan.Value = coolersStatus.Items[0].CurrentRpm;
-                        ActivateSensor(fan);
+                        _fan.Value = coolersStatus.Items[0].CurrentRpm;
+                        ActivateSensor(_fan);
                         tachReadingOk = true;
                     }
                 }
@@ -306,52 +306,52 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 Version = NVAPI.DISPLAY_DRIVER_MEMORY_INFO_VER,
                 Values = new uint[NVAPI.MAX_MEMORY_VALUES_PER_GPU]
             };
-            if (NVAPI.NvAPI_GetDisplayDriverMemoryInfo != null && displayHandle.HasValue &&
-              NVAPI.NvAPI_GetDisplayDriverMemoryInfo(displayHandle.Value, ref memoryInfo) ==
+            if (NVAPI.NvAPI_GetDisplayDriverMemoryInfo != null && _displayHandle.HasValue &&
+              NVAPI.NvAPI_GetDisplayDriverMemoryInfo(_displayHandle.Value, ref memoryInfo) ==
               NvStatus.OK)
             {
                 uint totalMemory = memoryInfo.Values[0];
                 uint freeMemory = memoryInfo.Values[4];
                 float usedMemory = Math.Max(totalMemory - freeMemory, 0);
-                memoryFree.Value = (float)freeMemory / 1024;
-                memoryAvail.Value = (float)totalMemory / 1024;
-                memoryUsed.Value = usedMemory / 1024;
-                memoryLoad.Value = 100f * usedMemory / totalMemory;
-                ActivateSensor(memoryAvail);
-                ActivateSensor(memoryUsed);
-                ActivateSensor(memoryFree);
-                ActivateSensor(memoryLoad);
+                _memoryFree.Value = (float)freeMemory / 1024;
+                _memoryAvail.Value = (float)totalMemory / 1024;
+                _memoryUsed.Value = usedMemory / 1024;
+                _memoryLoad.Value = 100f * usedMemory / totalMemory;
+                ActivateSensor(_memoryAvail);
+                ActivateSensor(_memoryUsed);
+                ActivateSensor(_memoryFree);
+                ActivateSensor(_memoryLoad);
             }
 
-            if (power != null)
+            if (_power != null)
             {
-                if (NVML.NvmlDeviceGetPowerUsage(device.Value, out int powerValue)
+                if (NVML.NvmlDeviceGetPowerUsage(_device.Value, out int powerValue)
                   == NVML.NvmlReturn.Success)
                 {
-                    power.Value = powerValue * 0.001f;
-                    ActivateSensor(power);
+                    _power.Value = powerValue * 0.001f;
+                    ActivateSensor(_power);
                 }
             }
 
-            if (pcieThroughputRx != null)
+            if (_pcieThroughputRx != null)
             {
-                if (NVML.NvmlDeviceGetPcieThroughput(device.Value,
+                if (NVML.NvmlDeviceGetPcieThroughput(_device.Value,
                   NVML.NvmlPcieUtilCounter.RxBytes, out uint value)
                   == NVML.NvmlReturn.Success)
                 {
-                    pcieThroughputRx.Value = value * (1.0f / 0x400);
-                    ActivateSensor(pcieThroughputRx);
+                    _pcieThroughputRx.Value = value * (1.0f / 0x400);
+                    ActivateSensor(_pcieThroughputRx);
                 }
             }
 
-            if (pcieThroughputTx != null)
+            if (_pcieThroughputTx != null)
             {
-                if (NVML.NvmlDeviceGetPcieThroughput(device.Value,
+                if (NVML.NvmlDeviceGetPcieThroughput(_device.Value,
                   NVML.NvmlPcieUtilCounter.TxBytes, out uint value)
                   == NVML.NvmlReturn.Success)
                 {
-                    pcieThroughputTx.Value = value * (1.0f / 0x400);
-                    ActivateSensor(pcieThroughputTx);
+                    _pcieThroughputTx.Value = value * (1.0f / 0x400);
+                    ActivateSensor(_pcieThroughputTx);
                 }
             }
         }
@@ -364,15 +364,15 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             r.AppendLine();
 
             r.AppendFormat("Name: {0}{1}", name, Environment.NewLine);
-            r.AppendFormat("Index: {0}{1}", adapterIndex, Environment.NewLine);
+            r.AppendFormat("Index: {0}{1}", _adapterIndex, Environment.NewLine);
 
-            if (displayHandle.HasValue && NVAPI.NvAPI_GetDisplayDriverVersion != null)
+            if (_displayHandle.HasValue && NVAPI.NvAPI_GetDisplayDriverVersion != null)
             {
                 NvDisplayDriverVersion driverVersion = new NvDisplayDriverVersion
                 {
                     Version = NVAPI.DISPLAY_DRIVER_VERSION_VER
                 };
-                if (NVAPI.NvAPI_GetDisplayDriverVersion(displayHandle.Value,
+                if (NVAPI.NvAPI_GetDisplayDriverVersion(_displayHandle.Value,
                   ref driverVersion) == NvStatus.OK)
                 {
                     r.Append("Driver Version: ");
@@ -390,7 +390,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             if (NVAPI.NvAPI_GPU_GetPCIIdentifiers != null)
             {
 
-                NvStatus status = NVAPI.NvAPI_GPU_GetPCIIdentifiers(handle,
+                NvStatus status = NVAPI.NvAPI_GPU_GetPCIIdentifiers(_handle,
                   out uint deviceId, out uint subSystemId, out uint revisionId, out uint extDeviceId);
 
                 if (status == NvStatus.OK)
@@ -416,7 +416,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                     Sensor = new NvSensor[NVAPI.MAX_THERMAL_SENSORS_PER_GPU]
                 };
 
-                NvStatus status = NVAPI.NvAPI_GPU_GetThermalSettings(handle,
+                NvStatus status = NVAPI.NvAPI_GPU_GetThermalSettings(_handle,
                   (int)NvThermalTarget.ALL, ref settings);
 
                 r.AppendLine("Thermal Settings");
@@ -452,7 +452,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                     Version = NVAPI.GPU_CLOCKS_VER,
                     Clock = new uint[NVAPI.MAX_CLOCKS_PER_GPU]
                 };
-                NvStatus status = NVAPI.NvAPI_GPU_GetAllClocks(handle, ref allClocks);
+                NvStatus status = NVAPI.NvAPI_GPU_GetAllClocks(_handle, ref allClocks);
 
                 r.AppendLine("Clocks");
                 r.AppendLine();
@@ -477,7 +477,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
 
             if (NVAPI.NvAPI_GPU_GetTachReading != null)
             {
-                NvStatus status = NVAPI.NvAPI_GPU_GetTachReading(handle, out int tachValue);
+                NvStatus status = NVAPI.NvAPI_GPU_GetTachReading(_handle, out int tachValue);
 
                 r.AppendLine("Tachometer");
                 r.AppendLine();
@@ -501,7 +501,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                     UtilizationDomains =
                   new NvUtilizationDomainEx[NVAPI.NVAPI_MAX_GPU_UTILIZATIONS]
                 };
-                NvStatus status = NVAPI.NvAPI_GPU_GetDynamicPstatesInfoEx(handle, ref info);
+                NvStatus status = NVAPI.NvAPI_GPU_GetDynamicPstatesInfoEx(_handle, ref info);
 
                 r.AppendLine("Utilization Domains Ex");
                 r.AppendLine();
@@ -532,7 +532,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                     UtilizationDomains =
                   new NvUtilizationDomain[NVAPI.NVAPI_MAX_GPU_UTILIZATIONS]
                 };
-                NvStatus status = NVAPI.NvAPI_GPU_GetDynamicPstatesInfo(handle, ref info);
+                NvStatus status = NVAPI.NvAPI_GPU_GetDynamicPstatesInfo(_handle, ref info);
 
                 r.AppendLine("Utilization Domains");
                 r.AppendLine();
@@ -563,7 +563,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                     Cooler = new NvCooler[NVAPI.MAX_COOLER_PER_GPU]
                 };
                 NvStatus status =
-                  NVAPI.NvAPI_GPU_GetCoolerSettings(handle, 0, ref settings);
+                  NVAPI.NvAPI_GPU_GetCoolerSettings(_handle, 0, ref settings);
 
                 r.AppendLine("Cooler Settings");
                 r.AppendLine();
@@ -606,7 +606,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             }
 
             if (NVAPI.NvAPI_GetDisplayDriverMemoryInfo != null &&
-              displayHandle.HasValue)
+              _displayHandle.HasValue)
             {
                 NvDisplayDriverMemoryInfo memoryInfo = new NvDisplayDriverMemoryInfo
                 {
@@ -614,7 +614,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                     Values = new uint[NVAPI.MAX_MEMORY_VALUES_PER_GPU]
                 };
                 NvStatus status = NVAPI.NvAPI_GetDisplayDriverMemoryInfo(
-                  displayHandle.Value, ref memoryInfo);
+                  _displayHandle.Value, ref memoryInfo);
 
                 r.AppendLine("Memory Info");
                 r.AppendLine();
@@ -643,7 +643,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                   new NvFanCoolersStatusItem[NVAPI.MAX_FAN_COOLERS_STATUS_ITEMS]
                 };
 
-                NvStatus status = NVAPI.NvAPI_GPU_ClientFanCoolersGetStatus(handle, ref coolers);
+                NvStatus status = NVAPI.NvAPI_GPU_ClientFanCoolersGetStatus(_handle, ref coolers);
 
                 r.AppendLine("Fan Coolers Status");
                 r.AppendLine();
@@ -683,7 +683,7 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
             };
             coolerLevels.Levels[0].Level = (int)control.SoftwareValue;
             coolerLevels.Levels[0].Policy = 1;
-            NVAPI.NvAPI_GPU_SetCoolerLevels(handle, 0, ref coolerLevels);
+            NVAPI.NvAPI_GPU_SetCoolerLevels(_handle, 0, ref coolerLevels);
         }
 
         private void ControlModeChanged(IControl control)
@@ -711,18 +711,18 @@ namespace OpenHardwareMonitor.Hardware.Nvidia
                 Levels = new NvLevel[NVAPI.MAX_COOLER_PER_GPU]
             };
             coolerLevels.Levels[0].Policy = 0x20;
-            NVAPI.NvAPI_GPU_SetCoolerLevels(handle, 0, ref coolerLevels);
+            NVAPI.NvAPI_GPU_SetCoolerLevels(_handle, 0, ref coolerLevels);
         }
 
         public override void Close()
         {
-            if (fanControl != null)
+            if (_fanControl != null)
             {
-                fanControl.ControlModeChanged -= ControlModeChanged;
-                fanControl.SoftwareControlValueChanged -=
+                _fanControl.ControlModeChanged -= ControlModeChanged;
+                _fanControl.SoftwareControlValueChanged -=
                   SoftwareControlValueChanged;
 
-                if (fanControl.ControlMode != ControlMode.Undefined)
+                if (_fanControl.ControlMode != ControlMode.Undefined)
                     SetDefaultFanSpeed();
             }
             base.Close();

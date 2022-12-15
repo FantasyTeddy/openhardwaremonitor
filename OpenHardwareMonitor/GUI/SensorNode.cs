@@ -17,11 +17,11 @@ namespace OpenHardwareMonitor.GUI
 {
     public class SensorNode : Node
     {
-        private readonly PersistentSettings settings;
-        private readonly UnitManager unitManager;
-        private readonly string fixedFormat;
-        private bool plot;
-        private Color? penColor;
+        private readonly PersistentSettings _settings;
+        private readonly UnitManager _unitManager;
+        private readonly string _fixedFormat;
+        private bool _plot;
+        private Color? _penColor;
 
         public string ValueToString(float? value)
         {
@@ -30,7 +30,7 @@ namespace OpenHardwareMonitor.GUI
                 switch (Sensor.SensorType)
                 {
                     case SensorType.Temperature:
-                        if (unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
+                        if (_unitManager.TemperatureUnit == TemperatureUnit.Fahrenheit)
                             return string.Format("{0:F1} °F", value * 1.8 + 32);
                         else
                             return string.Format("{0:F1} °C", value);
@@ -40,7 +40,7 @@ namespace OpenHardwareMonitor.GUI
                         else
                             return string.Format("{0:F1} MB/s", value);
                     default:
-                        return string.Format(fixedFormat, value);
+                        return string.Format(_fixedFormat, value);
                 }
             }
             else
@@ -54,22 +54,22 @@ namespace OpenHardwareMonitor.GUI
             : base()
         {
             Sensor = sensor;
-            this.settings = settings;
-            this.unitManager = unitManager;
+            _settings = settings;
+            _unitManager = unitManager;
             switch (sensor.SensorType)
             {
-                case SensorType.Voltage: fixedFormat = "{0:F3} V"; break;
-                case SensorType.Clock: fixedFormat = "{0:F1} MHz"; break;
-                case SensorType.Load: fixedFormat = "{0:F1} %"; break;
-                case SensorType.Fan: fixedFormat = "{0:F0} RPM"; break;
-                case SensorType.Flow: fixedFormat = "{0:F0} L/h"; break;
-                case SensorType.Control: fixedFormat = "{0:F1} %"; break;
-                case SensorType.Level: fixedFormat = "{0:F1} %"; break;
-                case SensorType.Power: fixedFormat = "{0:F1} W"; break;
-                case SensorType.Data: fixedFormat = "{0:F1} GB"; break;
-                case SensorType.SmallData: fixedFormat = "{0:F1} MB"; break;
-                case SensorType.Factor: fixedFormat = "{0:F3}"; break;
-                default: fixedFormat = string.Empty; break;
+                case SensorType.Voltage: _fixedFormat = "{0:F3} V"; break;
+                case SensorType.Clock: _fixedFormat = "{0:F1} MHz"; break;
+                case SensorType.Load: _fixedFormat = "{0:F1} %"; break;
+                case SensorType.Fan: _fixedFormat = "{0:F0} RPM"; break;
+                case SensorType.Flow: _fixedFormat = "{0:F0} L/h"; break;
+                case SensorType.Control: _fixedFormat = "{0:F1} %"; break;
+                case SensorType.Level: _fixedFormat = "{0:F1} %"; break;
+                case SensorType.Power: _fixedFormat = "{0:F1} W"; break;
+                case SensorType.Data: _fixedFormat = "{0:F1} GB"; break;
+                case SensorType.SmallData: _fixedFormat = "{0:F1} MB"; break;
+                case SensorType.Factor: _fixedFormat = "{0:F3}"; break;
+                default: _fixedFormat = string.Empty; break;
             }
 
             bool hidden = settings.GetValue(new Identifier(sensor.Identifier,
@@ -96,23 +96,23 @@ namespace OpenHardwareMonitor.GUI
             set
             {
                 base.IsVisible = value;
-                settings.SetValue(new Identifier(Sensor.Identifier,
+                _settings.SetValue(new Identifier(Sensor.Identifier,
                   "hidden").ToString(), !value);
             }
         }
 
         public Color? PenColor
         {
-            get => penColor;
+            get => _penColor;
             set
             {
-                penColor = value;
+                _penColor = value;
 
                 string id = new Identifier(Sensor.Identifier, "penColor").ToString();
                 if (value.HasValue)
-                    settings.SetValue(id, value.Value);
+                    _settings.SetValue(id, value.Value);
                 else
-                    settings.Remove(id);
+                    _settings.Remove(id);
 
                 PlotSelectionChanged?.Invoke(this, null);
             }
@@ -120,11 +120,11 @@ namespace OpenHardwareMonitor.GUI
 
         public bool Plot
         {
-            get => plot;
+            get => _plot;
             set
             {
-                plot = value;
-                settings.SetValue(new Identifier(Sensor.Identifier, "plot").ToString(),
+                _plot = value;
+                _settings.SetValue(new Identifier(Sensor.Identifier, "plot").ToString(),
                   value);
                 PlotSelectionChanged?.Invoke(this, null);
             }

@@ -15,23 +15,23 @@ namespace OpenHardwareMonitor.Hardware.RAM
     internal class GenericRAM : Hardware
     {
 
-        private readonly Sensor loadSensor;
-        private readonly Sensor usedMemory;
-        private readonly Sensor availableMemory;
+        private readonly Sensor _loadSensor;
+        private readonly Sensor _usedMemory;
+        private readonly Sensor _availableMemory;
 
         public GenericRAM(string name, ISettings settings)
           : base(name, new Identifier("ram"), settings)
         {
-            loadSensor = new Sensor("Memory", 0, SensorType.Load, this, settings);
-            ActivateSensor(loadSensor);
+            _loadSensor = new Sensor("Memory", 0, SensorType.Load, this, settings);
+            ActivateSensor(_loadSensor);
 
-            usedMemory = new Sensor("Used Memory", 0, SensorType.Data, this,
+            _usedMemory = new Sensor("Used Memory", 0, SensorType.Data, this,
               settings);
-            ActivateSensor(usedMemory);
+            ActivateSensor(_usedMemory);
 
-            availableMemory = new Sensor("Available Memory", 1, SensorType.Data, this,
+            _availableMemory = new Sensor("Available Memory", 1, SensorType.Data, this,
               settings);
-            ActivateSensor(availableMemory);
+            ActivateSensor(_availableMemory);
         }
 
         public override HardwareType HardwareType => HardwareType.RAM;
@@ -47,14 +47,14 @@ namespace OpenHardwareMonitor.Hardware.RAM
             if (!NativeMethods.GlobalMemoryStatusEx(ref status))
                 return;
 
-            loadSensor.Value = 100.0f -
+            _loadSensor.Value = 100.0f -
               100.0f * status.AvailablePhysicalMemory /
               status.TotalPhysicalMemory;
 
-            usedMemory.Value = (float)(status.TotalPhysicalMemory
+            _usedMemory.Value = (float)(status.TotalPhysicalMemory
               - status.AvailablePhysicalMemory) / (1024 * 1024 * 1024);
 
-            availableMemory.Value = (float)status.AvailablePhysicalMemory /
+            _availableMemory.Value = (float)status.AvailablePhysicalMemory /
               (1024 * 1024 * 1024);
         }
 

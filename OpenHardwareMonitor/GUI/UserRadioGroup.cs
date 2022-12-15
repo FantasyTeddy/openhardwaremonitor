@@ -16,29 +16,29 @@ namespace OpenHardwareMonitor.GUI
 {
     public class UserRadioGroup
     {
-        private readonly string name;
-        private int value;
-        private readonly MenuItem[] menuItems;
+        private readonly string _name;
+        private int _value;
+        private readonly MenuItem[] _menuItems;
         private event EventHandler changed;
-        private readonly PersistentSettings settings;
+        private readonly PersistentSettings _settings;
 
         public UserRadioGroup(string name, int value,
           MenuItem[] menuItems, PersistentSettings settings)
         {
-            this.settings = settings;
-            this.name = name;
+            _settings = settings;
+            _name = name;
             if (name != null)
-                this.value = settings.GetValue(name, value);
+                _value = settings.GetValue(name, value);
             else
-                this.value = value;
-            this.menuItems = menuItems;
-            this.value = Math.Max(Math.Min(this.value, menuItems.Length - 1), 0);
+                _value = value;
+            _menuItems = menuItems;
+            _value = Math.Max(Math.Min(_value, menuItems.Length - 1), 0);
 
-            for (int i = 0; i < this.menuItems.Length; i++)
+            for (int i = 0; i < _menuItems.Length; i++)
             {
-                this.menuItems[i].Checked = i == this.value;
+                _menuItems[i].Checked = i == _value;
                 int index = i;
-                this.menuItems[i].Click += (sender, e) =>
+                _menuItems[i].Click += (sender, e) =>
                 {
                     Value = index;
                 };
@@ -47,16 +47,16 @@ namespace OpenHardwareMonitor.GUI
 
         public int Value
         {
-            get => value;
+            get => _value;
             set
             {
-                if (this.value != value)
+                if (_value != value)
                 {
-                    this.value = value;
-                    if (name != null)
-                        settings.SetValue(name, value);
-                    for (int i = 0; i < menuItems.Length; i++)
-                        menuItems[i].Checked = i == value;
+                    _value = value;
+                    if (_name != null)
+                        _settings.SetValue(_name, value);
+                    for (int i = 0; i < _menuItems.Length; i++)
+                        _menuItems[i].Checked = i == value;
                     changed?.Invoke(this, null);
                 }
             }

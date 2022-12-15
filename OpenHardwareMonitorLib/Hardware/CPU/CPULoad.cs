@@ -37,13 +37,13 @@ namespace OpenHardwareMonitor.Hardware.CPU
             SystemProcessorPerformanceInformation = 8
         }
 
-        private readonly CPUID[][] cpuid;
+        private readonly CPUID[][] _cpuid;
 
-        private long[] idleTimes;
-        private long[] totalTimes;
+        private long[] _idleTimes;
+        private long[] _totalTimes;
 
-        private float totalLoad;
-        private readonly float[] coreLoads;
+        private float _totalLoad;
+        private readonly float[] _coreLoads;
 
         private static bool GetTimes(out long[] idle, out long[] total)
         {
@@ -76,19 +76,19 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         public CPULoad(CPUID[][] cpuid)
         {
-            this.cpuid = cpuid;
-            coreLoads = new float[cpuid.Length];
-            totalLoad = 0;
+            _cpuid = cpuid;
+            _coreLoads = new float[cpuid.Length];
+            _totalLoad = 0;
             try
             {
-                GetTimes(out idleTimes, out totalTimes);
+                GetTimes(out _idleTimes, out _totalTimes);
             }
             catch (Exception)
             {
-                idleTimes = null;
-                totalTimes = null;
+                _idleTimes = null;
+                _totalTimes = null;
             }
-            if (idleTimes != null)
+            if (_idleTimes != null)
                 IsAvailable = true;
         }
 
@@ -96,26 +96,26 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
         public float GetTotalLoad()
         {
-            return totalLoad;
+            return _totalLoad;
         }
 
         public float GetCoreLoad(int core)
         {
-            return coreLoads[core];
+            return _coreLoads[core];
         }
 
         public void Update()
         {
-            if (idleTimes == null)
+            if (_idleTimes == null)
                 return;
 
 
             if (!GetTimes(out long[] newIdleTimes, out long[] newTotalTimes))
                 return;
 
-            for (int i = 0; i < Math.Min(newTotalTimes.Length, totalTimes.Length); i++)
+            for (int i = 0; i < Math.Min(newTotalTimes.Length, _totalTimes.Length); i++)
             {
-                if (newTotalTimes[i] - totalTimes[i] < 100000)
+                if (newTotalTimes[i] - _totalTimes[i] < 100000)
                     return;
             }
 
@@ -124,25 +124,25 @@ namespace OpenHardwareMonitor.Hardware.CPU
 
             float total = 0;
             int count = 0;
-            for (int i = 0; i < cpuid.Length; i++)
+            for (int i = 0; i < _cpuid.Length; i++)
             {
                 float value = 0;
-                for (int j = 0; j < cpuid[i].Length; j++)
+                for (int j = 0; j < _cpuid[i].Length; j++)
                 {
-                    long index = cpuid[i][j].Thread;
-                    if (index < newIdleTimes.Length && index < totalTimes.Length)
+                    long index = _cpuid[i][j].Thread;
+                    if (index < newIdleTimes.Length && index < _totalTimes.Length)
                     {
                         float idle =
-                          (newIdleTimes[index] - idleTimes[index]) /
-                          (float)(newTotalTimes[index] - totalTimes[index]);
+                          (newIdleTimes[index] - _idleTimes[index]) /
+                          (float)(newTotalTimes[index] - _totalTimes[index]);
                         value += idle;
                         total += idle;
                         count++;
                     }
                 }
-                value = 1.0f - value / cpuid[i].Length;
+                value = 1.0f - value / _cpuid[i].Length;
                 value = value < 0 ? 0 : value;
-                coreLoads[i] = value * 100;
+                _coreLoads[i] = value * 100;
             }
             if (count > 0)
             {
@@ -153,10 +153,10 @@ namespace OpenHardwareMonitor.Hardware.CPU
             {
                 total = 0;
             }
-            totalLoad = total * 100;
+            _totalLoad = total * 100;
 
-            totalTimes = newTotalTimes;
-            idleTimes = newIdleTimes;
+            _totalTimes = newTotalTimes;
+            _idleTimes = newIdleTimes;
         }
 
         protected static class NativeMethods

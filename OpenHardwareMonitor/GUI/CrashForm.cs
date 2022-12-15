@@ -20,7 +20,7 @@ namespace OpenHardwareMonitor.GUI
     public partial class CrashForm : Form
     {
 
-        private Exception exception;
+        private Exception _exception;
 
         public CrashForm()
         {
@@ -29,20 +29,20 @@ namespace OpenHardwareMonitor.GUI
 
         public Exception Exception
         {
-            get => exception;
+            get => _exception;
             set
             {
-                exception = value;
+                _exception = value;
                 StringBuilder s = new StringBuilder();
                 Version version = typeof(CrashForm).Assembly.GetName().Version;
                 s.Append("Version: ");
                 s.AppendLine(version.ToString());
                 s.AppendLine();
-                s.AppendLine(exception.ToString());
+                s.AppendLine(_exception.ToString());
                 s.AppendLine();
-                if (exception.InnerException != null)
+                if (_exception.InnerException != null)
                 {
-                    s.AppendLine(exception.InnerException.ToString());
+                    s.AppendLine(_exception.InnerException.ToString());
                     s.AppendLine();
                 }
                 s.Append("Common Language Runtime: ");
