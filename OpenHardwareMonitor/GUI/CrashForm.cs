@@ -12,8 +12,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Web;
 using System.Windows.Forms;
-using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI
 {
