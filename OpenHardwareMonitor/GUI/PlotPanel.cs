@@ -16,6 +16,8 @@ using System.Windows.Forms;
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Utilities;
 using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 
 namespace OpenHardwareMonitor.GUI
@@ -26,7 +28,7 @@ namespace OpenHardwareMonitor.GUI
         private readonly PersistentSettings _settings;
         private readonly UnitManager _unitManager;
 
-        private readonly Plot _plot;
+        private readonly PlotView _plot;
         private readonly PlotModel _model;
         private readonly TimeSpanAxis _timeAxis = new TimeSpanAxis();
         private readonly SortedDictionary<SensorType, LinearAxis> _axes =
@@ -43,7 +45,7 @@ namespace OpenHardwareMonitor.GUI
 
             _model = CreatePlotModel();
 
-            _plot = new Plot
+            _plot = new PlotView
             {
                 Dock = DockStyle.Fill,
                 Model = _model,
@@ -243,19 +245,21 @@ namespace OpenHardwareMonitor.GUI
                 var series = new LineSeries();
                 if (sensor.SensorType == SensorType.Temperature)
                 {
-                    series.ItemsSource = sensor.Values.Select(value => new DataPoint
+                    series.ItemsSource = sensor.Values.Select(value =>
                     {
-                        X = (_now - value.Time).TotalSeconds,
-                        Y = _unitManager.TemperatureUnit == TemperatureUnit.Celsius ?
-                        value.Value : UnitManager.CelsiusToFahrenheit(value.Value).Value
+                        double x = (_now - value.Time).TotalSeconds;
+                        double y = _unitManager.TemperatureUnit == TemperatureUnit.Celsius ?
+                            value.Value : UnitManager.CelsiusToFahrenheit(value.Value).Value;
+                        return new DataPoint(x, y);
                     });
                 }
                 else
                 {
-                    series.ItemsSource = sensor.Values.Select(value => new DataPoint
+                    series.ItemsSource = sensor.Values.Select(value =>
                     {
-                        X = (_now - value.Time).TotalSeconds,
-                        Y = value.Value
+                        double x = (_now - value.Time).TotalSeconds;
+                        double y = value.Value;
+                        return new DataPoint(x, y);
                     });
                 }
                 series.Color = colors[sensor].ToOxyColor();

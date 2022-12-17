@@ -112,7 +112,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="2.2.0" />
-    <PackageReference Include="OxyPlot.WindowsForms" Version="2013.1.2.1" />
+    <PackageReference Include="OxyPlot.WindowsForms" Version="2.1.2" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
     <PackageReference Include="TreeViewAdv" Version="1.7.0" />
   </ItemGroup>
