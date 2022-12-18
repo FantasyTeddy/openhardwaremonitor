@@ -13,13 +13,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using Aga.Controls.Tree;
-using Aga.Controls.Tree.NodeControls;
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Utilities;
 using OpenHardwareMonitor.WebServer;
@@ -34,9 +31,7 @@ namespace OpenHardwareMonitor.GUI
         private readonly UnitManager _unitManager;
         private readonly Computer _computer;
         private readonly Node _root;
-        private readonly TreeModel _treeModel;
-        private IDictionary<ISensor, Color> _sensorPlotColors =
-          new Dictionary<ISensor, Color>();
+        private readonly TreePanel _treePanel;
         private readonly Color[] _plotColorPalette;
         private readonly SystemTray _systemTray;
         private readonly StartupManager _startupManager = new StartupManager();
@@ -71,8 +66,6 @@ namespace OpenHardwareMonitor.GUI
         private readonly UserRadioGroup _loggingInterval;
         private readonly Logger _logger;
 
-        private bool _selectionDragging;
-
         public MainForm()
         {
             InitializeComponent();
@@ -102,7 +95,6 @@ namespace OpenHardwareMonitor.GUI
             splitContainer.Dock = DockStyle.Fill;
 
             Font = SystemFonts.MessageBoxFont;
-            treeView.Font = SystemFonts.MessageBoxFont;
 
             _plotPanel = new PlotPanel(_settings, _unitManager)
             {
@@ -110,34 +102,10 @@ namespace OpenHardwareMonitor.GUI
                 Dock = DockStyle.Fill
             };
 
-            nodeCheckBox.IsVisibleValueNeeded += nodeCheckBox_IsVisibleValueNeeded;
-            nodeTextBoxText.DrawText += nodeTextBoxText_DrawText;
-            nodeTextBoxValue.DrawText += nodeTextBoxText_DrawText;
-            nodeTextBoxMin.DrawText += nodeTextBoxText_DrawText;
-            nodeTextBoxMax.DrawText += nodeTextBoxText_DrawText;
-            nodeTextBoxText.EditorShowing += nodeTextBoxText_EditorShowing;
-
-            sensor.Width = DpiHelper.LogicalToDeviceUnits(250);
-            value.Width = DpiHelper.LogicalToDeviceUnits(100);
-            min.Width = DpiHelper.LogicalToDeviceUnits(100);
-            max.Width = DpiHelper.LogicalToDeviceUnits(100);
-
-            foreach (TreeColumn column in treeView.Columns)
-            {
-                column.Width = Math.Max(DpiHelper.LogicalToDeviceUnits(20), Math.Min(
-                  DpiHelper.LogicalToDeviceUnits(400),
-                  _settings.GetValue("treeView.Columns." + column.Header + ".Width",
-                  column.Width)));
-            }
-
-            _treeModel = new TreeModel();
             _root = new Node(System.Environment.MachineName)
             {
                 Image = Utilities.EmbeddedResources.GetImage("computer.png")
             };
-
-            _treeModel.Nodes.Add(_root);
-            treeView.Model = _treeModel;
 
             _computer = new Computer(_settings);
 
@@ -147,11 +115,8 @@ namespace OpenHardwareMonitor.GUI
 
             if (Hardware.OperatingSystem.IsUnix)
             { // Unix
-                treeView.RowHeight = Math.Max(treeView.RowHeight,
-                  DpiHelper.LogicalToDeviceUnits(18));
                 splitContainer.BorderStyle = BorderStyle.None;
                 splitContainer.SplitterWidth = 4;
-                treeView.BorderStyle = BorderStyle.Fixed3D;
                 _plotPanel.BorderStyle = BorderStyle.Fixed3D;
                 gadgetMenuItem.Visible = false;
                 minCloseMenuItem.Visible = false;
@@ -160,15 +125,17 @@ namespace OpenHardwareMonitor.GUI
             }
             else
             { // Windows
-                treeView.RowHeight = Math.Max(treeView.Font.Height +
-                  DpiHelper.LogicalToDeviceUnits(1),
-                  DpiHelper.LogicalToDeviceUnits(18));
-
                 _gadget = new SensorGadget(_computer, _settings, _unitManager);
                 _gadget.HideShowCommand += hideShowClick;
 
                 _wmiProvider = new WmiProvider(_computer);
             }
+
+            _treePanel = new TreePanel(_settings, _systemTray, _gadget, _root)
+            {
+                Dock = DockStyle.Fill,
+            };
+            splitContainer.Panel1.Controls.Add(_treePanel);
 
             _logger = new Logger(_computer);
 
@@ -200,26 +167,26 @@ namespace OpenHardwareMonitor.GUI
               hiddenMenuItem, _settings);
             _showHiddenSensors.Changed += (sender, e) =>
             {
-                _treeModel.ForceVisible = _showHiddenSensors.Value;
+                _treePanel.ShowHiddenSensors(_showHiddenSensors.Value);
             };
 
             _showValue = new UserOption("valueMenuItem", true, valueMenuItem,
               _settings);
             _showValue.Changed += (sender, e) =>
             {
-                treeView.Columns[1].IsVisible = _showValue.Value;
+                _treePanel.SetVisibility(1, _showValue.Value);
             };
 
             _showMin = new UserOption("minMenuItem", false, minMenuItem, _settings);
             _showMin.Changed += (sender, e) =>
             {
-                treeView.Columns[2].IsVisible = _showMin.Value;
+                _treePanel.SetVisibility(2, _showMin.Value);
             };
 
             _showMax = new UserOption("maxMenuItem", true, maxMenuItem, _settings);
             _showMax.Changed += (sender, e) =>
             {
-                treeView.Columns[3].IsVisible = _showMax.Value;
+                _treePanel.SetVisibility(3, _showMax.Value);
             };
 
             _startMinimized = new UserOption("startMinMenuItem", false,
@@ -422,7 +389,8 @@ namespace OpenHardwareMonitor.GUI
                 {
                     splitContainer.Panel2Collapsed = !_showPlot.Value;
                 }
-                treeView.Invalidate();
+                _treePanel.ShowPlot = _showPlot.Value;
+                _treePanel.Invalidate(true);
             };
             _plotLocation.Changed += (sender, e) =>
             {
@@ -549,33 +517,14 @@ namespace OpenHardwareMonitor.GUI
             PlotSelectionChanged(this, null);
         }
 
-        private void nodeTextBoxText_DrawText(object sender, DrawEventArgs e)
-        {
-            if (e.Node.Tag is Node node)
-            {
-                if (node.IsVisible)
-                {
-                    if (plotMenuItem.Checked && node is SensorNode sensorNode &&
-                      _sensorPlotColors.TryGetValue(sensorNode.Sensor, out Color color))
-                    {
-                        e.TextColor = color;
-                    }
-                }
-                else
-                {
-                    e.TextColor = Color.DarkGray;
-                }
-            }
-        }
-
         private void PlotSelectionChanged(object sender, EventArgs e)
         {
             List<ISensor> selected = new List<ISensor>();
             IDictionary<ISensor, Color> colors = new Dictionary<ISensor, Color>();
             int colorIndex = 0;
-            foreach (TreeNodeAdv node in treeView.AllNodes)
+            foreach (object tag in _treePanel.GetAllTags())
             {
-                if (node.Tag is SensorNode sensorNode)
+                if (tag is SensorNode sensorNode)
                 {
                     if (sensorNode.Plot)
                     {
@@ -618,28 +567,14 @@ namespace OpenHardwareMonitor.GUI
                 }
             }
 
-            foreach (TreeNodeAdv node in treeView.AllNodes)
+            foreach (object tag in _treePanel.GetAllTags())
             {
-                if (node.Tag is SensorNode sensorNode && sensorNode.Plot && sensorNode.PenColor.HasValue)
+                if (tag is SensorNode sensorNode && sensorNode.Plot && sensorNode.PenColor.HasValue)
                     colors.Add(sensorNode.Sensor, sensorNode.PenColor.Value);
             }
 
-            _sensorPlotColors = colors;
+            _treePanel.SensorPlotColors = colors;
             _plotPanel.SetSensors(selected, colors);
-        }
-
-        private void nodeTextBoxText_EditorShowing(object sender,
-          CancelEventArgs e)
-        {
-            e.Cancel = !(treeView.CurrentNode != null &&
-              (treeView.CurrentNode.Tag is SensorNode ||
-               treeView.CurrentNode.Tag is HardwareNode));
-        }
-
-        private void nodeCheckBox_IsVisibleValueNeeded(object sender,
-          NodeControlValueEventArgs e)
-        {
-            e.Value = (e.Node.Tag is SensorNode node) && plotMenuItem.Checked;
         }
 
         private void exitClick(object sender, EventArgs e)
@@ -651,7 +586,7 @@ namespace OpenHardwareMonitor.GUI
         private void timer_Tick(object sender, EventArgs e)
         {
             _computer.Accept(_updateVisitor);
-            treeView.Invalidate();
+            _treePanel.Invalidate(true);
             _plotPanel.InvalidatePlot();
             _systemTray.Redraw();
             _gadget?.Redraw();
@@ -674,11 +609,7 @@ namespace OpenHardwareMonitor.GUI
             if (_plotPanel != null)
             {
                 _plotPanel.SetCurrentSettings();
-                foreach (TreeColumn column in treeView.Columns)
-                {
-                    _settings.SetValue("treeView.Columns." + column.Header + ".Width",
-                      column.Width);
-                }
+                _treePanel.SetCurrentSettings();
             }
 
             string fileName = Path.ChangeExtension(
@@ -750,172 +681,6 @@ namespace OpenHardwareMonitor.GUI
             new AboutBox().ShowDialog();
         }
 
-        private void treeView_Click(object sender, EventArgs e)
-        {
-            if (!(e is MouseEventArgs m) || m.Button != MouseButtons.Right)
-                return;
-
-            NodeControlInfo info = treeView.GetNodeControlInfoAt(
-              new Point(m.X, m.Y));
-            treeView.SelectedNode = info.Node;
-            if (info.Node != null)
-            {
-                if (info.Node.Tag is SensorNode node && node.Sensor != null)
-                {
-                    treeContextMenu.MenuItems.Clear();
-                    if (node.Sensor.Parameters.Count > 0)
-                    {
-                        MenuItem item = new MenuItem("Parameters...");
-                        item.Click += (obj, args) =>
-                        {
-                            ShowParameterForm(node.Sensor);
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-                    if (nodeTextBoxText.EditEnabled)
-                    {
-                        MenuItem item = new MenuItem("Rename");
-                        item.Click += (obj, args) =>
-                        {
-                            nodeTextBoxText.BeginEdit();
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-                    if (node.IsVisible)
-                    {
-                        MenuItem item = new MenuItem("Hide");
-                        item.Click += (obj, args) =>
-                        {
-                            node.IsVisible = false;
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-                    else
-                    {
-                        MenuItem item = new MenuItem("Unhide");
-                        item.Click += (obj, args) =>
-                        {
-                            node.IsVisible = true;
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-                    treeContextMenu.MenuItems.Add(new MenuItem("-"));
-                    {
-                        MenuItem item = new MenuItem("Pen Color...");
-                        item.Click += (obj, args) =>
-                        {
-                            ColorDialog dialog = new ColorDialog
-                            {
-                                Color = node.PenColor.GetValueOrDefault()
-                            };
-                            if (dialog.ShowDialog() == DialogResult.OK)
-                                node.PenColor = dialog.Color;
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-                    {
-                        MenuItem item = new MenuItem("Reset Pen Color");
-                        item.Click += (obj, args) =>
-                        {
-                            node.PenColor = null;
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-                    treeContextMenu.MenuItems.Add(new MenuItem("-"));
-                    {
-                        MenuItem item = new MenuItem("Show in Tray")
-                        {
-                            Checked = _systemTray.Contains(node.Sensor)
-                        };
-                        item.Click += (obj, args) =>
-                        {
-                            if (item.Checked)
-                                _systemTray.Remove(node.Sensor);
-                            else
-                                _systemTray.Add(node.Sensor, true);
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-                    if (_gadget != null)
-                    {
-                        MenuItem item = new MenuItem("Show in Gadget")
-                        {
-                            Checked = _gadget.Contains(node.Sensor)
-                        };
-                        item.Click += (obj, args) =>
-                        {
-                            if (item.Checked)
-                            {
-                                _gadget.Remove(node.Sensor);
-                            }
-                            else
-                            {
-                                _gadget.Add(node.Sensor);
-                            }
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-                    if (node.Sensor.Control != null)
-                    {
-                        treeContextMenu.MenuItems.Add(new MenuItem("-"));
-                        IControl control = node.Sensor.Control;
-                        MenuItem controlItem = new MenuItem("Control");
-                        MenuItem defaultItem = new MenuItem("Default")
-                        {
-                            Checked = control.ControlMode == ControlMode.Default
-                        };
-                        controlItem.MenuItems.Add(defaultItem);
-                        defaultItem.Click += (obj, args) =>
-                        {
-                            control.SetDefault();
-                        };
-                        MenuItem manualItem = new MenuItem("Manual");
-                        controlItem.MenuItems.Add(manualItem);
-                        manualItem.Checked = control.ControlMode == ControlMode.Software;
-                        for (int i = 0; i <= 100; i += 5)
-                        {
-                            if (i <= control.MaxSoftwareValue &&
-                                i >= control.MinSoftwareValue)
-                            {
-                                MenuItem item = new MenuItem(i + " %")
-                                {
-                                    RadioCheck = true
-                                };
-                                manualItem.MenuItems.Add(item);
-                                item.Checked = control.ControlMode == ControlMode.Software &&
-                                  Math.Round(control.SoftwareValue) == i;
-                                int softwareValue = i;
-                                item.Click += (obj, args) =>
-                                {
-                                    control.SetSoftware(softwareValue);
-                                };
-                            }
-                        }
-                        treeContextMenu.MenuItems.Add(controlItem);
-                    }
-
-                    treeContextMenu.Show(treeView, new Point(m.X, m.Y));
-                }
-
-                if (info.Node.Tag is HardwareNode hardwareNode && hardwareNode.Hardware != null)
-                {
-                    treeContextMenu.MenuItems.Clear();
-
-                    if (nodeTextBoxText.EditEnabled)
-                    {
-                        MenuItem item = new MenuItem("Rename");
-                        item.Click += (obj, args) =>
-                        {
-                            nodeTextBoxText.BeginEdit();
-                        };
-                        treeContextMenu.MenuItems.Add(item);
-                    }
-
-                    treeContextMenu.Show(treeView, new Point(m.X, m.Y));
-                }
-            }
-        }
-
         private void saveReportMenuItem_Click(object sender, EventArgs e)
         {
             string report = _computer.GetReport();
@@ -973,26 +738,6 @@ namespace OpenHardwareMonitor.GUI
             SysTrayHideShow();
         }
 
-        private static void ShowParameterForm(ISensor sensor)
-        {
-            ParameterForm form = new ParameterForm
-            {
-                Parameters = sensor.Parameters
-            };
-            form.captionLabel.Text = sensor.Name;
-            form.ShowDialog();
-        }
-
-        private void treeView_NodeMouseDoubleClick(object sender,
-          TreeNodeAdvMouseEventArgs e)
-        {
-            if (e.Node.Tag is SensorNode node && node.Sensor != null &&
-              node.Sensor.Parameters.Count > 0)
-            {
-                ShowParameterForm(node.Sensor);
-            }
-        }
-
         private void celsiusMenuItem_Click(object sender, EventArgs e)
         {
             celsiusMenuItem.Checked = true;
@@ -1044,24 +789,6 @@ namespace OpenHardwareMonitor.GUI
             _computer.Reset();
             // restore the MainIcon setting
             _systemTray.IsMainIconEnabled = _minimizeToTray.Value;
-        }
-
-        private void treeView_MouseMove(object sender, MouseEventArgs e)
-        {
-            _selectionDragging &= (e.Button & (MouseButtons.Left | MouseButtons.Right)) > 0;
-
-            if (_selectionDragging)
-                treeView.SelectedNode = treeView.GetNodeAt(e.Location);
-        }
-
-        private void treeView_MouseDown(object sender, MouseEventArgs e)
-        {
-            _selectionDragging = true;
-        }
-
-        private void treeView_MouseUp(object sender, MouseEventArgs e)
-        {
-            _selectionDragging = false;
         }
 
         private void serverPortMenuItem_Click(object sender, EventArgs e)

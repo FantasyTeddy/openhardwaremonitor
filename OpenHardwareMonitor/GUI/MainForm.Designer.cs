@@ -40,16 +40,6 @@ namespace OpenHardwareMonitor.GUI
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.sensor = new Aga.Controls.Tree.TreeColumn();
-            this.value = new Aga.Controls.Tree.TreeColumn();
-            this.min = new Aga.Controls.Tree.TreeColumn();
-            this.max = new Aga.Controls.Tree.TreeColumn();
-            this.nodeImage = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.nodeCheckBox = new Aga.Controls.Tree.NodeControls.NodeCheckBox();
-            this.nodeTextBoxText = new Aga.Controls.Tree.NodeControls.NodeTextBox();
-            this.nodeTextBoxValue = new Aga.Controls.Tree.NodeControls.NodeTextBox();
-            this.nodeTextBoxMin = new Aga.Controls.Tree.NodeControls.NodeTextBox();
-            this.nodeTextBoxMax = new Aga.Controls.Tree.NodeControls.NodeTextBox();
             this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
             this.fileMenuItem = new System.Windows.Forms.MenuItem();
             this.saveReportMenuItem = new System.Windows.Forms.MenuItem();
@@ -111,90 +101,12 @@ namespace OpenHardwareMonitor.GUI
             this.serverPortMenuItem = new System.Windows.Forms.MenuItem();
             this.helpMenuItem = new System.Windows.Forms.MenuItem();
             this.aboutMenuItem = new System.Windows.Forms.MenuItem();
-            this.treeContextMenu = new System.Windows.Forms.ContextMenu();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.treeView = new Aga.Controls.Tree.TreeViewAdv();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
-            this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // sensor
-            // 
-            this.sensor.Header = "Sensor";
-            this.sensor.SortOrder = System.Windows.Forms.SortOrder.None;
-            this.sensor.TooltipText = null;
-            // 
-            // value
-            // 
-            this.value.Header = "Value";
-            this.value.SortOrder = System.Windows.Forms.SortOrder.None;
-            this.value.TooltipText = null;
-            // 
-            // min
-            // 
-            this.min.Header = "Min";
-            this.min.SortOrder = System.Windows.Forms.SortOrder.None;
-            this.min.TooltipText = null;
-            // 
-            // max
-            // 
-            this.max.Header = "Max";
-            this.max.SortOrder = System.Windows.Forms.SortOrder.None;
-            this.max.TooltipText = null;
-            // 
-            // nodeImage
-            // 
-            this.nodeImage.DataPropertyName = "Image";
-            this.nodeImage.LeftMargin = 1;
-            this.nodeImage.ParentColumn = this.sensor;
-            this.nodeImage.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Fit;
-            // 
-            // nodeCheckBox
-            // 
-            this.nodeCheckBox.DataPropertyName = "Plot";
-            this.nodeCheckBox.EditEnabled = true;
-            this.nodeCheckBox.LeftMargin = 3;
-            this.nodeCheckBox.ParentColumn = this.sensor;
-            // 
-            // nodeTextBoxText
-            // 
-            this.nodeTextBoxText.DataPropertyName = "Text";
-            this.nodeTextBoxText.EditEnabled = true;
-            this.nodeTextBoxText.IncrementalSearchEnabled = true;
-            this.nodeTextBoxText.LeftMargin = 3;
-            this.nodeTextBoxText.ParentColumn = this.sensor;
-            this.nodeTextBoxText.Trimming = System.Drawing.StringTrimming.EllipsisCharacter;
-            this.nodeTextBoxText.UseCompatibleTextRendering = true;
-            // 
-            // nodeTextBoxValue
-            // 
-            this.nodeTextBoxValue.DataPropertyName = "Value";
-            this.nodeTextBoxValue.IncrementalSearchEnabled = true;
-            this.nodeTextBoxValue.LeftMargin = 3;
-            this.nodeTextBoxValue.ParentColumn = this.value;
-            this.nodeTextBoxValue.Trimming = System.Drawing.StringTrimming.EllipsisCharacter;
-            this.nodeTextBoxValue.UseCompatibleTextRendering = true;
-            // 
-            // nodeTextBoxMin
-            // 
-            this.nodeTextBoxMin.DataPropertyName = "Min";
-            this.nodeTextBoxMin.IncrementalSearchEnabled = true;
-            this.nodeTextBoxMin.LeftMargin = 3;
-            this.nodeTextBoxMin.ParentColumn = this.min;
-            this.nodeTextBoxMin.Trimming = System.Drawing.StringTrimming.EllipsisCharacter;
-            this.nodeTextBoxMin.UseCompatibleTextRendering = true;
-            // 
-            // nodeTextBoxMax
-            // 
-            this.nodeTextBoxMax.DataPropertyName = "Max";
-            this.nodeTextBoxMax.IncrementalSearchEnabled = true;
-            this.nodeTextBoxMax.LeftMargin = 3;
-            this.nodeTextBoxMax.ParentColumn = this.max;
-            this.nodeTextBoxMax.Trimming = System.Drawing.StringTrimming.EllipsisCharacter;
-            this.nodeTextBoxMax.UseCompatibleTextRendering = true;
             // 
             // mainMenu
             // 
@@ -616,48 +528,10 @@ namespace OpenHardwareMonitor.GUI
             this.splitContainer.Location = new System.Drawing.Point(12, 12);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.Controls.Add(this.treeView);
             this.splitContainer.Size = new System.Drawing.Size(386, 483);
             this.splitContainer.SplitterDistance = 354;
             this.splitContainer.SplitterWidth = 5;
             this.splitContainer.TabIndex = 3;
-            // 
-            // treeView
-            // 
-            this.treeView.BackColor = System.Drawing.SystemColors.Window;
-            this.treeView.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeView.Columns.Add(this.sensor);
-            this.treeView.Columns.Add(this.value);
-            this.treeView.Columns.Add(this.min);
-            this.treeView.Columns.Add(this.max);
-            this.treeView.DefaultToolTipProvider = null;
-            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView.DragDropMarkColor = System.Drawing.Color.Black;
-            this.treeView.FullRowSelect = true;
-            this.treeView.GridLineStyle = Aga.Controls.Tree.GridLineStyle.Horizontal;
-            this.treeView.LineColor = System.Drawing.SystemColors.ControlDark;
-            this.treeView.Location = new System.Drawing.Point(0, 0);
-            this.treeView.Model = null;
-            this.treeView.Name = "treeView";
-            this.treeView.NodeControls.Add(this.nodeImage);
-            this.treeView.NodeControls.Add(this.nodeCheckBox);
-            this.treeView.NodeControls.Add(this.nodeTextBoxText);
-            this.treeView.NodeControls.Add(this.nodeTextBoxValue);
-            this.treeView.NodeControls.Add(this.nodeTextBoxMin);
-            this.treeView.NodeControls.Add(this.nodeTextBoxMax);
-            this.treeView.SelectedNode = null;
-            this.treeView.Size = new System.Drawing.Size(382, 350);
-            this.treeView.TabIndex = 0;
-            this.treeView.Text = "treeView";
-            this.treeView.UseColumns = true;
-            this.treeView.NodeMouseDoubleClick += new System.EventHandler<Aga.Controls.Tree.TreeNodeAdvMouseEventArgs>(this.treeView_NodeMouseDoubleClick);
-            this.treeView.Click += new System.EventHandler(this.treeView_Click);
-            this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView_MouseDown);
-            this.treeView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.treeView_MouseMove);
-            this.treeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView_MouseUp);
             // 
             // MainForm
             // 
@@ -674,7 +548,6 @@ namespace OpenHardwareMonitor.GUI
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResizeEnd += new System.EventHandler(this.MainForm_MoveOrResize);
             this.Move += new System.EventHandler(this.MainForm_MoveOrResize);
-            this.splitContainer.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -685,18 +558,8 @@ namespace OpenHardwareMonitor.GUI
         private System.Windows.Forms.MainMenu mainMenu;
         private System.Windows.Forms.MenuItem fileMenuItem;
         private System.Windows.Forms.MenuItem exitMenuItem;
-        private Aga.Controls.Tree.TreeColumn sensor;
-        private Aga.Controls.Tree.TreeColumn value;
-        private Aga.Controls.Tree.TreeColumn min;
-        private Aga.Controls.Tree.TreeColumn max;
-        private Aga.Controls.Tree.NodeControls.NodeIcon nodeImage;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBoxText;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBoxValue;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBoxMin;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBoxMax;
         private System.Windows.Forms.MenuItem viewMenuItem;
         private System.Windows.Forms.MenuItem plotMenuItem;
-        private Aga.Controls.Tree.NodeControls.NodeCheckBox nodeCheckBox;
         private System.Windows.Forms.MenuItem helpMenuItem;
         private System.Windows.Forms.MenuItem aboutMenuItem;
         private System.Windows.Forms.MenuItem saveReportMenuItem;
@@ -704,7 +567,6 @@ namespace OpenHardwareMonitor.GUI
         private System.Windows.Forms.MenuItem hddMenuItem;
         private System.Windows.Forms.MenuItem minTrayMenuItem;
         private System.Windows.Forms.MenuItem separatorMenuItem;
-        private System.Windows.Forms.ContextMenu treeContextMenu;
         private System.Windows.Forms.MenuItem startMinMenuItem;
         private System.Windows.Forms.MenuItem startupMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
@@ -757,7 +619,6 @@ namespace OpenHardwareMonitor.GUI
         private System.Windows.Forms.MenuItem log2hMenuItem;
         private System.Windows.Forms.MenuItem log6hMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer;
-        private Aga.Controls.Tree.TreeViewAdv treeView;
     }
 }
 
